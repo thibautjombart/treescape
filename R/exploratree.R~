@@ -1,0 +1,28 @@
+#'
+#'
+#' Creates different time series based on the list of factor variables.
+#' This function should eventually migrate back into the OutbreakTools package.
+#'
+#' @param x The object (typically obkdata) to compute the incidence for.
+#' @param ... Whatever
+#'
+#' @author Michael Höhle
+#' @export
+setGeneric("get.incidence2", function(x, ...) standardGeneric("get.incidence2"))
+
+#' Modified obkData method such that doBy statements are possible
+#'
+#' @param x  See obkData::get.incidence
+#' @param data  See obkData::get.incidence
+#' @param where  See obkData::get.incidence
+#' @param val.min  See obkData::get.incidence
+#' @param val.max  See obkData::get.incidence
+#' @param val.kept  See obkData::get.incidence
+#' @param regexp  See obkData::get.incidence
+#' @param from  See obkData::get.incidence
+#' @param to  See obkData::get.incidence
+#' @param interval  See obkData::get.incidence
+#' @param add.zero See obkData::get.incidence
+#' @param doBy A character list of factor variables in the individuals slot to compute the ts for.
+#' @param ...  See obkData::get.incidence
+#' @export
