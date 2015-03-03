@@ -13,6 +13,8 @@ install_github("thibautjombart/exploratree")
 
 And then to try functionalities:
 ```r
+library(exploratree)
+
 example(exploratree)
 
 exploratreeServer()
