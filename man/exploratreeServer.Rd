@@ -4,10 +4,7 @@
 \alias{exploratreeServer}
 \title{Web-based tree explorer}
 \usage{
-exploratreeServer(x)
-}
-\arguments{
-\item{x}{a multiPhylo object}
+exploratreeServer()
 }
 \description{
 This function opens up an application in a web browser for an interactive exploration of the diversity in a set of trees. This function is under development. Please do not use without contacting the author.

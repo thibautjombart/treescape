@@ -1,5 +1,5 @@
 library(shiny)
-library(exploratree)
+##library(exploratree)
 
 
 ## DEFINE THE SERVER SIDE OF THE APPLICATION
@@ -23,7 +23,7 @@ shinyServer(function(input, output) {
         if(!is.null(input$datafile)){
             ## need to rename input file
             oldName <- input$datafile$datapath
-            extension <- .readExt(input$datafile$name)
+            extension <- adegenet::.readExt(input$datafile$name)
             newName <- paste(input$datafile$datapath, extension, sep=".")
             file.rename(oldName, newName)
 
@@ -41,7 +41,7 @@ shinyServer(function(input, output) {
     ## SELECTION OF MDS AXES
     output$naxes <- renderUI({
         if(!is.null(x <- getData())) {
-            nmax <- length(x@tab)
+            nmax <- length(x)
         } else {
             nmax <- 100
         }
@@ -58,7 +58,7 @@ shinyServer(function(input, output) {
         numericInput("xax", "Indicate the x axis", value=1, min=1, max=nmax)
     })
 
-    output$xax <- renderUI({
+    output$yax <- renderUI({
         if(!is.null(x <- getData())) {
             nmax <- length(x)
         } else {
@@ -82,8 +82,14 @@ shinyServer(function(input, output) {
 
         if(!is.null(x)){
             res <- exploratree(x, nf=naxes)
-            scatter(res$pco, xax=input$xax, yax=input$yax,
-                    cex=input$pointsize, clabel=input$labelsize)
+            ## make scatterplot
+            s.label(res$pco$li, xax=input$xax, yax=input$yax,
+                    cpoint=input$pointsize, clabel=input$labelsize)
+
+            ## add legend
+            if(input$screemds!="none"){
+                add.scatter.eig(res$pco$eig, res$pco$nf, xax=input$xax, yax=input$yax, posi=input$screemds)
+            }
         } else {
             NULL
         }

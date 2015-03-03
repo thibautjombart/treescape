@@ -9,12 +9,8 @@
 #' @import shiny
 #' @importFrom utils packageDescription
 #'
-#' @param x a multiPhylo object
-exploratreeServer <- function(x){
-    if(!inherits(x, "multiPhylo")) stop("x should be a multiphylo object")
-
+exploratreeServer <- function(){
     runApp(system.file("shiny",package="exploratree"))
-
     return(invisible())
 }
 
@@ -22,10 +18,17 @@ exploratreeServer <- function(x){
 
 
 
-#######################
-## .render.server.info
-#######################
-## INVISIBLE FUNCTION RENDERING SERVER INFO ##
+#'
+#' Auxiliary functions
+#'
+#' These functions are not supposed to be used by the user.
+#'
+#' @author Thibaut Jombart \email{thibautjombart@@gmail.com}
+#'
+#' @export
+#' 
+#' @importFrom adegenet .readExt
+#'
 .render.server.info <- function(){
     renderPrint(
             {
