@@ -7,14 +7,26 @@
 exploratree(x, explorer = distTips, nf = NULL, ...)
 }
 \arguments{
-\item{x}{}
+\item{x}{need}
 
-\item{explorer}{}
+\item{explorer}{to}
 
-\item{...}{}
+\item{nf}{document}
+
+\item{...}{all this}
 }
 \description{
 This functions are under development. Please do not use them without contacting the author first.
+}
+\examples{
+## generate list of trees
+x <- rmtree(10, 20)
+names(x) <- paste("tree", 1:10, sep = "")
+
+## use exploratree
+res <- exploratree(x, nf=3)
+table.paint(as.matrix(res$D))
+scatter(res$pco)
 }
 \author{
 Thibaut Jombart \email{thibautjombart@gmail.com}, Michelle Kendall \email{michelle.louise.kendall@gmail.com}, Caroline Colijn \email{c.colijn@imperial.ac.uk}

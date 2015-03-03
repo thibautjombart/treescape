@@ -3,9 +3,10 @@
 #'
 #' This functions are under development. Please do not use them without contacting the author first.
 #'
-#' @param x
-#' @param explorer
-#' @param ...
+#' @param x need
+#' @param explorer to
+#' @param nf document
+#' @param ... all this
 #'
 #' @author Thibaut Jombart \email{thibautjombart@@gmail.com}, Michelle Kendall \email{michelle.louise.kendall@@gmail.com}, Caroline Colijn \email{c.colijn@@imperial.ac.uk}
 #'
@@ -14,13 +15,24 @@
 #' @import ape ade4
 #' @importFrom adephylo distTips
 #'
+#' @examples
+#'
+#' ## generate list of trees
+#' x <- rmtree(10, 20)
+#' names(x) <- paste("tree", 1:10, sep = "")
+#'
+#' ## use exploratree
+#' res <- exploratree(x, nf=3)
+#' table.paint(as.matrix(res$D))
+#' scatter(res$pco)
+#'
 exploratree <- function(x, explorer=distTips, nf=NULL, ...){
     ## CHECKS ##
     if(!inherits(x, "multiPhylo")) stop("x should be a multiphylo object")
 
     ## GET DISTANCES BETWEEN TREES ##
     ## get data.frame of all summary vectors ##
-    df <- data.frame(lapply(x, function(e) as.vector(explorer(e, ...))))
+    df <- t(data.frame(lapply(x, function(e) as.vector(explorer(e, ...)))))
 
     ## get pairwise Euclidean distances ##
     D <- dist(df)
