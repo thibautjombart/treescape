@@ -4,7 +4,7 @@
 #' This functions are under development. Please do not use them without contacting the author first.
 #'
 #' @param x need
-#' @param explorer to
+#' @param method to
 #' @param nf document
 #' @param ... all this
 #'
@@ -26,13 +26,13 @@
 #' table.paint(as.matrix(res$D))
 #' scatter(res$pco)
 #'
-exploratree <- function(x, explorer=distTips, nf=NULL, ...){
+exploratree <- function(x, method=distTips, nf=NULL, ...){
     ## CHECKS ##
     if(!inherits(x, "multiPhylo")) stop("x should be a multiphylo object")
 
     ## GET DISTANCES BETWEEN TREES ##
     ## get data.frame of all summary vectors ##
-    df <- t(data.frame(lapply(x, function(e) as.vector(explorer(e, ...)))))
+    df <- t(data.frame(lapply(x, function(e) as.vector(method(e, ...)))))
 
     ## get pairwise Euclidean distances ##
     D <- dist(df)

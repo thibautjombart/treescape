@@ -81,7 +81,20 @@ shinyServer(function(input, output) {
         }
 
         if(!is.null(x)){
-            res <- exploratree(x, nf=naxes)
+            ## select method used to summarise tree
+            if(!is.null(input$treemethod)){
+                if(input$treemethod %in% c("patristic","nNodes","Abouheif","sumDD")){
+                    treeMethod <- function(x){return(distTips(x, method=input$treemethod))}
+                } else{
+                    treeMethod <- distTips
+                }
+            } else {
+                treeMethod <- distTips
+            }
+
+            ## run exploratree
+            res <- exploratree(x, method=treeMethod, nf=naxes)
+
             ## make scatterplot
             s.label(res$pco$li, xax=input$xax, yax=input$yax,
                     cpoint=input$pointsize, clabel=input$labelsize)

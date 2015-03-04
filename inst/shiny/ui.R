@@ -20,6 +20,16 @@ shinyUI(
             conditionalPanel(
                 ## condition
                 "$('li.active a').first().html()!= 'Help'",
+                selectInput("treemethod", "Choose a tree summary:",
+                            choices=c("Patristic distances" = "patristic",
+                            "Number of nodes" = "nNodes",
+                            "Abouheif's metric" = "Abouheif",
+                            "Sum of direct descendents" = "sumDD"))
+                ),
+
+            conditionalPanel(
+                ## condition
+                "$('li.active a').first().html()!= 'Help'",
                 uiOutput("naxes")
                 ),
 

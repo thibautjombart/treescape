@@ -4,12 +4,12 @@
 \alias{exploratree}
 \title{Phylogenetic tree exploration}
 \usage{
-exploratree(x, explorer = distTips, nf = NULL, ...)
+exploratree(x, method = distTips, nf = NULL, ...)
 }
 \arguments{
 \item{x}{need}
 
-\item{explorer}{to}
+\item{method}{to}
 
 \item{nf}{document}
 
