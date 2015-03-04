@@ -288,7 +288,16 @@ CK.wdistm <- compiler::cmpfun(CK.wdistm)
 
 
 
-#function to take ONE object of class phylo and return its topological vector
+#' function to take ONE object of class phylo and return its topological vector
+#'
+#' Description of this function..
+#'
+#' @export
+#'
+#' @author  Michelle Kendall \email{michelle.louise.kendall@@gmail.com}
+#'
+#' @param tr1 ...
+#'
 top.vec <- function(tr1) {
 k <- length(tr1$tip.label)
 
@@ -310,8 +319,18 @@ top.vec <- cmpfun(top.vec)
 
 
 
-# function to take ONE object of class phylo and return one long weighted vector
-# caveat: a tree should not be compared to another tree simply by taking the Euclidean distance between their vectors output by this function
+#' function to take ONE object of class phylo and return one long weighted vector
+#' caveat: a tree should not be compared to another tree simply by taking the Euclidean distance between their vectors output by this function
+#'
+#' Description of this function..
+#'
+#' @export
+#'
+#' @author  Michelle Kendall \email{michelle.louise.kendall@@gmail.com}
+#'
+#' @param tr1 ...
+#' @param p ...
+#'
 w.vec <- function(tr1,p=1) {
 k <- length(tr1$tip.label)
 # checks and warnings
