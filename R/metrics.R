@@ -283,3 +283,58 @@ CK.wdistm <- function(trees,p=1) {
     return(distmat)
 }
 CK.wdistm <- compiler::cmpfun(CK.wdistm)
+
+
+
+
+
+#function to take ONE object of class phylo and return its topological vector
+top.vec <- function(tr1) {
+k <- length(tr1$tip.label)
+
+# set all edge lengths to 1:
+tr1$edge.length <- rep(1,(2*k-2));
+# create vector of distances from root to tips:
+DN1 <- dist.nodes(tr1)[k+1,];
+# create mrca matrix:
+M1 <- my.mrca(tr1,k);
+
+# calculate the gamma vector of root to mrca distances:
+gamma <- apply(combn2(1:k), 1, function(x) DN1[M1[[x[1],x[2]]]])
+
+return(gamma)
+}
+top.vec <- cmpfun(top.vec)
+
+
+
+
+
+# function to take ONE object of class phylo and return one long weighted vector
+# caveat: a tree should not be compared to another tree simply by taking the Euclidean distance between their vectors output by this function
+w.vec <- function(tr1,p=1) {
+k <- length(tr1$tip.label)
+# checks and warnings
+if (is.null(tr1$edge.length)) {
+stop("edge lengths not defined")
+}
+
+tr1$edge.length <- tr1$edge.length + p;
+
+DN1 <- dist.nodes(tr1);
+M1 <- my.mrca(tr1,k);
+
+pairs <-combn2(1:k);
+
+gamma <- apply(pairs, 1, function(x) DN1[k+1,M1[[x[1],x[2]]]]) 
+delta <- apply(pairs, 1, function(x) DN1[k+1,x[1]]-DN1[k+1,x[2]])
+
+# add minimum pendant branch length / k
+ep1 <- edge.pendant(tr1,k);
+pen.length1 <- apply(ep1, 1, function(x) DN1[x[1],x[2]])
+near1 <- min(pen.length1)/k;
+
+v <- c(gamma,delta,near1)
+return(v)
+}
+w.vec <- cmpfun(w.vec)
