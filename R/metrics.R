@@ -1,18 +1,28 @@
-require(ape)
-require(phangorn)
-require(compiler)
-require(fastmatch)
-require(combinat)
+#' Function to make mrca matrix of a tree, where entry (i,j) gives the mrca of tips i and j
+#'
+#' Description of this function..
+#'
+#' @author  Michelle Kendall \email{michelle.louise.kendall@@gmail.com}
+#'
+#' @export
+#'
+#' @param tree ...
+#' @param k ...
 
-                                        # function to make mrca matrix of a tree, where entry (i,j) gives the mrca of tips i and j
+#' #' @import ape
+#' @import phangorn
+#' @import compiler
+#' @import fastmatch
+#' @import combinat
+#'
 my.mrca <- function(tree,k)
 {
     M <- matrix(0, nrow=k, ncol=k); # initialise matrix
-                                        # traverse internal nodes from root down
+    ## traverse internal nodes from root down
     for (tmp in (k+1):(2*k-1)){
-                                        # find the two children of tmp
+        ## find the two children of tmp
         tmp.desc <- Children(tree,tmp)
-                                        # tmp is the MRCA of all pairs of tips descending from child one and child two
+        ## tmp is the MRCA of all pairs of tips descending from child one and child two
         I <- Descendants(tree,tmp.desc[[1]], type="tips")
         J <- Descendants(tree,tmp.desc[[2]], type="tips")
         for (i in I)  {
@@ -22,16 +32,42 @@ my.mrca <- function(tree,k)
     }
     return(M)
 }
-my.mrca <- cmpfun(my.mrca) # compile
+my.mrca <- compiler::cmpfun(my.mrca) # compile
 
-                                        # function to create a vector of the pendant edges of the tree
+
+
+
+
+
+#' Function to create a vector of the pendant edges of the tree
+#'
+#' Description of this function..
+#'
+#' @export
+#'
+#' @author  Michelle Kendall \email{michelle.louise.kendall@@gmail.com}
+#'
+#' @param tree ...
+#' @param k ...
 edge.pendant <- function(tree,k) {tree$edge[fmatch(1:k, tree$edge[,2]),] }
-edge.pendant <- cmpfun(edge.pendant)
+edge.pendant <- compiler::cmpfun(edge.pendant)
 
-                                        # function to take two objects of class phylo and return their topological distance
+
+
+
+
+
+#' Function to take two objects of class phylo and return their topological distance
+#'
+#' Description of this function..
+#'
+#' @export
+#'
+#' @param tr1 ...
+#' @param tr2 ...
 CK.gdist <- function(tr1,tr2) {
     k <- length(tr1$tip.label)
-                                        # checks and warnings
+    ## checks and warnings
     if (k != length(tr2$tip.label)) {
         stop("trees have different numbers of tips")
     }
@@ -40,31 +76,47 @@ CK.gdist <- function(tr1,tr2) {
         stop("trees have different tip label sets")
     }
 
-                                        # set all edge lengths to 1:
+    ## set all edge lengths to 1:
     tr1$edge.length <- rep(1,(2*k-2));
     tr2$edge.length <- tr1$edge.length;
-                                        # create vector of distances from root to tips:
+    ## create vector of distances from root to tips:
     DN1 <- dist.nodes(tr1)[k+1,];
     DN2 <- dist.nodes(tr2)[k+1,];
-                                        # create mrca matrix for each tree:
+    ## create mrca matrix for each tree:
     M1 <- my.mrca(tr1,k);
     M2 <- my.mrca(tr2,k);
-                                        # find the permutation which maps tr1 tip labels to tr2 tip labels
+    ## find the permutation which maps tr1 tip labels to tr2 tip labels
     labelmatch <- fmatch(tr1$tip.label, tr2$tip.label);
 
-                                        # calculate the gamma vector of root to mrca distances:
+    ## calculate the gamma vector of root to mrca distances:
     gamma <- apply(combn2(1:k), 1, function(x) DN1[M1[[x[1],x[2]]]] - DN2[M2[[labelmatch[x[1]],labelmatch[x[2]]]]])
-                                        # Euclidean norm:
+    ## Euclidean norm:
     d <- sqrt(sum(gamma^2));
     return(d)
 }
-                                        # compile:
-CK.gdist <- cmpfun(CK.gdist)
+## compile:
+CK.gdist <- compiler::cmpfun(CK.gdist)
 
-                                        # function to take two objects of class phylo and return their weighted distance
+
+
+
+
+
+#' Function to take two objects of class phylo and return their weighted distance
+#'
+#' Description of this function..
+#'
+#' @export
+#'
+#' @author  Michelle Kendall \email{michelle.louise.kendall@@gmail.com}
+#'
+#' @param tr1 ...
+#' @param tr2 ...
+#' @param p ...
+#'
 CK.wdist <- function(tr1,tr2,p=1) {
     k <- length(tr1$tip.label)
-                                        # checks and warnings
+    ## checks and warnings
     if (k != length(tr2$tip.label)) {
         stop("trees have different numbers of tips")
     }
@@ -94,7 +146,7 @@ CK.wdist <- function(tr1,tr2,p=1) {
     d1 <-sqrt(sum(delta^2));
     d2 <- sqrt(sum(gamma^2));
 
-                                        # add difference in minimum pendant branch length
+    ## add difference in minimum pendant branch length
     ep1 <- edge.pendant(tr1,k);
     ep2 <- edge.pendant(tr2,k);
     pen.length1 <- apply(ep1, 1, function(x) DN1[x[1],x[2]])
@@ -104,11 +156,23 @@ CK.wdist <- function(tr1,tr2,p=1) {
 
     d1+d2+(abs(near1-near2)/k)
 }
-CK.wdist <- cmpfun(CK.wdist)
+CK.wdist <- compiler::cmpfun(CK.wdist)
 
-                                        # function to take an object of class multiPhylo and return topological distance matrix
+
+
+
+
+#' Function to take an object of class multiPhylo and return topological distance matrix
+#'
+#' Description of this function..
+#'
+#' @author  Michelle Kendall \email{michelle.louise.kendall@@gmail.com}
+#'
+#' @export
+#'
+#' @param trees ...
 CK.gdistm <- function(trees) {
-                                        # checks and warnings
+    ## checks and warnings
     if (class(trees) != "multiPhylo"){
         stop("input must be of class multiPhylo")
     }
@@ -125,7 +189,7 @@ CK.gdistm <- function(trees) {
         }
     }
 
-                                        # set all edge lengths to 1:
+    ## set all edge lengths to 1:
     for (i in 1:l) {
         trees[[i]]$edge.length <- rep(1,(2*k-2));
     }
@@ -138,22 +202,34 @@ CK.gdistm <- function(trees) {
 
     x <- k*(k-1)/2;
 
-                                        # create lower triangular matrix
-                                        # first, where each entry is a vector of differences
+    ## create lower triangular matrix
+    ## first, where each entry is a vector of differences
     gammadistmat <- sapply(1:l, function(a) sapply(1:l, function(b)
                                                    if (a<b) sapply(1:x, function(c) (gammas[[c,a]]-gammas[[c,b]])^2)))
-                                        # now find Euclidean norm of each entry
+    ## now find Euclidean norm of each entry
     gammadistmat <- sapply(1:l, function(a)
                            sapply(1:l, function(b) sqrt(sum(gammadistmat[[b,a]]))))
 
     return(gammadistmat)
 }
-CK.gdistm <- cmpfun(CK.gdistm)
+CK.gdistm <- compiler::cmpfun(CK.gdistm)
 
 
-                                        # function to take an object of class multiPhylo and return weighted distance matrix
+
+
+
+#' Function to take an object of class multiPhylo and return weighted distance matrix
+#'
+#' Description of this function..
+#'
+#' @author  Michelle Kendall \email{michelle.louise.kendall@@gmail.com}
+#'
+#' @export
+#'
+#' @param trees ...
+#' @param p ...
 CK.wdistm <- function(trees,p=1) {
-                                        # checks and warnings
+    ## checks and warnings
     if (class(trees) != "multiPhylo"){
         stop("input must be of class multiPhylo")
     }
@@ -206,4 +282,4 @@ CK.wdistm <- function(trees,p=1) {
     distmat <- deltadistmat + gammadistmat + sigmadistmat
     return(distmat)
 }
-CK.wdistm <- cmpfun(CK.wdistm)
+CK.wdistm <- compiler::cmpfun(CK.wdistm)
