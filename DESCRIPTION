@@ -5,7 +5,7 @@ Authors@R: c(TJ=person("Thibaut", "Jombart", email="thibaut.jombart@gmail.com", 
 	   MK=person("Michelle", "Kendall", role = c("aut")), 
 	   CC=person("Caroline", "Colijn", role = c("aut")))
 Description: Exploration of phylogenetic trees
-Depends: R (>= 3.2.0), ape, ade4
+Depends: R (>= 3.1.2), ape, ade4
 Imports: adephylo, shiny, utils, adegenet
 License: GPL>=2
 LazyData: true
