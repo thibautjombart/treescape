@@ -21,7 +21,9 @@ shinyUI(
                 ## condition
                 "$('li.active a').first().html()!= 'Help'",
                 selectInput("treemethod", "Choose a tree summary:",
-                            choices=c("Patristic distances" = "patristic",
+                            choices=c(
+                            "CK metric" = "CKmetric",
+                            "Patristic distances" = "patristic",
                             "Number of nodes" = "nNodes",
                             "Abouheif's metric" = "Abouheif",
                             "Sum of direct descendents" = "sumDD"))
@@ -30,6 +32,7 @@ shinyUI(
             conditionalPanel(
                 ## condition
                 "$('li.active a').first().html()!= 'Help'",
+                uiOutput("lambda"),
                 uiOutput("naxes")
                 ),
 

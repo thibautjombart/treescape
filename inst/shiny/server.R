@@ -1,5 +1,5 @@
-library(shiny)
-##library(exploratree)
+## library(shiny)
+## library(exploratree)
 
 
 ## DEFINE THE SERVER SIDE OF THE APPLICATION
@@ -67,6 +67,16 @@ shinyServer(function(input, output) {
         numericInput("yax", "Indicate the y axis", value=2, min=2, max=nmax)
     })
 
+    ## VALUE OF LAMBDA FOR CK METRIC
+    output$lambda <- renderUI({
+        ## if CK metric has been chosen
+        if(input$treemethod=="CKmetric") {
+            sliderInput("lambda", "Value of lambda", min=0, max=1, value=0.5, step=0.01)
+        } else {
+            NULL
+        }
+    })
+
 
     ## SCATTERPLOT ##
     output$scatterplot <- renderPlot({
@@ -85,11 +95,11 @@ shinyServer(function(input, output) {
             if(!is.null(input$treemethod)){
                 if(input$treemethod %in% c("patristic","nNodes","Abouheif","sumDD")){
                     treeMethod <- function(x){return(distTips(x, method=input$treemethod))}
-                } else{
+                } else if(input$treemethod=="CKmetric"){
+                    treeMethod <- function(x){return(CK.metric(x, lambda=input$lambda))}
+                } else {
                     treeMethod <- distTips
                 }
-            } else {
-                treeMethod <- distTips
             }
 
             ## run exploratree

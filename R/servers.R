@@ -7,6 +7,9 @@
 #'
 #' @export
 #' @import shiny
+#' @import adephylo
+#' @import ade4
+#' @import adegenet
 #' @importFrom utils packageDescription
 #'
 exploratreeServer <- function(){
@@ -26,7 +29,7 @@ exploratreeServer <- function(){
 #' @author Thibaut Jombart \email{thibautjombart@@gmail.com}
 #'
 #' @export
-#' 
+#'
 #' @importFrom adegenet .readExt
 #'
 .render.server.info <- function(){
