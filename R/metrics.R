@@ -9,12 +9,10 @@
 #'
 #' @param tree ...
 #' @param k ...
-
-#' @import ape
-#' @import phangorn
-#' @import compiler
-#' @import fastmatch
-#' @import combinat
+#'
+#' @importFrom phangorn Descendants
+#' @importFrom phangorn Children
+#' @importFrom compiler cmpfun
 #'
 linear.mrca <- function(tree,k)
 {
@@ -49,6 +47,8 @@ linear.mrca <- cmpfun(linear.mrca) # compile
 #' @param tree ...
 #' @param k ...
 #'
+#' @importFrom compiler cmpfun
+#' @importFrom fastmatch fmatch
 #'
 pen.edge.tree <- function(tree,k) {tree$edge[fmatch(1:k, tree$edge[,2]),] }
 pen.edge.tree <- cmpfun(pen.edge.tree)
@@ -65,6 +65,9 @@ pen.edge.tree <- cmpfun(pen.edge.tree)
 #'
 #' @param tree ...
 #' @param labelmatch ...
+#'
+#' @importFrom compiler cmpfun
+#' @importFrom fastmatch fmatch
 #'
 pen.edge.treematch  <- function(tree,labelmatch) {tree$edge[fmatch(labelmatch, tree$edge[,2]),] }
 pen.edge.treematch <- cmpfun(pen.edge.treematch)
@@ -84,6 +87,9 @@ pen.edge.treematch <- cmpfun(pen.edge.treematch)
 #' @param x an object of the class \code{phylo} ...
 #' @param lambda ...
 #' @param type ...
+#'
+#' @importFrom combinat combn2
+#' @importFrom compiler cmpfun
 #'
 CK.metric <- function(x,lambda=0,type="number") { # allow output type to be number or function
     if (type=="number"){
@@ -184,6 +190,9 @@ CK.metric <- cmpfun(CK.metric)
 #' @param lambda ...
 #' @param type ...
 #'
+#' @importFrom compiler cmpfun
+#' @importFrom fastmatch fmatch
+#' @importFrom combinat combn2
 tree.dist <- function(tr1,tr2,lambda=0,type="number") { # allow output type to be number or function of lambda
     if (type=="number"){
         if (lambda<0) {stop("Pick lambda in [0,1]")}

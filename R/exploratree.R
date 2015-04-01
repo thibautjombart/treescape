@@ -12,7 +12,8 @@
 #'
 #' @export
 #'
-#' @import ape ade4
+#' @import ape
+#' @importFrom ade4 dudi.pco
 #' @importFrom adephylo distTips
 #'
 #' @examples
