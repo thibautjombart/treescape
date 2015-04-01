@@ -7,9 +7,6 @@
 #'
 #' @export
 #' @import shiny
-#' @import adephylo
-#' @import ade4
-#' @import adegenet
 #' @importFrom utils packageDescription
 #'
 exploratreeServer <- function(){
