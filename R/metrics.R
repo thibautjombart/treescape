@@ -81,11 +81,11 @@ pen.edge.treematch <- cmpfun(pen.edge.treematch)
 #'
 #' @author  Michelle Kendall \email{michelle.louise.kendall@@gmail.com}
 #'
-#' @param tr1 ...
+#' @param x an object of the class \code{phylo} ...
 #' @param lambda ...
 #' @param type ...
 #'
-tree.vec <- function(tr1,lambda=0,type="number") { # allow output type to be number or function
+CK.metric <- function(x,lambda=0,type="number") { # allow output type to be number or function
     if (type=="number"){
         ## checks and warnings
         if (lambda<0) {stop("Pick lambda in [0,1]")}
@@ -166,7 +166,7 @@ tree.vec <- function(tr1,lambda=0,type="number") { # allow output type to be num
         return(vlambda)
     }
 }
-tree.vec <- cmpfun(tree.vec)
+CK.metric <- cmpfun(CK.metric)
 
 
 
