@@ -1,3 +1,4 @@
+
 #' Function to make mrca matrix of a tree, where entry (i,j) gives the mrca of tips i and j
 #'
 #' Description of this function..
@@ -9,37 +10,35 @@
 #' @param tree ...
 #' @param k ...
 
-#' #' @import ape
+#' @import ape
 #' @import phangorn
 #' @import compiler
 #' @import fastmatch
 #' @import combinat
 #'
-my.mrca <- function(tree,k)
+linear.mrca <- function(tree,k)
 {
-    M <- matrix(0, nrow=k, ncol=k); # initialise matrix
-    ## traverse internal nodes from root down
-    for (tmp in (k+1):(2*k-1)){
-        ## find the two children of tmp
-        tmp.desc <- Children(tree,tmp)
-        ## tmp is the MRCA of all pairs of tips descending from child one and child two
-        I <- Descendants(tree,tmp.desc[[1]], type="tips")
-        J <- Descendants(tree,tmp.desc[[2]], type="tips")
-        for (i in I)  {
-            for (j in J)  {
-                M[i,j] <- M[j,i] <- tmp
-            }  }
-    }
-    return(M)
+  M <- matrix(0, nrow=k, ncol=k); # initialise matrix
+  # traverse internal nodes from root down
+  for (tmp in (k+1):(2*k-1)){
+    # find the two children of tmp
+    tmp.desc <- Children(tree,tmp)
+    # tmp is the MRCA of all pairs of tips descending from child one and child two
+    I <- Descendants(tree,tmp.desc[[1]], type="tips")
+    J <- Descendants(tree,tmp.desc[[2]], type="tips")
+    for (i in I)  {
+      for (j in J)  {
+        M[i,j] <- M[j,i] <- tmp
+      }  }
+  }
+  return(M)
 }
-my.mrca <- compiler::cmpfun(my.mrca) # compile
+linear.mrca <- cmpfun(linear.mrca) # compile
 
 
 
 
-
-
-#' Function to create a vector of the pendant edges of the tree
+#' Title of the function
 #'
 #' Description of this function..
 #'
@@ -49,60 +48,114 @@ my.mrca <- compiler::cmpfun(my.mrca) # compile
 #'
 #' @param tree ...
 #' @param k ...
-edge.pendant <- function(tree,k) {tree$edge[fmatch(1:k, tree$edge[,2]),] }
-edge.pendant <- compiler::cmpfun(edge.pendant)
+#'
+#'
+pen.edge.tree <- function(tree,k) {tree$edge[fmatch(1:k, tree$edge[,2]),] }
+pen.edge.tree <- cmpfun(pen.edge.tree)
 
 
 
-
-
-
-#' Function to take two objects of class phylo and return their topological distance
+#' Title of the function
 #'
 #' Description of this function..
 #'
 #' @export
 #'
-#' @param tr1 ...
-#' @param tr2 ...
-CK.gdist <- function(tr1,tr2) {
+#' @author  Michelle Kendall \email{michelle.louise.kendall@@gmail.com}
+#'
+#' @param tree ...
+#' @param labelmatch ...
+#'
+pen.edge.treematch  <- function(tree,labelmatch) {tree$edge[fmatch(labelmatch, tree$edge[,2]),] }
+pen.edge.treematch <- cmpfun(pen.edge.treematch)
+
+tree.vec <- function(tr1,lambda=0,type="number") { # allow output type to be number or function
+  if (type=="number"){
+    if (lambda<0) {stop("Pick lambda in [0,1]")}
+    if (lambda>1) {stop("Pick lambda in [0,1]")}
     k <- length(tr1$tip.label)
-    ## checks and warnings
-    if (k != length(tr2$tip.label)) {
-        stop("trees have different numbers of tips")
+    # checks and warnings
+
+    if (lambda!=0) { # if lambda=0 then we don't need edge lengths to be defined, but if lambda!=0 then we do
+      if (is.null(tr1$edge.length)) {
+        stop("edge lengths not defined")
+      }
     }
 
-    if (setequal(tr1$tip.label,tr2$tip.label) == FALSE) {
-        stop("trees have different tip label sets")
+    M1 <- linear.mrca(tr1,k); # kxk MRCA matrix for tree 1
+
+    if (lambda!=1){ # make a copy with edge lengths = 1
+      TR1 <- tr1
+      TR1$edge.length <- rep(1,2*k-2);
+      D1 <- dist.nodes(TR1); # if lambda!=1 we need to know edge count distances
+    }
+    if (lambda!=0) { # if lambda!=0 we need to know branch length distances
+      d1 <- dist.nodes(tr1);
     }
 
-    ## set all edge lengths to 1:
-    tr1$edge.length <- rep(1,(2*k-2));
-    tr2$edge.length <- tr1$edge.length;
-    ## create vector of distances from root to tips:
-    DN1 <- dist.nodes(tr1)[k+1,];
-    DN2 <- dist.nodes(tr2)[k+1,];
-    ## create mrca matrix for each tree:
-    M1 <- my.mrca(tr1,k);
-    M2 <- my.mrca(tr2,k);
-    ## find the permutation which maps tr1 tip labels to tr2 tip labels
-    labelmatch <- fmatch(tr1$tip.label, tr2$tip.label);
+    pairs <- combn2(1:k)
+    # vt is the purely topological vector (don't waste time computing if lambda=1)
+    # vl is the purely length-based vector (don't waste time computing if lambda=0)
+    if (lambda==1) { vt <- rep(0,k*(k-1)/2)}
+    else {
+      vt <- apply(pairs, 1, function(x) D1[k+1,M1[[x[1],x[2]]]])
+    }
+    if (lambda==0) { vl <- rep(0,k*(k-1)/2)}
+    else {
+      vl <- apply(pairs, 1, function(x) d1[k+1,M1[[x[1],x[2]]]])
+    }
 
-    ## calculate the gamma vector of root to mrca distances:
-    gamma <- apply(combn2(1:k), 1, function(x) DN1[M1[[x[1],x[2]]]] - DN2[M2[[labelmatch[x[1]],labelmatch[x[2]]]]])
-    ## Euclidean norm:
-    d <- sqrt(sum(gamma^2));
-    return(d)
+    v <- (1-lambda)*vt + lambda*vl
+
+    if (lambda!=0) {
+      # append vector of pendant branch lengths
+      ep1 <- pen.edge.tree(tr1,k);
+      pen.length1 <- apply(ep1, 1, function(x) d1[x[1],x[2]])
+      v <- as.numeric(c(v,lambda*pen.length1))
+    }
+
+    return(v)
+  }
+  if (type=="function") {
+    lambda <- integer()
+    k <- length(tr1$tip.label)
+    # checks and warnings
+    if (is.null(tr1$edge.length)) {
+      stop("edge lengths not defined")
+    }
+
+    M1 <- linear.mrca(tr1,k); # kxk MRCA matrix for tree 1
+
+    # make a copy of the tree called TR1 with edge lengths = 1
+    TR1 <- tr1
+    TR1$edge.length <- rep(1,2*k-2);
+    D1 <- dist.nodes(TR1);
+    # find distances based on branch lengths:
+    d1 <- dist.nodes(tr1);
+
+    pairs <- combn2(1:k)
+    # vt is the purely topological vector, vl is the purely length-based vector
+    vt <- apply(pairs, 1, function(x) D1[k+1,M1[[x[1],x[2]]]])
+    vl <- apply(pairs, 1, function(x) d1[k+1,M1[[x[1],x[2]]]])
+
+    # append vector of pendant branch lengths
+    ep1 <- pen.edge.tree(tr1,k);
+    pen.length1 <- apply(ep1, 1, function(x) d1[x[1],x[2]])
+
+    vlambda <- function(lambda) {
+      if (lambda<0) {stop("Pick lambda in [0,1]")}
+      if (lambda>1) {stop("Pick lambda in [0,1]")}
+      (c(((1-lambda)*vt + lambda*vl),(lambda*pen.length1))) }
+
+    return(vlambda)
+  }
 }
-## compile:
-CK.gdist <- compiler::cmpfun(CK.gdist)
+tree.vec <- cmpfun(tree.vec)
 
 
 
 
-
-
-#' Function to take two objects of class phylo and return their weighted distance
+#' Title of the function
 #'
 #' Description of this function..
 #'
@@ -112,248 +165,258 @@ CK.gdist <- compiler::cmpfun(CK.gdist)
 #'
 #' @param tr1 ...
 #' @param tr2 ...
-#' @param p ...
+#' @param lambda ...
+#' @param type ...
 #'
-CK.wdist <- function(tr1,tr2,p=1) {
-    k <- length(tr1$tip.label)
-    ## checks and warnings
-    if (k != length(tr2$tip.label)) {
-        stop("trees have different numbers of tips")
-    }
-    if (setequal(tr1$tip.label,tr2$tip.label) == FALSE) {
-        stop("trees have different tip label sets")
-    }
+tree.dist <- function(tr1,tr2,lambda=0,type="number") { # allow output type to be number or function of lambda
+  if (type=="number"){
+  if (lambda<0) {stop("Pick lambda in [0,1]")}
+  if (lambda>1) {stop("Pick lambda in [0,1]")}
+  k <- length(tr1$tip.label)
+  # checks and warnings
+  if (k != length(tr2$tip.label)) {
+    stop("trees have different numbers of tips")
+  }
+  if (setequal(tr1$tip.label,tr2$tip.label) == FALSE) {
+    stop("trees have different tip label sets")
+  }
+  if (lambda!=0) { # if lambda=0 then we don't need edge lengths to be defined, but if lambda!=0 then we do
     if (is.null(tr1$edge.length)) {
-        stop("edge lengths not defined in first tree")
+      stop("edge lengths not defined in first tree")
     }
     if (is.null(tr2$edge.length)) {
-        stop("edge lengths not defined in second tree")
+      stop("edge lengths not defined in second tree")
+    }
+  }
+
+  M1 <- linear.mrca(tr1,k); # kxk MRCA matrix for tree 1
+  M2 <- linear.mrca(tr2,k);
+  labelmatch <- fmatch(tr1$tip.label, tr2$tip.label);
+  if (lambda!=1){ # make a copy of the trees called TR1 and TR2, with edge lengths = 1
+    TR1 <- tr1; TR2 <- tr2
+    TR1$edge.length <- rep(1,2*k-2);
+    TR2$edge.length <- rep(1,2*k-2);
+    D1 <- dist.nodes(TR1); # if lambda!=1 we need to know edge count distances
+    D2 <- dist.nodes(TR2);
+  }
+  if (lambda!=0) { # if lambda!=0 we need to know branch length distances.
+    d1 <- dist.nodes(tr1);
+    d2 <- dist.nodes(tr2);
+  }
+
+  pairs <- combn2(1:k)
+  # vt is the purely topological vector (don't waste time computing if lambda=1)
+  # vl is the purely length-based vector (don't waste time computing if lambda=0)
+  if (lambda==1) { vt <- rep(0,k*(k-1)/2)}
+  else {
+    vt <- apply(pairs, 1, function(x) D1[k+1,M1[[x[1],x[2]]]] - D2[k+1,M2[[labelmatch[x[1]],labelmatch[x[2]]]]])
+  }
+  if (lambda==0) { vl <- rep(0,k*(k-1)/2)}
+  else {
+    vl <- apply(pairs, 1, function(x) d1[k+1,M1[[x[1],x[2]]]] - d2[k+1,M2[[labelmatch[x[1]],labelmatch[x[2]]]]])
+  }
+
+  v <- (1-lambda)*vt + lambda*vl
+
+  if (lambda!=0) {
+    # append vector of difference in pendant branch lengths
+    ep1 <- pen.edge.tree(tr1,k);
+    ep2 <- pen.edge.treematch(tr2,labelmatch);
+    pen.length1 <- apply(ep1, 1, function(x) d1[x[1],x[2]])
+    pen.length2 <- apply(ep2, 1, function(x) d2[x[1],x[2]])
+    pen.length.diff <- sapply(1:k, function(x) pen.length1[[x]] - pen.length2[[x]])
+    v <- as.numeric(c(v,lambda*pen.length.diff))
+  }
+
+  return(sqrt(sum(v^2)))
+  }
+  if (type=="function") {
+    lambda <- integer()
+    k <- length(tr1$tip.label)
+    # checks and warnings
+    if (k != length(tr2$tip.label)) {
+      stop("trees have different numbers of tips")
+    }
+    if (setequal(tr1$tip.label,tr2$tip.label) == FALSE) {
+      stop("trees have different tip label sets")
+    }
+    if (is.null(tr1$edge.length)) {
+      stop("edge lengths not defined in first tree")
+    }
+    if (is.null(tr2$edge.length)) {
+      stop("edge lengths not defined in second tree")
     }
 
-    tr1$edge.length <- tr1$edge.length + p;
-    tr2$edge.length <- tr2$edge.length + p;
-    DN1 <- dist.nodes(tr1);
-    DN2 <- dist.nodes(tr2);
-    M1 <- my.mrca(tr1,k);
-    M2 <- my.mrca(tr2,k);
+    M1 <- linear.mrca(tr1,k); # kxk MRCA matrix for tree 1
+    M2 <- linear.mrca(tr2,k);
     labelmatch <- fmatch(tr1$tip.label, tr2$tip.label);
-    pairs <-combn2(1:k);
+    # make a copy of the trees called TR1 and TR2, with edge lengths = 1
+    TR1 <- tr1; TR2 <- tr2
+    TR1$edge.length <- rep(1,2*k-2);
+    TR2$edge.length <- rep(1,2*k-2);
+    D1 <- dist.nodes(TR1);
+    D2 <- dist.nodes(TR2);
 
-    delta <- apply(pairs, 1, function(x) DN1[k+1,x[1]]-DN1[k+1,x[2]] - DN2[k+1,labelmatch[x[1]]] + DN2[k+1,labelmatch[x[2]]])
+    # get full distance matrices with lengths
+    d1 <- dist.nodes(tr1);
+    d2 <- dist.nodes(tr2);
 
-    gamma <- apply(pairs, 1, function(x) DN1[k+1,M1[[x[1],x[2]]]] - DN2[k+1,M2[[labelmatch[x[1]],labelmatch[x[2]]]]])
+    pairs <- combn2(1:k)
+    # vt is the purely topological vector, vl is the purely length-based vector
+    vt <- apply(pairs, 1, function(x) D1[k+1,M1[[x[1],x[2]]]] - D2[k+1,M2[[labelmatch[x[1]],labelmatch[x[2]]]]])
+    vl <- apply(pairs, 1, function(x) d1[k+1,M1[[x[1],x[2]]]] - d2[k+1,M2[[labelmatch[x[1]],labelmatch[x[2]]]]])
 
-    d1 <-sqrt(sum(delta^2));
-    d2 <- sqrt(sum(gamma^2));
+    # append vector of difference in pendant branch lengths
+    ep1 <- pen.edge.tree(tr1,k);
+    ep2 <- pen.edge.treematch(tr2,labelmatch);
+    pen.length1 <- apply(ep1, 1, function(x) d1[x[1],x[2]])
+    pen.length2 <- apply(ep2, 1, function(x) d2[x[1],x[2]])
+    pen.length.diff <- sapply(1:k, function(x) pen.length1[[x]] - pen.length2[[x]])
 
-    ## add difference in minimum pendant branch length
-    ep1 <- edge.pendant(tr1,k);
-    ep2 <- edge.pendant(tr2,k);
-    pen.length1 <- apply(ep1, 1, function(x) DN1[x[1],x[2]])
-    pen.length2 <- apply(ep2, 1, function(x) DN2[x[1],x[2]])
-    near1 <- min(pen.length1);
-    near2 <- min(pen.length2);
+    vlambda <- function(lambda) {
+      if (lambda<0) {stop("Pick lambda in [0,1]")}
+      if (lambda>1) {stop("Pick lambda in [0,1]")}
+      sqrt(sum((c(((1-lambda)*vt + lambda*vl),(lambda*pen.length.diff)))^2)) }
 
-    d1+d2+(abs(near1-near2)/k)
+  return(vlambda)
+  }
 }
-CK.wdist <- compiler::cmpfun(CK.wdist)
+tree.dist <- cmpfun(tree.dist)
 
 
 
 
 
-#' Function to take an object of class multiPhylo and return topological distance matrix
+#' Title of the function
 #'
 #' Description of this function..
 #'
-#' @author  Michelle Kendall \email{michelle.louise.kendall@@gmail.com}
-#'
 #' @export
-#'
-#' @param trees ...
-CK.gdistm <- function(trees) {
-    ## checks and warnings
-    if (class(trees) != "multiPhylo"){
-        stop("input must be of class multiPhylo")
-    }
-
-    l <- length(trees)
-    k <- length(trees[[1]]$tip.label)
-
-    for (i in 1:l) {
-        if (k != length(trees[[i]]$tip.label)) {
-            stop("trees must all have the same number of tips")
-        }
-        if (setequal(trees[[i]]$tip.label,trees[[1]]$tip.label) == FALSE) {
-            stop("trees have different tip label sets")
-        }
-    }
-
-    ## set all edge lengths to 1:
-    for (i in 1:l) {
-        trees[[i]]$edge.length <- rep(1,(2*k-2));
-    }
-    DN <- sapply(1:l, function(x) dist.nodes(trees[[x]])[k+1,]); # vector of vectors
-    M <- lapply(1:l, function(x) my.mrca(trees[[x]],k)); # list of matrices
-    labelmatch <- lapply(1:l, function (y) fmatch(trees[[1]]$tip.label,trees[[y]]$tip.label)); # list of permutations
-    pairs <-combn2(1:k);
-
-    gammas <- sapply(1:l, function(y) apply(pairs, 1, function(x) DN[M[[y]][[labelmatch[[y]][x[1]],labelmatch[[y]][x[2]]]],y]));
-
-    x <- k*(k-1)/2;
-
-    ## create lower triangular matrix
-    ## first, where each entry is a vector of differences
-    gammadistmat <- sapply(1:l, function(a) sapply(1:l, function(b)
-                                                   if (a<b) sapply(1:x, function(c) (gammas[[c,a]]-gammas[[c,b]])^2)))
-    ## now find Euclidean norm of each entry
-    gammadistmat <- sapply(1:l, function(a)
-                           sapply(1:l, function(b) sqrt(sum(gammadistmat[[b,a]]))))
-
-    return(gammadistmat)
-}
-CK.gdistm <- compiler::cmpfun(CK.gdistm)
-
-
-
-
-
-#' Function to take an object of class multiPhylo and return weighted distance matrix
-#'
-#' Description of this function..
 #'
 #' @author  Michelle Kendall \email{michelle.louise.kendall@@gmail.com}
 #'
-#' @export
-#'
 #' @param trees ...
-#' @param p ...
-CK.wdistm <- function(trees,p=1) {
-    ## checks and warnings
-    if (class(trees) != "multiPhylo"){
-        stop("input must be of class multiPhylo")
+#' @param lambda ...
+#' @param type ...
+#'
+multi.dist <- function(trees,lambda=0,type="number") { # allow output type to be number or function
+  #checks and warnings
+  if (class(trees) != "multiPhylo"){
+    stop("input must be of class multiPhylo")
+  }
+  l <- length(trees)
+  k <- length(trees[[1]]$tip.label)
+
+  for (i in 1:l) {
+    if (k != length(trees[[i]]$tip.label)) {
+      stop("trees must all have the same number of tips")
     }
-
-    l <- length(trees)
-    k <- length(trees[[1]]$tip.label)
-
-    for (i in 1:l) {
-        if (k != length(trees[[i]]$tip.label)) {
-            stop("trees must all have the same number of tips")
-        }
-        if (setequal(trees[[i]]$tip.label,trees[[1]]$tip.label) == FALSE) {
-            stop("trees have different tip label sets")
-        }
-        if (is.null(trees[[i]]$edge.length)) {
-            stop("edge lengths not defined")
-        }
-        trees[[i]]$edge.length <- trees[[i]]$edge.length + p;
+    if (setequal(trees[[i]]$tip.label,trees[[1]]$tip.label) == FALSE) {
+      stop("trees have different tip label sets")
     }
+  }
+  if (type=="number"){
+    # checks and warnings
+    if (lambda<0) {stop("Pick lambda in [0,1]")}
+    if (lambda>1) {stop("Pick lambda in [0,1]")}
+    if (lambda!=0) { # if lambda=0 then we don't need edge lengths to be defined, but if lambda!=0 then we do
+      if (is.null(trees[[i]]$edge.length)) {
+        stop("edge lengths not defined")
+      }}
 
-    DN <- lapply(1:l, function(x) dist.nodes(trees[[x]]));
-    M <- lapply(1:l, function(x) my.mrca(trees[[x]],k));
+    M <- lapply(1:l, function(x) linear.mrca(trees[[x]],k));
     labelmatch <- lapply(1:l, function (y)
-                         fmatch(trees[[1]]$tip.label,trees[[y]]$tip.label));
-    pairs <-combn2(1:k);
+      fmatch(trees[[1]]$tip.label,trees[[y]]$tip.label));
+    pairs <- combn2(1:k)
+    x <- k*(k-1)/2
 
-    deltas <- sapply(1:l, function(y) apply(pairs, 1, function(x)
-                                            DN[[y]][k+1,labelmatch[[y]][x[1]]] - DN[[y]][k+1,labelmatch[[y]][x[2]]]))
-    gammas <- sapply(1:l, function(y) apply(pairs, 1, function(x)
-                                            DN[[y]][k+1,M[[y]][labelmatch[[y]][x[1]],labelmatch[[y]][x[2]]]]));
+    # topvecs is the purely topological matrix of vectors (don't waste time computing if lambda=1)
+    # lvecs is the purely length-based matrix of vectors (don't waste time computing if lambda=0)
+    if (lambda!=1) {
+      # make a copy of the trees with edge lengths = 1
+      TREES <- trees
+      for (i in 1:l) {
+        TREES[[i]]$edge.length <- rep(1,(2*k-2));
+      }
+      D <- sapply(1:l, function(x) dist.nodes(TREES[[x]])[k+1,]); # vector of vectors
 
-    x <- k*(k-1)/2;
+      topvecs <- sapply(1:l, function(y) apply(pairs, 1, function(x) D[M[[y]][[labelmatch[[y]][x[1]],labelmatch[[y]][x[2]]]],y]));
+      tv <- (1-lambda)*topvecs
+    }
+    if (lambda!=0) {
+      # we also need to know branch length distance matrix
+      d <- lapply(1:l, function(x) dist.nodes(trees[[x]]));
 
-    deltadistmat <- sapply(1:l, function(a) sapply(1:l, function(b)
-                                                   if (a<b) sapply(1:x, function(c) (deltas[[c,a]]-deltas[[c,b]])^2)))
-    deltadistmat <- sapply(1:l, function(a) sapply(1:l, function(b)
-                                                   sqrt(sum(deltadistmat[[b,a]]))))
+      lvecs <- sapply(1:l, function(y) apply(pairs, 1, function(x) d[[y]][k+1,M[[y]][labelmatch[[y]][x[1]],labelmatch[[y]][x[2]]]]));
+      tl <- lambda*lvecs
 
-    gammadistmat <- sapply(1:l, function(a) sapply(1:l, function(b)
-                                                   if (a<b) sapply(1:x, function(c) (gammas[[c,a]]-gammas[[c,b]])^2)))
-    gammadistmat <- sapply(1:l, function(a) sapply(1:l, function(b)
-                                                   sqrt(sum(gammadistmat[[b,a]]))))
+      # append vector of difference in pendant branch lengths
+      E <- lapply(1:l, function(x) pen.edge.treematch(trees[[x]],labelmatch[[x]]))
+      Pen <- sapply(1:l, function(x) apply(E[[x]], 1, function(y) d[[x]][y[1],y[2]]) )
+      P <- lambda*Pen
+    }
 
-    E <- lapply(1:l, function(x) edge.pendant(trees[[x]],k))
-    P <- sapply(1:l, function(x) apply(E[[x]], 1, function(y) DN[[x]][y[1],y[2]]) )
-    minP <- sapply(1:l, function(x) min(P[,x]))
-    sigmadistmat <- sapply(1:l, function(a) sapply(1:l, function(b)
-                                                   if (a<b) {abs(minP[[a]]-minP[[b]])/k} else {0}))
-
-    distmat <- deltadistmat + gammadistmat + sigmadistmat
+    if (lambda==0) {
+      # matrix where each entry is a vector of squared differences
+      sqdistmat <- sapply(1:l, function(a) sapply(1:l, function(b)
+        if (a<b) sapply(1:x, function(n) (tv[[n,a]]-tv[[n,b]])^2)))
+    }
+    else if (lambda==1) {
+      # matrix where each entry is a vector of squared differences plus pendant lengths
+      sqdistmat <- sapply(1:l, function(a) sapply(1:l, function(b)
+        if (a<b) c(sapply(1:x, function(n) (tl[[n,a]]-tl[[n,b]])^2),
+                   sapply(1:k, function(d) (P[,a][[d]]-P[,b][[d]])^2))))
+    }
+    else {
+      # matrix where each entry is a vector of squared differences plus pendant lengths
+      sqdistmat <- sapply(1:l, function(a) sapply(1:l, function(b)
+        if (a<b) c(sapply(1:x, function(n) (tv[[n,a]]+tl[[n,a]]-tv[[n,b]]-tl[[n,b]])^2),
+                   sapply(1:k, function(d) (P[,a][[d]]-P[,b][[d]])^2))))
+    }
+    # final matrix: each entry is square root of sum of sqdistmat entry
+    distmat <- sapply(1:l, function(a) sapply(1:l, function(b)
+      sqrt(sum(sqdistmat[[b,a]]))))
     return(distmat)
+  }
+  else if (type=="function"){
+    lambda <- integer()
+    # check: we need edge lengths defined
+    if (is.null(trees[[i]]$edge.length)) {
+      stop("edge lengths not defined")
+    }}
+
+
+    M <- lapply(1:l, function(x) linear.mrca(trees[[x]],k));
+    labelmatch <- lapply(1:l, function (y)
+      fmatch(trees[[1]]$tip.label,trees[[y]]$tip.label));
+    pairs <- combn2(1:k)
+    x <- k*(k-1)/2
+
+    # make a copy of the trees with edge lengths = 1
+    TREES <- trees
+    for (i in 1:l) {
+      TREES[[i]]$edge.length <- rep(1,(2*k-2));
+    }
+    D <- sapply(1:l, function(x) dist.nodes(TREES[[x]])[k+1,]); # vector of vectors
+
+    tv <- sapply(1:l, function(y) apply(pairs, 1, function(x) D[M[[y]][[labelmatch[[y]][x[1]],labelmatch[[y]][x[2]]]],y]));
+
+    # we also need to know branch length distance matrix
+    d <- lapply(1:l, function(x) dist.nodes(trees[[x]]));
+
+    tl <- sapply(1:l, function(y) apply(pairs, 1, function(x) d[[y]][k+1,M[[y]][labelmatch[[y]][x[1]],labelmatch[[y]][x[2]]]]));
+
+    # append vector of difference in pendant branch lengths
+    E <- lapply(1:l, function(x) pen.edge.treematch(trees[[x]],labelmatch[[x]]))
+    P <- sapply(1:l, function(x) apply(E[[x]], 1, function(y) d[[x]][y[1],y[2]]) )
+
+    # matrix where each entry is a vector of squared differences plus pendant lengths
+    sqdistmat <- function(lambda) { sapply(1:l, function(a) sapply(1:l, function(b)
+      if (a<b) {sqrt(sum(c(sapply(1:x, function(n) ((1-lambda)*(tv[[n,a]]-tv[[n,b]])+lambda*(tl[[n,a]]-tl[[n,b]]))^2),
+                           sapply(1:k, function(d) (lambda*(P[,a][[d]]-P[,b][[d]]))^2))))}
+      else {0}))  }
+
+  }
+  return(sqdistmat)
 }
-CK.wdistm <- compiler::cmpfun(CK.wdistm)
-
-
-
-
-
-#' function to take ONE object of class phylo and return its topological vector
-#'
-#' Description of this function..
-#'
-#' @export
-#'
-#' @author  Michelle Kendall \email{michelle.louise.kendall@@gmail.com}
-#'
-#' @param tr1 ...
-#'
-top.vec <- function(tr1) {
-k <- length(tr1$tip.label)
-
-# set all edge lengths to 1:
-tr1$edge.length <- rep(1,(2*k-2));
-# create vector of distances from root to tips:
-DN1 <- dist.nodes(tr1)[k+1,];
-# create mrca matrix:
-M1 <- my.mrca(tr1,k);
-
-# calculate the gamma vector of root to mrca distances:
-gamma <- apply(combn2(1:k), 1, function(x) DN1[M1[[x[1],x[2]]]])
-
-return(gamma)
-}
-top.vec <- cmpfun(top.vec)
-
-
-
-
-
-#' function to take ONE object of class phylo and return one long weighted vector
-#' caveat: a tree should not be compared to another tree simply by taking the Euclidean distance between their vectors output by this function
-#'
-#' Description of this function..
-#'
-#' @export
-#'
-#' @author  Michelle Kendall \email{michelle.louise.kendall@@gmail.com}
-#'
-#' @param tr1 ...
-#' @param p ...
-#'
-w.vec <- function(tr1,p=1) {
-k <- length(tr1$tip.label)
-# checks and warnings
-if (is.null(tr1$edge.length)) {
-stop("edge lengths not defined")
-}
-
-tr1$edge.length <- tr1$edge.length + p;
-
-DN1 <- dist.nodes(tr1);
-M1 <- my.mrca(tr1,k);
-
-pairs <-combn2(1:k);
-
-gamma <- apply(pairs, 1, function(x) DN1[k+1,M1[[x[1],x[2]]]]) 
-delta <- apply(pairs, 1, function(x) DN1[k+1,x[1]]-DN1[k+1,x[2]])
-
-# add minimum pendant branch length / k
-ep1 <- edge.pendant(tr1,k);
-pen.length1 <- apply(ep1, 1, function(x) DN1[x[1],x[2]])
-near1 <- min(pen.length1)/k;
-
-v <- c(gamma,delta,near1)
-return(v)
-}
-w.vec <- cmpfun(w.vec)
+multi.dist <- cmpfun(multi.dist)
