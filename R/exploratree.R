@@ -3,10 +3,10 @@
 #'
 #' This functions are under development. Please do not use them without contacting the author first.
 #'
-#' @param x need
-#' @param method to
-#' @param nf document
-#' @param ... all this
+#' @param x an object of the class \code{\link[ape]{multiPhylo}}
+#' @param method a function outputting the summary of a tree (phylo object) in the form of a vector
+#' @param nf the number of principal components to retain
+#' @param ... further arguments to be passed to \code{method}
 #'
 #' @author Thibaut Jombart \email{thibautjombart@@gmail.com}, Michelle Kendall \email{michelle.louise.kendall@@gmail.com}, Caroline Colijn \email{c.colijn@@imperial.ac.uk}
 #'
