@@ -90,23 +90,23 @@ CK.metric <- function(x,lambda=0,type="number") { # allow output type to be numb
         ## checks and warnings
         if (lambda<0) {stop("Pick lambda in [0,1]")}
         if (lambda>1) {stop("Pick lambda in [0,1]")}
-        k <- length(tr1$tip.label)
+        k <- length(x$tip.label)
 
         if (lambda!=0) { # if lambda=0 then we don't need edge lengths to be defined, but if lambda!=0 then we do
-            if (is.null(tr1$edge.length)) {
+            if (is.null(x$edge.length)) {
                 stop("edge lengths not defined")
             }
         }
 
-        M1 <- linear.mrca(tr1,k); # kxk MRCA matrix for tree 1
+        M1 <- linear.mrca(x,k); # kxk MRCA matrix for tree 1
 
         if (lambda!=1){ # make a copy with edge lengths = 1
-            TR1 <- tr1
-            TR1$edge.length <- rep(1,2*k-2);
-            D1 <- dist.nodes(TR1); # if lambda!=1 we need to know edge count distances
+            X <- x
+            X$edge.length <- rep(1,2*k-2);
+            D1 <- dist.nodes(X); # if lambda!=1 we need to know edge count distances
         }
         if (lambda!=0) { # if lambda!=0 we need to know branch length distances
-            d1 <- dist.nodes(tr1);
+            d1 <- dist.nodes(x);
         }
 
         pairs <- combn2(1:k)
@@ -125,7 +125,7 @@ CK.metric <- function(x,lambda=0,type="number") { # allow output type to be numb
 
         if (lambda!=0) {
                                         # append vector of pendant branch lengths
-            ep1 <- pen.edge.tree(tr1,k);
+            ep1 <- pen.edge.tree(x,k);
             pen.length1 <- apply(ep1, 1, function(x) d1[x[1],x[2]])
             v <- as.numeric(c(v,lambda*pen.length1))
         }
@@ -134,20 +134,20 @@ CK.metric <- function(x,lambda=0,type="number") { # allow output type to be numb
     }
     if (type=="function") {
         lambda <- integer()
-        k <- length(tr1$tip.label)
+        k <- length(x$tip.label)
                                         # checks and warnings
-        if (is.null(tr1$edge.length)) {
+        if (is.null(x$edge.length)) {
             stop("edge lengths not defined")
         }
 
-        M1 <- linear.mrca(tr1,k); # kxk MRCA matrix for tree 1
+        M1 <- linear.mrca(x,k); # kxk MRCA matrix for tree 1
 
-        ## make a copy of the tree called TR1 with edge lengths = 1
-        TR1 <- tr1
-        TR1$edge.length <- rep(1,2*k-2);
-        D1 <- dist.nodes(TR1);
+        ## make a copy of the tree called X with edge lengths = 1
+        X <- x
+        X$edge.length <- rep(1,2*k-2);
+        D1 <- dist.nodes(X);
         ## find distances based on branch lengths:
-        d1 <- dist.nodes(tr1);
+        d1 <- dist.nodes(x);
 
         pairs <- combn2(1:k)
         ## vt is the purely topological vector, vl is the purely length-based vector
@@ -155,7 +155,7 @@ CK.metric <- function(x,lambda=0,type="number") { # allow output type to be numb
         vl <- apply(pairs, 1, function(x) d1[k+1,M1[[x[1],x[2]]]])
 
         ## append vector of pendant branch lengths
-        ep1 <- pen.edge.tree(tr1,k);
+        ep1 <- pen.edge.tree(x,k);
         pen.length1 <- apply(ep1, 1, function(x) d1[x[1],x[2]])
 
         vlambda <- function(lambda) {
