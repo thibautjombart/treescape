@@ -3,7 +3,7 @@
 #'
 #' This functions are under development. Please do not use them without contacting the author first.
 #'
-#' @param x an object of the class \code{\link[ape]{multiPhylo}}
+#' @param x an object of the class multiPhylo
 #' @param method a function outputting the summary of a tree (phylo object) in the form of a vector
 #' @param nf the number of principal components to retain
 #' @param ... further arguments to be passed to \code{method}
@@ -26,9 +26,12 @@
 #' table.paint(as.matrix(res$D))
 #' scatter(res$pco)
 #'
-exploratree <- function(x, method=distTips, nf=NULL, ...){
+exploratree <- function(x, method=CK.metric, nf=NULL, ...){
     ## CHECKS ##
     if(!inherits(x, "multiPhylo")) stop("x should be a multiphylo object")
+    if(is.null(names(x))) names(x) <- 1:length(x)
+    lab <- names(x)
+
 
     ## GET DISTANCES BETWEEN TREES ##
     ## get data.frame of all summary vectors ##
@@ -36,6 +39,7 @@ exploratree <- function(x, method=distTips, nf=NULL, ...){
 
     ## get pairwise Euclidean distances ##
     D <- dist(df)
+    attr(D,"Labels") <- lab # restore labels
 
     ## perform PCoA/MDS ##
     pco <- dudi.pco(D, scannf=is.null(nf), nf=nf)
@@ -45,4 +49,3 @@ exploratree <- function(x, method=distTips, nf=NULL, ...){
     out <- list(D=D, pco=pco)
     return(out)
 } # end exploratree
-

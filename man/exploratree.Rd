@@ -4,16 +4,16 @@
 \alias{exploratree}
 \title{Phylogenetic tree exploration}
 \usage{
-exploratree(x, method = distTips, nf = NULL, ...)
+exploratree(x, method = CK.metric, nf = NULL, ...)
 }
 \arguments{
-\item{x}{need}
+\item{x}{an object of the class multiPhylo}
 
-\item{method}{to}
+\item{method}{a function outputting the summary of a tree (phylo object) in the form of a vector}
 
-\item{nf}{document}
+\item{nf}{the number of principal components to retain}
 
-\item{...}{all this}
+\item{...}{further arguments to be passed to \code{method}}
 }
 \description{
 This functions are under development. Please do not use them without contacting the author first.

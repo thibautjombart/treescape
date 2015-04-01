@@ -110,8 +110,8 @@ CK.metric <- function(x,lambda=0,type="number") { # allow output type to be numb
         }
 
         pairs <- combn2(1:k)
-                                        # vt is the purely topological vector (don't waste time computing if lambda=1)
-                                        # vl is the purely length-based vector (don't waste time computing if lambda=0)
+        ## vt is the purely topological vector (don't waste time computing if lambda=1)
+        ## vl is the purely length-based vector (don't waste time computing if lambda=0)
         if (lambda==1) { vt <- rep(0,k*(k-1)/2)}
         else {
             vt <- apply(pairs, 1, function(x) D1[k+1,M1[[x[1],x[2]]]])
@@ -124,7 +124,7 @@ CK.metric <- function(x,lambda=0,type="number") { # allow output type to be numb
         v <- (1-lambda)*vt + lambda*vl
 
         if (lambda!=0) {
-                                        # append vector of pendant branch lengths
+            ## append vector of pendant branch lengths
             ep1 <- pen.edge.tree(x,k);
             pen.length1 <- apply(ep1, 1, function(x) d1[x[1],x[2]])
             v <- as.numeric(c(v,lambda*pen.length1))
@@ -135,7 +135,7 @@ CK.metric <- function(x,lambda=0,type="number") { # allow output type to be numb
     if (type=="function") {
         lambda <- integer()
         k <- length(x$tip.label)
-                                        # checks and warnings
+        ## checks and warnings
         if (is.null(x$edge.length)) {
             stop("edge lengths not defined")
         }
