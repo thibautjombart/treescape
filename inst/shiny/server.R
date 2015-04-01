@@ -94,11 +94,11 @@ shinyServer(function(input, output) {
             ## select method used to summarise tree
             if(!is.null(input$treemethod)){
                 if(input$treemethod %in% c("patristic","nNodes","Abouheif","sumDD")){
-                    treeMethod <- function(x){return(distTips(x, method=input$treemethod))}
+                    treeMethod <- function(x){return(adephylo::distTips(x, method=input$treemethod))}
                 } else if(input$treemethod=="CKmetric"){
                     treeMethod <- function(x){return(CK.metric(x, lambda=input$lambda))}
                 } else {
-                    treeMethod <- distTips
+                    treeMethod <- adephylo::distTips
                 }
             }
 

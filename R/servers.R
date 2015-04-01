@@ -7,6 +7,7 @@
 #'
 #' @export
 #' @import shiny
+#' @importFrom adephylo distTips
 #' @importFrom utils packageDescription
 #'
 exploratreeServer <- function(){
