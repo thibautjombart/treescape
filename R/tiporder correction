@@ -1,0 +1,84 @@
+tree.vec <- function(tr1,lambda=0,type="number") { # allow output type to be number or function
+  if (type=="number"){
+    if (lambda<0) {stop("Pick lambda in [0,1]")}
+    if (lambda>1) {stop("Pick lambda in [0,1]")}
+    k <- length(tr1$tip.label)
+    # checks and warnings
+    
+    if (lambda!=0) { # if lambda=0 then we don't need edge lengths to be defined, but if lambda!=0 then we do
+      if (is.null(tr1$edge.length)) {
+        stop("edge lengths not defined")
+      }
+    }
+    
+    M1 <- linear.mrca(tr1,k); # kxk MRCA matrix for tree 1
+    
+    if (lambda!=1){ # make a copy with edge lengths = 1
+      TR1 <- tr1
+      TR1$edge.length <- rep(1,2*k-2);
+      D1 <- dist.nodes(TR1); # if lambda!=1 we need to know edge count distances
+    }
+    if (lambda!=0) { # if lambda!=0 we need to know branch length distances
+      d1 <- dist.nodes(tr1);
+    }
+    
+    pairs <- combn2(1:k)
+    tiporder <- order(tr1$tip.label)
+    # vt is the purely topological vector (don't waste time computing if lambda=1)
+    # vl is the purely length-based vector (don't waste time computing if lambda=0)
+    if (lambda==1) { vt <- rep(0,k*(k-1)/2)}
+    else {
+      vt <- apply(pairs, 1, function(x) D1[k+1,M1[[tiporder[[x[1]]],tiporder[[x[2]]]]]]) 
+    }
+    if (lambda==0) { vl <- rep(0,k*(k-1)/2)}
+    else {
+      vl <- apply(pairs, 1, function(x) d1[k+1,M1[[tiporder[[x[1]]],tiporder[[x[2]]]]]]) 
+    }
+    
+    v <- (1-lambda)*vt + lambda*vl
+    
+    if (lambda!=0) {
+      # append vector of pendant branch lengths
+      ep1 <- pen.edge.treematch(tr1,tiporder);
+      pen.length1 <- apply(ep1, 1, function(x) d1[x[1],x[2]])
+      v <- as.numeric(c(v,lambda*pen.length1)) 
+    }
+    
+    return(v)
+  }
+  if (type=="function") {  
+    lambda <- integer()
+    k <- length(tr1$tip.label)
+    # checks and warnings
+    if (is.null(tr1$edge.length)) {
+      stop("edge lengths not defined")
+    }
+    
+    M1 <- linear.mrca(tr1,k); # kxk MRCA matrix for tree 1
+    
+    # make a copy of the tree called TR1 with edge lengths = 1
+    TR1 <- tr1
+    TR1$edge.length <- rep(1,2*k-2);
+    D1 <- dist.nodes(TR1); 
+    # find distances based on branch lengths:
+    d1 <- dist.nodes(tr1);
+    
+    pairs <- combn2(1:k)
+    tiporder <- order(tr1$tip.label)
+    # vt is the purely topological vector, vl is the purely length-based vector 
+    vt <- apply(pairs, 1, function(x) D1[k+1,M1[[tiporder[[x[1]]],tiporder[[x[2]]]]]]) 
+    vl <- apply(pairs, 1, function(x) d1[k+1,M1[[tiporder[[x[1]]],tiporder[[x[2]]]]]]) 
+    
+    # append vector of pendant branch lengths
+    ep1 <- pen.edge.treematch(tr1,tiporder);
+    pen.length1 <- apply(ep1, 1, function(x) d1[x[1],x[2]])
+    
+    vlambda <- function(lambda) {
+      if (lambda<0) {stop("Pick lambda in [0,1]")}
+      if (lambda>1) {stop("Pick lambda in [0,1]")}
+      (c(((1-lambda)*vt + lambda*vl),(lambda*pen.length1))) }
+    
+    return(vlambda)
+  }
+}
+tree.vec <- cmpfun(tree.vec)
