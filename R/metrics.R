@@ -397,7 +397,7 @@ tree.dist <- cmpfun(tree.dist)
 ##         ## check: we need edge lengths defined
 ##         if (is.null(trees[[i]]$edge.length)) {
 ##             stop("edge lengths not defined")
-##         }}
+##         }  # }
 
 
 ##     M <- lapply(1:l, function(x) linear.mrca(trees[[x]],k));
