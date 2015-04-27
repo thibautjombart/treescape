@@ -7,8 +7,8 @@
 #'
 #' @export
 #'
-#' @param tree ...
-#' @param k ...
+#' @param tree object of class phylo
+#' @param k number of tips in tree
 #'
 #' @importFrom phangorn Descendants
 #' @importFrom phangorn Children
@@ -44,8 +44,8 @@ linear.mrca <- cmpfun(linear.mrca) # compile
 #'
 #' @author  Michelle Kendall \email{michelle.louise.kendall@@gmail.com}
 #'
-#' @param tree ...
-#' @param k ...
+#' @param tree object of class phylo
+#' @param k number of tips in tree
 #'
 #' @importFrom compiler cmpfun
 #' @importFrom fastmatch fmatch
