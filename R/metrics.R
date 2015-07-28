@@ -15,6 +15,14 @@
 #' @importFrom combinat combn
 #' @importFrom compiler cmpfun
 #'
+#' @examples
+#'
+#' ## generate a phylo tree
+#' x <- rtree(6)
+#'
+#' ## create matrix of MRCAs: entry (i,j) is the node number of the MRCA of tips i and j
+#' linear.mrca(x,6)
+#'
 linear.mrca <- function(tree,k=0) { # k is number of tips, which can be passed to the function to save on computation
   if (k==0) {k <- length(tree$tip.label)}
   M <- matrix(0, nrow=k, ncol=k); # initialise matrix
