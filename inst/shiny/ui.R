@@ -22,7 +22,7 @@ shinyUI(
                 "$('li.active a').first().html()!= 'Help'",
                 selectInput("treemethod", "Choose a tree summary:",
                             choices=c(
-                            "CK metric" = "CKmetric",
+                            "Metric" = "metric",
                             "Patristic distances" = "patristic",
                             "Number of nodes" = "nNodes",
                             "Abouheif's metric" = "Abouheif",
