@@ -113,7 +113,7 @@ pen.edge.treematch <- cmpfun(pen.edge.treematch)
 #'
 #' @importFrom combinat combn2
 #' @importFrom compiler cmpfun
-#' @importFrom ape dist.nodes
+#' @import ape 
 #'
 #' @examples
 #'
@@ -230,7 +230,7 @@ CK.metric <- cmpfun(CK.metric)
 #'
 #' @importFrom compiler cmpfun
 #' @importFrom combinat combn2
-#' @importFrom ape dist.nodes
+#' @import ape 
 #'
 #'
 #' @examples
@@ -377,7 +377,7 @@ tree.dist <- cmpfun(tree.dist)
 #'
 #' @importFrom compiler cmpfun
 #' @importFrom combinat combn2
-#' @importFrom ape dist.nodes
+#' @import ape 
 #'
 #'
 #' @examples
@@ -541,7 +541,7 @@ multi.dist <- cmpfun(multi.dist)
 #'
 #' @importFrom compiler cmpfun
 #' @importFrom combinat combn2
-#' @importFrom ape dist.nodes
+#' @import ape 
 #'
 #'
 #' @examples
