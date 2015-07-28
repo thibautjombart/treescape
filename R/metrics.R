@@ -1,7 +1,7 @@
 
-#' Function to make mrca matrix of a tree, where entry (i,j) gives the mrca of tips i and j
+#' Linear MRCA function
 #'
-#' Description of this function..
+#' Function to make mrca matrix of a tree, where entry (i,j) gives the mrca of tips i and j
 #'
 #' @author  Michelle Kendall \email{michelle.louise.kendall@@gmail.com}
 #'
@@ -12,33 +12,48 @@
 #'
 #' @importFrom phangorn Descendants
 #' @importFrom phangorn Children
+#' @importFrom combinat combn
 #' @importFrom compiler cmpfun
 #'
-linear.mrca <- function(tree,k)
-{
-    M <- matrix(0, nrow=k, ncol=k); # initialise matrix
-                                        # traverse internal nodes from root down
-    for (tmp in (k+1):(2*k-1)){
-                                        # find the two children of tmp
-        tmp.desc <- Children(tree,tmp)
-                                        # tmp is the MRCA of all pairs of tips descending from child one and child two
-        I <- Descendants(tree,tmp.desc[[1]], type="tips")
-        J <- Descendants(tree,tmp.desc[[2]], type="tips")
-        for (i in I)  {
-            for (j in J)  {
-                M[i,j] <- M[j,i] <- tmp
-            }  }
-    }
-    return(M)
+linear.mrca <- function(tree,k=0) { # k is number of tips, which can be passed to the function to save on computation
+  if (k==0) {k <- length(tree$tip.label)}
+  M <- matrix(0, nrow=k, ncol=k); # initialise matrix
+  T <- tree$Nnode # total number of internal nodes
+  # traverse internal nodes from root down 
+  for (tmp in (k+1):(k+T)){
+    # find the children of tmp. Then tmp is the MRCA of all pairs of tips descending from different children
+    tmp.desc <- Children(tree,tmp)
+    Desc <- sapply(1:length(tmp.desc), function(x) Descendants(tree,tmp.desc[[x]],type="tips"))
+      if (length(tmp.desc)==2) {  # tmp is the MRCA of tips descending from child one and tips from child two
+        I <- Desc[[1]]; J <- Desc[[2]]
+          for (i in I)  {
+           for (j in J)  {
+            M[i,j] <- M[j,i] <- tmp  
+           }
+          }
+      }
+      else { # for each pair of children of tmp, tmp is the MRCA of their descendant tips
+        pairs <- combn(length(Desc),2)
+        for (p in 1:length(pairs[1,])) {
+          for (i in Desc[[pairs[1,p]]])  {
+           for (j in Desc[[pairs[2,p]]])  {
+            M[i,j] <- M[j,i] <- tmp  
+           }
+          }
+        } 
+      }
+  }
+  diag(M) <- 1:k # we define the diagonal elements of M to be the tips themselves
+  return(M)
 }
 linear.mrca <- cmpfun(linear.mrca) # compile
 
 
 
 
-#' Title of the function
+#' Pendant edges
 #'
-#' Description of this function..
+#' Extract just the pendant edges from the vector tree$edge
 #'
 #' @export
 #'
@@ -48,16 +63,15 @@ linear.mrca <- cmpfun(linear.mrca) # compile
 #' @param k number of tips in tree
 #'
 #' @importFrom compiler cmpfun
-#' @importFrom fastmatch fmatch
 #'
-pen.edge.tree <- function(tree,k) {tree$edge[fmatch(1:k, tree$edge[,2]),] }
+pen.edge.tree <- function(tree,k) {tree$edge[match(1:k, tree$edge[,2]),] }
 pen.edge.tree <- cmpfun(pen.edge.tree)
 
 
 
-#' Title of the function
+#' Pendant edges, matched
 #'
-#' Description of this function..
+#' Extract the pendant edges from the vector tree$edge, in the order given by labelmatch
 #'
 #' @export
 #'
@@ -67,9 +81,8 @@ pen.edge.tree <- cmpfun(pen.edge.tree)
 #' @param labelmatch ...
 #'
 #' @importFrom compiler cmpfun
-#' @importFrom fastmatch fmatch
 #'
-pen.edge.treematch  <- function(tree,labelmatch) {tree$edge[fmatch(labelmatch, tree$edge[,2]),] }
+pen.edge.treematch  <- function(tree,labelmatch) {tree$edge[match(labelmatch, tree$edge[,2]),] }
 pen.edge.treematch <- cmpfun(pen.edge.treematch)
 
 
