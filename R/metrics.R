@@ -246,117 +246,117 @@ CK.metric <- cmpfun(CK.metric)
 #'
 #'
 tree.dist <- function(tr1,tr2,lambda=0,type="number") { # allow output type to be number or function of lambda
-    if (type=="number"){
-        if (lambda<0) {stop("Pick lambda in [0,1]")}
-        if (lambda>1) {stop("Pick lambda in [0,1]")}
-        k <- length(tr1$tip.label)
-                                        # checks and warnings
-        if (k != length(tr2$tip.label)) {
-            stop("trees have different numbers of tips")
-        }
-        if (setequal(tr1$tip.label,tr2$tip.label) == FALSE) {
-            stop("trees have different tip label sets")
-        }
-        if (lambda!=0) { # if lambda=0 then we don't need edge lengths to be defined, but if lambda!=0 then we do
-            if (is.null(tr1$edge.length)) {
-                stop("edge lengths not defined in first tree")
-            }
-            if (is.null(tr2$edge.length)) {
-                stop("edge lengths not defined in second tree")
-            }
-        }
-
-        M1 <- linear.mrca(tr1,k); # kxk MRCA matrix for tree 1
-        M2 <- linear.mrca(tr2,k);
-        labelmatch <- fmatch(tr1$tip.label, tr2$tip.label);
-        if (lambda!=1){ # make a copy of the trees called TR1 and TR2, with edge lengths = 1
-            TR1 <- tr1; TR2 <- tr2
-            TR1$edge.length <- rep(1,2*k-2);
-            TR2$edge.length <- rep(1,2*k-2);
-            D1 <- dist.nodes(TR1); # if lambda!=1 we need to know edge count distances
-            D2 <- dist.nodes(TR2);
-        }
-        if (lambda!=0) { # if lambda!=0 we need to know branch length distances.
-            d1 <- dist.nodes(tr1);
-            d2 <- dist.nodes(tr2);
-        }
-
-        pairs <- combn2(1:k)
-        ## vt is the purely topological vector (don't waste time computing if lambda=1)
-        ## vl is the purely length-based vector (don't waste time computing if lambda=0)
-        if (lambda==1) { vt <- rep(0,k*(k-1)/2)}
-        else {
-            vt <- apply(pairs, 1, function(x) D1[k+1,M1[[x[1],x[2]]]] - D2[k+1,M2[[labelmatch[x[1]],labelmatch[x[2]]]]])
-        }
-        if (lambda==0) { vl <- rep(0,k*(k-1)/2)}
-        else {
-            vl <- apply(pairs, 1, function(x) d1[k+1,M1[[x[1],x[2]]]] - d2[k+1,M2[[labelmatch[x[1]],labelmatch[x[2]]]]])
-        }
-
-        v <- (1-lambda)*vt + lambda*vl
-
-        if (lambda!=0) {
-            ## append vector of difference in pendant branch lengths
-            ep1 <- pen.edge.tree(tr1,k);
-            ep2 <- pen.edge.treematch(tr2,labelmatch);
-            pen.length1 <- apply(ep1, 1, function(x) d1[x[1],x[2]])
-            pen.length2 <- apply(ep2, 1, function(x) d2[x[1],x[2]])
-            pen.length.diff <- sapply(1:k, function(x) pen.length1[[x]] - pen.length2[[x]])
-            v <- as.numeric(c(v,lambda*pen.length.diff))
-        }
-
-        return(sqrt(sum(v^2)))
+  if (type=="number"){
+    if (lambda<0) {stop("Pick lambda in [0,1]")}
+    if (lambda>1) {stop("Pick lambda in [0,1]")}
+    k <- length(tr1$tip.label)
+    # checks and warnings
+    if (k != length(tr2$tip.label)) {
+      stop("trees have different numbers of tips")
     }
-    if (type=="function") {
-        lambda <- integer()
-        k <- length(tr1$tip.label)
-                                        # checks and warnings
-        if (k != length(tr2$tip.label)) {
-            stop("trees have different numbers of tips")
-        }
-        if (setequal(tr1$tip.label,tr2$tip.label) == FALSE) {
-            stop("trees have different tip label sets")
-        }
-        if (is.null(tr1$edge.length)) {
-            stop("edge lengths not defined in first tree")
-        }
-        if (is.null(tr2$edge.length)) {
-            stop("edge lengths not defined in second tree")
-        }
-
-        M1 <- linear.mrca(tr1,k); # kxk MRCA matrix for tree 1
-        M2 <- linear.mrca(tr2,k);
-        labelmatch <- fmatch(tr1$tip.label, tr2$tip.label);
-        ## make a copy of the trees called TR1 and TR2, with edge lengths = 1
-        TR1 <- tr1; TR2 <- tr2
-        TR1$edge.length <- rep(1,2*k-2);
-        TR2$edge.length <- rep(1,2*k-2);
-        D1 <- dist.nodes(TR1);
-        D2 <- dist.nodes(TR2);
-
-        ## get full distance matrices with lengths
-        d1 <- dist.nodes(tr1);
-        d2 <- dist.nodes(tr2);
-
-        pairs <- combn2(1:k)
-        ## vt is the purely topological vector, vl is the purely length-based vector
-        vt <- apply(pairs, 1, function(x) D1[k+1,M1[[x[1],x[2]]]] - D2[k+1,M2[[labelmatch[x[1]],labelmatch[x[2]]]]])
-        vl <- apply(pairs, 1, function(x) d1[k+1,M1[[x[1],x[2]]]] - d2[k+1,M2[[labelmatch[x[1]],labelmatch[x[2]]]]])
-
-        ## append vector of difference in pendant branch lengths
-        ep1 <- pen.edge.tree(tr1,k);
-        ep2 <- pen.edge.treematch(tr2,labelmatch);
-        pen.length1 <- apply(ep1, 1, function(x) d1[x[1],x[2]])
-        pen.length2 <- apply(ep2, 1, function(x) d2[x[1],x[2]])
-        pen.length.diff <- sapply(1:k, function(x) pen.length1[[x]] - pen.length2[[x]])
-
-        vlambda <- function(lambda) {
-            if (lambda<0) {stop("Pick lambda in [0,1]")}
-            if (lambda>1) {stop("Pick lambda in [0,1]")}
-            sqrt(sum((c(((1-lambda)*vt + lambda*vl),(lambda*pen.length.diff)))^2)) }
-
-        return(vlambda)
+    if (setequal(tr1$tip.label,tr2$tip.label) == FALSE) {
+      stop("trees have different tip label sets")
+    } 
+    if (lambda!=0) { # if lambda=0 then we don't need edge lengths to be defined, but if lambda!=0 then we do
+      if (is.null(tr1$edge.length)) {
+        stop("edge lengths not defined in first tree")
+      }
+      if (is.null(tr2$edge.length)) {
+        stop("edge lengths not defined in second tree")
+      }
     }
+    
+    M1 <- linear.mrca(tr1,k); # kxk MRCA matrix for tree 1
+    M2 <- linear.mrca(tr2,k);
+    labelmatch <- match(tr1$tip.label, tr2$tip.label);
+    if (lambda!=1){ # make a copy of the trees called TR1 and TR2, with edge lengths = 1
+      TR1 <- tr1; TR2 <- tr2
+      TR1$edge.length <- rep(1,2*k-2);
+      TR2$edge.length <- rep(1,2*k-2);
+      D1 <- dist.nodes(TR1); # if lambda!=1 we need to know edge count distances
+      D2 <- dist.nodes(TR2);
+    }
+    if (lambda!=0) { # if lambda!=0 we need to know branch length distances.
+      d1 <- dist.nodes(tr1);
+      d2 <- dist.nodes(tr2);
+    }
+    
+    pairs <- combn2(1:k)
+    # vt is the purely topological vector (don't waste time computing if lambda=1)
+    # vl is the purely length-based vector (don't waste time computing if lambda=0)
+    if (lambda==1) { vt <- rep(0,k*(k-1)/2)}
+    else {
+      vt <- apply(pairs, 1, function(x) D1[k+1,M1[[x[1],x[2]]]] - D2[k+1,M2[[labelmatch[x[1]],labelmatch[x[2]]]]]) 
+    }
+    if (lambda==0) { vl <- rep(0,k*(k-1)/2)}
+    else {
+      vl <- apply(pairs, 1, function(x) d1[k+1,M1[[x[1],x[2]]]] - d2[k+1,M2[[labelmatch[x[1]],labelmatch[x[2]]]]]) 
+    }
+    
+    v <- (1-lambda)*vt + lambda*vl
+    
+    if (lambda!=0) {
+      # append vector of difference in pendant branch lengths
+      ep1 <- pen.edge.tree(tr1,k);
+      ep2 <- pen.edge.treematch(tr2,labelmatch);
+      pen.length1 <- apply(ep1, 1, function(x) d1[x[1],x[2]])
+      pen.length2 <- apply(ep2, 1, function(x) d2[x[1],x[2]])
+      pen.length.diff <- sapply(1:k, function(x) pen.length1[[x]] - pen.length2[[x]])
+      v <- as.numeric(c(v,lambda*pen.length.diff)) 
+    }
+    
+    return(sqrt(sum(v^2)))
+  }
+  if (type=="function") {  
+    lambda <- integer()
+    k <- length(tr1$tip.label)
+    # checks and warnings
+    if (k != length(tr2$tip.label)) {
+      stop("trees have different numbers of tips")
+    }
+    if (setequal(tr1$tip.label,tr2$tip.label) == FALSE) {
+      stop("trees have different tip label sets")
+    } 
+    if (is.null(tr1$edge.length)) {
+      stop("edge lengths not defined in first tree")
+    }
+    if (is.null(tr2$edge.length)) {
+      stop("edge lengths not defined in second tree")
+    }
+    
+    M1 <- linear.mrca(tr1,k); # kxk MRCA matrix for tree 1
+    M2 <- linear.mrca(tr2,k);
+    labelmatch <- match(tr1$tip.label, tr2$tip.label);
+    # make a copy of the trees called TR1 and TR2, with edge lengths = 1
+    TR1 <- tr1; TR2 <- tr2
+    TR1$edge.length <- rep(1,2*k-2);
+    TR2$edge.length <- rep(1,2*k-2);
+    D1 <- dist.nodes(TR1); 
+    D2 <- dist.nodes(TR2);
+    
+    # get full distance matrices with lengths
+    d1 <- dist.nodes(tr1);
+    d2 <- dist.nodes(tr2);
+    
+    pairs <- combn2(1:k)
+    # vt is the purely topological vector, vl is the purely length-based vector 
+    vt <- apply(pairs, 1, function(x) D1[k+1,M1[[x[1],x[2]]]] - D2[k+1,M2[[labelmatch[x[1]],labelmatch[x[2]]]]]) 
+    vl <- apply(pairs, 1, function(x) d1[k+1,M1[[x[1],x[2]]]] - d2[k+1,M2[[labelmatch[x[1]],labelmatch[x[2]]]]]) 
+    
+    # append vector of difference in pendant branch lengths
+    ep1 <- pen.edge.tree(tr1,k);
+    ep2 <- pen.edge.treematch(tr2,labelmatch);
+    pen.length1 <- apply(ep1, 1, function(x) d1[x[1],x[2]])
+    pen.length2 <- apply(ep2, 1, function(x) d2[x[1],x[2]])
+    pen.length.diff <- sapply(1:k, function(x) pen.length1[[x]] - pen.length2[[x]])
+    
+    vlambda <- function(lambda) {
+      if (lambda<0) {stop("Pick lambda in [0,1]")}
+      if (lambda>1) {stop("Pick lambda in [0,1]")}
+      sqrt(sum((c(((1-lambda)*vt + lambda*vl),(lambda*pen.length.diff)))^2)) }
+    
+    return(vlambda)
+  }
 }
 tree.dist <- cmpfun(tree.dist)
 
