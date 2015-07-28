@@ -114,7 +114,7 @@ pen.edge.treematch <- cmpfun(pen.edge.treematch)
 #' @importFrom combinat combn2
 #' @importFrom compiler cmpfun
 #'
-tree.vec <- function(tr1,lambda=0,type="number") { # allow output type to be number or function
+CK.metric <- function(tr1,lambda=0,type="number") { # allow output type to be number or function
   if (type=="number"){
     if (lambda<0) {stop("Pick lambda in [0,1]")}
     if (lambda>1) {stop("Pick lambda in [0,1]")}
@@ -195,7 +195,7 @@ tree.vec <- function(tr1,lambda=0,type="number") { # allow output type to be num
     return(vlambda)
   }
 }
-tree.vec <- cmpfun(tree.vec)
+CK.metric <- cmpfun(CK.metric)
 
 
 
