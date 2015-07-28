@@ -393,7 +393,7 @@ tree.dist <- cmpfun(tree.dist)
 #'
 #' ## A method to visualise these distances with MDS:
 #' require(ade4)
-#' mMDS <- dudi.pco(m(0), scannf=FALSE,nf=2) # asks you to select number of axes; only 2 needed for MDS
+#' mMDS <- dudi.pco(as.dist(m(0)), scannf=FALSE,nf=2) # asks you to select number of axes; only 2 needed for MDS
 #' mdf <- as.data.frame(cbind(mMDS$li[,1],mMDS$li[,2]))
 #' require(ggplot2)
 #' mplot <- ggplot(mdf, aes(mMDS$li[,1],mMDS$li[,2]))
