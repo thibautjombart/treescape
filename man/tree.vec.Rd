@@ -22,11 +22,11 @@ otherwise they are functions of lambda
 ## generate a random tree
 tree <- rtree(6)
 ## topological vector of mrca distances from root:
-CK.metric(tree)
+tree.vec(tree)
 ## vector of mrca distances from root when lambda=0.5:
-CK.metric(tree,0.5)
+tree.vec(tree,0.5)
 ## vector of mrca distances as a function of lambda:
-vec.func <- CK.metric(tree,type="function")
+vec.func <- tree.vec(tree,type="function")
 ## evaluate the vector at lambda=0.5:
 vec.func(0.5)
 }
