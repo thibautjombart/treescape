@@ -7,9 +7,9 @@
 pen.edge.treematch(tree, labelmatch)
 }
 \arguments{
-\item{tree}{...}
+\item{tree}{an object of the class \code{phylo}}
 
-\item{labelmatch}{...}
+\item{labelmatch}{a vector specifying the order of the tips in the output. This is used by other functions in the package to match the tip labels in the trees}
 }
 \description{
 Extract the pendant edges from the vector tree$edge, in the order given by labelmatch

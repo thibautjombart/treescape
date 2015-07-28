@@ -7,7 +7,7 @@
 pen.edge.tree(tree, k)
 }
 \arguments{
-\item{tree}{object of class phylo}
+\item{tree}{an object of the class \code{phylo}}
 
 \item{k}{number of tips in tree}
 }

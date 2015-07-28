@@ -7,15 +7,15 @@
 linear.mrca(tree, k = 0)
 }
 \arguments{
-\item{tree}{object of class phylo}
+\item{tree}{an object of the class \code{phylo}}
 
-\item{k}{number of tips in tree}
+\item{k}{(optional) number of tips in tree, for faster computation}
 }
 \description{
-Function to make mrca matrix of a tree, where entry (i,j) gives the mrca of tips i and j
+Function to make the MRCA matrix of a tree, where entry (i,j) gives the MRCA of tips i and j
 }
 \examples{
-## generate a phylo tree
+## generate a random tree
 x <- rtree(6)
 
 ## create matrix of MRCAs: entry (i,j) is the node number of the MRCA of tips i and j

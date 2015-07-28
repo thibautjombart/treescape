@@ -7,16 +7,28 @@
 CK.metric(tr1, lambda = 0, type = "number")
 }
 \arguments{
-\item{lambda}{...}
+\item{tr1}{an object of the class \code{phylo}}
 
-\item{type}{...}
+\item{lambda}{a number in [0,1] which specifies the extent to which topology (default, with lambda=0)  or branch lengths (lambda=1) are emphasised. This argument is ignored if type="function"}
 
-\item{x}{an object of the class \code{phylo} ...}
+\item{type}{logical which takes the inputs "\code{number}" (default) or "\code{function}". When \code{type="number"}, the entries of the output vector are numeric; when \code{type="function"} each entry is a function of lambda}
 }
 \description{
-Function which takes a phylo as input and outputs the vector.
-The elements of the vector are numeric if a value for lambda is supplied and type="number",
+Function which takes a phylo as input and outputs the vector for the metric.
+The elements of the vector are numeric if type="number",
 otherwise they are functions of lambda
+}
+\examples{
+## generate a random tree
+tree <- rtree(6)
+## topological vector of mrca distances from root:
+CK.metric(tree)
+## vector of mrca distances from root when lambda=0.5:
+CK.metric(tree,0.5)
+## vector of mrca distances as a function of lambda:
+vec.func <- CK.metric(tree,type="function")
+## evaluate the vector at lambda=0.5:
+vec.func(0.5)
 }
 \author{
 Michelle Kendall \email{michelle.louise.kendall@gmail.com}
