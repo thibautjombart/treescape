@@ -393,13 +393,14 @@ tree.dist <- cmpfun(tree.dist)
 #'
 #' ## A method to visualise these distances with MDS:
 #' require(ade4)
-#' mMDS <- dudi.pco(as.dist(m(0)), scannf=FALSE,nf=2) # asks you to select number of axes; only 2 needed for MDS
-#' mdf <- as.data.frame(cbind(mMDS$li[,1],mMDS$li[,2]))
+#' mMDS <- dudi.pco(as.dist(m(0)), scannf=FALSE,nf=2) # finds a projection of the points in 2 dimensions
+#' mdf <- as.data.frame(cbind(mMDS$li[,1],mMDS$li[,2])) # put the coordinates of these points into a data frame
 #' require(ggplot2)
-#' mplot <- ggplot(mdf, aes(mMDS$li[,1],mMDS$li[,2]))
+#' mplot <- ggplot(mdf, aes(mMDS$li[,1],mMDS$li[,2])) # create plot
 #' require(RColorBrewer)
-#' mpalette <- brewer.pal(10,"Paired")
-#' mplot + geom_point(colour=mpalette,size=5) + 
+#' mpalette <- brewer.pal(10,"Paired") # create colour palette
+#' ## plot:
+#' mplot + geom_point(colour=mpalette,size=5) +  
 #'   xlab("") + ylab("") + theme_bw(base_family = "") 
 #'
 #'
