@@ -128,7 +128,7 @@ pen.edge.treematch <- cmpfun(pen.edge.treematch)
 #' ## evaluate the vector at lambda=0.5:
 #' vec.func(0.5)  
 #'
-CK.metric <- function(tr1,lambda=0,type="number") { # allow output type to be number or function
+tree.vec <- function(tr1,lambda=0,type="number") { # allow output type to be number or function
   if (type=="number"){
     if (lambda<0) {stop("Pick lambda in [0,1]")}
     if (lambda>1) {stop("Pick lambda in [0,1]")}
@@ -209,7 +209,7 @@ CK.metric <- function(tr1,lambda=0,type="number") { # allow output type to be nu
     return(vlambda)
   }
 }
-CK.metric <- cmpfun(CK.metric)
+tree.vec <- cmpfun(tree.vec)
 
 
 
