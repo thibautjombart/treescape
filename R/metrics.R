@@ -120,11 +120,11 @@ pen.edge.treematch <- cmpfun(pen.edge.treematch)
 #' ## generate a random tree
 #' tree <- rtree(6)
 #' ## topological vector of mrca distances from root:
-#' CK.metric(tree) 
+#' tree.vec(tree) 
 #' ## vector of mrca distances from root when lambda=0.5:
-#' CK.metric(tree,0.5) 
+#' tree.vec(tree,0.5) 
 #' ## vector of mrca distances as a function of lambda:
-#' vec.func <- CK.metric(tree,type="function") 
+#' vec.func <- tree.vec(tree,type="function") 
 #' ## evaluate the vector at lambda=0.5:
 #' vec.func(0.5)  
 #'
@@ -271,8 +271,8 @@ tree.dist <- function(tr1,tr2,lambda=0,type="number") { # allow output type to b
     labelmatch <- match(tr1$tip.label, tr2$tip.label);
     if (lambda!=1){ # make a copy of the trees called TR1 and TR2, with edge lengths = 1
       TR1 <- tr1; TR2 <- tr2
-      TR1$edge.length <- rep(1,2*k-2);
-      TR2$edge.length <- rep(1,2*k-2);
+      TR1$edge.length <- rep(1,length(tr1$edge.length));
+      TR2$edge.length <- rep(1,length(tr2$edge.length));
       D1 <- dist.nodes(TR1); # if lambda!=1 we need to know edge count distances
       D2 <- dist.nodes(TR2);
     }
@@ -329,8 +329,8 @@ tree.dist <- function(tr1,tr2,lambda=0,type="number") { # allow output type to b
     labelmatch <- match(tr1$tip.label, tr2$tip.label);
     # make a copy of the trees called TR1 and TR2, with edge lengths = 1
     TR1 <- tr1; TR2 <- tr2
-    TR1$edge.length <- rep(1,2*k-2);
-    TR2$edge.length <- rep(1,2*k-2);
+    TR1$edge.length <- rep(1,length(tr1$edge.length));
+    TR2$edge.length <- rep(1,length(tr2$edge.length));
     D1 <- dist.nodes(TR1); 
     D2 <- dist.nodes(TR2);
     
@@ -441,7 +441,7 @@ multi.dist <- function(trees,lambda=0,type="number") { # allow output type to be
       # make a copy of the trees with edge lengths = 1
       TREES <- trees
       for (i in 1:l) {
-        TREES[[i]]$edge.length <- rep(1,(2*k-2));
+        TREES[[i]]$edge.length <- rep(1,length(trees[[i]]$edge.length));
       }
       D <- sapply(1:l, function(x) dist.nodes(TREES[[x]])[k+1,]); # vector of vectors
       
@@ -500,7 +500,7 @@ multi.dist <- function(trees,lambda=0,type="number") { # allow output type to be
     # make a copy of the trees with edge lengths = 1
     TREES <- trees
     for (i in 1:l) {
-      TREES[[i]]$edge.length <- rep(1,(2*k-2));
+      TREES[[i]]$edge.length <- rep(1,length(trees[[i]]$edge.length));
     }
     D <- sapply(1:l, function(x) dist.nodes(TREES[[x]])[k+1,]); # vector of vectors
     
@@ -585,7 +585,7 @@ med.tree <- function(trees,likes=rep(1,length(trees)),lambda=0) {
     
     if (lambda!=1){ # make a copy with edge lengths = 1
       TR1 <- tr1
-      TR1$edge.length <- rep(1,2*k-2)
+      TR1$edge.length <- rep(1,length(tr1$edge.length))
       D1 <- dist.nodes(TR1)
     }
     if (lambda!=0) { # if lambda!=0 we need to know branch length distances
