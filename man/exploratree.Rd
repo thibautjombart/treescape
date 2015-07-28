@@ -4,7 +4,7 @@
 \alias{exploratree}
 \title{Phylogenetic tree exploration}
 \usage{
-exploratree(x, method = CK.metric, nf = NULL, ...)
+exploratree(x, method = tree.vec, nf = NULL, ...)
 }
 \arguments{
 \item{x}{an object of the class multiPhylo}
