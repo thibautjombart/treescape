@@ -592,7 +592,8 @@ multi.dist <- cmpfun(multi.dist)
 #' geomMedWoodmice1 <- med.tree(woodmiceCluster1)
 #' plot(woodmiceCluster1[[geomMedWoodmice1$median[[1]]]])
 #' # this has the same topology as the overall median tree:
-#' tree.dist(woodmiceTrees[[woodmiceMed$median[[1]]]],woodmiceCluster1[[geomMedWoodmice1$median[[1]]]])
+#' tree.dist(woodmiceTrees[[woodmiceMed$median[[1]]]],
+#'    woodmiceCluster1[[geomMedWoodmice1$median[[1]]]])
 #'
 #' ## However, median trees from other clusters have different topologies, for example:
 #' ## isolate the trees from the second largest cluster:
@@ -604,7 +605,8 @@ multi.dist <- cmpfun(multi.dist)
 #' geomMedWoodmice2 <- med.tree(woodmiceCluster2)
 #' plot(woodmiceCluster2[[geomMedWoodmice2$median[[1]]]])
 #' ## This is another representative topology, which is different from those we found above:
-#' tree.dist(woodmiceCluster2[[geomMedWoodmice2$median[[1]]]],woodmiceCluster2[[geomMedWoodmice2$median[[1]]]])
+#' tree.dist(woodmiceCluster2[[geomMedWoodmice2$median[[1]]]],
+#'     woodmiceCluster2[[geomMedWoodmice2$median[[1]]]])
 #'
 med.tree <- function(trees,likes=rep(1,length(trees)),lambda=0) {
   n <- length(trees)
