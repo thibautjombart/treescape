@@ -574,6 +574,40 @@ multi.dist <- cmpfun(multi.dist)
 #' mymedian$median # the identifier(s) of the tree(s) closest to the central vector
 #' mymedian$mindist # the distance of the median tree(s) from the central vector
 #'
+#' ## Example with woodmice data:
+#' data(woodmiceTrees)
+#' woodmiceMed <- med.tree(woodmiceTrees)
+#' ## plot the (first) geometric median tree (there are seven topologically identical median trees):
+#' plot(woodmiceTrees[[woodmiceMed$median[[1]]]])
+#' 
+#' ## finding the geometric median tree from a single cluster:
+#' woodmiceDists <- multi.dist(woodmiceTrees)
+#' woodmiceMDS <- dudi.pco(as.dist(woodmiceDists), scannf=FALSE, nf=2)
+#' ## isolate the trees from the largest cluster
+#' woodmiceCluster1 <- woodmiceTrees[intersect(
+#'    intersect(which(woodmiceMDS$li[,1]>(-2)),which(woodmiceMDS$li[,1]<2)),
+#'    intersect(which(woodmiceMDS$li[,2]>(-2.5)),which(woodmiceMDS$li[,1]<2.5))
+#'    )]
+#' ## find the geometric median
+#' geomMedWoodmice1 <- med.tree(woodmiceCluster1)
+#' plot(woodmiceCluster1[[geomMedWoodmice1$median[[1]]]])
+#' # this has the same topology as the overall median tree:
+#' tree.dist(woodmiceTrees[[woodmiceMed$median[[1]]]],
+#'   woodmiceCluster1[[geomMedWoodmice1$median[[1]]]])
+#'
+#' ## However, median trees from other clusters have different topologies, for example:
+#' ## isolate the trees from the second largest cluster:
+#' woodmiceCluster2 <- woodmiceTrees[intersect(
+#'  intersect(which(woodmiceMDS$li[,1]>(-1)),which(woodmiceMDS$li[,1]<8)),
+#'  intersect(which(woodmiceMDS$li[,2]>1),which(woodmiceMDS$li[,1]<6))
+#' )]
+#' ## find the geometric median
+#' geomMedWoodmice2 <- med.tree(woodmiceCluster2)
+#' plot(woodmiceCluster2[[geomMedWoodmice2$median[[1]]]])
+#' ## This is another representative topology, which is different from those we found above:
+#' tree.dist(woodmiceCluster2[[geomMedWoodmice2$median[[1]]]],
+#'   woodmiceCluster2[[geomMedWoodmice2$median[[1]]]])
+#'
 med.tree <- function(trees,likes=rep(1,length(trees)),lambda=0) {
   n <- length(trees)
   if (length(likes)!=n) {stop("Number of likelihoods is not equal to number of trees.")}
