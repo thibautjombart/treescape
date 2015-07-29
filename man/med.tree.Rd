@@ -11,7 +11,7 @@ med.tree(trees, likes = rep(1, length(trees)), lambda = 0)
 
 \item{likes}{a vector of weightings for the trees. Defaults to a vector of 1's so that all trees are equally weighted, but can be used to weight trees according to likelihood or other characteristics.}
 
-\item{lambda}{a number in [0,1] which specifies the extent to which topology (default, with lambda=0)  or branch lengths (lambda=1) are emphasised. This argument is ignored if type="function"}
+\item{lambda}{a number in [0,1] which specifies the extent to which topology (default, with lambda=0)  or branch lengths (lambda=1) are emphasised. This argument is ignored if \code{type="function"}.}
 }
 \description{
 Finding the geometric median of a set of trees according to the Kendall Colijn metric

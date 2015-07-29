@@ -11,7 +11,7 @@ tree.dist(tr1, tr2, lambda = 0, type = "number")
 
 \item{tr2}{an object of the class \code{phylo}}
 
-\item{lambda}{a number in [0,1] which specifies the extent to which topology (default, with lambda=0)  or branch lengths (lambda=1) are emphasised. This argument is ignored if type="function"}
+\item{lambda}{a number in [0,1] which specifies the extent to which topology (default, with lambda=0)  or branch lengths (lambda=1) are emphasised. This argument is ignored if \code{type="function"}.}
 
 \item{type}{logical which takes the inputs "\code{number}" (default) or "\code{function}". When \code{type="number"}, the output is numeric; when \code{type="function"} the output is a function of lambda}
 }
