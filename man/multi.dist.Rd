@@ -9,7 +9,7 @@ multi.dist(trees, lambda = 0, type = "number")
 \arguments{
 \item{trees}{an object of the class \code{multiPhylo}}
 
-\item{lambda}{a number in [0,1] which specifies the extent to which topology (default, with lambda=0)  or branch lengths (lambda=1) are emphasised. This argument is ignored if \code{type="function"}.}
+\item{lambda}{a number in [0,1] which specifies the extent to which topology (default, with lambda=0)  or branch lengths (lambda=1) are emphasised. This argument is ignored if type="function"}
 
 \item{type}{logical which takes the inputs "\code{number}" (default) or "\code{function}". When \code{type="number"}, the output is a matrix where each entry is numeric; when \code{type="function"} the output is a matrix where each entry is a function of lambda}
 }
