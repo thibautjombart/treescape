@@ -28,15 +28,36 @@ m(0)
 
 ## A method to visualise these distances with MDS:
 require(ade4)
-mMDS <- dudi.pco(as.dist(m(0)), scannf=FALSE,nf=2) # finds a projection of the points in 2 dimensions
-mdf <- as.data.frame(cbind(mMDS$li[,1],mMDS$li[,2])) # put the coordinates of these points into a data frame
-require(ggplot2)
-mplot <- ggplot(mdf, aes(mMDS$li[,1],mMDS$li[,2])) # create plot
+# find an approximate projection of the points in 2 dimensions:
+mMDS <- dudi.pco(as.dist(m(0)), scannf=FALSE,nf=2)
+# put the coordinates of these points into a data frame
+mdf <- as.data.frame(cbind(mMDS$li[,1],mMDS$li[,2]))
+# create plot:
+\donttest{require(ggplot2)
+mplot <- ggplot(mdf, aes(mMDS$li[,1],mMDS$li[,2]))
 require(RColorBrewer)
 mpalette <- brewer.pal(10,"Paired") # create colour palette
 ## plot:
 mplot + geom_point(colour=mpalette,size=5) +
-  xlab("") + ylab("") + theme_bw(base_family = "")
+  xlab("") + ylab("") + theme_bw(base_family = "") }
+
+## An example using data:
+## These woodmice phylogenies were created using the bootstrapping example in package \\code{ape}
+data(woodmiceTrees)
+\donttest{woodmiceDists <- multi.dist(woodmiceTrees) # find topological distances
+woodmiceMDS <- dudi.pco(as.dist(woodmiceDists), scannf=FALSE, nf=2)
+woodmicedf <- as.data.frame(cbind(woodmiceMDS$li[,1], woodmiceMDS$li[,2]))
+require(ggplot2)
+woodmiceplot <- ggplot(woodmicedf, aes(woodmiceMDS$li[,1], woodmiceMDS$li[,2])) # create plot
+woodmiceplot + geom_density2d(colour="gray80") + # contour lines
+ geom_point(size=6, shape=1, colour="gray50") + # grey edges
+ geom_point(size=6, alpha=0.2, colour="navy") + # transparent blue points
+ xlab("") + ylab("") + theme_bw(base_family="") # remove axis labels and grey background}
+
+\donttest{require(rgl)
+woodmiceMDS3D <- dudi.pco(as.dist(woodmiceDists), scannf=FALSE, nf=3)
+plot3d(woodmiceMDS3D$li[,1], woodmiceMDS3D$li[,2], woodmiceMDS3D$li[,3], type="s", size=1.5,
+   col="navy", alpha=0.5, xlab="", ylab="", zlab="")}
 }
 \author{
 Michelle Kendall \email{michelle.louise.kendall@gmail.com}
