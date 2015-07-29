@@ -3,7 +3,7 @@
 \alias{woodmouse}
 \title{Bootstrap trees from woodmouse dataset}
 \usage{woodmiceTrees}
-\description{These trees were created using the neighbour-joining and bootstrapping example in the ape documentation.}
+\description{These trees were created using the neighbour-joining and bootstrapping example from the ape documentation.}
 \format{A multiPhylo object containing 201 trees, each with 15 tips}
 \source{A set of 15 sequences of the mitochondrial gene cytochrome b of the woodmouse (Apodemus
 sylvaticus) which is a subset of the data analysed by Michaux et al. (2003). The full data set is
