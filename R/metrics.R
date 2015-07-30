@@ -1,7 +1,7 @@
 
 #' Linear MRCA function
 #'
-#' Function to make the MRCA matrix of a tree, where entry (i,j) gives the MRCA of tips i and j
+#' Function to make the MRCA matrix of a tree, where entry (i,j) gives the MRCA of tips i and j.
 #'
 #' @author  Michelle Kendall \email{michelle.louise.kendall@@gmail.com}
 #'
@@ -61,7 +61,7 @@ linear.mrca <- cmpfun(linear.mrca) # compile
 
 #' Pendant edges
 #'
-#' Extract just the pendant edges from the vector tree$edge
+#' Extract just the pendant edges from the vector \code{tree$edge}.
 #'
 #' @export
 #'
@@ -79,7 +79,7 @@ pen.edge.tree <- cmpfun(pen.edge.tree)
 
 #' Pendant edges, matched
 #'
-#' Extract the pendant edges from the vector tree$edge, in the order given by labelmatch
+#' Extract the pendant edges from the vector \code{tree$edge}, in the order given by \code{labelmatch}.
 #'
 #' @export
 #'
@@ -100,16 +100,16 @@ pen.edge.treematch <- cmpfun(pen.edge.treematch)
 #' Tree vector function
 #'
 #' Function which takes a phylo as input and outputs the vector for the metric. 
-#' The elements of the vector are numeric if type="number", 
-#' otherwise they are functions of lambda
+#' The elements of the vector are numeric if \code{type="number"}, 
+#' and otherwise they are functions of lambda.
 #'
 #' @export
 #'
 #' @author  Michelle Kendall \email{michelle.louise.kendall@@gmail.com}
 #'
 #' @param tr1 an object of the class \code{phylo} 
-#' @param lambda a number in [0,1] which specifies the extent to which topology (default, with lambda=0)  or branch lengths (lambda=1) are emphasised. This argument is ignored if type="function" 
-#' @param type logical which takes the inputs "\code{number}" (default) or "\code{function}". When \code{type="number"}, the entries of the output vector are numeric; when \code{type="function"} each entry is a function of lambda
+#' @param lambda a number in [0,1] which specifies the extent to which topology (default, with lambda=0)  or branch lengths (lambda=1) are emphasised. This argument is ignored if \code{type="function"}. 
+#' @param type logical which takes the inputs "\code{number}" (default) or "\code{function}". When \code{type="number"}, the entries of the output vector are numeric; when \code{type="function"} each entry is a function of lambda.
 #'
 #' @importFrom combinat combn2
 #' @importFrom compiler cmpfun
@@ -224,8 +224,8 @@ tree.vec <- cmpfun(tree.vec)
 #'
 #' @param tr1 an object of the class \code{phylo} 
 #' @param tr2 an object of the class \code{phylo} 
-#' @param lambda a number in [0,1] which specifies the extent to which topology (default, with lambda=0)  or branch lengths (lambda=1) are emphasised. This argument is ignored if type="function" 
-#' @param type logical which takes the inputs "\code{number}" (default) or "\code{function}". When \code{type="number"}, the output is numeric; when \code{type="function"} the output is a function of lambda
+#' @param lambda a number in [0,1] which specifies the extent to which topology (default, with lambda=0)  or branch lengths (lambda=1) are emphasised. This argument is ignored if \code{type="function"}.
+#' @param type logical which takes the inputs "\code{number}" (default) or "\code{function}". When \code{type="number"}, the output is numeric; when \code{type="function"} the output is a function of lambda.
 #'
 #'
 #' @importFrom compiler cmpfun
@@ -371,8 +371,8 @@ tree.dist <- cmpfun(tree.dist)
 #' @author  Michelle Kendall \email{michelle.louise.kendall@@gmail.com}
 #'
 #' @param trees an object of the class \code{multiPhylo} 
-#' @param lambda a number in [0,1] which specifies the extent to which topology (default, with lambda=0)  or branch lengths (lambda=1) are emphasised. This argument is ignored if type="function" 
-#' @param type logical which takes the inputs "\code{number}" (default) or "\code{function}". When \code{type="number"}, the output is a matrix where each entry is numeric; when \code{type="function"} the output is a matrix where each entry is a function of lambda
+#' @param lambda a number in [0,1] which specifies the extent to which topology (default, with lambda=0)  or branch lengths (lambda=1) are emphasised. This argument is ignored if \code{type="function"}. 
+#' @param type logical which takes the inputs "\code{number}" (default) or "\code{function}". When \code{type="number"}, the output is a matrix where each entry is numeric; when \code{type="function"} the output is a matrix where each entry is a function of lambda.
 #'
 #'
 #' @importFrom compiler cmpfun
@@ -548,7 +548,7 @@ multi.dist <- cmpfun(multi.dist)
 
 #' Geometric median tree function
 #'
-#' Finding the geometric median of a set of trees according to the Kendall Colijn metric
+#' Finds the geometric median of a set of trees according to the Kendall Colijn metric.
 #'
 #' @export
 #'
@@ -556,7 +556,7 @@ multi.dist <- cmpfun(multi.dist)
 #'
 #' @param trees an object of the class \code{multiPhylo} 
 #' @param likes a vector of weightings for the trees. Defaults to a vector of 1's so that all trees are equally weighted, but can be used to weight trees according to likelihood or other characteristics.
-#' @param lambda a number in [0,1] which specifies the extent to which topology (default, with lambda=0)  or branch lengths (lambda=1) are emphasised. This argument is ignored if type="function" 
+#' @param lambda a number in [0,1] which specifies the extent to which topology (default, with lambda=0)  or branch lengths (lambda=1) are emphasised. This argument is ignored if \code{type="function"}.
 #' 
 #'
 #' @importFrom compiler cmpfun
