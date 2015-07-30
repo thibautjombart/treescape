@@ -1,6 +1,6 @@
 \name{woodmiceTrees}
 \docType{data}
-\alias{woodmouse}
+\alias{woodmiceTrees}
 \title{Bootstrap trees from woodmouse dataset}
 \usage{woodmiceTrees}
 \description{These trees were created using the neighbour-joining and bootstrapping example from the ape documentation.}
