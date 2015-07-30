@@ -12,7 +12,7 @@ pen.edge.tree(tree, k)
 \item{k}{number of tips in tree}
 }
 \description{
-Extract just the pendant edges from the vector tree$edge
+Extract just the pendant edges from the vector \code{tree$edge}.
 }
 \author{
 Michelle Kendall \email{michelle.louise.kendall@gmail.com}

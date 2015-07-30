@@ -12,7 +12,7 @@ pen.edge.treematch(tree, labelmatch)
 \item{labelmatch}{a vector specifying the order of the tips in the output. This is used by other functions in the package to match the tip labels in the trees}
 }
 \description{
-Extract the pendant edges from the vector tree$edge, in the order given by labelmatch
+Extract the pendant edges from the vector \code{tree$edge}, in the order given by \code{labelmatch}.
 }
 \author{
 Michelle Kendall \email{michelle.louise.kendall@gmail.com}

@@ -12,7 +12,7 @@ linear.mrca(tree, k = 0)
 \item{k}{(optional) number of tips in tree, for faster computation}
 }
 \description{
-Function to make the MRCA matrix of a tree, where entry (i,j) gives the MRCA of tips i and j
+Function to make the MRCA matrix of a tree, where entry (i,j) gives the MRCA of tips i and j.
 }
 \examples{
 ## generate a random tree
