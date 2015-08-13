@@ -67,10 +67,10 @@ shinyServer(function(input, output) {
         numericInput("yax", "Indicate the y axis", value=2, min=2, max=nmax)
     })
 
-    ## VALUE OF LAMBDA FOR CK METRIC
+    ## VALUE OF LAMBDA FOR METRIC
     output$lambda <- renderUI({
-        ## if CK metric has been chosen
-        if(input$treemethod=="CKmetric") {
+        ## if metric has been chosen
+        if(input$treemethod=="metric") {
             sliderInput("lambda", "Value of lambda", min=0, max=1, value=0.5, step=0.01)
         } else {
             NULL
@@ -95,8 +95,8 @@ shinyServer(function(input, output) {
             if(!is.null(input$treemethod)){
                 if(input$treemethod %in% c("patristic","nNodes","Abouheif","sumDD")){
                     treeMethod <- function(x){return(adephylo::distTips(x, method=input$treemethod))}
-                } else if(input$treemethod=="CKmetric"){
-                    treeMethod <- function(x){return(CK.metric(x, lambda=input$lambda))}
+                } else if(input$treemethod=="metric"){
+                    treeMethod <- function(x){return(tree.vec(x, lambda=input$lambda))}
                 } else {
                     treeMethod <- adephylo::distTips
                 }

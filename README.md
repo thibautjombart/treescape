@@ -3,7 +3,7 @@
 # exploratree
 Exploring tree diversity
 
-! This package is under development. Please do not use it without first emailing the author (thibautjombart@gmail.com)
+! This package is under development. Please do not use it without first emailing the authors (thibautjombart@gmail.com, m.kendall@imperial.ac.uk)
 
 To install the package:
 ```r
@@ -18,4 +18,6 @@ library(exploratree)
 example(exploratree)
 
 exploratreeServer()
+
+example(multi.dist)
 ```

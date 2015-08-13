@@ -6,6 +6,6 @@ Authors@R: c(TJ=person("Thibaut", "Jombart", email="thibaut.jombart@gmail.com", 
 	   CC=person("Caroline", "Colijn", role = c("aut")))
 Description: Exploration of phylogenetic trees
 Depends: R (>= 3.1.2), ape, ade4
-Imports: adephylo, shiny, utils, adegenet, combinat, compiler, phangorn, fastmatch
+Imports: adephylo, shiny, utils, adegenet, combinat, compiler, phangorn
 License: GPL (>=2)
 LazyData: true
