@@ -90,6 +90,16 @@ pen.edge.tree <- cmpfun(pen.edge.tree)
 pen.edge.treematch  <- function(tree,labelmatch) {tree$edge[match(labelmatch, tree$edge[,2]),] }
 pen.edge.treematch <- cmpfun(pen.edge.treematch)
 
+
+
+
+
+
+
+
+
+
+
 #' CPP leaf combination distance function
 #'
 #' CPP implementation of the function that updates the vector of distances for a set of leaf combinations (the ones
@@ -107,7 +117,9 @@ pen.edge.treematch <- cmpfun(pen.edge.treematch)
 #'
 #' @author Jacob Almagro-Garcia \email{nativecoder@@gmail.com}
 #'
+#' @import inline
 #' @importFrom Rcpp cppFunction
+
 
 
 CPP_update_combinations <- cppFunction("void updateDistancesWithCombinations(NumericVector& length_root_distances,
