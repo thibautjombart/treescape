@@ -15,8 +15,6 @@ tree.vec(tree, lambda = 0, return_lambda_function = F)
 }
 \value{
 The vector with the metric values or a function that produces the vector given a value of lambda.
-
-##
 }
 \description{
 Function which takes an object of class phylo as input and outputs the vector for the metric.
