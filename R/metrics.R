@@ -56,6 +56,41 @@ linear.mrca <- function(tree,k=0) { # k is number of tips, which can be passed t
 }
 linear.mrca <- cmpfun(linear.mrca) # compile
 
+#' Pendant edges
+#'
+#' Extract just the pendant edges from the vector \code{tree$edge}.
+#'
+#' @export
+#'
+#' @author  Michelle Kendall \email{michelle.louise.kendall@@gmail.com}
+#'
+#' @param tree an object of the class \code{phylo} 
+#' @param k number of tips in tree
+#'
+#' @importFrom compiler cmpfun
+#'
+pen.edge.tree <- function(tree,k) {tree$edge[match(1:k, tree$edge[,2]),] }
+pen.edge.tree <- cmpfun(pen.edge.tree)
+
+
+
+#' Pendant edges, matched
+#'
+#' Extract the pendant edges from the vector \code{tree$edge}, in the order given by \code{labelmatch}.
+#'
+#' @export
+#'
+#' @author  Michelle Kendall \email{michelle.louise.kendall@@gmail.com}
+#'
+#' @param tree an object of the class \code{phylo} 
+#' @param labelmatch a vector specifying the order of the tips in the output. This is used by other functions in the package to match the tip labels in the trees
+#'
+#' @importFrom compiler cmpfun
+#'
+pen.edge.treematch  <- function(tree,labelmatch) {tree$edge[match(labelmatch, tree$edge[,2]),] }
+pen.edge.treematch <- cmpfun(pen.edge.treematch)
+
+
 
 
 #' Tree vector function
