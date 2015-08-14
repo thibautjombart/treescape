@@ -113,7 +113,6 @@ pen.edge.treematch <- cmpfun(pen.edge.treematch)
 #' @param distance_to_root The branch length distance (branch length to the root).
 #' @param edges_to_root The edge distance (number of edges to the root).
 #'
-#' @export
 #'
 #' @author Jacob Almagro-Garcia \email{nativecoder@@gmail.com}
 #'
