@@ -4,18 +4,21 @@
 \alias{tree.vec}
 \title{Tree vector function}
 \usage{
-tree.vec(tr1, lambda = 0, type = "number")
+tree.vec(tree, lambda = 0, return_lambda_function = F)
 }
 \arguments{
-\item{tr1}{an object of the class \code{phylo}}
+\item{tree}{an object of the class \code{phylo}}
 
 \item{lambda}{a number in [0,1] which specifies the extent to which topology (default, with lambda=0)  or branch lengths (lambda=1) are emphasised. This argument is ignored if \code{type="function"}.}
 
-\item{type}{logical which takes the inputs "\code{number}" (default) or "\code{function}". When \code{type="number"}, the entries of the output vector are numeric; when \code{type="function"} each entry is a function of lambda.}
+\item{return_lambda_function}{If true, a function that can be invoked with different lambda values is returned. This function returns the vector of metric values for the given lambda.}
+}
+\value{
+The vector with the metric values or a function that produces the vector given a value of lambda.
 }
 \description{
-Function which takes a phylo as input and outputs the vector for the metric.
-The elements of the vector are numeric if \code{type="number"},
+Function which takes an object of class phylo as input and outputs the vector for the metric.
+The elements of the vector are numeric if \code{return_lambda_function=FALSE} (default),
 and otherwise they are functions of lambda.
 }
 \examples{
@@ -26,11 +29,13 @@ tree.vec(tree)
 ## vector of mrca distances from root when lambda=0.5:
 tree.vec(tree,0.5)
 ## vector of mrca distances as a function of lambda:
-vec.func <- tree.vec(tree,type="function")
+vec.func <- tree.vec(tree,return_lambda_function=TRUE)
 ## evaluate the vector at lambda=0.5:
 vec.func(0.5)
 }
 \author{
+Jacob Almagro-Garcia \email{nativecoder@gmail.com}
+
 Michelle Kendall \email{michelle.louise.kendall@gmail.com}
 }
 
