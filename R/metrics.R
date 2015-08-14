@@ -107,7 +107,7 @@ pen.edge.treematch <- cmpfun(pen.edge.treematch)
 #'
 #' @author Jacob Almagro-Garcia \email{nativecoder@@gmail.com}
 #'
-#' @import Rcpp
+#' @importFrom Rcpp cppFunction
 
 
 CPP_update_combinations <- cppFunction("void updateDistancesWithCombinations(NumericVector& length_root_distances,
