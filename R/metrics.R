@@ -117,6 +117,7 @@ pen.edge.treematch <- cmpfun(pen.edge.treematch)
 #'
 #' @author Jacob Almagro-Garcia \email{nativecoder@@gmail.com}
 #'
+#' @useDynLib 
 #' @import inline
 #' @import Rcpp 
 
