@@ -7,5 +7,6 @@ Authors@R: c(TJ=person("Thibaut", "Jombart", email="thibaut.jombart@gmail.com", 
 Description: Tools for the exploration of distributions of phylogenetic trees. This package includes a shiny interface which can be started from R using 'treescapeServer()'.
 Depends: R (>= 3.1.2), ape, ade4
 Imports: adephylo, shiny, utils, adegenet, combinat, compiler, phangorn
+Suggests: RColorBrewer, ggplot2, rgl
 License: GPL (>=2)
 LazyData: true
