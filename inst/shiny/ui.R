@@ -77,7 +77,12 @@ shinyUI(
         mainPanel(
             tabsetPanel(
 
-                tabPanel("Scatterplot",plotOutput("scatterplot")),
+                tabPanel("Scatterplot",
+                         plotOutput("scatterplot"),
+
+                         ## add tree selector
+                         textInput("selectedTree", "Choose tree (label)", value = "1")
+                         ),
 
 
                 ## HELP SECTION
