@@ -1,4 +1,4 @@
-[![Travis-CI Build Status](https://travis-ci.org/thibautjombart/exploratree.png?branch=master)](https://travis-ci.org/thibautjombart/exploratree)
+[![Travis-CI Build Status](https://travis-ci.org/thibautjombart/treescape.png?branch=master)](https://travis-ci.org/thibautjombart/treescape)
 
 # exploratree
 Exploring tree diversity
@@ -8,16 +8,16 @@ Exploring tree diversity
 To install the package:
 ```r
 library(devtools)
-install_github("thibautjombart/exploratree")
+install_github("thibautjombart/treescape")
 ```
 
 And then to try functionalities:
 ```r
-library(exploratree)
+library(treescape)
 
-example(exploratree)
+example(treescape)
 
-exploratreeServer()
+treescapeServer()
 
 example(multi.dist)
 ```
