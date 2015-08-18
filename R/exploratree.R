@@ -22,12 +22,12 @@
 #' x <- rmtree(10, 20)
 #' names(x) <- paste("tree", 1:10, sep = "")
 #'
-#' ## use exploratree
-#' res <- exploratree(x, nf=3)
+#' ## use treescape
+#' res <- treescape(x, nf=3)
 #' table.paint(as.matrix(res$D))
 #' scatter(res$pco)
 #'
-exploratree <- function(x, method=tree.vec, nf=NULL, ...){
+treescape <- function(x, method=tree.vec, nf=NULL, ...){
     ## CHECKS ##
     if(!inherits(x, "multiPhylo")) stop("x should be a multiphylo object")
     if(is.null(names(x))) names(x) <- 1:length(x)
@@ -49,4 +49,4 @@ exploratree <- function(x, method=tree.vec, nf=NULL, ...){
     ## BUILD RESULT AND RETURN ##
     out <- list(D=D, pco=pco)
     return(out)
-} # end exploratree
+} # end treescape

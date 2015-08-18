@@ -488,45 +488,60 @@ tree.dist <- cmpfun(tree.dist)
 #'
 #' ## generate 10 random trees, each with 6 tips
 #' trees <- rmtree(10,6)
+#' 
 #' ## pairwise distance matrix when lambda=0
-#' multi.dist(trees) 
+#' multi.dist(trees)
+#' 
 #' ## pairwise distance matrix as a function of lambda:
-#' m <- multi.dist(trees, type="function") 
+#' m <- multi.dist(trees, type="function")
+#' 
 #' ## evaluate at lambda=0. Equivalent to multi.dist(trees).
 #' m(0)
 #'
 #' ## A method to visualise these distances with MDS:
 #' require(ade4)
-#' # find an approximate projection of the points in 2 dimensions:
+#' 
+#' ## find an optimum projection of the points in 2 dimensions:
 #' mMDS <- dudi.pco(as.dist(m(0)), scannf=FALSE,nf=2)
-#' # put the coordinates of these points into a data frame
-#' mdf <- as.data.frame(cbind(mMDS$li[,1],mMDS$li[,2])) 
-#' # create plot:
-#' \donttest{require(ggplot2)
-#' mplot <- ggplot(mdf, aes(mMDS$li[,1],mMDS$li[,2])) 
-#' require(RColorBrewer)
-#' mpalette <- brewer.pal(10,"Paired") # create colour palette
-#' ## plot:
-#' mplot + geom_point(colour=mpalette,size=5) +  
-#'   xlab("") + ylab("") + theme_bw(base_family = "") }
+#' 
+#' ## put the coordinates of these points into a data frame
+#' mdf <-mMDS$li
 #'
+#' ## basic ade4 plot
+#' s.label(mdf)
+#' 
+#' ## ggplot2 version
+#' if(require(ggplot2) && require(RColorBrewer)){
+#' mplot <- ggplot(mdf, aes(x=A1, y=A2)) 
+#' 
+#' mpalette <- brewer.pal(10,"Paired") # create colour palette
+#' 
+#' mplot + geom_point(colour=mpalette,size=5) +  
+#'   xlab("") + ylab("") + theme_bw(base_family = "")
+#' }
+#' 
+#' 
 #' ## An example using data:
 #' ## These woodmice phylogenies were created using the bootstrapping example in package \code{ape}
 #' data(woodmiceTrees)
-#' \donttest{woodmiceDists <- multi.dist(woodmiceTrees) # find topological distances
+#' woodmiceDists <- multi.dist(woodmiceTrees) # find topological distances
 #' woodmiceMDS <- dudi.pco(as.dist(woodmiceDists), scannf=FALSE, nf=2)
-#' woodmicedf <- as.data.frame(cbind(woodmiceMDS$li[,1], woodmiceMDS$li[,2]))
-#' require(ggplot2)
-#' woodmiceplot <- ggplot(woodmicedf, aes(woodmiceMDS$li[,1], woodmiceMDS$li[,2])) # create plot
+#' woodmicedf <- woodmiceMDS$li
+#'
+#' if(require(ggplot2)){
+#' woodmiceplot <- ggplot(woodmicedf, aes(x=A1, y=A2)) # create plot
 #' woodmiceplot + geom_density2d(colour="gray80") + # contour lines
 #'  geom_point(size=6, shape=1, colour="gray50") + # grey edges
 #'  geom_point(size=6, alpha=0.2, colour="navy") + # transparent blue points
-#'  xlab("") + ylab("") + theme_bw(base_family="") # remove axis labels and grey background}
-#'
-#' \donttest{require(rgl)
+#'  xlab("") + ylab("") + theme_bw(base_family="") # remove axis labels and grey background
+#' }
+#' 
+#' if(require(rgl)){
 #' woodmiceMDS3D <- dudi.pco(as.dist(woodmiceDists), scannf=FALSE, nf=3)
 #' plot3d(woodmiceMDS3D$li[,1], woodmiceMDS3D$li[,2], woodmiceMDS3D$li[,3], type="s", size=1.5, 
-#'    col="navy", alpha=0.5, xlab="", ylab="", zlab="")}
+#'    col="navy", alpha=0.5, xlab="", ylab="", zlab="")
+#' }
+#' 
 multi.dist <- function(trees,lambda=0,type="number") { # allow output type to be number or function
   #checks and warnings
   if (class(trees) != "multiPhylo"){

@@ -1,5 +1,5 @@
 ## library(shiny)
-## library(exploratree)
+## library(treescape)
 
 
 ## DEFINE THE SERVER SIDE OF THE APPLICATION
@@ -102,8 +102,8 @@ shinyServer(function(input, output) {
                 }
             }
 
-            ## run exploratree
-            res <- exploratree(x, method=treeMethod, nf=naxes)
+            ## run treescape
+            res <- treescape(x, method=treeMethod, nf=naxes)
 
             ## make scatterplot
             s.label(res$pco$li, xax=input$xax, yax=input$yax,

@@ -1,11 +1,11 @@
 library(shiny)
-## library(exploratree)
+## library(treescape)
 
 ## DEFINE UI ##
 shinyUI(
     pageWithSidebar(
         ##  TITLE
-        headerPanel("exploratree"),
+        headerPanel("treescape"),
 
         ## SIDE PANEL CONTENT
         sidebarPanel(
