@@ -27,9 +27,20 @@ shinyServer(function(input, output) {
             newName <- paste(input$datafile$datapath, extension, sep=".")
             file.rename(oldName, newName)
 
-            if(extension %in% c("RData","Rdata","Rda","rda")){
+            if(tolower(extension) %in% c("rdata","rda")){
                 out <- get(load(newName))
             }
+            if(tolower(extension) %in% c("nex", "nexus")){
+                if(!require(ape)) stop("ape is required to read in NEXUS (.nex, .nexus) files")
+                out <- read.nexus(file=newName)
+            }
+
+            ## fix potential bug with names - they need to be unique
+            if(length(unique(names(out)))!=length(out)){
+                warning("duplicates detected in tree labels - using generic names")
+                names(out) <- 1:length(out)
+            }
+
         }
         return(out)
     })
