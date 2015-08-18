@@ -1,6 +1,6 @@
 [![Travis-CI Build Status](https://travis-ci.org/thibautjombart/treescape.png?branch=master)](https://travis-ci.org/thibautjombart/treescape)
 
-# exploratree
+# treescape
 Exploring tree diversity
 
 ! This package is under development. Please do not use it without first emailing the authors (thibautjombart@gmail.com, m.kendall@imperial.ac.uk)

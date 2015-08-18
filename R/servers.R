@@ -10,8 +10,8 @@
 #' @importFrom adephylo distTips
 #' @importFrom utils packageDescription
 #'
-exploratreeServer <- function(){
-    runApp(system.file("shiny",package="exploratree"))
+treescapeServer <- function(){
+    runApp(system.file("shiny",package="treescape"))
     return(invisible())
 }
 
@@ -39,8 +39,8 @@ exploratreeServer <- function(){
                 cat("\n== Date ==\n")
                 print(date())
 
-                cat("\n== exploratree version ==\n")
-                print(packageDescription("exploratree", fields=c("Package", "Version", "Date", "Built")))
+                cat("\n== treescape version ==\n")
+                print(packageDescription("treescape", fields=c("Package", "Version", "Date", "Built")))
 
                 cat("\n== shiny version ==\n")
                 print(packageDescription("shiny", fields=c("Package", "Version", "Date", "Built")))
