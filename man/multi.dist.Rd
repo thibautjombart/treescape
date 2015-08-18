@@ -67,10 +67,12 @@ woodmiceplot + geom_density2d(colour="gray80") + # contour lines
  xlab("") + ylab("") + theme_bw(base_family="") # remove axis labels and grey background
 }
 
+\dontrun{
 if(require(rgl)){
 woodmiceMDS3D <- dudi.pco(as.dist(woodmiceDists), scannf=FALSE, nf=3)
 plot3d(woodmiceMDS3D$li[,1], woodmiceMDS3D$li[,2], woodmiceMDS3D$li[,3], type="s", size=1.5,
    col="navy", alpha=0.5, xlab="", ylab="", zlab="")
+}
 }
 }
 \author{

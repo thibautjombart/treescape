@@ -431,13 +431,14 @@ tree.dist <- cmpfun(tree.dist)
 #'  geom_point(size=6, alpha=0.2, colour="navy") + # transparent blue points
 #'  xlab("") + ylab("") + theme_bw(base_family="") # remove axis labels and grey background
 #' }
-#' 
+#'
+#' \dontrun{
 #' if(require(rgl)){
 #' woodmiceMDS3D <- dudi.pco(as.dist(woodmiceDists), scannf=FALSE, nf=3)
 #' plot3d(woodmiceMDS3D$li[,1], woodmiceMDS3D$li[,2], woodmiceMDS3D$li[,3], type="s", size=1.5, 
 #'    col="navy", alpha=0.5, xlab="", ylab="", zlab="")
 #' }
-#' 
+#' }
 multi.dist <- function(trees,lambda=0,type="number") { # allow output type to be number or function
   #checks and warnings
   if (class(trees) != "multiPhylo"){
