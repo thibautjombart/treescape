@@ -1,0 +1,84 @@
+<h1 id="top"> </h1>
+<img src="img/logo.png", height="70"> 
+<br> 
+<font color="#6C6CC4" size="3"> [statistical exploration of landscapes of phylogenetic trees]  </font>
+<br>
+<br>
+<!-- <h1> Welcome to the <font color="#6C6CC4"> <i>treescape</i> </font> server! </h1> -->
+<font color="#6C6CC4"> <i>treescape</i> </font> implements statistical tools for the exploration of
+sets of phylogenetic trees describing the evolutionary relationships between the same taxa.
+This web interface provies an easy access to the resoures implemented in the package.
+
+The <i>tree landscape explorer</i> is made of two panels: a <i>sidebar</i> used to define inputs and various
+customizations, and a main analysis panel displaying results.
+The main panel displays two types of outputs:  
+<ul>
+  <li>the scatterplot of a Metric Multidimensional Scaling
+(MDS, a.k.a. Principal Coordinates Analysis, PCoA), providing the best reduced-spaced visualisation
+of the distances between trees</li>
+  <li>an optional plot of a specific tree; a valid tree label or number needs to be provided.</li>
+</ul>
+<br>
+
+ The <i>sidebar</i> contains the following sections:
+ <ul>
+  <li><font color="#6C6CC4"><a href="#input">Input</a></font>: to choose the analysed dataset </li>
+  <li><font color="#6C6CC4"><a href="#analysis">Analysis</a></font>: to customize the analysis </li>
+  <li><font color="#6C6CC4"><a href="#aesthetics">Aesthetics</a></font>: to customize graphics </li>
+</ul>
+
+<br>
+ <h3 id="input"> <font color="#6C6CC4"> Input </font></h3>
+ <font color="#6C6CC4"> <i>treescape</i> </font> needs a list of phylogenetics trees as input. 
+The user can choose between data distributed with the package, or provide input files.
+Two types of input files can be used:
+ <ul>
+  <li>R objects saved using the function <font face="Courier New">save(x, file="x.RData")</font>
+  where <font face="Courier New">'x'</font> is a list of trees of the class <font face="Courier
+  New">multiphylo</font> (from the <i>ape</i> package. Accepted extensions are ".RData" and ".rda".</li>
+  <li>list of trees saved in a nexus file, e.g. using <i>ape</i>'s function <font face="Courier
+  New">write.nexus(x, file="x.nex")</font> in R.</li>
+</ul>
+
+
+
+
+<br>
+ <h3 id="analysis"> <font color="#6C6CC4"> Analysis </font></h3>
+
+ <h4> Metric </h4>
+ The metric to be used to measure distances between tips of the trees:
+<ul>
+  <li> <i>metric</i>: the tree metric developed by Kendall & Colijn; used by default</li>
+  <li> <i>patristic</i>: the sum of branch lengths on the shortest path between pairs of tips 
+    (see <font face="Courier New">?distTips</font> in the package <i>adephylo</i>)</li>
+  <li> <i>Number of nodes</i>: the total number of internal nodes on the shortest path between pairs of tips 
+    (see <font face="Courier New">?distTips</font> in the package <i>adephylo</i>)</li>
+  <li> <i>Abouheif</i>: the Abouheif metric
+    (see <font face="Courier New">?distTips</font> in the package <i>adephylo</i>)</li>
+  <li> <i>Sum of direct descendents</i>: another metric related to the Abouheif metric
+    (see <font face="Courier New">?distTips</font> in the package <i>adephylo</i>)</li>
+</ul>
+
+ <h4> Lambda  </h4>
+ The value of lambda used in Kendall & Colijn's metric.
+
+ <h4> Number of MDS axes retained  </h4>
+ The number of principal components to retain in the Metric Multidimensional Scaling (MDS). 
+
+ <h4> x/y axes </h4>
+Used to select which principal components are represented as x and y axes on the scatterplot.
+
+
+<br>
+<br>
+ <h3 id="aesthetics"> <font color="#6C6CC4"> Aesthetics </font></h3>
+A number of graphical options are available. If a tree is plotted on the main panel, then a number
+ of new options will be available (scroll down to access them).
+<br>
+<br>
+<br>
+<a href="top">[Back to top]</a>
+<br>
+<br>
+<br>
