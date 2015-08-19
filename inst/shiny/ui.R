@@ -83,7 +83,8 @@ shinyUI(
                             "Bottom right" = "bottomright",
                             "Bottom left" = "bottomleft",
                             "Top right" = "topright",
-                            "Top left" = "topleft"))
+                            "Top left" = "topleft"),
+                            selected="bottomleft")
                 )
 
             ), # end sidebarPanel
