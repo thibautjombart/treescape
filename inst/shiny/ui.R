@@ -11,6 +11,10 @@ shinyUI(
 
         ## SIDE PANEL CONTENT
         sidebarPanel(
+            tags$head(tags$style(
+                type = 'text/css',
+                'form.well { max-height: 100%; overflow-y: auto; }'
+                )),
 
             ## choice of type of data source
             conditionalPanel(condition = "$('li.active a').first().html()!= 'Help'",
@@ -93,9 +97,9 @@ shinyUI(
                             "Top right" = "topright",
                             "Top left" = "topleft"),
                             selected="bottomleft")
-                )
+                ),
 
-            ), # end sidebarPanel
+            width=3), # end sidebarPanel; width is out of 12
 
         ## MAIN PANEL
         mainPanel(
