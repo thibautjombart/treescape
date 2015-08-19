@@ -10,15 +10,27 @@ shinyUI(
         ## SIDE PANEL CONTENT
         sidebarPanel(
 
-            ## choice of dataset if source is a file
+            ## choice of type of data source
             conditionalPanel(condition = "$('li.active a').first().html()!= 'Help'",
-                             fileInput("datafile", p(HTML(' <font size="14"> Choose input file:</font>'), br(),
+                             radioButtons("datatype", "What data source to use?",
+                                          list("Example from treescape"="expl","Input file"="file"))),
+
+            ## choice of dataset if source is an example
+            conditionalPanel(condition = "input.datatype=='expl'&& $('li.active a').first().html()!= 'Help'",
+                             selectInput("dataset", "Select an example dataset:",
+                                         choices=c("woodmiceTrees"))
+                             ),
+
+            ## choice of dataset if source is a file
+            conditionalPanel(condition = "input.datatype=='file'&& $('li.active a').first().html()!= 'Help'",
+                             fileInput("datafile", p(HTML(' <font size="5"> Choose input file:</font>'), br(),
                                                      strong("accepted formats:"), br(),
                                                      em("- multiphylo"), "saved from R (.RData/.Rda)", br(),
                                                      em("- nexus"), "file (.nex/.nexus)")
                                        ),
                              tags$hr()
                              ),
+
 
             conditionalPanel(
                 ## condition
