@@ -114,6 +114,9 @@ shinyUI(
                                               choices=c("rightwards", "leftwards", "upwards", "downwards"),
                                               selected="rightwards", width="100%"),
 
+                                 ## ladderize
+                                 checkboxInput("ladderize", label="Ladderize the tree?", value=TRUE),
+
                                  ## tip labels
                                  checkboxInput("showtiplabels", label="Display tip labels?", value=TRUE),
 

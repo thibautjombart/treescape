@@ -157,7 +157,12 @@ shinyServer(function(input, output) {
                 ## text label
                 tre <- x[[as.numeric(trelab)]]
             }
+
+            if(input$ladderize){
+                tre <- ladderize(tre)
+            }
         }
+
 
         ## plot tree ##
         par(mar=rep(2,4), xpd=TRUE)
