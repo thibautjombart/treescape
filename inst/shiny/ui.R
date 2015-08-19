@@ -13,7 +13,7 @@ shinyUI(
         sidebarPanel(
             tags$head(tags$style(
                 type = 'text/css',
-                'form.well { max-height: 100%; overflow-y: auto; }'
+                'form.well { max-height: 800px; overflow-y: auto; }'
                 )),
 
             ## choice of type of data source
@@ -99,6 +99,7 @@ shinyUI(
                             selected="bottomleft")
                 ),
 
+            br(),br(),br(),br(),br(),br(),br(), # add some blank space at the end of side panel
             width=3), # end sidebarPanel; width is out of 12
 
         ## MAIN PANEL
