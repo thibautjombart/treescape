@@ -12,8 +12,11 @@ shinyUI(
 
             ## choice of dataset if source is a file
             conditionalPanel(condition = "$('li.active a').first().html()!= 'Help'",
-                             fileInput('datafile', 'Choose input file',
-                                       accept=c('Nexus or RData', 'Input file (*.RData,*.Rda, *.nex, *.nexus)')),
+                             fileInput("datafile", p(HTML(' <font size="14"> Choose input file:</font>'), br(),
+                                                     strong("accepted formats:"), br(),
+                                                     em("- multiphylo"), "saved from R (.RData/.Rda)", br(),
+                                                     em("- nexus"), "file (.nex/.nexus)")
+                                       ),
                              tags$hr()
                              ),
 
