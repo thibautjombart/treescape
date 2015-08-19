@@ -102,7 +102,7 @@ shinyServer(function(input, output) {
 
 
     ## ANALYSIS ##
-    output$analysis <- renderPlot({
+    output$scatterplot <- renderPlot({
         ## get dataset
         x <- getData()
 
@@ -161,16 +161,14 @@ shinyServer(function(input, output) {
             if(input$ladderize){
                 tre <- ladderize(tre)
             }
+
+            ## plot tree ##
+            par(mar=rep(2,4), xpd=TRUE)
+            plot(tre, type=input$treetype,
+                 show.tip.lab=input$showtiplabels, font=1, cex=input$tiplabelsize,
+                 direction=input$treedirection,
+                 edge.width=input$edgewidth)
         }
-
-
-        ## plot tree ##
-        par(mar=rep(2,4), xpd=TRUE)
-        plot(tre, type=input$treetype,
-             show.tip.lab=input$showtiplabels, font=1, cex=input$tiplabelsize,
-             direction=input$treedirection,
-             edge.width=input$edgewidth)
-
     })
 
     ## RENDER SYSTEM INFO ##

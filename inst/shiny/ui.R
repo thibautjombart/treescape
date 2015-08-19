@@ -34,7 +34,7 @@ shinyUI(
             conditionalPanel(condition = "input.datatype=='file'&& $('li.active a').first().html()!= 'Help'",
                              fileInput("datafile", p(HTML(' <font size="4"> Choose input file:</font>'), br(),
                                                      strong("accepted formats:"), br(),
-                                                     em("- multiphylo"), "saved from R (.RData/.Rda)", br(),
+                                                     em("- multiphylo"), "saved from R (.RData/.rda)", br(),
                                                      em("- nexus"), "file (.nex/.nexus)")
                                        )
                              ),
@@ -44,7 +44,7 @@ shinyUI(
                 ## condition
                 "$('li.active a').first().html()!= 'Help'",
                 img(src="img/line.png", width="100%"),
-                h2(HTML('<font color="#6C6CC4" size="6"> > Options </font>')),
+                h2(HTML('<font color="#6C6CC4" size="6"> > Analysis </font>')),
                 selectInput("treemethod", "Choose a tree summary:",
                             choices=c(
                             "Metric" = "metric",
@@ -61,10 +61,10 @@ shinyUI(
                 uiOutput("naxes")
                 ),
 
-            ## ## inputs specific of analysis tab
+            ## ## inputs specific of explorer tab
             conditionalPanel(
                 ## condition
-                "$('li.active a').first().html()=='Analysis'",
+                "$('li.active a').first().html()=='Tree landscape explorer'",
 
                 ## select first axis to plot
                 ##numericInput("xax", "Indicate the x axis", value=1, min=1),
@@ -77,7 +77,7 @@ shinyUI(
 
             conditionalPanel(
                 ## condition
-                "$('li.active a').first().html()==='Analysis'",
+                "$('li.active a').first().html()==='Tree landscape explorer'",
 
                 img(src="img/line.png", width="100%"),
 
@@ -130,14 +130,15 @@ shinyUI(
                 ),
 
             br(),br(),br(),br(),br(),br(),br(), # add some blank space at the end of side panel
+            br(),br(),br(),br(),br(),br(),br(), # add some blank space at the end of side panel
             width=3), # end sidebarPanel; width is out of 12
 
         ## MAIN PANEL
         mainPanel(
             tabsetPanel(
 
-                tabPanel("Analysis",
-                         plotOutput("analysis"),
+                tabPanel("Tree landscape explorer",
+                         plotOutput("scatterplot"),
 
                          ## add tree selector
                          textInput("selectedTree", "Choose tree (number or label)", value = ""),
@@ -152,7 +153,7 @@ shinyUI(
 
                 ## HELP SECTION
                 tabPanel("Help",
-                         h1(HTML('<font color="#6C6CC4" size="6"> treescape: statistical exploration of landscapes of phylogenetic trees  </font>'))
+                         HTML(paste(readLines("www/html/help.html"), collapse=" "))
                          ),
 
                 ## SERVER INFO ##
