@@ -25,6 +25,7 @@ mymedian$centre # the vector at the 'centre' of the trees; may not correspond to
 mymedian$median # the identifier(s) of the tree(s) closest to the central vector
 mymedian$mindist # the distance of the median tree(s) from the central vector
 
+\dontrun{
 ## Example with woodmice data:
 data(woodmiceTrees)
 woodmiceMed <- med.tree(woodmiceTrees)
@@ -58,6 +59,7 @@ plot(woodmiceCluster2[[geomMedWoodmice2$median[[1]]]])
 ## This is another representative topology, which is different from those we found above:
 tree.dist(woodmiceCluster2[[geomMedWoodmice2$median[[1]]]],
   woodmiceCluster2[[geomMedWoodmice2$median[[1]]]])
+}
 }
 \author{
 Michelle Kendall \email{michelle.louise.kendall@gmail.com}
