@@ -152,7 +152,7 @@ shinyUI(
 
                 ## HELP SECTION
                 tabPanel("Help",
-                         h3("Functions under development - do not use!")
+                         h1(HTML('<font color="#6C6CC4" size="6"> treescape: statistical exploration of landscapes of phylogenetic trees  </font>'))
                          ),
 
                 ## SERVER INFO ##

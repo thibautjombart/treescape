@@ -1570,17 +1570,17 @@
     </g>
     <text
        xml:space="preserve"
-       style="font-size:30px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;text-anchor:start;fill:#2b2bff;fill-opacity:0.54117856;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
-       x="158.25"
-       y="399.00571"
+       style="font-size:35.30131149px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;text-anchor:start;fill:#2b2bff;fill-opacity:0.54117856;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
+       x="158.1568"
+       y="400.33362"
        id="text4029"
        inkscape:export-filename="/home/thibaut/dev/treescape/inst/shiny/www/img/logo.png"
        inkscape:export-xdpi="318.00555"
        inkscape:export-ydpi="318.00555"><tspan
          sodipodi:role="line"
          id="tspan4031"
-         x="158.25"
-         y="399.00571">Treescape</tspan></text>
+         x="158.1568"
+         y="400.33362">treescape</tspan></text>
     <g
        id="g5679"
        style="fill-opacity:1;fill:url(#linearGradient5727)"
