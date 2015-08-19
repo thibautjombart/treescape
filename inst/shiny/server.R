@@ -101,8 +101,8 @@ shinyServer(function(input, output) {
     })
 
 
-    ## SCATTERPLOT ##
-    output$scatterplot <- renderPlot({
+    ## ANALYSIS ##
+    output$analysis <- renderPlot({
         ## get dataset
         x <- getData()
 
@@ -160,7 +160,11 @@ shinyServer(function(input, output) {
         }
 
         ## plot tree ##
-        plot(tre, show.tip.lab=input$showtiplabels)
+        par(mar=rep(2,4), xpd=TRUE)
+        plot(tre, type=input$treetype,
+             show.tip.lab=input$showtiplabels, font=1, cex=input$tiplabelsize,
+             direction=input$treedirection,
+             edge.width=input$edgewidth)
 
     })
 

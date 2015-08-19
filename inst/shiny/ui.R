@@ -1,5 +1,5 @@
-library(shiny)
-## library(treescape)
+## CHECKS ##
+if(!require(shiny)) stop("shiny is required")
 
 ## DEFINE UI ##
 shinyUI(
@@ -61,10 +61,10 @@ shinyUI(
                 uiOutput("naxes")
                 ),
 
-            ## ## inputs specific of scatterplot tab
+            ## ## inputs specific of analysis tab
             conditionalPanel(
                 ## condition
-                "$('li.active a').first().html()=='Scatterplot'",
+                "$('li.active a').first().html()=='Analysis'",
 
                 ## select first axis to plot
                 ##numericInput("xax", "Indicate the x axis", value=1, min=1),
@@ -77,7 +77,7 @@ shinyUI(
 
             conditionalPanel(
                 ## condition
-                "$('li.active a').first().html()==='Scatterplot'",
+                "$('li.active a').first().html()==='Analysis'",
 
                 img(src="img/line.png", width="100%"),
 
@@ -102,8 +102,28 @@ shinyUI(
                             selected="bottomleft"),
 
                 ## TREE AESTHETICS
-                checkboxInput("showtiplabels", label="Display tip labels?", value=TRUE)
+                ## condition on tree being displayed
+                conditionalPanel(condition = "input.selectedTree!=''",
+                                 ## type of tree
+                                 radioButtons("treetype", "Type of tree",
+                                              choices=c("phylogram","cladogram", "fan", "unrooted", "radial"),
+                                              selected="phylogram", width="100%"),
 
+                                 ## tree direction
+                                 radioButtons("treedirection", "Direction of the tree",
+                                              choices=c("rightwards", "leftwards", "upwards", "downwards"),
+                                              selected="rightwards", width="100%"),
+
+                                 ## tip labels
+                                 checkboxInput("showtiplabels", label="Display tip labels?", value=TRUE),
+
+                                 ## tip label size
+                                 sliderInput("tiplabelsize", "Size of the tip labels", value=1, min=0, max=5, step=0.1),
+
+                                 ## edge width
+                                 sliderInput("edgewidth", "Width of the edges", value=1, min=0, max=20, step=0.2)
+
+                                 )
                 ),
 
             br(),br(),br(),br(),br(),br(),br(), # add some blank space at the end of side panel
@@ -113,8 +133,8 @@ shinyUI(
         mainPanel(
             tabsetPanel(
 
-                tabPanel("Scatterplot",
-                         plotOutput("scatterplot"),
+                tabPanel("Analysis",
+                         plotOutput("analysis"),
 
                          ## add tree selector
                          textInput("selectedTree", "Choose tree (number or label)", value = ""),
