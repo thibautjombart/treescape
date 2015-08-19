@@ -129,8 +129,9 @@ shinyServer(function(input, output) {
             res <- treescape(x, method=treeMethod, nf=naxes)
 
             ## make scatterplot
+            clab <- ifelse(input$showlabels, input$labelsize, 0)
             s.label(res$pco$li, xax=input$xax, yax=input$yax,
-                    cpoint=input$pointsize, clabel=input$labelsize)
+                    cpoint=input$pointsize, clab=clab)
 
             ## add legend
             if(input$screemds!="none"){
@@ -159,7 +160,7 @@ shinyServer(function(input, output) {
         }
 
         ## plot tree ##
-        plot(tre)
+        plot(tre, show.tip.lab=input$showtiplabels)
 
     })
 
