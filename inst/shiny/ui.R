@@ -110,7 +110,13 @@ shinyUI(
                          plotOutput("scatterplot"),
 
                          ## add tree selector
-                         textInput("selectedTree", "Choose tree (label)", value = "1")
+                         textInput("selectedTree", "Choose tree (number or label)", value = ""),
+
+                         ## conditional panel: plot tree if needed
+                         conditionalPanel(
+                             condition = "input.selectedTree!=''",
+                             plotOutput("tree")
+                             )
                          ),
 
 

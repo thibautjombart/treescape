@@ -4,6 +4,10 @@
 
 ## DEFINE THE SERVER SIDE OF THE APPLICATION
 shinyServer(function(input, output) {
+    ## LOAD PACKAGES
+    if(!require("ape")) stop("ape is required")
+    if(!require("ade4")) stop("ade4 is required")
+    if(!require("treescape")) stop("treescape is required")
 
     ## GET DYNAMIC ANNOTATION
     graphTitle <- reactive({
@@ -135,6 +139,28 @@ shinyServer(function(input, output) {
         } else {
             NULL
         }
+    })
+
+    ## PHYLOGENY ##
+    output$tree <- renderPlot({
+        ## get dataset
+        x <- getData()
+
+        ## get right tree ##
+        trelab <- input$selectedTree
+        if(trelab!=""){
+            ## numeric label
+            if(!is.na(as.numeric(trelab))){
+                tre <- x[[as.numeric(trelab)]]
+            } else {
+                ## text label
+                tre <- x[[as.numeric(trelab)]]
+            }
+        }
+
+        ## plot tree ##
+        plot(tre)
+
     })
 
     ## RENDER SYSTEM INFO ##
