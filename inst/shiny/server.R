@@ -20,7 +20,14 @@ shinyServer(function(input, output) {
     getData <- reactive({
         out <- NULL
 
-        if(!is.null(input$datafile)){
+        ## data is a distributed dataset
+        if(input$datatype=="expl"){
+            if(input$dataset=="woodmiceTrees") data("woodmiceTrees", package="treescape", envir=environment())
+            out <- get(input$dataset)
+        }
+
+        ## data is an input file
+        if(input$datatype=="file" && !is.null(input$datafile)){
             ## need to rename input file
             oldName <- input$datafile$datapath
             extension <- adegenet::.readExt(input$datafile$name)
@@ -40,8 +47,9 @@ shinyServer(function(input, output) {
                 warning("duplicates detected in tree labels - using generic names")
                 names(out) <- 1:length(out)
             }
-
         }
+
+        ## return data
         return(out)
     })
 
