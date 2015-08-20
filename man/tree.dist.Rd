@@ -27,7 +27,7 @@ Comparison of two trees using the Kendall Colijn metric
 tree_a <- rtree(6); tree_b <- rtree(6)
 tree.dist(tree_a,tree_b) # lambda=0
 tree.dist(tree_a,tree_b,1)  # lambda=1
-dist.func <- tree.dist(tree_a,tree_b,type="function") # distance as a function of lambda
+dist.func <- tree.dist(tree_a,tree_b,return_lambda_function=TRUE) # distance as a function of lambda
 dist.func(0) # evaluate at lambda=0. Equivalent to tree.dist(tree_a,tree_b).
 ## We can see how the distance changes when moving from focusing on topology to length:
 plot(sapply(seq(0,1,length.out=100), function(x) dist.func(x)), type="l",ylab="",xlab="")
