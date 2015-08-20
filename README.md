@@ -1,7 +1,8 @@
 [![Travis-CI Build Status](https://travis-ci.org/thibautjombart/treescape.png?branch=master)](https://travis-ci.org/thibautjombart/treescape)
 
-# treescape
-Exploring tree diversity
+<img src="/inst/shiny/www/img/logo.png" height="120" alt="treescape">
+
+*Statistical exploration of landscapes of phylogenetic trees*
 
 ! This package is under development. Please do not use it without first emailing the authors (thibautjombart@gmail.com, m.kendall@imperial.ac.uk)
 

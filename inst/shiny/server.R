@@ -4,6 +4,10 @@
 
 ## DEFINE THE SERVER SIDE OF THE APPLICATION
 shinyServer(function(input, output) {
+    ## LOAD PACKAGES
+    if(!require("ape")) stop("ape is required")
+    if(!require("ade4")) stop("ade4 is required")
+    if(!require("treescape")) stop("treescape is required")
 
     ## GET DYNAMIC ANNOTATION
     graphTitle <- reactive({
@@ -20,17 +24,36 @@ shinyServer(function(input, output) {
     getData <- reactive({
         out <- NULL
 
-        if(!is.null(input$datafile)){
+        ## data is a distributed dataset
+        if(input$datatype=="expl"){
+            if(input$dataset=="woodmiceTrees") data("woodmiceTrees", package="treescape", envir=environment())
+            out <- get(input$dataset)
+        }
+
+        ## data is an input file
+        if(input$datatype=="file" && !is.null(input$datafile)){
             ## need to rename input file
             oldName <- input$datafile$datapath
             extension <- adegenet::.readExt(input$datafile$name)
             newName <- paste(input$datafile$datapath, extension, sep=".")
             file.rename(oldName, newName)
 
-            if(extension %in% c("RData","Rdata","Rda","rda")){
+            if(tolower(extension) %in% c("rdata","rda")){
                 out <- get(load(newName))
             }
+            if(tolower(extension) %in% c("nex", "nexus")){
+                if(!require(ape)) stop("ape is required to read in NEXUS (.nex, .nexus) files")
+                out <- read.nexus(file=newName)
+            }
+
+            ## fix potential bug with names - they need to be unique
+            if(length(unique(names(out)))!=length(out)){
+                warning("duplicates detected in tree labels - using generic names")
+                names(out) <- 1:length(out)
+            }
         }
+
+        ## return data
         return(out)
     })
 
@@ -78,7 +101,7 @@ shinyServer(function(input, output) {
     })
 
 
-    ## SCATTERPLOT ##
+    ## ANALYSIS ##
     output$scatterplot <- renderPlot({
         ## get dataset
         x <- getData()
@@ -106,8 +129,9 @@ shinyServer(function(input, output) {
             res <- treescape(x, method=treeMethod, nf=naxes)
 
             ## make scatterplot
+            clab <- ifelse(input$showlabels, input$labelsize, 0)
             s.label(res$pco$li, xax=input$xax, yax=input$yax,
-                    cpoint=input$pointsize, clabel=input$labelsize)
+                    cpoint=input$pointsize, clab=clab)
 
             ## add legend
             if(input$screemds!="none"){
@@ -115,6 +139,35 @@ shinyServer(function(input, output) {
             }
         } else {
             NULL
+        }
+    })
+
+    ## PHYLOGENY ##
+    output$tree <- renderPlot({
+        ## get dataset
+        x <- getData()
+
+        ## get right tree ##
+        trelab <- input$selectedTree
+        if(trelab!=""){
+            ## numeric label
+            if(!is.na(as.numeric(trelab))){
+                tre <- x[[as.numeric(trelab)]]
+            } else {
+                ## text label
+                tre <- x[[as.numeric(trelab)]]
+            }
+
+            if(input$ladderize){
+                tre <- ladderize(tre)
+            }
+
+            ## plot tree ##
+            par(mar=rep(2,4), xpd=TRUE)
+            plot(tre, type=input$treetype,
+                 show.tip.lab=input$showtiplabels, font=1, cex=input$tiplabelsize,
+                 direction=input$treedirection,
+                 edge.width=input$edgewidth)
         }
     })
 

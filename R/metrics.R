@@ -535,12 +535,13 @@ tree.dist <- cmpfun(tree.dist)
 #'  xlab("") + ylab("") + theme_bw(base_family="") # remove axis labels and grey background
 #' }
 #'
+#' \dontrun{
 #' if(require(rgl)){
 #' woodmiceMDS3D <- dudi.pco(as.dist(woodmiceDists), scannf=FALSE, nf=3)
 #' plot3d(woodmiceMDS3D$li[,1], woodmiceMDS3D$li[,2], woodmiceMDS3D$li[,3], type="s", size=1.5,
 #'    col="navy", alpha=0.5, xlab="", ylab="", zlab="")
 #' }
-#'
+#' }
 multi.dist <- function(trees,lambda=0,type="number") { # allow output type to be number or function
   #checks and warnings
   if (class(trees) != "multiPhylo"){
@@ -692,6 +693,7 @@ multi.dist <- cmpfun(multi.dist)
 #' mymedian$median # the identifier(s) of the tree(s) closest to the central vector
 #' mymedian$mindist # the distance of the median tree(s) from the central vector
 #'
+#' \dontrun{
 #' ## Example with woodmice data:
 #' data(woodmiceTrees)
 #' woodmiceMed <- med.tree(woodmiceTrees)
@@ -725,7 +727,7 @@ multi.dist <- cmpfun(multi.dist)
 #' ## This is another representative topology, which is different from those we found above:
 #' tree.dist(woodmiceCluster2[[geomMedWoodmice2$median[[1]]]],
 #'   woodmiceCluster2[[geomMedWoodmice2$median[[1]]]])
-#'
+#'}
 med.tree <- function(trees,likes=rep(1,length(trees)),lambda=0) {
   n <- length(trees)
   if (length(likes)!=n) {stop("Number of likelihoods is not equal to number of trees.")}
