@@ -9,7 +9,7 @@ tree.vec(tree, lambda = 0, return_lambda_function = F)
 \arguments{
 \item{tree}{an object of the class \code{phylo}}
 
-\item{lambda}{a number in [0,1] which specifies the extent to which topology (default, with lambda=0)  or branch lengths (lambda=1) are emphasised. This argument is ignored if \code{type="function"}.}
+\item{lambda}{a number in [0,1] which specifies the extent to which topology (default, with lambda=0)  or branch lengths (lambda=1) are emphasised. This argument is ignored if \code{return_lambda_function=TRUE}.}
 
 \item{return_lambda_function}{If true, a function that can be invoked with different lambda values is returned. This function returns the vector of metric values for the given lambda.}
 }
