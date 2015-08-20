@@ -14,7 +14,9 @@ find.groves(x, method = tree.vec, nf = NULL, clustering = "ward.D2",
 
 \item{nf}{the number of principal components to retain}
 
-\item{clustering}{a character string indicating the clustering method to be used; see argument \code{method} in \code{?hclust} for more details.}
+\item{clustering}{a character string indicating the clustering method to be used; defaults to Ward's method; see argument \code{method} in \code{?hclust} for more details.}
+
+\item{nclust}{an integer indicating the number of clusters to find; if not provided, an interactive process based on cutoff threshold selection is used.}
 
 \item{...}{further arguments to be passed to \code{treescape}}
 }
@@ -33,8 +35,10 @@ if(require("adegenet")){
 ## load data
 data(woodmiceTrees)
 
-## use treescape
+## run find.groves: treescape+clustering
 res <- find.groves(woodmiceTrees, nf=5, nclust=6)
+
+## plot results on first 2 axes
 PCs <- res$treescape$pco$li
 s.class(PCs, fac=res$groups, col=funky(6))
 }

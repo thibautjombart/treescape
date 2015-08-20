@@ -6,7 +6,8 @@
 #' @param x an object of the class multiPhylo
 #' @param method a function outputting the summary of a tree (phylo object) in the form of a vector
 #' @param nf the number of principal components to retain
-#' @param clustering a character string indicating the clustering method to be used; see argument \code{method} in \code{?hclust} for more details.
+#' @param clustering a character string indicating the clustering method to be used; defaults to Ward's method; see argument \code{method} in \code{?hclust} for more details.
+#' @param nclust an integer indicating the number of clusters to find; if not provided, an interactive process based on cutoff threshold selection is used.
 #' @param ... further arguments to be passed to \code{treescape}
 #'
 #' @author Thibaut Jombart \email{thibautjombart@@gmail.com}
@@ -29,8 +30,10 @@
 #' ## load data
 #' data(woodmiceTrees)
 #'
-#' ## use treescape
+#' ## run find.groves: treescape+clustering
 #' res <- find.groves(woodmiceTrees, nf=5, nclust=6)
+#'
+#' ## plot results on first 2 axes
 #' PCs <- res$treescape$pco$li
 #' s.class(PCs, fac=res$groups, col=funky(6))
 #' }
