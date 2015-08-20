@@ -100,56 +100,56 @@ pen.edge.treematch <- cmpfun(pen.edge.treematch)
 
 
 
-#' CPP leaf combination distance function
-#'
-#' CPP implementation of the function that updates the vector of distances for a set of leaf combinations (the ones
-#' induced by a specific node of the tree). We modify the vectors within the function (to avoid copying them).
-#'
-#' @param length_root_distances The vector of length distances to the root (for each combination of leaves).
-#' @param topological_root_distances The vector of edge distances to the root (for each combination of leaves).
-#' @param left_partition A vector with the leaves on the left subtree of the current node.
-#' @param right_partition A vector with the leaves on the right subtree of the current node.
-#' @param index_offsets Auxiliary vector used to compute the vector index for a given combination.
-#' @param distance_to_root The branch length distance (branch length to the root).
-#' @param edges_to_root The edge distance (number of edges to the root).
-#'
-#'
-#' @author Jacob Almagro-Garcia \email{nativecoder@@gmail.com}
-#'
-#' @importFrom Rcpp sourceCpp
-#' @importFrom Rcpp cppFunction
-#'
-#'
-CPP_update_combinations <- cppFunction("void updateDistancesWithCombinations(NumericVector& length_root_distances,
-                                                                             NumericVector& topological_root_distances,
-                                                                             IntegerVector& left_partition,
-                                                                             IntegerVector& right_partition,
-                                                                             IntegerVector& index_offsets,
-                                                                             double distance_to_root,
-                                                                             int edges_to_root)
-{
-  // Iterate through all combinations.
-  for(int i=0; i < left_partition.size(); ++i) {
-    for(int j=0; j < right_partition.size(); ++j) {
-
-      int first_leaf = left_partition[i];
-      int second_leaf = right_partition[j];
-
-      // Because of the symmetric distances.
-      if(left_partition[i] > right_partition[j]) {
-        first_leaf = right_partition[j];
-        second_leaf = left_partition[i];
-      }
-
-      // Roll the index (notice we take into account C++ indices here, starting at 0).
-      int combination_index = index_offsets[first_leaf-1] + (second_leaf - first_leaf) - 1;
-
-      // Update the vectors.
-      length_root_distances[combination_index] = distance_to_root;
-      topological_root_distances[combination_index] = edges_to_root;
-    }
-  }
-}")
+##' CPP leaf combination distance function
+##'
+##' CPP implementation of the function that updates the vector of distances for a set of leaf combinations (the ones
+##' induced by a specific node of the tree). We modify the vectors within the function (to avoid copying them).
+##'
+##' @param length_root_distances The vector of length distances to the root (for each combination of leaves).
+##' @param topological_root_distances The vector of edge distances to the root (for each combination of leaves).
+##' @param left_partition A vector with the leaves on the left subtree of the current node.
+##' @param right_partition A vector with the leaves on the right subtree of the current node.
+##' @param index_offsets Auxiliary vector used to compute the vector index for a given combination.
+##' @param distance_to_root The branch length distance (branch length to the root).
+##' @param edges_to_root The edge distance (number of edges to the root).
+##'
+##'
+##' @author Jacob Almagro-Garcia \email{nativecoder@@gmail.com}
+##'
+##' @importFrom Rcpp sourceCpp
+##' @importFrom Rcpp cppFunction
+##'
+##'
+#CPP_update_combinations <- cppFunction("void updateDistancesWithCombinations(NumericVector& length_root_distances,
+#                                                                             NumericVector& topological_root_distances,
+#                                                                             IntegerVector& left_partition,
+#                                                                             IntegerVector& right_partition,
+#                                                                             IntegerVector& index_offsets,
+#                                                                             double distance_to_root,
+#                                                                             int edges_to_root)
+#{
+#  // Iterate through all combinations.
+#  for(int i=0; i < left_partition.size(); ++i) {
+#    for(int j=0; j < right_partition.size(); ++j) {
+#
+#      int first_leaf = left_partition[i];
+#      int second_leaf = right_partition[j];
+#
+#      // Because of the symmetric distances.
+#      if(left_partition[i] > right_partition[j]) {
+#        first_leaf = right_partition[j];
+#        second_leaf = left_partition[i];
+#      }
+#
+#      // Roll the index (notice we take into account C++ indices here, starting at 0).
+#      int combination_index = index_offsets[first_leaf-1] + (second_leaf - first_leaf) - 1;
+#
+#      // Update the vectors.
+#      length_root_distances[combination_index] = distance_to_root;
+#      topological_root_distances[combination_index] = edges_to_root;
+#    }
+#  }
+#}")
 
 
 #' Tree vector function
