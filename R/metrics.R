@@ -110,7 +110,7 @@ pen.edge.treematch <- cmpfun(pen.edge.treematch)
 #'
 #' @import ape
 #' @importFrom Rcpp evalCpp
-#' @useDynLib treespace
+#' @useDynLib treescape
 #'
 #' @examples
 #'
