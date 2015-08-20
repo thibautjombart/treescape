@@ -30,7 +30,7 @@
 #' data(woodmiceTrees)
 #'
 #' ## use treescape
-#' res <- find.groves(x, nf=5, nclust=6)
+#' res <- find.groves(woodmiceTrees, nf=5, nclust=6)
 #' PCs <- res$treescape$pco$li
 #' s.class(PCs, fac=res$groups, col=funky(6))
 #' }
