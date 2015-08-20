@@ -1,7 +1,7 @@
 #'
 #' Identify clusters of similar trees
 #'
-#' This function uses hierarchical clustering on principal components output by \link{\code{treescape}} to identify groups of similar trees. Clustering relies on \link{\code{hclust}}, using Ward's method by default.
+#' This function uses hierarchical clustering on principal components output by \code{\link{treescape}} to identify groups of similar trees. Clustering relies on \code{\link{hclust}}, using Ward's method by default.
 #'
 #' @param x an object of the class multiPhylo
 #' @param method a function outputting the summary of a tree (phylo object) in the form of a vector

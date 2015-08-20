@@ -26,7 +26,7 @@ A list containing:
 }
 }
 \description{
-This function uses hierarchical clustering on principal components output by \link{\code{treescape}} to identify groups of similar trees. Clustering relies on \link{\code{hclust}}, using Ward's method by default.
+This function uses hierarchical clustering on principal components output by \code{\link{treescape}} to identify groups of similar trees. Clustering relies on \code{\link{hclust}}, using Ward's method by default.
 }
 \examples{
 if(require("adegenet")){
