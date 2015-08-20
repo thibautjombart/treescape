@@ -281,7 +281,8 @@ tree.vec <- function(tree, lambda=0, return_lambda_function=F) {
 #' @examples
 #'
 #' ## generate random trees
-#' tree_a <- rtree(6); tree_b <- rtree(6)
+#' tree_a <- rtree(6)
+#' tree_b <- rtree(6)
 #' tree.dist(tree_a,tree_b) # lambda=0
 #' tree.dist(tree_a,tree_b,1)  # lambda=1
 #' dist.func <- tree.dist(tree_a,tree_b,return_lambda_function=TRUE) # distance as a function of lambda
@@ -292,16 +293,16 @@ tree.vec <- function(tree, lambda=0, return_lambda_function=F) {
 #'
 tree.dist <- function(tree_a, tree_b, lambda=0, return_lambda_function=F) {
 
-  metric_a <- tree.vec(tree_a, lambda, return_lambda_function)
-  metric_b <- tree.vec(tree_b, lambda, return_lambda_function)
-  if(!return_lambda_function) {
-    return(sqrt(sum((metric_a - metric_b)^2)))
-  }
-  else {
-    return(function(l) {
-      return(sqrt(sum((metric_a(l) - metric_b(l))^2)))
-    })
-  }
+    metric_a <- tree.vec(tree_a, lambda, return_lambda_function)
+    metric_b <- tree.vec(tree_b, lambda, return_lambda_function)
+    if(!return_lambda_function) {
+        return(sqrt(sum((metric_a - metric_b)^2)))
+    }
+    else {
+        return(function(l) {
+            return(sqrt(sum((metric_a(l) - metric_b(l))^2)))
+        })
+    }
 }
 
 
@@ -383,7 +384,7 @@ tree.dist <- function(tree_a, tree_b, lambda=0, return_lambda_function=F) {
 #' plot3d(woodmiceMDS3D$li[,1], woodmiceMDS3D$li[,2], woodmiceMDS3D$li[,3], type="s", size=1.5,
 #'    col="navy", alpha=0.5, xlab="", ylab="", zlab="")
 #' }
-#'
+#' }
 multi.dist <- function(trees, lambda=0, return_lambda_function=F, save_memory=F) {
 
   num_trees <- length(trees)
@@ -507,7 +508,7 @@ multi.dist <- function(trees, lambda=0, return_lambda_function=F, save_memory=F)
 #' ## This is another representative topology, which is different from those we found above:
 #' tree.dist(woodmiceCluster2[[geomMedWoodmice2$median[[1]]]],
 #'   woodmiceCluster2[[geomMedWoodmice2$median[[1]]]])
-#'
+#' }
 med.tree <- function(trees, lambda=0, weights=rep(1,length(trees)), return_lambda_function=F, save_memory=F) {
 
   num_trees <- length(trees)
