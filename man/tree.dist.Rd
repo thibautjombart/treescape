@@ -4,31 +4,38 @@
 \alias{tree.dist}
 \title{Metric function}
 \usage{
-tree.dist(tr1, tr2, lambda = 0, type = "number")
+tree.dist(tree_a, tree_b, lambda = 0, return_lambda_function = F)
 }
 \arguments{
-\item{tr1}{an object of the class \code{phylo}}
+\item{tree_a}{an object of the class \code{phylo}}
 
-\item{tr2}{an object of the class \code{phylo}}
+\item{tree_b}{an object of the class \code{phylo} (with the same tip labels as tree_a)}
 
 \item{lambda}{a number in [0,1] which specifies the extent to which topology (default, with lambda=0)  or branch lengths (lambda=1) are emphasised. This argument is ignored if \code{type="function"}.}
 
-\item{type}{logical which takes the inputs "\code{number}" (default) or "\code{function}". When \code{type="number"}, the output is numeric; when \code{type="function"} the output is a function of lambda.}
+\item{return_lambda_function}{If true, a function that can be invoked with different lambda values is returned.
+This function returns the vector of metric values for the given lambda.}
+}
+\value{
+The vector with the metric values or a function that produces the vector given a value of lambda.
 }
 \description{
 Comparison of two trees using the Kendall Colijn metric
 }
 \examples{
 ## generate random trees
-tree1 <- rtree(6); tree2 <- rtree(6)
-tree.dist(tree1,tree2) # lambda=0
-tree.dist(tree1,tree2,1)  # lambda=1
-dist.func <- tree.dist(tree1,tree2,type="function") # distance as a function of lambda
-dist.func(0) # evaluate at lambda=0. Equivalent to tree.dist(tree1,tree2).
+tree_a <- rtree(6)
+tree_b <- rtree(6)
+tree.dist(tree_a,tree_b) # lambda=0
+tree.dist(tree_a,tree_b,1)  # lambda=1
+dist.func <- tree.dist(tree_a,tree_b,return_lambda_function=TRUE) # distance as a function of lambda
+dist.func(0) # evaluate at lambda=0. Equivalent to tree.dist(tree_a,tree_b).
 ## We can see how the distance changes when moving from focusing on topology to length:
 plot(sapply(seq(0,1,length.out=100), function(x) dist.func(x)), type="l",ylab="",xlab="")
 }
 \author{
+Jacob Almagro-Garcia \email{nativecoder@gmail.com}
+
 Michelle Kendall \email{michelle.louise.kendall@gmail.com}
 }
 

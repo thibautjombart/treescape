@@ -4,14 +4,20 @@
 \alias{multi.dist}
 \title{Metric function for \code{multiPhylo} input}
 \usage{
-multi.dist(trees, lambda = 0, type = "number")
+multi.dist(trees, lambda = 0, return_lambda_function = F, save_memory = F)
 }
 \arguments{
-\item{trees}{an object of the class \code{multiPhylo}}
+\item{trees}{an object of the class \code{multiPhylo} containing the trees to be compared}
 
-\item{lambda}{a number in [0,1] which specifies the extent to which topology (default, with lambda=0)  or branch lengths (lambda=1) are emphasised. This argument is ignored if \code{type="function"}.}
+\item{lambda}{a number in [0,1] which specifies the extent to which topology (default, with lambda=0)  or branch lengths (lambda=1) are emphasised. This argument is ignored if \code{return_lambda_function=TRUE}.}
 
-\item{type}{logical which takes the inputs "\code{number}" (default) or "\code{function}". When \code{type="number"}, the output is a matrix where each entry is numeric; when \code{type="function"} the output is a matrix where each entry is a function of lambda.}
+\item{return_lambda_function}{If true, a function that can be invoked with different lambda values is returned.
+This function returns the matrix of metric values for the given lambda.}
+
+\item{save_memory}{A flag that saves a lot of memory but increases the execution time (not compatible with return_lambda_function=TRUE).}
+}
+\value{
+The distance matrix or a function that produces the distance matrix given a value for lambda.
 }
 \description{
 Comparison of a list of trees using the Kendall Colijn metric. Output is given as a pairwise distance matrix.
@@ -24,16 +30,16 @@ trees <- rmtree(10,6)
 multi.dist(trees)
 
 ## pairwise distance matrix as a function of lambda:
-m <- multi.dist(trees, type="function")
+m <- multi.dist(trees, return_lambda_function=TRUE)
 
 ## evaluate at lambda=0. Equivalent to multi.dist(trees).
-m(0)
+m0 <- m(0)
 
 ## A method to visualise these distances with MDS:
 require(ade4)
 
 ## find an optimum projection of the points in 2 dimensions:
-mMDS <- dudi.pco(as.dist(m(0)), scannf=FALSE,nf=2)
+mMDS <- dudi.pco(as.dist(m0), scannf=FALSE,nf=2)
 
 ## put the coordinates of these points into a data frame
 mdf <-mMDS$li
@@ -76,6 +82,8 @@ plot3d(woodmiceMDS3D$li[,1], woodmiceMDS3D$li[,2], woodmiceMDS3D$li[,3], type="s
 }
 }
 \author{
+Jacob Almagro-Garcia \email{nativecoder@gmail.com}
+
 Michelle Kendall \email{michelle.louise.kendall@gmail.com}
 }
 

@@ -3,10 +3,12 @@ Title: Statistical exploration of landscapes of phylogenetic trees
 Version: 0.0.0.9000
 Authors@R: c(TJ=person("Thibaut", "Jombart", email="thibaut.jombart@gmail.com", role = c("aut", "cre")), 
 	   MK=person("Michelle", "Kendall", role = c("aut")), 
+	   JAG=person("Jacob", "Almagro-Garcia", role = c("aut")),	
 	   CC=person("Caroline", "Colijn", role = c("aut")))
 Description: Tools for the exploration of distributions of phylogenetic trees. This package includes a shiny interface which can be started from R using 'treescapeServer()'.
 Depends: R (>= 3.1.2), ape, ade4
-Imports: adephylo, shiny, utils, adegenet, combinat, compiler, phangorn
+Imports: adephylo, shiny, utils, adegenet, combinat, compiler, phangorn, Rcpp
+LinkingTo: Rcpp
 Suggests: RColorBrewer, ggplot2, rgl
 License: GPL (>=2)
 LazyData: true
