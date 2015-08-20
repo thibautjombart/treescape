@@ -2,7 +2,7 @@
 % Please edit documentation in R/metrics.R
 \name{tree.vec}
 \alias{tree.vec}
-\title{CPP leaf combination distance function}
+\title{Tree vector function}
 \usage{
 tree.vec(tree, lambda = 0, return_lambda_function = F)
 }
@@ -12,27 +12,14 @@ tree.vec(tree, lambda = 0, return_lambda_function = F)
 \item{lambda}{a number in [0,1] which specifies the extent to which topology (default, with lambda=0)  or branch lengths (lambda=1) are emphasised. This argument is ignored if \code{type="function"}.}
 
 \item{return_lambda_function}{If true, a function that can be invoked with different lambda values is returned. This function returns the vector of metric values for the given lambda.}
-
-\item{length_root_distances}{The vector of length distances to the root (for each combination of leaves).}
-
-\item{topological_root_distances}{The vector of edge distances to the root (for each combination of leaves).}
-
-\item{left_partition}{A vector with the leaves on the left subtree of the current node.}
-
-\item{right_partition}{A vector with the leaves on the right subtree of the current node.}
-
-\item{index_offsets}{Auxiliary vector used to compute the vector index for a given combination.}
-
-\item{distance_to_root}{The branch length distance (branch length to the root).}
-
-\item{edges_to_root}{The edge distance (number of edges to the root).}
 }
 \value{
 The vector with the metric values or a function that produces the vector given a value of lambda.
 }
 \description{
-CPP implementation of the function that updates the vector of distances for a set of leaf combinations (the ones
-induced by a specific node of the tree). We modify the vectors within the function (to avoid copying them).
+Function which takes an object of class phylo as input and outputs the vector for the metric.
+The elements of the vector are numeric if \code{return_lambda_function=FALSE} (default),
+and otherwise they are functions of lambda.
 }
 \examples{
 ## generate a random tree
@@ -47,8 +34,6 @@ vec.func <- tree.vec(tree,return_lambda_function=TRUE)
 vec.func(0.5)
 }
 \author{
-Jacob Almagro-Garcia \email{nativecoder@gmail.com}
-
 Jacob Almagro-Garcia \email{nativecoder@gmail.com}
 
 Michelle Kendall \email{michelle.louise.kendall@gmail.com}
