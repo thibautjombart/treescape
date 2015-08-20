@@ -446,15 +446,19 @@ multi.dist <- function(trees, lambda=0, return_lambda_function=F, save_memory=F)
 #'
 #' @export
 #'
+#' @author Jacob Almagro-Garcia \email{nativecoder@@gmail.com}
 #' @author  Michelle Kendall \email{michelle.louise.kendall@@gmail.com}
 #'
-#' @param trees an object of the class \code{multiPhylo}
-#' @param likes a vector of weightings for the trees. Defaults to a vector of 1's so that all trees are equally weighted, but can be used to weight trees according to likelihood or other characteristics.
-#' @param lambda a number in [0,1] which specifies the extent to which topology (default, with lambda=0)  or branch lengths (lambda=1) are emphasised. This argument is ignored if \code{type="function"}.
+#' @param trees An object of the class multiPhylo, containing the trees for which the median tree will be computed.
+#' @param lambda a number in [0,1] which specifies the extent to which topology (default, with lambda=0)  or branch lengths (lambda=1) are emphasised. This argument is ignored if \code{return_lambda_function=TRUE}.
+#' @param weights A vector of weights for the trees. Defaults to a vector of 1's so that all trees are equally weighted, but can be used to encode likelihood, posterior probabilities or other characteristics.
+#' @param return_lambda_function If true, a function that can be invoked with different lambda values is returned.
+#'  This function returns the vector of metric values for the given lambda.
+#' @param save_memory A flag that saves a lot of memory but increases the execution time (not compatible with return_lambda_function=TRUE).
+#' @return A list with the median metric vector, distances, indices of the tree(s) that are closest to the median tree and the value of this distance
+#'  or a function that produces this list for a given value of lambda.
 #'
 #'
-#' @importFrom compiler cmpfun
-#' @importFrom combinat combn2
 #' @import ape
 #'
 #'
@@ -502,91 +506,86 @@ multi.dist <- function(trees, lambda=0, return_lambda_function=F, save_memory=F)
 #' tree.dist(woodmiceCluster2[[geomMedWoodmice2$median[[1]]]],
 #'   woodmiceCluster2[[geomMedWoodmice2$median[[1]]]])
 #'
-med.tree <- function(trees,likes=rep(1,length(trees)),lambda=0) {
-  n <- length(trees)
-  if (length(likes)!=n) {stop("Number of likelihoods is not equal to number of trees.")}
-  if (lambda<0) {stop("Pick lambda in [0,1]")}
-  if (lambda>1) {stop("Pick lambda in [0,1]")}
-
-  k <- length(trees[[1]]$tip.label)
-  for (i in 1:n) {
-    if (k != length(trees[[i]]$tip.label)) {
-      stop("trees must all have the same number of tips")
+med.tree <- function(trees, lambda=0, weights=rep(1,length(trees)), return_lambda_function=F, save_memory=F) {
+  
+  num_trees <- length(trees)
+  num_leaves <- length(trees[[1]]$tip.label)
+  
+  # Working with numbers (no functions).
+  if(!return_lambda_function) {
+    
+    # Here we speed up the computation by storing all vectors (a lot of memory for big trees).
+    if(!save_memory) {
+      
+      # Compute the metric vector for all trees.
+      tree_metrics <- t(sapply(trees, function(tree) {tree.vec(tree, lambda, F)}))
+      
+      # Compute the centre metric vector by weighting the metric vector of each tree.
+      centre <- (weights %*% tree_metrics)/num_trees
+      
+      # Distances to the centre.
+      distances <- apply(tree_metrics, 1, function(m){sqrt(sum((m-centre)^2))})
+      
+      # Get the indices for the median tree(s).
+      min_distance <- min(distances)
+      median_trees <- which(min_distance == distances)
+      
+      return(list(centre=centre, distances=distances, mindist=min_distance, median=median_trees))
     }
-    if (setequal(trees[[i]]$tip.label,trees[[1]]$tip.label) == FALSE) {
-      stop("trees have different tip label sets")
-    }
-  }
-  if (lambda!=0) { # if lambda=0 then we don't need edge lengths to be defined, but if lambda!=0 then we do
-    if (is.null(trees[[i]]$edge.length)) {
-      stop("edge lengths not defined")
-    }}
-
-  labelmatch <- lapply(1:n, function (y)
-    match(trees[[1]]$tip.label,trees[[y]]$tip.label))
-
-  # version of tree.vec which applies labelmatch first
-  tree.vec.match <- function(tr1,lambda,labelmatchi,k,n) {
-    M1 <- linear.mrca(tr1,k); # kxk MRCA matrix for tree
-
-    if (lambda!=1){ # make a copy with edge lengths = 1
-      TR1 <- tr1
-      TR1$edge.length <- rep(1,length(tr1$edge.length))
-      D1 <- dist.nodes(TR1)
-    }
-    if (lambda!=0) { # if lambda!=0 we need to know branch length distances
-      # first, we need to rescale branch lengths so median is 1
-      tr1$edge.length <- tr1$edge.length/median(tr1$edge.length)
-      d1 <- dist.nodes(tr1);
-    }
-
-    pairs <- combn2(1:k)
-    # vt is the purely topological vector (don't waste time computing if lambda=1)
-    # vl is the purely length-based vector (don't waste time computing if lambda=0)
-    if (lambda==1) { vt <- rep(0,k*(k-1)/2)}
+    
+    # To save memory we recompute the vectors on the fly (way slower but we don't eat a ton of memory).
+    # We'll need a first pass to compute the centre and a second pass to compute distances.
     else {
-      vt <- apply(pairs, 1, function(x) D1[k+1,M1[[labelmatchi[x[1]],labelmatchi[x[2]]]]])
+      
+      # First pass: compute the centre.
+      centre <- rep(0,(num_leaves*(num_leaves-1)/2) + num_leaves)
+      for(i in 1:num_trees) {
+        centre <- centre + tree.vec(trees[[i]], lambda, F) * weights[i]
+      }
+      centre <- centre/num_trees
+      
+      # Second pass: compute the distances.
+      distances <- rep(NA,num_trees)
+      for(i in 1:num_trees) {
+        distances[i] <- sqrt(sum((tree.vec(trees[[i]], lambda, F) - centre)^2))
+      }
+      
+      # Get the indices for the median tree(s).
+      min_distance <- min(distances)
+      median_trees <- which(min_distance == distances)
+      
+      return(list(centre=centre, distances=distances, mindist=min_distance, median=median_trees))
     }
-    if (lambda==0) { vl <- rep(0,k*(k-1)/2)}
-    else {
-      vl <- apply(pairs, 1, function(x) d1[k+1,M1[[labelmatchi[x[1]],labelmatchi[x[2]]]]])
+  }
+  
+  # Working with functions.
+  else {
+    
+    if(save_memory)
+      warning("save_memory=T is incompatible with return_lambda_function=T, setting save_memory=F")
+    
+    # Compute the list of metric functions for all trees.
+    tree_metric_functions <- sapply(trees, function(tree) {tree.vec(tree, lambda, T)})
+    
+    # Inner function that we'll return, computes the distance matrix given lambda.
+    compute_median_tree_function <- function(l) {
+      
+      # Compute the tree metrics for the given lambda.
+      tree_metrics <- t(sapply(tree_metric_functions, function(tmf){tmf(l)}))
+      
+      # Compute the centre metric vector by weighting the metric vector of each tree.
+      centre <- (weights %*% tree_metrics)/num_trees
+      
+      # Distances to the centre.
+      distances <- apply(tree_metrics, 1, function(m){sqrt(sum((m-centre)^2))})
+      
+      # Get the indices for the median tree(s).
+      min_distance <- min(distances)
+      median_trees <- which(min_distance == distances)
+      
+      return(list(centre=centre, distances=distances, mindist=min_distance, median=median_trees))
     }
-
-    v <- (1-lambda)*vt + lambda*vl
-
-    if (lambda!=0) {
-      # append vector of pendant branch lengths
-      ep1 <- pen.edge.treematch(tr1,labelmatchi)
-      pen.length1 <- apply(ep1, 1, function(x) d1[x[1],x[2]])
-      v <- as.numeric(c(v,lambda*pen.length1))
-    }
-
-    return(v)
+    
+    return(compute_median_tree_function)
   }
-  # initialise vector, length n choose 2 if lambda=0, otherwise n choose 2 + n
-  if (lambda==0) {  centre <- rep(0,(k*(k-1)/2)) }
-  else {  centre <- rep(0,(k*(k+1)/2)) }
-  vecs <- list()
-  for (i in 1:n) {
-    vecs[[i]] <- tree.vec.match(trees[[i]],lambda,labelmatch[[i]],k,n)
-    centre <- centre + vecs[[i]]*likes[[i]]
-  }
-  centre <- centre/n
-  # also want to know which vecs[[i]] is closest to median
-  d <- list()
-  for (i in 1:n){
-    v <- vecs[[i]]-centre
-    d[[i]] <- sqrt(sum(v^2))
-  }
-  class(d) <- "numeric"
-  md <- min(d)
-  median <- which(d==md)
-
-  result <- list()
-  result$centre <- centre
-  result$median <- median
-  result$mindist <- md
-
-  return(result)
 }
-med.tree <- cmpfun(med.tree)

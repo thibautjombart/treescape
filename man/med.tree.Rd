@@ -4,14 +4,24 @@
 \alias{med.tree}
 \title{Geometric median tree function}
 \usage{
-med.tree(trees, likes = rep(1, length(trees)), lambda = 0)
+med.tree(trees, lambda = 0, weights = rep(1, length(trees)),
+  return_lambda_function = F, save_memory = F)
 }
 \arguments{
-\item{trees}{an object of the class \code{multiPhylo}}
+\item{trees}{An object of the class multiPhylo, containing the trees for which the median tree will be computed.}
 
-\item{likes}{a vector of weightings for the trees. Defaults to a vector of 1's so that all trees are equally weighted, but can be used to weight trees according to likelihood or other characteristics.}
+\item{lambda}{a number in [0,1] which specifies the extent to which topology (default, with lambda=0)  or branch lengths (lambda=1) are emphasised. This argument is ignored if \code{return_lambda_function=TRUE}.}
 
-\item{lambda}{a number in [0,1] which specifies the extent to which topology (default, with lambda=0)  or branch lengths (lambda=1) are emphasised. This argument is ignored if \code{type="function"}.}
+\item{weights}{A vector of weights for the trees. Defaults to a vector of 1's so that all trees are equally weighted, but can be used to encode likelihood, posterior probabilities or other characteristics.}
+
+\item{return_lambda_function}{If true, a function that can be invoked with different lambda values is returned.
+This function returns the vector of metric values for the given lambda.}
+
+\item{save_memory}{A flag that saves a lot of memory but increases the execution time (not compatible with return_lambda_function=TRUE).}
+}
+\value{
+A list with the median metric vector, distances, indices of the tree(s) that are closest to the median tree and the value of this distance
+ or a function that produces this list for a given value of lambda.
 }
 \description{
 Finds the geometric median of a set of trees according to the Kendall Colijn metric.
@@ -60,6 +70,8 @@ tree.dist(woodmiceCluster2[[geomMedWoodmice2$median[[1]]]],
   woodmiceCluster2[[geomMedWoodmice2$median[[1]]]])
 }
 \author{
+Jacob Almagro-Garcia \email{nativecoder@gmail.com}
+
 Michelle Kendall \email{michelle.louise.kendall@gmail.com}
 }
 
