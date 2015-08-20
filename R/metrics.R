@@ -296,7 +296,7 @@ tree.vec <- function(tree, lambda=0, return_lambda_function=F) {
       num_groups <- length(node$partitions)
       for(group_a in 1:(num_groups-1)) {
         for(group_b in (group_a+1):num_groups) {
-          CPP_update_combinations(length_root_distances, topological_root_distances, node$partitions[[group_a]],
+          updateDistancesWithCombinations(length_root_distances, topological_root_distances, node$partitions[[group_a]],
                                   node$partitions[[group_b]], index_offsets, node$root_distance, node$edges_to_root)
         }
       }
