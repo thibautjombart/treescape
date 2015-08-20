@@ -109,6 +109,8 @@ pen.edge.treematch <- cmpfun(pen.edge.treematch)
 #' @return The vector with the metric values or a function that produces the vector given a value of lambda.
 #'
 #' @import ape
+#' @importFrom Rcpp evalCpp
+#' @useDynLib treespace
 #'
 #' @examples
 #'
