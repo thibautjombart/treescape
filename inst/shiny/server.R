@@ -171,6 +171,17 @@ shinyServer(function(input, output) {
         }
     })
 
+
+
+    ## EXPORT TREES ##
+    output$exporttrees <- downloadHandler(
+        filename = function() { paste(input$dataset, '.nex', sep='') },
+        content = function(file) {
+            if(!require(ape)) stop("ape is required to save trees into nexus file")
+            x <- getData()
+            if(!is.null(x) && inherits(x, "multiPhylo")) ape::write.nexus(x, file=file)
+        })
+
     ## RENDER SYSTEM INFO ##
     output$systeminfo <- .render.server.info()
 

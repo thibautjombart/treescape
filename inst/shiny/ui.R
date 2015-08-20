@@ -4,22 +4,23 @@ if(!require(shiny)) stop("shiny is required")
 ## DEFINE UI ##
 shinyUI(
     pageWithSidebar(
-        ##  TITLE
+        ##  TITLE ##
         headerPanel(
             img(src="img/logo.png", height="160")
             ),
 
-        ## SIDE PANEL CONTENT
+        ## SIDE PANEL CONTENT ##
         sidebarPanel(
             tags$head(tags$style(
                 type = 'text/css',
                 'form.well { max-height: 800px; overflow-y: auto; }'
                 )),
 
+            ## INPUT
             ## choice of type of data source
             conditionalPanel(condition = "$('li.active a').first().html()!= 'Help'",
                              img(src="img/line.png", width="100%"),
-                             h2(HTML('<font color="#6C6CC4" size="6"> > Input </font>')),
+                             h2(HTML('<font color="#6C6CC4" size="6"> > Input / output </font>')),
                              radioButtons("datatype", HTML('<font size="4"> Choose data source:</font>'),
                                           list("Example from treescape"="expl","Input file"="file"))),
 
@@ -39,7 +40,13 @@ shinyUI(
                                        )
                              ),
 
+            ## output data
+            conditionalPanel(condition = " $('li.active a').first().html()!= 'Help'",
+                             downloadButton('exporttrees', "Export trees (to nexus format)")
+                             ),
 
+
+            ## ANALYSIS
             conditionalPanel(
                 ## condition
                 "$('li.active a').first().html()!= 'Help'",
