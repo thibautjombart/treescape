@@ -91,8 +91,6 @@ pen.edge.treematch  <- function(tree,labelmatch) {tree$edge[match(labelmatch, tr
 pen.edge.treematch <- cmpfun(pen.edge.treematch)
 
 
-
-
 #' Tree vector function
 #'
 #' Function which takes an object of class phylo as input and outputs the vector for the metric.
