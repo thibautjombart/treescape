@@ -204,14 +204,18 @@ shinyServer(function(input, output) {
             ## get clusters
             groves <- getClusters()
 
+            ## plot without groups
             if(is.null(groves)){
                 plotGroves(res$pco, type=input$scattertype, xax=input$xax, yax=input$yax,
                            scree.posi=input$screemds, lab.optim=input$optimlabels,
-                           lab.show=input$showlabels, lab.cex=input$labelsize)
+                           lab.show=input$showlabels, lab.cex=input$labelsize,
+                           point.cex=input$pointsize)
             } else {
+                ## plot with groups
                 plotGroves(groves, type=input$scattertype, xax=input$xax, yax=input$yax,
                            scree.posi=input$screemds, lab.optim=input$optimlabels,
-                           lab.show=input$showlabels, lab.cex=input$labelsize)
+                           lab.show=input$showlabels, lab.cex=input$labelsize,
+                           point.cex=input$pointsize)
             }
         }
     })

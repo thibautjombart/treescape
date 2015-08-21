@@ -105,7 +105,7 @@ plotGroves <- function(x, groups=NULL, xax=1, yax=2,
         if(lab.show){
             out <- s.label(x, xax=xax, yax=yax,
                            plabels=list(optim=lab.optim, col=lab.col, cex=lab.cex),
-                           pppoints=list(cex=point.cex),
+                           ppoints=list(cex=point.cex),
                            pbackground.col=bg,
                            pgrid.text.col=lab.col, plot=FALSE, ...)
         } else {

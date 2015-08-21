@@ -100,6 +100,14 @@ shinyUI(
                              ## display labels
                              checkboxInput("showlabels", label="Display labels?", value=TRUE),
 
+                             ## optimize labels?
+                             conditionalPanel(
+                                     ## condition
+                                 condition="input.showlabels",
+                                 checkboxInput("optimlabels", label="Optimize label position?", value=FALSE)
+                                 )
+                             ),
+
                              ## symbol size
                              sliderInput("pointsize", "Size of the points", value=1, min=0, max=10, step=0.2),
 
@@ -124,16 +132,6 @@ shinyUI(
                                  radioButtons("scattertype", "Type of scatterplot",
                                               choices=c(chull="chull","ellipse"),
                                               selected="convex hull", inline=TRUE),
-
-                                 ## optimize labels?
-                                 conditionalPanel(
-                                     ## condition
-                                     condition="input.findgroups && input.showlabels",
-                                     checkboxInput("optimlabels", label="Optimize label position?", value=FALSE)
-                                     )
-                                 ),
-
-
 
                              ## TREE AESTHETICS
                              ## condition on tree being displayed
