@@ -3,7 +3,7 @@
 #'
 #' This function displays the scatterplot of the Multidimensional
 #' Scaling (MDS) output by treescape, superimposing group information
-#' (derived by \code{\link{find.groves}}) using colors.
+#' (derived by \code{\link{findGroves}}) using colors.
 #'
 #' This function relies on \code{\link[adegraphics]{s.class}}
 #' from the adegraphics package.
@@ -18,7 +18,7 @@
 #' @importFrom adegenet bluepal
 #' @importFrom adegenet transp
 #'
-#' @param x a list returned by \code{\link{find.groves}} or a MDS with class \code{dudi}
+#' @param x a list returned by \code{\link{findGroves}} or a MDS with class \code{dudi}
 #' @param groups a factor defining groups of trees
 #' @param xax a number indicating which principal component to be used as 'x' axis
 #' @param yax a number indicating which principal component to be used as 'y' axis
@@ -49,8 +49,8 @@
 #' ## load data
 #' data(woodmiceTrees)
 #'
-#' ## run find.groves: treescape+clustering
-#' res <- find.groves(woodmiceTrees, nf=5, nclust=6)
+#' ## run findGroves: treescape+clustering
+#' res <- findGroves(woodmiceTrees, nf=5, nclust=6)
 #'
 #' ## basic plot
 #' plotGroves(res)
@@ -79,7 +79,7 @@ plotGroves <- function(x, groups=NULL, xax=1, yax=2,
     type <- match.arg(type)
     if(is.null(scree.pal)) scree.pal <- function(n) rev(bluepal(n))
 
-    ## x is a list returned by find.groves
+    ## x is a list returned by findGroves
     if(is.list(x) && !is.data.frame(x) && !inherits(x,"dudi")){
         if(is.null(x$groups)) stop("if x is a list, it should contain a slot $groups")
         if(is.null(x$treescape)) stop("if x is a list, it should contain a slot $treescape")
@@ -94,7 +94,7 @@ plotGroves <- function(x, groups=NULL, xax=1, yax=2,
     }
 
     ## groups
-    if(is.null(groups)) stop("group information missing; try running find.groves first")
+    if(is.null(groups)) stop("group information missing; try running findGroves first")
     if(!is.factor(groups)) groups <- factor(groups)
     n.lev <- length(levels(groups))
 
