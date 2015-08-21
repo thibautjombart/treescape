@@ -75,18 +75,18 @@ test_that("error is given if lambda is outside of [0,1]", {
   expect_error(med.tree(trees,2))
   })
 
-test_that("warning is given for the combination return_lambda_function=TRUE, save_memory=TRUE", {
-  expect_warning(multi.dist(trees,return_lambda_function=TRUE, save_memory=TRUE))
-  expect_warning(med.tree(trees,return_lambda_function=TRUE, save_memory=TRUE))
-  })
-  
 test_that("error is given if input is not of class phylo / multiphylo", {
   expect_error(tree.vec(trees))
   expect_error(tree.dist(trees))
   expect_error(multi.dist(tree_a))
   expect_error(med.tree(tree_a))
-  })
+  })  
 
+test_that("error is given if input tree is unrooted", {
+  unrootedtree <- read.tree(text="(A:1,B:1,C:1);") # an unrooted tree
+  expect_error(tree.vec(unrootedtree))
+  })  
+   
 test_that("warning is given if tree edge lengths are not defined, then they are set to 1", {
   newicktree <- read.tree(text="((A,B),C);") # a tree without defined edge lengths
   expect_warning(tree.vec(newicktree))
@@ -104,4 +104,9 @@ test_that("error is given if trees have different tip labels", {
 test_that("error is given if weights vector is not of length n", {
   expect_error(med.tree(trees,weights=rep(1,n+1)))
   expect_error(med.tree(trees,weights=rep(1,n+1),return_lambda_function=TRUE))
+  })
+  
+test_that("warning is given for the combination return_lambda_function=TRUE, save_memory=TRUE", {
+  expect_warning(multi.dist(trees,return_lambda_function=TRUE, save_memory=TRUE))
+  expect_warning(med.tree(trees,return_lambda_function=TRUE, save_memory=TRUE))
   })

@@ -129,6 +129,7 @@ tree.vec <- function(tree, lambda=0, return_lambda_function=F) {
 
   if(lambda<0 || lambda>1) stop("Pick lambda in [0,1]")
   if(class(tree)!="phylo") stop("Tree should be of class phylo")
+  if(is.rooted(tree)!=TRUE) stop("Metric is for rooted trees only")
   if(is.null(tree$edge.length)) {
     warning("Tree edge lengths are not defined, setting edges to have length 1")
 	tree$edge.length <- rep(1,length(tree$edge))
