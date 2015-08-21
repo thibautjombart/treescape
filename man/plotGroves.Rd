@@ -53,6 +53,7 @@ This function relies on \code{\link[adegraphics]{s.class}}
 from the adegraphics package.
 }
 \examples{
+\dontrun{
 if(require("adegenet") && require("adegraphics")){
 ## load data
 data(woodmiceTrees)
@@ -74,6 +75,7 @@ bg="black", lab.col="white", scree.size=.35)
 plotGroves(res, type="ellipse", lab.show=TRUE,
 lab.optim=FALSE, scree.size=.35)
 
+}
 }
 }
 \author{

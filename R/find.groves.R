@@ -32,8 +32,8 @@
 #' ## load data
 #' data(woodmiceTrees)
 #'
-#' ## run find.groves: treescape+clustering
-#' res <- find.groves(woodmiceTrees, nf=5, nclust=6)
+#' ## run findGroves: treescape+clustering
+#' res <- findGroves(woodmiceTrees, nf=5, nclust=6)
 #'
 #' ## plot results on first 2 axes
 #' PCs <- res$treescape$pco$li
@@ -43,7 +43,7 @@
 #' plotGroves(res)
 #' }
 #'
-find.groves <- function(x, method=tree.vec, nf=NULL, clustering="ward.D2",
+findGroves <- function(x, method=tree.vec, nf=NULL, clustering="ward.D2",
                         nclust=NULL, ...){
     ## CHECKS ##
     if(!inherits(x, "multiPhylo")) stop("x should be a multiphylo object")
@@ -78,5 +78,5 @@ find.groves <- function(x, method=tree.vec, nf=NULL, clustering="ward.D2",
     out <- list(groups=factor(grp), treescape=res)
 
     return(out)
-} # end find.groves
+} # end findGroves
 
