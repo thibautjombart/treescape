@@ -10,7 +10,7 @@ plotGroves(x, groups = NULL, xax = 1, yax = 2, type = c("chull",
   scree.size = 0.2, scree.posi = c(0.02, 0.02), ...)
 }
 \arguments{
-\item{x}{a list returned by \code{\link{find.groves}} or a MDS with class \code{dudi}}
+\item{x}{a list returned by \code{\link{findGroves}} or a MDS with class \code{dudi}}
 
 \item{groups}{a factor defining groups of trees}
 
@@ -46,7 +46,7 @@ An adegraphics object (class: ADEgS)
 \description{
 This function displays the scatterplot of the Multidimensional
 Scaling (MDS) output by treescape, superimposing group information
-(derived by \code{\link{find.groves}}) using colors.
+(derived by \code{\link{findGroves}}) using colors.
 }
 \details{
 This function relies on \code{\link[adegraphics]{s.class}}
@@ -58,8 +58,8 @@ if(require("adegenet") && require("adegraphics")){
 ## load data
 data(woodmiceTrees)
 
-## run find.groves: treescape+clustering
-res <- find.groves(woodmiceTrees, nf=5, nclust=6)
+## run findGroves: treescape+clustering
+res <- findGroves(woodmiceTrees, nf=5, nclust=6)
 
 ## basic plot
 plotGroves(res)
