@@ -56,7 +56,7 @@ shinyServer(function(input, output) {
 
         ## return data
         return(out)
-    })
+    }) # end getData
 
 
     ## GET ANALYSIS ##
@@ -90,16 +90,55 @@ shinyServer(function(input, output) {
 
         ## return results
         return(res)
-    })
+    }) # end getAnalysis
 
 
-    ## ## GET CLUSTERS ##
-    ## output$groups <- reactive({
-    ##     if(inut$findgroups){
-    ##         find
-    ##     }
-    ## }
-    ##                           )
+   ## GET CLUSTERS ##
+    getClusters <- reactive({
+        ## stop if clusters not required
+        if(!input$findgroups) return(NULL)
+
+        ## get dataset
+        x <- getData()
+
+        ## stop if not data
+        if(is.null(x)) return(NULL)
+
+        ## get number of axes retained
+        if(!is.null(input$naxes)) {
+            naxes <- input$naxes
+        } else {
+            naxes <- 2
+        }
+
+        ## get number of clusters
+        if(!is.null(input$nclust)) {
+            nclust <- input$nclust
+        } else {
+            nclust <- 2
+        }
+
+
+        ## select method used to summarise tree
+        if(!is.null(input$treemethod)){
+            if(input$treemethod %in% c("patristic","nNodes","Abouheif","sumDD")){
+                treeMethod <- function(x){return(adephylo::distTips(x, method=input$treemethod))}
+            } else if(input$treemethod=="metric"){
+                treeMethod <- function(x){return(tree.vec(x, lambda=input$lambda))}
+            } else {
+                treeMethod <- adephylo::distTips
+            }
+        }
+
+        ## run findGroves
+        res <- findGroves(x, method=treeMethod, nf=naxes,
+                          nclust=nclust, clustering=input$clustmethod)
+
+        ## return results
+        return(res)
+    }) # end getClusters
+
+
 
     ## DYNAMIC UI COMPONENTS ##
     ## SELECTION OF MDS AXES
@@ -141,24 +180,15 @@ shinyServer(function(input, output) {
         }
     })
 
-    ## SELECTION OF MDS AXES FOR CLUSTERING
-    output$naxesclust <- renderUI({
-        if(!is.null(x <- getData())) {
-            nmax <- length(x)
-        } else {
-            nmax <- 100
-        }
-        sliderInput("naxes", "Number of MDS axes retained:", min=1, max=nmax, value=2, step=1)
-    })
-
-   ## SELECTION OF NUMBER OF CLUSTERS
+    ## SELECTION OF NUMBER OF CLUSTERS
     output$nclust <- renderUI({
         if(!is.null(x <- getData())) {
             nmax <- length(x)
         } else {
             nmax <- 100
         }
-        sliderInput("naxes", "Number of clusters:", min=2, max=nmax, value=2, step=1)
+        nmax <- min(20, nmax)
+        sliderInput("nclust", "Number of clusters:", min=2, max=nmax, value=2, step=1)
     })
 
 
@@ -171,17 +201,32 @@ shinyServer(function(input, output) {
             ## get analysis
             res <- getAnalysis()
 
-             ## make scatterplot
-            clab <- ifelse(input$showlabels, input$labelsize, 0)
-            s.label(res$pco$li, xax=input$xax, yax=input$yax,
-                    cpoint=input$pointsize, clab=clab)
+            ## get clusters
+            groves <- getClusters()
 
-            ## add legend
-            if(input$screemds!="none"){
-                add.scatter.eig(res$pco$eig, res$pco$nf, xax=input$xax, yax=input$yax, posi=input$screemds)
+            if(is.null(groves)){
+                ## make scatterplot
+                clab <- ifelse(input$showlabels, input$labelsize, 0)
+                g1 <- s.label(res$pco$li, xax=input$xax, yax=input$yax,
+                        label.optim = input$optimlabels,
+                        ppoints.cex = input$pointsize, plabels.cex = clab,
+                        plot=FALSE)
+                
+                ## make screeplot
+                screeplot <- s1d.barchart(c(rep(0, 3), eig), p1d.horizontal = FALSE, 
+                                          ppolygons.col = scree.pal(length(eig)), pbackground = list(col = transp("white"), 
+                                                                                  box = TRUE), layout.width = list(left.padding = 2), 
+                                          pgrid.draw = FALSE, plot = FALSE)
+                
+                ## add legend
+                if(input$screemds!="none"){
+                    add.scatter.eig(res$pco$eig, res$pco$nf, xax=input$xax, yax=input$yax, posi=input$screemds)
+                }
+            } else {
+                plotGroves(groves, type=input$scattertype, xax=input$xax, yax=input$yax,
+                           scree.posi=input$screemds, lab.optim=input$optimlabels,
+                           lab.show=input$showlabels, lab.cex=input$labelsize)
             }
-        } else {
-            NULL
         }
     })
 

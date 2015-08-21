@@ -61,26 +61,24 @@ shinyUI(
                                          "Abouheif's metric" = "Abouheif",
                                          "Sum of direct descendents" = "sumDD")),
 
-                             ## lambda, axes, clusters
+                             ## lambda, axes
                              uiOutput("lambda"),
                              uiOutput("naxes"),
-                             checkboxInput("findgroups", label="Idenfify clusters?", value=FALSE),
 
+                             ## group stuff
+                             checkboxInput("findgroups", label="Idenfify clusters?", value=FALSE),
 
                              conditionalPanel(
                                  ## condition
                                  condition="input.findgroups",
 
                                  ## tree method
-                                 selectInput("treemethod", "Clustering method:",
+                                 selectInput("clustmethod", "Clustering method:",
                                              choices=c(
                                              "Ward" = "ward.D2",
                                              "Single" = "single",
                                              "Complete" = "complete",
                                              "UPGMA" = "average")),
-
-                                 ## number of axes
-                                 uiOutput("naxesclust"),
 
                                  ## number of clusters
                                  uiOutput("nclust")
@@ -117,6 +115,26 @@ shinyUI(
                                          "Top left" = "topleft"),
                                          selected="bottomleft"),
 
+                             ## options for clusters
+                             conditionalPanel(
+                                 ## condition
+                                 condition="input.findgroups",
+
+                                 ## type of plot
+                                 radioButtons("scattertype", "Type of scatterplot",
+                                              choices=c(chull="chull","ellipse"),
+                                              selected="convex hull", inline=TRUE),
+
+                                 ## optimize labels?
+                                 conditionalPanel(
+                                     ## condition
+                                     condition="input.findgroups && input.showlabels",
+                                     checkboxInput("optimlabels", label="Optimize label position?", value=FALSE)
+                                     )
+                                 ),
+
+
+
                              ## TREE AESTHETICS
                              ## condition on tree being displayed
                              conditionalPanel(condition = "input.selectedTree!=''",
@@ -147,7 +165,7 @@ shinyUI(
 
             br(),br(),br(),br(),br(),br(),br(), # add some blank space at the end of side panel
             br(),br(),br(),br(),br(),br(),br(), # add some blank space at the end of side panel
-            width=3), # end sidebarPanel; width is out of 12
+            width=4), # end sidebarPanel; width is out of 12
 
         ## MAIN PANEL
         mainPanel(
