@@ -173,7 +173,7 @@ shinyUI(
             tabsetPanel(
 
                 tabPanel("Tree landscape explorer",
-                         plotOutput("scatterplot"),
+                         plotOutput("scatterplot", height = "800px"),
 
                          ## add tree selector
                          textInput("selectedTree", "Choose tree (number or label)", value = ""),

@@ -218,7 +218,7 @@ shinyServer(function(input, output) {
                            point.cex=input$pointsize)
             }
         }
-    })
+    }, res=120)
 
     ## PHYLOGENY ##
     output$tree <- renderPlot({
