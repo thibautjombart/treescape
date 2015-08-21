@@ -134,6 +134,8 @@ find.groves <- function(x, method=tree.vec, nf=NULL, clustering="ward.D2",
 #' plot.groves(res, lab.show=TRUE,
 #' bg="black", lab.col="white", scree.size=.35)
 #'
+#' }
+#'
 plot.groves <- function(x, groups=NULL, xax=1, yax=2,
                         type=c("chull","ellipse"), col.pal=funky, bg="white",
                         lab.show=FALSE, lab.col="black", lab.cex=1, lab.optim=TRUE,
