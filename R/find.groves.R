@@ -92,11 +92,14 @@ find.groves <- function(x, method=tree.vec, nf=NULL, clustering="ward.D2",
 #' @importFrom adegraphics insert
 #' @importFrom adegenet funky
 #' @importFrom adegenet bluepal
+#' @importFrom adegenet transp
 #'
 plot.groves <- function(x, groups=NULL, xax=1, yax=2,
                         type=c("chull","ellipse"), col.pal=funky,
-                        bg="black", scree.pal=NULL, scree.size=.2,
-                        scree.posi=c(.02,.02),...){
+                        show.labels=FALSE,
+                        bg=transp("black"), lab.col="white",
+                        scree.pal=NULL, scree.size=.2,
+                        scree.posi=c(.02,.02), ...){
     ## HANDLE ARGUMENTS ##
     ## checks
     type <- match.arg(type)
@@ -131,6 +134,11 @@ plot.groves <- function(x, groups=NULL, xax=1, yax=2,
     if(type=="ellipse"){
         out <- s.class(x, xax=xax, yax=yax, fac=groups, col=col.pal(n.lev),
                        pbackground.col=bg, ellipse=1, plot=FALSE)
+    }
+
+    ## add labels
+    if(show.labels){
+        out <- out + s.label(x$li, plabel.optim=TRUE, plabel.col=lab.col, ppoints.cex=0)
     }
 
     ## add inset
