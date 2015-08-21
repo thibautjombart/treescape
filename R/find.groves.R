@@ -94,10 +94,27 @@ find.groves <- function(x, method=tree.vec, nf=NULL, clustering="ward.D2",
 #' @importFrom adegenet bluepal
 #' @importFrom adegenet transp
 #'
+#' @param x a list returned by \code{\link{find.groves}} or a MDS with class \code{dudi}
+#' @param groups a factor defining groups of trees
+#' @param xax a number indicating which principal component to be used as 'x' axis
+#' @param yax a number indicating which principal component to be used as 'y' axis
+#' @param type a character string indicating which type of graph to use
+#' @param col.pal a color palette to be used for the groups
+#' @param bg the background color
+#' @param lab.show a logical indicating whether labels should be displayed
+#' @param
+#' @param
+#' @param
+#' @param
+#' @param
+#' @param
+#' @param
+#' @param
+#' @param
+#' @param
 plot.groves <- function(x, groups=NULL, xax=1, yax=2,
-                        type=c("chull","ellipse"), col.pal=funky,
-                        show.labels=FALSE,
-                        bg=transp("black"), lab.col="white",
+                        type=c("chull","ellipse"), col.pal=funky, bg="white",
+                        lab.show=FALSE, lab.col="black", lab.cex=1, lab.optim=TRUE,
                         scree.pal=NULL, scree.size=.2,
                         scree.posi=c(.02,.02), ...){
     ## HANDLE ARGUMENTS ##
@@ -129,22 +146,29 @@ plot.groves <- function(x, groups=NULL, xax=1, yax=2,
     ## base scatterplot
     if(type=="chull"){
         out <- s.class(x, xax=xax, yax=yax, fac=groups, col=col.pal(n.lev),
-                       ellipse=0, chullSize=1, pbackground.col=bg, plot=FALSE)
+                       ellipse=0, chullSize=1,
+                       pbackground.col=bg,
+                       pgrid.text.col=lab.col, plot=FALSE)
     }
     if(type=="ellipse"){
         out <- s.class(x, xax=xax, yax=yax, fac=groups, col=col.pal(n.lev),
-                       pbackground.col=bg, ellipse=1, plot=FALSE)
+                       ellipse=1,
+                       pbackground.col=bg,
+                       pgrid.text.col=lab.col, plot=FALSE)
     }
 
     ## add labels
-    if(show.labels){
-        out <- out + s.label(x$li, plabel.optim=TRUE, plabel.col=lab.col, ppoints.cex=0)
+    if(lab.show){
+        out <- out + s.label(x, plabel.optim=lab.optim, plabel.col=lab.col,
+                             ppoints.cex=0, plabels.cex=lab.cex)
     }
 
     ## add inset
     if(!is.null(scree.posi[1]) && !is.na(scree.posi[1])){
-        screeplot <- s1d.barchart(eig, p1d.horizontal=FALSE, ppolygons.col=scree.pal(length(eig)),
-                                  pbackground.col=transp("white"), pgrid.draw=FALSE, plot=FALSE)
+        screeplot <- s1d.barchart(c(rep(0,3),eig), p1d.horizontal=FALSE, ppolygons.col=scree.pal(length(eig)),
+                                  pbackground=list(col=transp("white"), box=TRUE),
+                                  layout.width=list(left.padding=2),
+                                  pgrid.draw=FALSE, plot=FALSE)
         out <- insert(screeplot, out, posi=scree.posi, ratio=scree.size, plot=FALSE)
 
     }
