@@ -91,12 +91,15 @@ find.groves <- function(x, method=tree.vec, nf=NULL, clustering="ward.D2",
 #' @importFrom adegenet funky
 #'
 plot.groves <- function(x, groups=NULL, xax=1, yax=2,
-                        type=c("chull","ellipse"),col.pal=funky, posi.eig="bottomleft",...){
+                        type=c("chull","ellipse"), col.pal=funky,
+                        scree.pal=NULL, scree.size=.2,
+                        scree.posi="bottomleft",...){
     ## HANDLE ARGUMENTS ##
     ## force types
     if(!is.factor(groups)) groups <- factor(groups)
     n.lev <- length(levels(groups))
     type <- match.arg(type)
+    if(is.null(scree.pal)) scree.pal <- function(n) rev(bluepal(n))
 
     ## x is a list returned by find.groves
     if(is.list(x) && !is.data.frame(x) && !inherits(x,"dudi")){
@@ -115,12 +118,23 @@ plot.groves <- function(x, groups=NULL, xax=1, yax=2,
     if(is.null(groups)) stop("group information missing; try running find.groves first")
 
     ## make graph ##
+    ## base scatterplot
     if(type=="chull"){
-        out <- s.class(x, fac=groups, col=col.pal(n.lev), ellipse=0, chullSize=1, plot=FALSE)
+        out <- s.class(x, xax=xax, yax=yax, fac=groups, col=col.pal(n.lev), ellipse=0, chullSize=1, plot=FALSE)
     }
     if(type=="ellipse"){
-                out <- s.class(x, fac=groups, col=col.pal(n.lev), ellipse=1, plot=FALSE)
+        out <- s.class(x, xax=xax, yax=yax, fac=groups, col=col.pal(n.lev), ellipse=1, plot=FALSE)
+    }
+
+    ## add inset
+    if(!is.null(scree.posi[1]) && !is.na(scree.posi[1])){
+        screeplot <- s1d.barchart(eig, p1d.horizontal=FALSE, ppolygons.col=scree.pal(length(eig)),
+                                  pbackground.col=transp("white"), plot=FALSE)
+        out <- insert(screeplot, out, posi=scree.posi, ratio=scree.size, plot=FALSE)
+
     }
 
 
+    ## RETURN ##
+    return(out)
 } # end plot.groves
