@@ -41,10 +41,11 @@ shinyUI(
                                                         )
                                               ),
 
-                             ## output data
-                             conditionalPanel(condition = " $('li.active a').first().html()== 'Tree landscape explorer'",
-                                              downloadButton('exporttrees', "Export trees (to nexus format)")
-                                              ),
+                             ## save trees to nexus file
+                             downloadButton('exporttrees', "Save trees to nexus file"),
+
+                             ## save groups
+                             downloadButton('exportres', "Save results (MDS+clusters) to csv file"),
 
                              br(),
 

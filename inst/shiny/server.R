@@ -260,6 +260,26 @@ shinyServer(function(input, output) {
             if(!is.null(x) && inherits(x, "multiPhylo")) ape::write.nexus(x, file=file)
         })
 
+
+    ## EXPORT CLUSTERS ##
+    output$exportres <- downloadHandler(
+        filename = function() { paste(input$dataset, "-clusters", '.csv', sep='') },
+        content = function(file) {
+            x <- getData()
+            res <- getClusters()
+            if(!is.null(res)){
+                tab <- cbind.data.frame(res$groups, res$treescape$pco$li)
+                names(tab) <- c("cluster", paste("PC", 1:ncol(res$treescape$pco$li), sep="."))
+                row.names(tab) <- names(x)
+            } else{
+                res <- getAnalysis()
+                tab <- res$pco$li
+                names(tab) <- paste("PC", 1:ncol(tab), sep=".")
+                row.names(tab) <- names(x)
+            }
+            if(!is.null(res)) write.csv(tab, file=file)
+        })
+
     ## RENDER SYSTEM INFO ##
     output$systeminfo <- .render.server.info()
 
