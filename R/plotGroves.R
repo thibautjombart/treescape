@@ -43,6 +43,8 @@
 #' @export
 #'
 #' @examples
+#'
+#' \dontrun{
 #' if(require("adegenet") && require("adegraphics")){
 #' ## load data
 #' data(woodmiceTrees)
@@ -64,6 +66,7 @@
 #' plotGroves(res, type="ellipse", lab.show=TRUE,
 #' lab.optim=FALSE, scree.size=.35)
 #'
+#' }
 #' }
 #'
 plotGroves <- function(x, groups=NULL, xax=1, yax=2,
