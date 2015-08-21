@@ -261,9 +261,9 @@ shinyServer(function(input, output) {
         })
 
 
-    ## EXPORT CLUSTERS ##
-    output$exportres <- downloadHandler(
-        filename = function() { paste(input$dataset, "-clusters", '.csv', sep='') },
+    ## EXPORT ANALYSIS TO CSV ##
+    output$exportrestocsv <- downloadHandler(
+        filename = function() { paste(input$dataset, "-analysis", '.csv', sep='') },
         content = function(file) {
             x <- getData()
             res <- getClusters()
@@ -278,6 +278,18 @@ shinyServer(function(input, output) {
                 row.names(tab) <- names(x)
             }
             if(!is.null(res)) write.csv(tab, file=file)
+        })
+
+    ## EXPORT ANALYSIS TO RDATA ##
+    output$exportrestordata <- downloadHandler(
+        filename = function() { paste(input$dataset, "-analysis", '.RData', sep='') },
+        content = function(file) {
+            trees <- getData()
+            analysis <- getClusters()
+            if(is.null(analysis)) analysis <- getAnalysis()
+            if(!is.null(analysis)) {
+                save(trees, analysis, file=file)
+            }
         })
 
     ## RENDER SYSTEM INFO ##

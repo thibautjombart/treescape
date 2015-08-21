@@ -44,8 +44,11 @@ shinyUI(
                              ## save trees to nexus file
                              downloadButton('exporttrees', "Save trees to nexus file"),
 
-                             ## save groups
-                             downloadButton('exportres', "Save results (MDS+clusters) to csv file"),
+                             ## save results to csv
+                             downloadButton('exportrestocsv', "Save results (MDS+clusters) to csv file"),
+
+                             ## save results to RData
+                             downloadButton('exportrestordata', "Save results (MDS+clusters) to R object"),
 
                              br(),
 
