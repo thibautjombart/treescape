@@ -66,6 +66,12 @@
 #' plotGroves(res, type="ellipse", lab.show=TRUE,
 #' lab.optim=FALSE, scree.size=.35)
 #'
+#' ## example with no group information
+#' plotGroves(res$treescape$pco)
+#'
+#' ## adding labels
+#' plotGroves(res$treescape$pco, lab.show=TRUE, lab.cex=2)
+#'
 #' }
 #' }
 #'
@@ -96,14 +102,16 @@ plotGroves <- function(x, groups=NULL, xax=1, yax=2,
     if(is.null(groups)) {
         ## with labels
         if(lab.show){
-            out <- s.label(x, plabel.optim=lab.optim, plabel.col=lab.col,
-                           ppoints.cex=0, plabels.cex=lab.cex,
-                           background.col=bg,
+            out <- s.label(x,
+                           plabels=list(optim=lab.optim, col=lab.col, cex=lab.cex),
+                           pppoints=list(cex=0),
+                           pbackground.col=bg,
                            pgrid.text.col=lab.col, plot=FALSE, ...)
         } else {
             ## just points
-            out <- s.label(x, plabel.optim=FALSE, ppoints.col=lab.col,
-                           ppoints.cex=lab.cex,
+            out <- s.label(x,
+                           plabels=list(optim=FALSE,cex=0),
+                           ppoints=list(cex=lab.cex, col=lab.col),
                            background.col=bg,
                            pgrid.text.col=lab.col, plot=FALSE, ...)
         }
