@@ -81,7 +81,6 @@ plotGroves <- function(x, groups=NULL, xax=1, yax=2,
 
     ## x is a list returned by findGroves
     if(is.list(x) && !is.data.frame(x) && !inherits(x,"dudi")){
-        if(is.null(x$groups)) stop("if x is a list, it should contain a slot $groups")
         if(is.null(x$treescape)) stop("if x is a list, it should contain a slot $treescape")
         groups <- x$groups
         x <- x$treescape$pco
@@ -93,33 +92,48 @@ plotGroves <- function(x, groups=NULL, xax=1, yax=2,
         x <- x$li
     }
 
-    ## groups
-    if(is.null(groups)) stop("group information missing; try running findGroves first")
-    if(!is.factor(groups)) groups <- factor(groups)
-    n.lev <- length(levels(groups))
+    ## groups missing - just s.label
+    if(is.null(groups)) {
+        ## with labels
+        if(lab.show){
+            out <- s.label(x, plabel.optim=lab.optim, plabel.col=lab.col,
+                           ppoints.cex=0, plabels.cex=lab.cex,
+                           background.col=bg,
+                           pgrid.text.col=lab.col, plot=FALSE, ...)
+        } else {
+            ## just points
+            out <- s.label(x, plabel.optim=FALSE, ppoints.col=lab.col,
+                           ppoints.cex=lab.cex,
+                           background.col=bg,
+                           pgrid.text.col=lab.col, plot=FALSE, ...)
+        }
+    } else {
+        ## if groups are provided
+        if(!is.factor(groups)) groups <- factor(groups)
+        n.lev <- length(levels(groups))
 
 
-    ## MAKE GRAPH ##
-    ## base scatterplot
-    if(type=="chull"){
-        out <- s.class(x, xax=xax, yax=yax, fac=groups, col=col.pal(n.lev),
-                       ellipseSize=0, chullSize=1,
-                       pbackground.col=bg,
-                       pgrid.text.col=lab.col, plot=FALSE, ...)
+        ## MAKE GRAPH ##
+        ## base scatterplot
+        if(type=="chull"){
+            out <- s.class(x, xax=xax, yax=yax, fac=groups, col=col.pal(n.lev),
+                           ellipseSize=0, chullSize=1,
+                           pbackground.col=bg,
+                           pgrid.text.col=lab.col, plot=FALSE, ...)
+        }
+        if(type=="ellipse"){
+            out <- s.class(x, xax=xax, yax=yax, fac=groups, col=col.pal(n.lev),
+                           ellipseSize=1,
+                           pbackground.col=bg,
+                           pgrid.text.col=lab.col, plot=FALSE, ...)
+        }
+
+        ## add labels
+        if(lab.show){
+            out <- out + s.label(x, plabel.optim=lab.optim, plabel.col=lab.col,
+                                 ppoints.cex=0, plabels.cex=lab.cex)
+        }
     }
-    if(type=="ellipse"){
-        out <- s.class(x, xax=xax, yax=yax, fac=groups, col=col.pal(n.lev),
-                       ellipseSize=1,
-                       pbackground.col=bg,
-                       pgrid.text.col=lab.col, plot=FALSE, ...)
-    }
-
-    ## add labels
-    if(lab.show){
-        out <- out + adegraphics::s.label(x, plabel.optim=lab.optim, plabel.col=lab.col,
-                             ppoints.cex=0, plabels.cex=lab.cex)
-    }
-
     ## add inset
     if(!is.null(scree.posi[1]) && !is.na(scree.posi[1])){
         screeplot <- s1d.barchart(c(rep(0,3),eig), p1d.horizontal=FALSE, ppolygons.col=scree.pal(length(eig)),
