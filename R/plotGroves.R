@@ -99,13 +99,13 @@ plotGroves <- function(x, groups=NULL, xax=1, yax=2,
     ## MAKE GRAPH ##
     ## base scatterplot
     if(type=="chull"){
-        out <- adegraphics::s.class(x, xax=xax, yax=yax, fac=groups, col=col.pal(n.lev),
+        out <- s.class(x, xax=xax, yax=yax, fac=groups, col=col.pal(n.lev),
                        ellipseSize=0, chullSize=1,
                        pbackground.col=bg,
                        pgrid.text.col=lab.col, plot=FALSE, ...)
     }
     if(type=="ellipse"){
-        out <- adegraphics::s.class(x, xax=xax, yax=yax, fac=groups, col=col.pal(n.lev),
+        out <- s.class(x, xax=xax, yax=yax, fac=groups, col=col.pal(n.lev),
                        ellipseSize=1,
                        pbackground.col=bg,
                        pgrid.text.col=lab.col, plot=FALSE, ...)
