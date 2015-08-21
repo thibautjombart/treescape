@@ -54,7 +54,7 @@ linear.mrca <- function(tree,k=0) { # k is number of tips, which can be passed t
   diag(M) <- 1:k # we define the diagonal elements of M to be the tips themselves
   return(M)
 }
-linear.mrca <- cmpfun(linear.mrca) # compile
+linear.mrca <- compiler::cmpfun(linear.mrca) # compile
 
 #' Pendant edges
 #'
@@ -70,7 +70,7 @@ linear.mrca <- cmpfun(linear.mrca) # compile
 #' @importFrom compiler cmpfun
 #'
 pen.edge.tree <- function(tree,k) {tree$edge[match(1:k, tree$edge[,2]),] }
-pen.edge.tree <- cmpfun(pen.edge.tree)
+pen.edge.tree <- compiler::cmpfun(pen.edge.tree)
 
 
 
@@ -88,7 +88,7 @@ pen.edge.tree <- cmpfun(pen.edge.tree)
 #' @importFrom compiler cmpfun
 #'
 pen.edge.treematch  <- function(tree,labelmatch) {tree$edge[match(labelmatch, tree$edge[,2]),] }
-pen.edge.treematch <- cmpfun(pen.edge.treematch)
+pen.edge.treematch <- compiler::cmpfun(pen.edge.treematch)
 
 
 #' Tree vector function
@@ -253,7 +253,7 @@ tree.vec <- function(tree, lambda=0, return_lambda_function=F) {
       return(l * length_root_distances + (1-l) * topological_root_distances) })
   }
 }
-#tree.vec <- cmpfun(tree.vec)
+#tree.vec <- compiler::cmpfun(tree.vec)
 
 
 

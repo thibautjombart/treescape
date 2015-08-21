@@ -31,7 +31,7 @@ A list containing:
 This function uses hierarchical clustering on principal components output by \code{\link{treescape}} to identify groups of similar trees. Clustering relies on \code{\link{hclust}}, using Ward's method by default.
 }
 \examples{
-if(require("adegenet")){
+if(require("adegenet") && require("adegraphics")){
 ## load data
 data(woodmiceTrees)
 
