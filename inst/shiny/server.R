@@ -7,6 +7,7 @@ shinyServer(function(input, output) {
     ## LOAD PACKAGES
     if(!require("ape")) stop("ape is required")
     if(!require("ade4")) stop("ade4 is required")
+    if(!require("adegraphics")) stop("ade4 is required")
     if(!require("treescape")) stop("treescape is required")
 
     ## GET DYNAMIC ANNOTATION
