@@ -74,3 +74,53 @@ find.groves <- function(x, method=tree.vec, nf=NULL, clustering="ward.D2",
 
     return(out)
 } # end find.groves
+
+
+
+
+
+#' Scatterplot of trees
+#'
+#' This function displays the scatterplot of the Multidimensional Scaling (MDS) output by treescape, superimposing group information (derived by \code{\link{find.groves}} using colors.
+#'
+#' @author Thibaut Jombart \email{thibautjombart@@gmail.com}
+#'
+#' @export
+#'
+#' @importFrom adegraphics s.class
+#' @importFrom adegenet funky
+#'
+plot.groves <- function(x, groups=NULL, xax=1, yax=2,
+                        type=c("chull","ellipse"),col.pal=funky, posi.eig="bottomleft",...){
+    ## HANDLE ARGUMENTS ##
+    ## force types
+    if(!is.factor(groups)) groups <- factor(groups)
+    n.lev <- length(levels(groups))
+    type <- match.arg(type)
+
+    ## x is a list returned by find.groves
+    if(is.list(x) && !is.data.frame(x) && !inherits(x,"dudi")){
+        if(is.null(x$groups)) stop("if x is a list, it should contain a slot $groups")
+        if(is.null(x$treescape)) stop("if x is a list, it should contain a slot $treescape")
+        groups <- x$groups
+        x <- x$treescape$pco
+    }
+
+    ## x is a dudi object
+    if(inherits(x,"dudi")){
+        eig <- x$eig
+        x <- x$li
+    }
+
+    if(is.null(groups)) stop("group information missing; try running find.groves first")
+
+    ## make graph ##
+    if(type=="chull"){
+        out <- s.class(x, fac=groups, col=col.pal(n.lev), ellipse=0, chullSize=1, plot=FALSE)
+    }
+    if(type=="ellipse"){
+                out <- s.class(x, fac=groups, col=col.pal(n.lev), ellipse=1, plot=FALSE)
+    }
+
+
+} # end plot.groves
