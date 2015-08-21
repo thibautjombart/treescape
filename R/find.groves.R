@@ -88,16 +88,17 @@ find.groves <- function(x, method=tree.vec, nf=NULL, clustering="ward.D2",
 #' @export
 #'
 #' @importFrom adegraphics s.class
+#' @importFrom adegraphics s1d.barchart
+#' @importFrom adegraphics insert
 #' @importFrom adegenet funky
+#' @importFrom adegenet bluepal
 #'
 plot.groves <- function(x, groups=NULL, xax=1, yax=2,
                         type=c("chull","ellipse"), col.pal=funky,
-                        scree.pal=NULL, scree.size=.2,
-                        scree.posi="bottomleft",...){
+                        bg="black", scree.pal=NULL, scree.size=.2,
+                        scree.posi=c(.02,.02),...){
     ## HANDLE ARGUMENTS ##
-    ## force types
-    if(!is.factor(groups)) groups <- factor(groups)
-    n.lev <- length(levels(groups))
+    ## checks
     type <- match.arg(type)
     if(is.null(scree.pal)) scree.pal <- function(n) rev(bluepal(n))
 
@@ -115,21 +116,27 @@ plot.groves <- function(x, groups=NULL, xax=1, yax=2,
         x <- x$li
     }
 
+    ## groups
     if(is.null(groups)) stop("group information missing; try running find.groves first")
+    if(!is.factor(groups)) groups <- factor(groups)
+    n.lev <- length(levels(groups))
 
-    ## make graph ##
+
+    ## MAKE GRAPH ##
     ## base scatterplot
     if(type=="chull"){
-        out <- s.class(x, xax=xax, yax=yax, fac=groups, col=col.pal(n.lev), ellipse=0, chullSize=1, plot=FALSE)
+        out <- s.class(x, xax=xax, yax=yax, fac=groups, col=col.pal(n.lev),
+                       ellipse=0, chullSize=1, pbackground.col=bg, plot=FALSE)
     }
     if(type=="ellipse"){
-        out <- s.class(x, xax=xax, yax=yax, fac=groups, col=col.pal(n.lev), ellipse=1, plot=FALSE)
+        out <- s.class(x, xax=xax, yax=yax, fac=groups, col=col.pal(n.lev),
+                       pbackground.col=bg, ellipse=1, plot=FALSE)
     }
 
     ## add inset
     if(!is.null(scree.posi[1]) && !is.na(scree.posi[1])){
         screeplot <- s1d.barchart(eig, p1d.horizontal=FALSE, ppolygons.col=scree.pal(length(eig)),
-                                  pbackground.col=transp("white"), plot=FALSE)
+                                  pbackground.col=transp("white"), pgrid.draw=FALSE, plot=FALSE)
         out <- insert(screeplot, out, posi=scree.posi, ratio=scree.size, plot=FALSE)
 
     }
