@@ -46,7 +46,7 @@ shinyUI(
                                               downloadButton('exporttrees', "Export trees (to nexus format)")
                                               ),
 
-
+                             br(),
 
                              ## ANALYSIS
                              img(src="img/line.png", width="100%"),
@@ -102,11 +102,10 @@ shinyUI(
 
                              ## optimize labels?
                              conditionalPanel(
-                                     ## condition
+                                 ## condition
                                  condition="input.showlabels",
                                  checkboxInput("optimlabels", label="Optimize label position?", value=FALSE)
-                                 )
-                             ),
+                                 ),
 
                              ## symbol size
                              sliderInput("pointsize", "Size of the points", value=1, min=0, max=10, step=0.2),
@@ -133,38 +132,38 @@ shinyUI(
                                               choices=c(chull="chull","ellipse"),
                                               selected="convex hull", inline=TRUE),
 
-                             ## TREE AESTHETICS
-                             ## condition on tree being displayed
-                             conditionalPanel(condition = "input.selectedTree!=''",
-                                              ## type of tree
-                                              radioButtons("treetype", "Type of tree",
-                                                           choices=c("phylogram","cladogram", "fan", "unrooted", "radial"),
-                                                           selected="phylogram", width="100%"),
+                                 ## TREE AESTHETICS
+                                 ## condition on tree being displayed
+                                 conditionalPanel(condition = "input.selectedTree!=''",
+                                                  ## type of tree
+                                                  radioButtons("treetype", "Type of tree",
+                                                               choices=c("phylogram","cladogram", "fan", "unrooted", "radial"),
+                                                               selected="phylogram", width="100%"),
 
-                                              ## tree direction
-                                              radioButtons("treedirection", "Direction of the tree",
-                                                           choices=c("rightwards", "leftwards", "upwards", "downwards"),
-                                                           selected="rightwards", width="100%"),
+                                                  ## tree direction
+                                                  radioButtons("treedirection", "Direction of the tree",
+                                                               choices=c("rightwards", "leftwards", "upwards", "downwards"),
+                                                               selected="rightwards", width="100%"),
 
-                                              ## ladderize
-                                              checkboxInput("ladderize", label="Ladderize the tree?", value=TRUE),
+                                                  ## ladderize
+                                                  checkboxInput("ladderize", label="Ladderize the tree?", value=TRUE),
 
-                                              ## tip labels
-                                              checkboxInput("showtiplabels", label="Display tip labels?", value=TRUE),
+                                                  ## tip labels
+                                                  checkboxInput("showtiplabels", label="Display tip labels?", value=TRUE),
 
-                                              ## tip label size
-                                              sliderInput("tiplabelsize", "Size of the tip labels", value=1, min=0, max=5, step=0.1),
+                                                  ## tip label size
+                                                  sliderInput("tiplabelsize", "Size of the tip labels", value=1, min=0, max=5, step=0.1),
 
-                                              ## edge width
-                                              sliderInput("edgewidth", "Width of the edges", value=1, min=0, max=20, step=0.2)
+                                                  ## edge width
+                                                  sliderInput("edgewidth", "Width of the edges", value=1, min=0, max=20, step=0.2)
 
-                                              )
-                             ),
+                                                  )
+                                 ),
 
-            br(),br(),br(),br(),br(),br(),br(), # add some blank space at the end of side panel
-            br(),br(),br(),br(),br(),br(),br(), # add some blank space at the end of side panel
-            width=4), # end sidebarPanel; width is out of 12
-
+                             br(),br(),br(),br(),br(),br(),br(), # add some blank space at the end of side panel
+                             br(),br(),br(),br(),br(),br(),br(), # add some blank space at the end of side panel
+                             width=4) # end sidebarPanel; width is out of 12
+            ),
         ## MAIN PANEL
         mainPanel(
             tabsetPanel(
