@@ -75,6 +75,12 @@ bg="black", lab.col="white", scree.size=.35)
 plotGroves(res, type="ellipse", lab.show=TRUE,
 lab.optim=FALSE, scree.size=.35)
 
+## example with no group information
+plotGroves(res$treescape$pco)
+
+## adding labels
+plotGroves(res$treescape$pco, lab.show=TRUE, lab.cex=2)
+
 }
 }
 }

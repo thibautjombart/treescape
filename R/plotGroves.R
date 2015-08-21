@@ -29,6 +29,7 @@
 #' @param lab.col a color for the labels
 #' @param lab.cex the size of the labels
 #' @param lab.optim a logical indicating whether label positions should be optimized to avoid overlap; better display but time-consuming for large datasets
+#' @param point.cex the size of the points
 #' @param scree.pal a color palette for the screeplot
 #' @param scree.size a size factor for the screeplot, between 0 and 1
 #' @param scree.posi either a character string or xy coordinates indicating the position of the screeplot.
@@ -78,7 +79,7 @@
 plotGroves <- function(x, groups=NULL, xax=1, yax=2,
                         type=c("chull","ellipse"), col.pal=funky, bg="white",
                         lab.show=FALSE, lab.col="black", lab.cex=1, lab.optim=TRUE,
-                        scree.pal=NULL, scree.size=.2,
+                        point.cex=1, scree.pal=NULL, scree.size=.2,
                         scree.posi=c(.02,.02), ...){
     ## HANDLE ARGUMENTS ##
     ## checks
@@ -102,17 +103,17 @@ plotGroves <- function(x, groups=NULL, xax=1, yax=2,
     if(is.null(groups)) {
         ## with labels
         if(lab.show){
-            out <- s.label(x,
+            out <- s.label(x, xax=xax, yax=yax,
                            plabels=list(optim=lab.optim, col=lab.col, cex=lab.cex),
-                           pppoints=list(cex=0),
+                           pppoints=list(cex=point.cex),
                            pbackground.col=bg,
                            pgrid.text.col=lab.col, plot=FALSE, ...)
         } else {
             ## just points
-            out <- s.label(x,
+            out <- s.label(x, xax=xax, yax=yax,
                            plabels=list(optim=FALSE,cex=0),
-                           ppoints=list(cex=lab.cex, col=lab.col),
-                           background.col=bg,
+                           ppoints=list(cex=point.cex, col=lab.col),
+                           pbackground.col=bg,
                            pgrid.text.col=lab.col, plot=FALSE, ...)
         }
     } else {
@@ -127,12 +128,14 @@ plotGroves <- function(x, groups=NULL, xax=1, yax=2,
             out <- s.class(x, xax=xax, yax=yax, fac=groups, col=col.pal(n.lev),
                            ellipseSize=0, chullSize=1,
                            pbackground.col=bg,
+                           ppoints.cex=point.cex,
                            pgrid.text.col=lab.col, plot=FALSE, ...)
         }
         if(type=="ellipse"){
             out <- s.class(x, xax=xax, yax=yax, fac=groups, col=col.pal(n.lev),
                            ellipseSize=1,
                            pbackground.col=bg,
+                           ppoints.cex=point.cex,
                            pgrid.text.col=lab.col, plot=FALSE, ...)
         }
 
@@ -143,7 +146,7 @@ plotGroves <- function(x, groups=NULL, xax=1, yax=2,
         }
     }
     ## add inset
-    if(!is.null(scree.posi[1]) && !is.na(scree.posi[1])){
+    if(!is.null(scree.posi[1]) && !is.na(scree.posi[1]) && scree.posi[1]!="none"){
         screeplot <- s1d.barchart(c(rep(0,3),eig), p1d.horizontal=FALSE, ppolygons.col=scree.pal(length(eig)),
                                   pbackground=list(col=transp("white"), box=TRUE),
                                   layout.width=list(left.padding=2),

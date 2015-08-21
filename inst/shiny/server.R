@@ -205,23 +205,9 @@ shinyServer(function(input, output) {
             groves <- getClusters()
 
             if(is.null(groves)){
-                ## make scatterplot
-                clab <- ifelse(input$showlabels, input$labelsize, 0)
-                g1 <- s.label(res$pco$li, xax=input$xax, yax=input$yax,
-                        label.optim = input$optimlabels,
-                        ppoints.cex = input$pointsize, plabels.cex = clab,
-                        plot=FALSE)
-                
-                ## make screeplot
-                screeplot <- s1d.barchart(c(rep(0, 3), eig), p1d.horizontal = FALSE, 
-                                          ppolygons.col = scree.pal(length(eig)), pbackground = list(col = transp("white"), 
-                                                                                  box = TRUE), layout.width = list(left.padding = 2), 
-                                          pgrid.draw = FALSE, plot = FALSE)
-                
-                ## add legend
-                if(input$screemds!="none"){
-                    add.scatter.eig(res$pco$eig, res$pco$nf, xax=input$xax, yax=input$yax, posi=input$screemds)
-                }
+                plotGroves(res$pco, type=input$scattertype, xax=input$xax, yax=input$yax,
+                           scree.posi=input$screemds, lab.optim=input$optimlabels,
+                           lab.show=input$showlabels, lab.cex=input$labelsize)
             } else {
                 plotGroves(groves, type=input$scattertype, xax=input$xax, yax=input$yax,
                            scree.posi=input$screemds, lab.optim=input$optimlabels,
