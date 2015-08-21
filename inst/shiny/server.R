@@ -280,6 +280,7 @@ shinyServer(function(input, output) {
             if(!is.null(res)) write.csv(tab, file=file)
         })
 
+
     ## EXPORT ANALYSIS TO RDATA ##
     output$exportrestordata <- downloadHandler(
         filename = function() { paste(input$dataset, "-analysis", '.RData', sep='') },
@@ -291,6 +292,7 @@ shinyServer(function(input, output) {
                 save(trees, analysis, file=file)
             }
         })
+
 
     ## RENDER SYSTEM INFO ##
     output$systeminfo <- .render.server.info()
