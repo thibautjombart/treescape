@@ -26,7 +26,7 @@
 #'
 #' @examples
 #'
-#' if(require("adegenet")){
+#' if(require("adegenet") && require("adegraphics")){
 #' ## load data
 #' data(woodmiceTrees)
 #'
@@ -115,6 +115,24 @@ find.groves <- function(x, method=tree.vec, nf=NULL, clustering="ward.D2",
 #'
 #' @seealso
 #' \code{\link[adegraphics]{s.class}}
+#'
+#' @examples
+#' if(require("adegenet") && require("adegraphics")){
+#' ## load data
+#' data(woodmiceTrees)
+#'
+#' ## run find.groves: treescape+clustering
+#' res <- find.groves(woodmiceTrees, nf=5, nclust=6)
+#'
+#' ## basic plot
+#' plot.groves(res)
+#'
+#' ## adding labels
+#' plot.groves(res, lab.show=TRUE)
+#'
+#' ## customizing
+#' plot.groves(res, lab.show=TRUE,
+#' bg="black", lab.col="white", scree.size=.35)
 #'
 plot.groves <- function(x, groups=NULL, xax=1, yax=2,
                         type=c("chull","ellipse"), col.pal=funky, bg="white",
