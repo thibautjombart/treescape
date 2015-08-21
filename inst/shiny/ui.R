@@ -70,12 +70,20 @@ shinyUI(
                              conditionalPanel(
                                  ## condition
                                  condition="input.findgroups",
+
+                                 ## tree method
                                  selectInput("treemethod", "Clustering method:",
                                              choices=c(
                                              "Ward" = "ward.D2",
                                              "Single" = "single",
                                              "Complete" = "complete",
-                                             "UPGMA" = "average"))
+                                             "UPGMA" = "average")),
+
+                                 ## number of axes
+                                 uiOutput("naxesclust"),
+
+                                 ## number of clusters
+                                 uiOutput("nclust")
                                  ),
 
 

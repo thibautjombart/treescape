@@ -59,7 +59,47 @@ shinyServer(function(input, output) {
     })
 
 
+    ## GET ANALYSIS ##
+    getAnalysis <- reactive({
+        ## get dataset
+        x <- getData()
 
+        ## stop if not data
+        if(is.null(x)) return(NULL)
+
+        ## get number of axes retained
+        if(!is.null(input$naxes)) {
+            naxes <- input$naxes
+        } else {
+            naxes <- 2
+        }
+
+        ## select method used to summarise tree
+        if(!is.null(input$treemethod)){
+            if(input$treemethod %in% c("patristic","nNodes","Abouheif","sumDD")){
+                treeMethod <- function(x){return(adephylo::distTips(x, method=input$treemethod))}
+            } else if(input$treemethod=="metric"){
+                treeMethod <- function(x){return(tree.vec(x, lambda=input$lambda))}
+            } else {
+                treeMethod <- adephylo::distTips
+            }
+        }
+
+        ## run treescape
+        res <- treescape(x, method=treeMethod, nf=naxes)
+
+        ## return results
+        return(res)
+    })
+
+
+    ## ## GET CLUSTERS ##
+    ## output$groups <- reactive({
+    ##     if(inut$findgroups){
+    ##         find
+    ##     }
+    ## }
+    ##                           )
 
     ## DYNAMIC UI COMPONENTS ##
     ## SELECTION OF MDS AXES
@@ -69,7 +109,7 @@ shinyServer(function(input, output) {
         } else {
             nmax <- 100
         }
-        sliderInput("naxes", "Number of MDS axes retained:", min=1, max=nmax, value=10, step=1)
+        sliderInput("naxes", "Number of MDS axes retained:", min=1, max=nmax, value=2, step=1)
     })
 
     ## SELECTION OF PLOTTED AXES
@@ -101,35 +141,37 @@ shinyServer(function(input, output) {
         }
     })
 
+    ## SELECTION OF MDS AXES FOR CLUSTERING
+    output$naxesclust <- renderUI({
+        if(!is.null(x <- getData())) {
+            nmax <- length(x)
+        } else {
+            nmax <- 100
+        }
+        sliderInput("naxes", "Number of MDS axes retained:", min=1, max=nmax, value=2, step=1)
+    })
+
+   ## SELECTION OF NUMBER OF CLUSTERS
+    output$nclust <- renderUI({
+        if(!is.null(x <- getData())) {
+            nmax <- length(x)
+        } else {
+            nmax <- 100
+        }
+        sliderInput("naxes", "Number of clusters:", min=2, max=nmax, value=2, step=1)
+    })
+
 
     ## ANALYSIS ##
     output$scatterplot <- renderPlot({
         ## get dataset
         x <- getData()
 
-        ## get number of axes retained
-        if(!is.null(input$naxes)) {
-            naxes <- input$naxes
-        } else {
-            naxes <- 2
-        }
-
         if(!is.null(x)){
-            ## select method used to summarise tree
-            if(!is.null(input$treemethod)){
-                if(input$treemethod %in% c("patristic","nNodes","Abouheif","sumDD")){
-                    treeMethod <- function(x){return(adephylo::distTips(x, method=input$treemethod))}
-                } else if(input$treemethod=="metric"){
-                    treeMethod <- function(x){return(tree.vec(x, lambda=input$lambda))}
-                } else {
-                    treeMethod <- adephylo::distTips
-                }
-            }
+            ## get analysis
+            res <- getAnalysis()
 
-            ## run treescape
-            res <- treescape(x, method=treeMethod, nf=naxes)
-
-            ## make scatterplot
+             ## make scatterplot
             clab <- ifelse(input$showlabels, input$labelsize, 0)
             s.label(res$pco$li, xax=input$xax, yax=input$yax,
                     cpoint=input$pointsize, clab=clab)
