@@ -81,7 +81,7 @@ find.groves <- function(x, method=tree.vec, nf=NULL, clustering="ward.D2",
 
 #' Scatterplot of trees
 #'
-#' This function displays the scatterplot of the Multidimensional Scaling (MDS) output by treescape, superimposing group information (derived by \code{\link{find.groves}} using colors.
+#' This function displays the scatterplot of the Multidimensional Scaling (MDS) output by treescape, superimposing group information (derived by \code{\link{find.groves}} using colors. This function relies on \code{\link[adegraphics]{s.class}} from the adegraphics package.
 #'
 #' @author Thibaut Jombart \email{thibautjombart@@gmail.com}
 #'
@@ -102,16 +102,20 @@ find.groves <- function(x, method=tree.vec, nf=NULL, clustering="ward.D2",
 #' @param col.pal a color palette to be used for the groups
 #' @param bg the background color
 #' @param lab.show a logical indicating whether labels should be displayed
-#' @param
-#' @param
-#' @param
-#' @param
-#' @param
-#' @param
-#' @param
-#' @param
-#' @param
-#' @param
+#' @param lab.col a color for the labels
+#' @param lab.cex the size of the labels
+#' @param lab.optim a logical indicating whether label positions should be optimized to avoid overlap; better display but time-consuming for large datasets
+#' @param scree.pal a color palette for the screeplot
+#' @param scree.size a size factor for the screeplot, between 0 and 1
+#' @param scree.posi either a character string or xy coordinates indicating the position of the screeplot.
+#' @param ... further arguments passed to \code{\link{s.class}}
+#'
+#' @return
+#' An adegraphics object (class: ADEgS)
+#'
+#' @seealso
+#' \code{\link[adegraphics]{s.class}}
+#'
 plot.groves <- function(x, groups=NULL, xax=1, yax=2,
                         type=c("chull","ellipse"), col.pal=funky, bg="white",
                         lab.show=FALSE, lab.col="black", lab.cex=1, lab.optim=TRUE,
