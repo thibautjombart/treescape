@@ -41,9 +41,15 @@ res <- find.groves(woodmiceTrees, nf=5, nclust=6)
 ## plot results on first 2 axes
 PCs <- res$treescape$pco$li
 s.class(PCs, fac=res$groups, col=funky(6))
+
+## using plotGroves
+plotGroves(res)
 }
 }
 \author{
 Thibaut Jombart \email{thibautjombart@gmail.com}
+}
+\seealso{
+\code{\link{plotGroves}} to display results
 }
 

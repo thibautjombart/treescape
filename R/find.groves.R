@@ -17,6 +17,8 @@
 #' @import ape
 #' @importFrom stats hclust
 #'
+#' @seealso \code{\link{plotGroves}} to display results
+#'
 #' @return
 #' A list containing:
 #' \itemize{
@@ -36,6 +38,9 @@
 #' ## plot results on first 2 axes
 #' PCs <- res$treescape$pco$li
 #' s.class(PCs, fac=res$groups, col=funky(6))
+#'
+#' ## using plotGroves
+#' plotGroves(res)
 #' }
 #'
 find.groves <- function(x, method=tree.vec, nf=NULL, clustering="ward.D2",
