@@ -21,9 +21,9 @@
 #' x <- rtree(6)
 #'
 #' ## create matrix of MRCAs: entry (i,j) is the node number of the MRCA of tips i and j
-#' linear.mrca(x,6)
+#' linearMrca(x,6)
 #'
-linear.mrca <- function(tree,k=0) { # k is number of tips, which can be passed to the function to save on computation
+linearMrca <- function(tree,k=0) { # k is number of tips, which can be passed to the function to save on computation
   if (k==0) {k <- length(tree$tip.label)}
   M <- matrix(0, nrow=k, ncol=k); # initialise matrix
   T <- tree$Nnode # total number of internal nodes
@@ -54,7 +54,7 @@ linear.mrca <- function(tree,k=0) { # k is number of tips, which can be passed t
   diag(M) <- 1:k # we define the diagonal elements of M to be the tips themselves
   return(M)
 }
-linear.mrca <- compiler::cmpfun(linear.mrca) # compile
+linearMrca <- compiler::cmpfun(linearMrca) # compile
 
 #' Pendant edges
 #'
@@ -69,8 +69,8 @@ linear.mrca <- compiler::cmpfun(linear.mrca) # compile
 #'
 #' @importFrom compiler cmpfun
 #'
-pen.edge.tree <- function(tree,k) {tree$edge[match(1:k, tree$edge[,2]),] }
-pen.edge.tree <- compiler::cmpfun(pen.edge.tree)
+penEdgeTree <- function(tree,k) {tree$edge[match(1:k, tree$edge[,2]),] }
+penEdgeTree <- compiler::cmpfun(penEdgeTree)
 
 
 
@@ -87,8 +87,8 @@ pen.edge.tree <- compiler::cmpfun(pen.edge.tree)
 #'
 #' @importFrom compiler cmpfun
 #'
-pen.edge.treematch  <- function(tree,labelmatch) {tree$edge[match(labelmatch, tree$edge[,2]),] }
-pen.edge.treematch <- compiler::cmpfun(pen.edge.treematch)
+penEdgeTreematch  <- function(tree,labelmatch) {tree$edge[match(labelmatch, tree$edge[,2]),] }
+penEdgeTreematch <- compiler::cmpfun(penEdgeTreematch)
 
 
 #' Tree vector function
@@ -117,16 +117,15 @@ pen.edge.treematch <- compiler::cmpfun(pen.edge.treematch)
 #' ## generate a random tree
 #' tree <- rtree(6)
 #' ## topological vector of mrca distances from root:
-#' tree.vec(tree)
+#' treeVec(tree)
 #' ## vector of mrca distances from root when lambda=0.5:
-#' tree.vec(tree,0.5)
+#' treeVec(tree,0.5)
 #' ## vector of mrca distances as a function of lambda:
-#' vec.func <- tree.vec(tree,return_lambda_function=TRUE)
+#' vec.func <- treeVec(tree,return_lambda_function=TRUE)
 #' ## evaluate the vector at lambda=0.5:
 #' vec.func(0.5)
 #'
-tree.vec <- function(tree, lambda=0, return_lambda_function=F) {
-  if(!is.null(lambda) || is.na(lambda)) lambda <- 0
+treeVec <- function(tree, lambda=0, return_lambda_function=F) {
   if(lambda<0 || lambda>1) stop("Pick lambda in [0,1]")
   if(class(tree)!="phylo") stop("Tree should be of class phylo")
   if(is.rooted(tree)!=TRUE) stop("Metric is for rooted trees only")
@@ -259,7 +258,7 @@ tree.vec <- function(tree, lambda=0, return_lambda_function=F) {
       return(l * length_root_distances + (1-l) * topological_root_distances) })
   }
 }
-#tree.vec <- compiler::cmpfun(tree.vec)
+#treeVec <- compiler::cmpfun(treeVec)
 
 
 
@@ -289,22 +288,22 @@ tree.vec <- function(tree, lambda=0, return_lambda_function=F) {
 #' ## generate random trees
 #' tree_a <- rtree(6)
 #' tree_b <- rtree(6)
-#' tree.dist(tree_a,tree_b) # lambda=0
-#' tree.dist(tree_a,tree_b,1)  # lambda=1
-#' dist.func <- tree.dist(tree_a,tree_b,return_lambda_function=TRUE) # distance as a function of lambda
-#' dist.func(0) # evaluate at lambda=0. Equivalent to tree.dist(tree_a,tree_b).
+#' treeDist(tree_a,tree_b) # lambda=0
+#' treeDist(tree_a,tree_b,1)  # lambda=1
+#' dist.func <- treeDist(tree_a,tree_b,return_lambda_function=TRUE) # distance as a function of lambda
+#' dist.func(0) # evaluate at lambda=0. Equivalent to treeDist(tree_a,tree_b).
 #' ## We can see how the distance changes when moving from focusing on topology to length:
 #' plot(sapply(seq(0,1,length.out=100), function(x) dist.func(x)), type="l",ylab="",xlab="")
 #'
 #'
-tree.dist <- function(tree_a, tree_b, lambda=0, return_lambda_function=F) {
+treeDist <- function(tree_a, tree_b, lambda=0, return_lambda_function=F) {
 
     if(length(tree_a$tip.label) != length(tree_b$tip.label)) stop("Trees must have the same number of tips")
 
     if(setequal(tree_a$tip.label,tree_b$tip.label) == FALSE) stop("Trees must have the same tip label sets")
 
-    metric_a <- tree.vec(tree_a, lambda, return_lambda_function)
-    metric_b <- tree.vec(tree_b, lambda, return_lambda_function)
+    metric_a <- treeVec(tree_a, lambda, return_lambda_function)
+    metric_b <- treeVec(tree_b, lambda, return_lambda_function)
     if(!return_lambda_function) {
         return(sqrt(sum((metric_a - metric_b)^2)))
     }
@@ -408,7 +407,7 @@ multi.dist <- function(trees, lambda=0, return_lambda_function=F, save_memory=F)
     if(!save_memory) {
 
       # Compute the metric vector for all trees.
-      tree_metrics <- t(sapply(trees, function(tree) {tree.vec(tree, lambda, F)}))
+      tree_metrics <- t(sapply(trees, function(tree) {treeVec(tree, lambda, F)}))
       sapply(1:(num_trees-1), function(i) {
         sapply((i+1):num_trees, function(j) {
           distances[i,j] <<- distances[j,i] <<- sqrt(sum((tree_metrics[i,] - tree_metrics[j,])^2))
@@ -420,7 +419,7 @@ multi.dist <- function(trees, lambda=0, return_lambda_function=F, save_memory=F)
     else {
       sapply(1:(num_trees-1), function(i) {
         sapply((i+1):num_trees, function(j) {
-          distances[i,j] <<- distances[j,i] <<- tree.dist(trees[[i]], trees[[j]], lambda, F)
+          distances[i,j] <<- distances[j,i] <<- treeDist(trees[[i]], trees[[j]], lambda, F)
         })
       })
     }
@@ -435,7 +434,7 @@ multi.dist <- function(trees, lambda=0, return_lambda_function=F, save_memory=F)
       warning("save_memory=T is incompatible with return_lambda_function=T, setting save_memory=F")
 
     # Compute the list of metric functions for all trees.
-    tree_metric_functions <- sapply(trees, function(tree) {tree.vec(tree, lambda, T)})
+    tree_metric_functions <- sapply(trees, function(tree) {treeVec(tree, lambda, T)})
 
     # Inner function that we'll return, computes the distance matrix given lambda.
     compute_distance_matrix_function <- function(l) {
@@ -479,7 +478,7 @@ multi.dist <- function(trees, lambda=0, return_lambda_function=F, save_memory=F)
 #' ## generate 10 random trees, each with 6 tips
 #' trees <- rmtree(10,6)
 #' ## Geometric median tree:
-#' mymedian <- med.tree(trees)
+#' mymedian <- medTree(trees)
 #' mymedian$centre # the vector at the 'centre' of the trees; may not correspond to an actual tree
 #' mymedian$median # the identifier(s) of the tree(s) closest to the central vector
 #' mymedian$mindist # the distance of the median tree(s) from the central vector
@@ -487,7 +486,7 @@ multi.dist <- function(trees, lambda=0, return_lambda_function=F, save_memory=F)
 #' \dontrun{
 #' ## Example with woodmice data:
 #' data(woodmiceTrees)
-#' woodmiceMed <- med.tree(woodmiceTrees)
+#' woodmiceMed <- medTree(woodmiceTrees)
 #' ## plot the (first) geometric median tree (there are seven topologically identical median trees):
 #' plot(woodmiceTrees[[woodmiceMed$median[[1]]]])
 #'
@@ -500,10 +499,10 @@ multi.dist <- function(trees, lambda=0, return_lambda_function=F, save_memory=F)
 #'    intersect(which(woodmiceMDS$li[,2]>(-2.5)),which(woodmiceMDS$li[,1]<2.5))
 #'    )]
 #' ## find the geometric median
-#' geomMedWoodmice1 <- med.tree(woodmiceCluster1)
+#' geomMedWoodmice1 <- medTree(woodmiceCluster1)
 #' plot(woodmiceCluster1[[geomMedWoodmice1$median[[1]]]])
 #' # this has the same topology as the overall median tree:
-#' tree.dist(woodmiceTrees[[woodmiceMed$median[[1]]]],
+#' treeDist(woodmiceTrees[[woodmiceMed$median[[1]]]],
 #'   woodmiceCluster1[[geomMedWoodmice1$median[[1]]]])
 #'
 #' ## However, median trees from other clusters have different topologies, for example:
@@ -513,13 +512,13 @@ multi.dist <- function(trees, lambda=0, return_lambda_function=F, save_memory=F)
 #'  intersect(which(woodmiceMDS$li[,2]>1),which(woodmiceMDS$li[,1]<6))
 #' )]
 #' ## find the geometric median
-#' geomMedWoodmice2 <- med.tree(woodmiceCluster2)
+#' geomMedWoodmice2 <- medTree(woodmiceCluster2)
 #' plot(woodmiceCluster2[[geomMedWoodmice2$median[[1]]]])
 #' ## This is another representative topology, which is different from those we found above:
-#' tree.dist(woodmiceCluster2[[geomMedWoodmice2$median[[1]]]],
+#' treeDist(woodmiceCluster2[[geomMedWoodmice2$median[[1]]]],
 #'   woodmiceCluster2[[geomMedWoodmice2$median[[1]]]])
 #' }
-med.tree <- function(trees, lambda=0, weights=rep(1,length(trees)), return_lambda_function=F, save_memory=F) {
+medTree <- function(trees, lambda=0, weights=rep(1,length(trees)), return_lambda_function=F, save_memory=F) {
 
   num_trees <- length(trees)
   num_leaves <- length(trees[[1]]$tip.label)
@@ -533,7 +532,7 @@ med.tree <- function(trees, lambda=0, weights=rep(1,length(trees)), return_lambd
     if(!save_memory) {
 
       # Compute the metric vector for all trees.
-      tree_metrics <- t(sapply(trees, function(tree) {tree.vec(tree, lambda, F)}))
+      tree_metrics <- t(sapply(trees, function(tree) {treeVec(tree, lambda, F)}))
 
       # Compute the centre metric vector by weighting the metric vector of each tree.
       centre <- (weights %*% tree_metrics)/num_trees
@@ -555,14 +554,14 @@ med.tree <- function(trees, lambda=0, weights=rep(1,length(trees)), return_lambd
       # First pass: compute the centre.
       centre <- rep(0,(num_leaves*(num_leaves-1)/2) + num_leaves)
       for(i in 1:num_trees) {
-        centre <- centre + tree.vec(trees[[i]], lambda, F) * weights[i]
+        centre <- centre + treeVec(trees[[i]], lambda, F) * weights[i]
       }
       centre <- centre/num_trees
 
       # Second pass: compute the distances.
       distances <- rep(NA,num_trees)
       for(i in 1:num_trees) {
-        distances[i] <- sqrt(sum((tree.vec(trees[[i]], lambda, F) - centre)^2))
+        distances[i] <- sqrt(sum((treeVec(trees[[i]], lambda, F) - centre)^2))
       }
 
       # Get the indices for the median tree(s).
@@ -580,7 +579,7 @@ med.tree <- function(trees, lambda=0, weights=rep(1,length(trees)), return_lambd
       warning("save_memory=T is incompatible with return_lambda_function=T, setting save_memory=F")
 
     # Compute the list of metric functions for all trees.
-    tree_metric_functions <- sapply(trees, function(tree) {tree.vec(tree, lambda, T)})
+    tree_metric_functions <- sapply(trees, function(tree) {treeVec(tree, lambda, T)})
 
     # Inner function that we'll return, computes the distance matrix given lambda.
     compute_median_tree_function <- function(l) {
