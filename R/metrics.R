@@ -126,7 +126,7 @@ pen.edge.treematch <- compiler::cmpfun(pen.edge.treematch)
 #' vec.func(0.5)
 #'
 tree.vec <- function(tree, lambda=0, return_lambda_function=F) {
-
+  if(!is.null(lambda) || is.na(lambda)) lambda <- 0
   if(lambda<0 || lambda>1) stop("Pick lambda in [0,1]")
   if(class(tree)!="phylo") stop("Tree should be of class phylo")
   if(is.rooted(tree)!=TRUE) stop("Metric is for rooted trees only")
@@ -300,7 +300,7 @@ tree.vec <- function(tree, lambda=0, return_lambda_function=F) {
 tree.dist <- function(tree_a, tree_b, lambda=0, return_lambda_function=F) {
 
     if(length(tree_a$tip.label) != length(tree_b$tip.label)) stop("Trees must have the same number of tips")
-    
+
     if(setequal(tree_a$tip.label,tree_b$tip.label) == FALSE) stop("Trees must have the same tip label sets")
 
     metric_a <- tree.vec(tree_a, lambda, return_lambda_function)
@@ -523,7 +523,7 @@ med.tree <- function(trees, lambda=0, weights=rep(1,length(trees)), return_lambd
 
   num_trees <- length(trees)
   num_leaves <- length(trees[[1]]$tip.label)
-  
+
   if(length(weights)!=num_trees) stop("Length of vector of weights must be the same as number of trees")
 
   # Working with numbers (no functions).
