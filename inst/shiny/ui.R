@@ -134,7 +134,7 @@ shinyUI(
                                  ## type of plot
                                  radioButtons("scattertype", "Type of scatterplot",
                                               choices=c(chull="chull","ellipse"),
-                                              selected="convex hull", inline=TRUE),
+                                              selected="convex hull"),
 
                                  ## TREE AESTHETICS
                                  ## condition on tree being displayed
