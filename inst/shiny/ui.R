@@ -70,7 +70,7 @@ shinyUI(
                              uiOutput("naxes"),
 
                              ## group stuff
-                             checkboxInput("findgroups", label="Idenfify clusters?", value=FALSE),
+                             checkboxInput("findgroups", label="Identify clusters?", value=FALSE),
 
                              conditionalPanel(
                                  ## condition
