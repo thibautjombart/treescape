@@ -1,5 +1,6 @@
 ## CHECKS ##
-if(!require(shiny)) stop("shiny is required")
+if(!require("shiny")) stop("shiny is required")
+if(!require("RLumShiny")) stop("RLumShiny is required")
 
 ## DEFINE UI ##
 shinyUI(
@@ -70,7 +71,7 @@ shinyUI(
                              uiOutput("naxes"),
 
                              ## group stuff
-                             checkboxInput("findgroups", label="Identify clusters?", value=FALSE),
+                             checkboxInput("findgroups", label=strong("Identify clusters?"), value=FALSE),
 
                              conditionalPanel(
                                  ## condition
@@ -142,12 +143,22 @@ shinyUI(
                                  ## condition
                                  condition="input.findgroups",
 
-                             selectInput("palette", "Palette for the clusters",
-                                         choices=c("funky", "spectral",
-                                         "seasun", "lightseasun", "deepseasun",
-                                         "rainbow", "azur", "wasp"),
-                                         selected="funky")
+                                 selectInput("palette", "Palette for the clusters",
+                                             choices=c("funky", "spectral",
+                                             "seasun", "lightseasun", "deepseasun",
+                                             "rainbow", "azur", "wasp"),
+                                             selected="funky")
                                  ),
+
+                             ## HTML('<script type="text/javascript" src="jscolor/jscolor.js"></script>'),
+
+                             ## HTML('<p> Choose any color: <input class="color" id="backgroundcolor" onchange="input.background = "#"+this.color" </p>'),
+
+                             ## choose background color
+                             jscolorInput("bgcol", "Background color", "white"),
+
+                             ## choose label colors
+                             jscolorInput("labcol", "Label color", "black"),
 
                              ## TREE AESTHETICS
                              ## condition on tree being displayed

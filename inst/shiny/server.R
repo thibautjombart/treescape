@@ -8,8 +8,9 @@ shinyServer(function(input, output) {
     if(!require("ape")) stop("ape is required")
     if(!require("ade4")) stop("ade4 is required")
     if(!require("adegraphics")) stop("ade4 is required")
-    if(!require("adegenet")) stop("adegenet is required")
     if(!require("treescape")) stop("treescape is required")
+    if(!require("adegenet")) stop("adegenet is required")
+
 
     ## GET DYNAMIC ANNOTATION
     graphTitle <- reactive({
@@ -192,6 +193,16 @@ shinyServer(function(input, output) {
         sliderInput("nclust", "Number of clusters:", min=2, max=nmax, value=2, step=1)
     })
 
+    ## ## SELECTION OF BACKGROUND COLOR
+    ## output$bg <- renderUI({
+    ##     selectInput("bg", "Background color:", colors(), selected="white")
+    ## })
+
+    ##  ## SELECTION OF LABELS COLOR
+    ## output$labcol <- renderUI({
+    ##     selectInput("labcol", "Label color:", colors(), selected="black")
+    ## })
+
 
     ## ANALYSIS ##
     output$scatterplot <- renderPlot({
@@ -208,18 +219,24 @@ shinyServer(function(input, output) {
             ## get palette
             pal <- get(input$palette)
 
+            ## get colors
+            labcol <- ifelse(!is.null(input$labcol), input$labcol, "black")
+            bgcol <- ifelse(!is.null(input$bgcol), input$bgcol, "white")
+
             ## plot without groups
             if(is.null(groves)){
                 plotGroves(res$pco, type=input$scattertype, xax=input$xax, yax=input$yax,
                            scree.posi=input$screemds, lab.optim=input$optimlabels,
                            lab.show=input$showlabels, lab.cex=input$labelsize,
-                           point.cex=input$pointsize)
+                           lab.col=labcol,
+                           point.cex=input$pointsize, bg=bgcol)
             } else {
                 ## plot with groups
                 plotGroves(groves, type=input$scattertype, xax=input$xax, yax=input$yax,
                            scree.posi=input$screemds, lab.optim=input$optimlabels,
                            lab.show=input$showlabels, lab.cex=input$labelsize,
-                           point.cex=input$pointsize, col.pal=pal)
+                           lab.col=labcol,
+                           point.cex=input$pointsize, bg=bgcol, col.pal=pal)
             }
         }
     }, res=120)
