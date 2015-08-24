@@ -81,7 +81,7 @@ shinyServer(function(input, output) {
             if(input$treemethod %in% c("patristic","nNodes","Abouheif","sumDD")){
                 treeMethod <- function(x){return(adephylo::distTips(x, method=input$treemethod))}
             } else if(input$treemethod=="metric"){
-                treeMethod <- function(x){return(tree.vec(x, lambda=input$lambda))}
+                treeMethod <- function(x){return(treeVec(x, lambda=input$lambda))}
             } else {
                 treeMethod <- adephylo::distTips
             }
@@ -126,7 +126,7 @@ shinyServer(function(input, output) {
             if(input$treemethod %in% c("patristic","nNodes","Abouheif","sumDD")){
                 treeMethod <- function(x){return(adephylo::distTips(x, method=input$treemethod))}
             } else if(input$treemethod=="metric"){
-                treeMethod <- function(x){return(tree.vec(x, lambda=input$lambda))}
+                treeMethod <- function(x){return(treeVec(x, lambda=input$lambda))}
             } else {
                 treeMethod <- adephylo::distTips
             }

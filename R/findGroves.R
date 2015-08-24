@@ -43,7 +43,7 @@
 #' plotGroves(res)
 #' }
 #'
-findGroves <- function(x, method=tree.vec, nf=NULL, clustering="ward.D2",
+findGroves <- function(x, method=treeVec, nf=NULL, clustering="ward.D2",
                         nclust=NULL, ...){
     ## CHECKS ##
     if(!inherits(x, "multiPhylo")) stop("x should be a multiphylo object")

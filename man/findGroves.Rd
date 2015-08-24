@@ -4,7 +4,7 @@
 \alias{findGroves}
 \title{Identify clusters of similar trees}
 \usage{
-findGroves(x, method = tree.vec, nf = NULL, clustering = "ward.D2",
+findGroves(x, method = treeVec, nf = NULL, clustering = "ward.D2",
   nclust = NULL, ...)
 }
 \arguments{

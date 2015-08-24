@@ -27,7 +27,7 @@
 #' table.paint(as.matrix(res$D))
 #' scatter(res$pco)
 #'
-treescape <- function(x, method=tree.vec, nf=NULL, ...){
+treescape <- function(x, method=treeVec, nf=NULL, ...){
     ## CHECKS ##
     if(!inherits(x, "multiPhylo")) stop("x should be a multiphylo object")
     if(is.null(names(x))) names(x) <- 1:length(x)

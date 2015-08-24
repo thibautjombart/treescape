@@ -4,7 +4,7 @@
 \alias{treescape}
 \title{Phylogenetic tree exploration}
 \usage{
-treescape(x, method = tree.vec, nf = NULL, ...)
+treescape(x, method = treeVec, nf = NULL, ...)
 }
 \arguments{
 \item{x}{an object of the class multiPhylo}
