@@ -8,6 +8,7 @@ shinyServer(function(input, output) {
     if(!require("ape")) stop("ape is required")
     if(!require("ade4")) stop("ade4 is required")
     if(!require("adegraphics")) stop("ade4 is required")
+    if(!require("adegenet")) stop("adegenet is required")
     if(!require("treescape")) stop("treescape is required")
 
     ## GET DYNAMIC ANNOTATION
@@ -204,6 +205,9 @@ shinyServer(function(input, output) {
             ## get clusters
             groves <- getClusters()
 
+            ## get palette
+            pal <- get(input$palette)
+
             ## plot without groups
             if(is.null(groves)){
                 plotGroves(res$pco, type=input$scattertype, xax=input$xax, yax=input$yax,
@@ -215,7 +219,7 @@ shinyServer(function(input, output) {
                 plotGroves(groves, type=input$scattertype, xax=input$xax, yax=input$yax,
                            scree.posi=input$screemds, lab.optim=input$optimlabels,
                            lab.show=input$showlabels, lab.cex=input$labelsize,
-                           point.cex=input$pointsize)
+                           point.cex=input$pointsize, col.pal=pal)
             }
         }
     }, res=120)

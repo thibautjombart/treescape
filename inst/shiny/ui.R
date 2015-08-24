@@ -95,7 +95,7 @@ shinyUI(
                              h2(HTML('<font color="#6C6CC4" size="6"> > Aesthetics </font>')),
 
                              ## SCATTERPLOT AESTHETICS
-                             ## options for clusters
+                             ## type of graph (if clusters detected)
                              conditionalPanel(
                                  ## condition
                                  condition="input.findgroups",
@@ -137,6 +137,17 @@ shinyUI(
                                          "Top left" = "topleft"),
                                          selected="bottomleft"),
 
+                             ## choose color palette (if clusters detected)
+                             conditionalPanel(
+                                 ## condition
+                                 condition="input.findgroups",
+
+                             selectInput("palette", "Palette for the clusters",
+                                         choices=c("funky", "spectral",
+                                         "seasun", "lightseasun", "deepseasun",
+                                         "rainbow", "azur", "wasp"),
+                                         selected="funky")
+                                 ),
 
                              ## TREE AESTHETICS
                              ## condition on tree being displayed
