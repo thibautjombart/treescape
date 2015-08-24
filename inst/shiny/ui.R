@@ -76,7 +76,7 @@ shinyUI(
                                  ## condition
                                  condition="input.findgroups",
 
-                                 ## tree method
+                                 ## clustering method
                                  selectInput("clustmethod", "Clustering method:",
                                              choices=c(
                                              "Ward" = "ward.D2",
@@ -95,6 +95,17 @@ shinyUI(
                              h2(HTML('<font color="#6C6CC4" size="6"> > Aesthetics </font>')),
 
                              ## SCATTERPLOT AESTHETICS
+                             ## options for clusters
+                             conditionalPanel(
+                                 ## condition
+                                 condition="input.findgroups",
+
+                                 ## type of plot
+                                 radioButtons("scattertype", "Type of scatterplot",
+                                              choices=c("chull","ellipse"),
+                                              selected="chull")
+                                 ),
+
                              ## select first axis to plot
                              uiOutput("xax"),
 
@@ -126,43 +137,34 @@ shinyUI(
                                          "Top left" = "topleft"),
                                          selected="bottomleft"),
 
-                             ## options for clusters
-                             conditionalPanel(
-                                 ## condition
-                                 condition="input.findgroups",
 
-                                 ## type of plot
-                                 radioButtons("scattertype", "Type of scatterplot",
-                                              choices=c(chull="chull","ellipse"),
-                                              selected="convex hull"),
+                             ## TREE AESTHETICS
+                             ## condition on tree being displayed
+                             conditionalPanel(condition = "input.selectedTree!=''",
+                                              ## type of tree
+                                              radioButtons("treetype", "Type of tree",
+                                                           choices=c("phylogram","cladogram", "fan", "unrooted", "radial"),
+                                                           selected="phylogram", width="100%"),
 
-                                 ## TREE AESTHETICS
-                                 ## condition on tree being displayed
-                                 conditionalPanel(condition = "input.selectedTree!=''",
-                                                  ## type of tree
-                                                  radioButtons("treetype", "Type of tree",
-                                                               choices=c("phylogram","cladogram", "fan", "unrooted", "radial"),
-                                                               selected="phylogram", width="100%"),
+                                              ## tree direction
+                                              radioButtons("treedirection", "Direction of the tree",
+                                                           choices=c("rightwards", "leftwards", "upwards", "downwards"),
+                                                           selected="rightwards", width="100%"),
 
-                                                  ## tree direction
-                                                  radioButtons("treedirection", "Direction of the tree",
-                                                               choices=c("rightwards", "leftwards", "upwards", "downwards"),
-                                                               selected="rightwards", width="100%"),
+                                              ## ladderize
+                                              checkboxInput("ladderize", label="Ladderize the tree?", value=TRUE),
 
-                                                  ## ladderize
-                                                  checkboxInput("ladderize", label="Ladderize the tree?", value=TRUE),
+                                              ## tip labels
+                                              checkboxInput("showtiplabels", label="Display tip labels?", value=TRUE),
 
-                                                  ## tip labels
-                                                  checkboxInput("showtiplabels", label="Display tip labels?", value=TRUE),
+                                              ## tip label size
+                                              sliderInput("tiplabelsize", "Size of the tip labels", value=1, min=0, max=5, step=0.1),
 
-                                                  ## tip label size
-                                                  sliderInput("tiplabelsize", "Size of the tip labels", value=1, min=0, max=5, step=0.1),
+                                              ## edge width
+                                              sliderInput("edgewidth", "Width of the edges", value=1, min=0, max=20, step=0.2)
 
-                                                  ## edge width
-                                                  sliderInput("edgewidth", "Width of the edges", value=1, min=0, max=20, step=0.2)
+                                              ),
 
-                                                  )
-                                 ),
 
                              br(),br(),br(),br(),br(),br(),br(), # add some blank space at the end of side panel
                              br(),br(),br(),br(),br(),br(),br(), # add some blank space at the end of side panel
