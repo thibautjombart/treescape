@@ -6,8 +6,8 @@
 \usage{
 plotGroves(x, groups = NULL, xax = 1, yax = 2, type = c("chull",
   "ellipse"), col.pal = funky, bg = "white", lab.show = FALSE,
-  lab.col = "black", lab.cex = 1, lab.optim = TRUE, scree.pal = NULL,
-  scree.size = 0.2, scree.posi = c(0.02, 0.02), ...)
+  lab.col = "black", lab.cex = 1, lab.optim = TRUE, point.cex = 1,
+  scree.pal = NULL, scree.size = 0.2, scree.posi = c(0.02, 0.02), ...)
 }
 \arguments{
 \item{x}{a list returned by \code{\link{findGroves}} or a MDS with class \code{dudi}}
@@ -31,6 +31,8 @@ plotGroves(x, groups = NULL, xax = 1, yax = 2, type = c("chull",
 \item{lab.cex}{the size of the labels}
 
 \item{lab.optim}{a logical indicating whether label positions should be optimized to avoid overlap; better display but time-consuming for large datasets}
+
+\item{point.cex}{the size of the points}
 
 \item{scree.pal}{a color palette for the screeplot}
 
