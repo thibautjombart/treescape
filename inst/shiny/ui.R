@@ -14,7 +14,7 @@ shinyUI(
         sidebarPanel(
             tags$head(tags$style(
                 type = 'text/css',
-                'form.well { max-height: 800px; overflow-y: auto; }'
+                'form.well { max-height: 1600px; overflow-y: auto; }'
                 )),
 
             ## SPECIFIC TO TREE LANDSCAPE EXPLORER ##
@@ -150,10 +150,6 @@ shinyUI(
                                              selected="funky")
                                  ),
 
-                             ## HTML('<script type="text/javascript" src="jscolor/jscolor.js"></script>'),
-
-                             ## HTML('<p> Choose any color: <input class="color" id="backgroundcolor" onchange="input.background = "#"+this.color" </p>'),
-
                              ## choose background color
                              jscolorInput("bgcol", "Background color", "white"),
 
@@ -205,7 +201,7 @@ shinyUI(
                          ## conditional panel: plot tree if needed
                          conditionalPanel(
                              condition = "input.selectedTree!=''",
-                             plotOutput("tree")
+                             plotOutput("tree", height = "800px")
                              )
                          ),
 
