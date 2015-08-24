@@ -38,6 +38,11 @@ Then, to load the package, use:
 library("treescape")
 ```
 
+```
+## Loading required package: ape
+## Loading required package: ade4
+```
+
 
 Content overview
 -------------
@@ -50,7 +55,7 @@ The main functions implemented in *treescape* are:
 * __`med.tree`__: 
 
 
-Distributed datasets inclue:
+Distributed datasets include:
 * __`woodmiceTrees`__: 
 
 
