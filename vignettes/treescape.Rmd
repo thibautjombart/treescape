@@ -1,0 +1,41 @@
+---
+title: "Statistical exploration of landscapes of phylogenetic trees"
+author: "Thibaut Jombart, Michelle Kendall"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{treescape: statistical exploration of landscapes of phylogenetic trees}
+  \usepackage[utf8]{inputenc}
+---
+
+
+```{r setup, echo=FALSE}
+# set global chunk options: images will be 7x5 inches
+knitr::opts_chunk$set(fig.width=7, fig.height=10, fig.path="figs/")
+options(digits = 4)
+```
+
+*treescape*: tatistical exploration of landscapes of phylogenetic trees
+=================================================
+*treescape* implements new methods for the exploration and analysis of distributions of phylogenetic trees for a given set of taxa.
+
+
+Installing *apex*
+-------------
+To install the development version from github:
+```{r install, eval=FALSE}
+library(devtools)
+install_github("thibautjombart/treescape")
+```
+
+The stable version can be installed from CRAN using:
+```{r install2, eval=FALSE}
+install.packages("treescape")
+```
+
+Then, to load the package, use:
+```{r load}
+library("treescape")
+```
+
