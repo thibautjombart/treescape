@@ -341,12 +341,12 @@ treeDist <- function(tree_a, tree_b, lambda=0, return_lambda_function=F) {
 #' trees <- rmtree(10,6)
 #'
 #' ## pairwise distance matrix when lambda=0
-#' multi.dist(trees)
+#' multiDist(trees)
 #'
 #' ## pairwise distance matrix as a function of lambda:
-#' m <- multi.dist(trees, return_lambda_function=TRUE)
+#' m <- multiDist(trees, return_lambda_function=TRUE)
 #'
-#' ## evaluate at lambda=0. Equivalent to multi.dist(trees).
+#' ## evaluate at lambda=0. Equivalent to multiDist(trees).
 #' m0 <- m(0)
 #'
 #' ## A method to visualise these distances with MDS:
@@ -375,7 +375,7 @@ treeDist <- function(tree_a, tree_b, lambda=0, return_lambda_function=F) {
 #' ## An example using data:
 #' ## These woodmice phylogenies were created using the bootstrapping example in package \code{ape}
 #' data(woodmiceTrees)
-#' woodmiceDists <- multi.dist(woodmiceTrees) # find topological distances
+#' woodmiceDists <- multiDist(woodmiceTrees) # find topological distances
 #' woodmiceMDS <- dudi.pco(as.dist(woodmiceDists), scannf=FALSE, nf=2)
 #' woodmicedf <- woodmiceMDS$li
 #'
@@ -394,7 +394,7 @@ treeDist <- function(tree_a, tree_b, lambda=0, return_lambda_function=F) {
 #'    col="navy", alpha=0.5, xlab="", ylab="", zlab="")
 #' }
 #' }
-multi.dist <- function(trees, lambda=0, return_lambda_function=F, save_memory=F) {
+multiDist <- function(trees, lambda=0, return_lambda_function=F, save_memory=F) {
 
   num_trees <- length(trees)
 
@@ -491,7 +491,7 @@ multi.dist <- function(trees, lambda=0, return_lambda_function=F, save_memory=F)
 #' plot(woodmiceTrees[[woodmiceMed$median[[1]]]])
 #'
 #' ## finding the geometric median tree from a single cluster:
-#' woodmiceDists <- multi.dist(woodmiceTrees)
+#' woodmiceDists <- multiDist(woodmiceTrees)
 #' woodmiceMDS <- dudi.pco(as.dist(woodmiceDists), scannf=FALSE, nf=2)
 #' ## isolate the trees from the largest cluster
 #' woodmiceCluster1 <- woodmiceTrees[intersect(

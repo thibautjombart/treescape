@@ -43,7 +43,7 @@ woodmiceMed <- medTree(woodmiceTrees)
 plot(woodmiceTrees[[woodmiceMed$median[[1]]]])
 
 ## finding the geometric median tree from a single cluster:
-woodmiceDists <- multi.dist(woodmiceTrees)
+woodmiceDists <- multiDist(woodmiceTrees)
 woodmiceMDS <- dudi.pco(as.dist(woodmiceDists), scannf=FALSE, nf=2)
 ## isolate the trees from the largest cluster
 woodmiceCluster1 <- woodmiceTrees[intersect(
