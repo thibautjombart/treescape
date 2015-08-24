@@ -9,8 +9,9 @@
 #' @import shiny
 #' @importFrom adephylo distTips
 #' @importFrom utils packageDescription
-#'
+#' @importFrom RLumShiny jscolorInput
 treescapeServer <- function(){
+    ## RUN APP
     runApp(system.file("shiny",package="treescape"))
     return(invisible())
 }
