@@ -155,8 +155,8 @@ shinyServer(function(input, output) {
 
     ## SELECTION OF PLOTTED AXES
     output$xax <- renderUI({
-        if(!is.null(x <- getData())){
-            nmax <- length(x)
+        if(!is.null(x <- getAnalysis())){
+            nmax <- x$pco$nf
         } else {
             nmax <- 100
         }
@@ -164,12 +164,12 @@ shinyServer(function(input, output) {
     })
 
     output$yax <- renderUI({
-        if(!is.null(x <- getData())) {
-            nmax <- length(x)
+        if(!is.null(x <- getAnalysis())) {
+            nmax <- x$pco$nf
         } else {
             nmax <- 100
         }
-        numericInput("yax", "Indicate the y axis", value=2, min=2, max=nmax)
+        numericInput("yax", "Indicate the y axis", value=2, min=1, max=nmax)
     })
 
     ## VALUE OF LAMBDA FOR METRIC
