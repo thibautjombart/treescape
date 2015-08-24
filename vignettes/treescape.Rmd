@@ -51,7 +51,7 @@ The main functions implemented in *treescape* are:
 * __`med.tree`__: 
 
 
-Distributed datasets inclue:
+Distributed datasets include:
 * __`woodmiceTrees`__: 
 
 
