@@ -1,45 +1,5 @@
 [![Travis-CI Build Status](https://travis-ci.org/thibautjombart/treescape.png?branch=master)](https://travis-ci.org/thibautjombart/treescape)
 
-<style TYPE="text/css">
-code.has-jax {font: inherit; font-size: 100%; background: inherit; border: inherit;}
-</style>
-<script type="text/x-mathjax-config">
-MathJax.Hub.Config({
-    tex2jax: {
-        inlineMath: [['$','$'], ['\\(','\\)']],
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'] // removed 'code' entry
-    }
-});
-MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i = 0; i < all.length; i += 1) {
-        all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-});
-</script>
-<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-
-
-MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i = 0; i < all.length; i += 1) {
-        all[i].SourceElement().parentNode.className += ' has-jax';
-    }
-});
-</script>
-<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
----
-title: "Exploration of landscapes of phylogenetic trees"
-author: "Thibaut Jombart, Michelle Kendall"
-date: "2015-08-25"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteIndexEntry{treescape: exploration of landscapes of phylogenetic trees}
-  \usepackage[utf8]{inputenc}
----
 
 
 
@@ -253,7 +213,7 @@ treeVec(tree)
 ```
 
 ```
-##  [1] 1 0 0 0 0 0 0 0 0 2 1 2 1 3 1 1 1 1 1 1 1
+##  [1] 0 0 0 0 1 1 2 1 0 1 2 0 1 0 0 1 1 1 1 1 1
 ```
 
 ```r
@@ -262,9 +222,9 @@ treeVec(tree,0.5)
 ```
 
 ```
-##  [1] 0.8171 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 1.4548
-## [11] 0.8985 1.4548 0.8985 2.3656 0.8985 0.6116 0.6098 0.8825 0.6523 0.5842
-## [21] 0.8217
+##  [1] 0.0000 0.0000 0.0000 0.0000 0.8681 0.5893 1.3848 0.5893 0.0000 0.5893
+## [11] 1.4440 0.0000 0.5893 0.0000 0.0000 0.5398 0.8937 0.7926 0.5463 0.7070
+## [21] 0.5245
 ```
 
 ```r
@@ -275,9 +235,9 @@ vecAsFunction(0.5)
 ```
 
 ```
-##  [1] 0.8171 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 0.0000 1.4548
-## [11] 0.8985 1.4548 0.8985 2.3656 0.8985 0.6116 0.6098 0.8825 0.6523 0.5842
-## [21] 0.8217
+##  [1] 0.0000 0.0000 0.0000 0.0000 0.8681 0.5893 1.3848 0.5893 0.0000 0.5893
+## [11] 1.4440 0.0000 0.5893 0.0000 0.0000 0.5398 0.8937 0.7926 0.5463 0.7070
+## [21] 0.5245
 ```
 
 The metric -- the distance between two trees -- is the Euclidean distance between these vectors:
@@ -296,7 +256,7 @@ treeDist(tree_a,tree_b)
 ```
 
 ```
-## [1] 4.899
+## [1] 4.69
 ```
 
 ```r
@@ -305,6 +265,6 @@ treeDist(tree_a,tree_b,1)
 ```
 
 ```
-## [1] 2.795
+## [1] 1.556
 ```
 
