@@ -49,7 +49,7 @@ The main functions implemented in *treescape* are:
 * __`plotGroves`__: scatterplot of groups of trees
 * __`treeVec`__: characterise a tree by a vector
 * __`treeDist`__: find the distance between two tree vectors
-* __`multiDist'__: find the pairwise distances of a list of trees
+* __`multiDist`__: find the pairwise distances of a list of trees
 * __`medTree`__: find geometric median tree(s) to summarise a group of trees
 
 
@@ -109,7 +109,7 @@ The functions __`findGroves`__ and __`plotGroves`__ can be used to identify clus
 woodmiceGroves <- findGroves(woodmiceTrees, nf=2, nclust=6)
 ```
 and plot them:
-```{r plotgroves, fig.width=8, fig.height=8}
+```{r plotgroves, fig.height=8}
 ## plot results on first 2 axes
 PCs <- woodmiceGroves$treescape$pco$li
 s.class(PCs, fac=woodmiceGroves$groups, col=funky(6))
@@ -131,7 +131,7 @@ plot(woodmiceTrees[[woodmiceMed]],type="cladogram",edge.width=3, cex=0.8)
 ```
 
 However, a more complete and accurate summary of the data can be given by finding a summary tree from each cluster. For example, we can isolate the trees from the largest cluster:
-woodmiceDists <- treescape(woodmiceTrees,nf=2)
+
 ```{r woodmiceCluster1}
 wmx <- woodmiceDists$pco$li[,1] # simplifying notation
 wmy <- woodmiceDists$pco$li[,2]
@@ -169,7 +169,7 @@ This is another representative summary tree which is different from those we fou
 treeDist(wmCluster1[[geomMedwm1]],wmCluster2[[geomMedwm2]])
 ```
 
-It differs in the placement of the $(1007S,1208S,0909S)$ clade. Performing this analysis enables the detection of distinct representative trees supported by data.
+It differs in the placement of the **(1007S,1208S,0909S)** clade. Performing this analysis enables the detection of distinct representative trees supported by data.
 
 
 

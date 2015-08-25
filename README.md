@@ -1,7 +1,7 @@
 [![Travis-CI Build Status](https://travis-ci.org/thibautjombart/treescape.png?branch=master)](https://travis-ci.org/thibautjombart/treescape)
 
 
-
+![plot of chunk compileVignette](figure/compileVignette-1.png) 
 
 
 *treescape*: exploration of landscapes of phylogenetic trees
@@ -40,7 +40,7 @@ The main functions implemented in *treescape* are:
 * __`plotGroves`__: scatterplot of groups of trees
 * __`treeVec`__: characterise a tree by a vector
 * __`treeDist`__: find the distance between two tree vectors
-* __`multiDist'__: find the pairwise distances of a list of trees
+* __`multiDist`__: find the pairwise distances of a list of trees
 * __`medTree`__: find geometric median tree(s) to summarise a group of trees
 
 
@@ -137,7 +137,6 @@ plot(woodmiceTrees[[woodmiceMed]],type="cladogram",edge.width=3, cex=0.8)
 ![plot of chunk woodmiceMedian](vignettes/figs/woodmiceMedian-1.png) 
 
 However, a more complete and accurate summary of the data can be given by finding a summary tree from each cluster. For example, we can isolate the trees from the largest cluster:
-woodmiceDists <- treescape(woodmiceTrees,nf=2)
 
 ```r
 wmx <- woodmiceDists$pco$li[,1] # simplifying notation
@@ -192,7 +191,7 @@ treeDist(wmCluster1[[geomMedwm1]],wmCluster2[[geomMedwm2]])
 ## [1] 7.28
 ```
 
-It differs in the placement of the $(1007S,1208S,0909S)$ clade. Performing this analysis enables the detection of distinct representative trees supported by data.
+It differs in the placement of the **(1007S,1208S,0909S)** clade. Performing this analysis enables the detection of distinct representative trees supported by data.
 
 
 
@@ -214,7 +213,7 @@ treeVec(tree)
 ```
 
 ```
-##  [1] 1 0 1 1 1 0 3 2 2 0 0 0 2 2 3 1 1 1 1 1 1
+##  [1] 1 1 0 3 2 2 0 1 1 0 1 1 0 0 2 1 1 1 1 1 1
 ```
 
 ```r
@@ -223,9 +222,9 @@ treeVec(tree,0.5)
 ```
 
 ```
-##  [1] 0.7614 0.0000 0.7614 0.7614 0.7614 0.0000 2.3387 1.5886 1.5886 0.0000
-## [11] 0.0000 0.0000 1.5886 1.5886 2.3208 0.8270 0.5023 0.7366 0.5446 0.6421
-## [21] 0.6306
+##  [1] 0.7374 0.7374 0.0000 2.2222 1.2793 1.5158 0.0000 0.7374 0.7374 0.0000
+## [11] 0.7374 0.7374 0.0000 0.0000 1.2793 0.7313 0.6342 0.5541 0.6723 0.9586
+## [21] 0.7598
 ```
 
 ```r
@@ -236,9 +235,9 @@ vecAsFunction(0.5)
 ```
 
 ```
-##  [1] 0.7614 0.0000 0.7614 0.7614 0.7614 0.0000 2.3387 1.5886 1.5886 0.0000
-## [11] 0.0000 0.0000 1.5886 1.5886 2.3208 0.8270 0.5023 0.7366 0.5446 0.6421
-## [21] 0.6306
+##  [1] 0.7374 0.7374 0.0000 2.2222 1.2793 1.5158 0.0000 0.7374 0.7374 0.0000
+## [11] 0.7374 0.7374 0.0000 0.0000 1.2793 0.7313 0.6342 0.5541 0.6723 0.9586
+## [21] 0.7598
 ```
 
 The metric -- the distance between two trees -- is the Euclidean distance between these vectors:
@@ -257,7 +256,7 @@ treeDist(tree_a,tree_b)
 ```
 
 ```
-## [1] 3.606
+## [1] 4.69
 ```
 
 ```r
@@ -266,6 +265,6 @@ treeDist(tree_a,tree_b,1)
 ```
 
 ```
-## [1] 3.229
+## [1] 3.495
 ```
 
