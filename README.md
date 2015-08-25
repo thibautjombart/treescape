@@ -3,11 +3,6 @@
 
 
 
-  \usepackage[utf8]{inputenc}
----
-
-
-
 
 *treescape*: exploration of landscapes of phylogenetic trees
 =================================================
@@ -122,7 +117,9 @@ PCs <- woodmiceGroves$treescape$pco$li
 s.class(PCs, fac=woodmiceGroves$groups, col=funky(6))
 ```
 
-![plot of chunk plotgroves](vignettes/figs/plotgroves-1.png) 
+```
+## Error in s.class(PCs, fac = woodmiceGroves$groups, col = funky(6)): could not find function "funky"
+```
 
 These functions can be explored dynamically using __`treescapeServer`__, where there are further plotting options, clustering methods and ways to save the results of the analysis.
 
@@ -218,7 +215,7 @@ treeVec(tree)
 ```
 
 ```
-##  [1] 3 1 2 1 0 1 2 1 0 1 2 0 1 0 0 1 1 1 1 1 1
+##  [1] 0 0 0 1 2 2 1 0 0 1 0 0 0 0 1 1 1 1 1 1 1
 ```
 
 ```r
@@ -227,9 +224,9 @@ treeVec(tree,0.5)
 ```
 
 ```
-##  [1] 1.8028 0.5268 1.0436 0.5268 0.0000 0.5268 1.0436 0.5268 0.0000 0.5268
-## [11] 1.2096 0.0000 0.5268 0.0000 0.0000 0.9962 0.6364 0.7569 0.6462 0.6405
-## [21] 0.6635
+##  [1] 0.0000 0.0000 0.0000 0.8334 1.4208 1.1972 0.5742 0.0000 0.0000 0.5742
+## [11] 0.0000 0.0000 0.0000 0.0000 0.8334 0.8949 0.7461 0.9339 0.7425 0.8930
+## [21] 0.9506
 ```
 
 ```r
@@ -240,9 +237,9 @@ vecAsFunction(0.5)
 ```
 
 ```
-##  [1] 1.8028 0.5268 1.0436 0.5268 0.0000 0.5268 1.0436 0.5268 0.0000 0.5268
-## [11] 1.2096 0.0000 0.5268 0.0000 0.0000 0.9962 0.6364 0.7569 0.6462 0.6405
-## [21] 0.6635
+##  [1] 0.0000 0.0000 0.0000 0.8334 1.4208 1.1972 0.5742 0.0000 0.0000 0.5742
+## [11] 0.0000 0.0000 0.0000 0.0000 0.8334 0.8949 0.7461 0.9339 0.7425 0.8930
+## [21] 0.9506
 ```
 
 The metric -- the distance between two trees -- is the Euclidean distance between these vectors:
@@ -261,7 +258,7 @@ treeDist(tree_a,tree_b)
 ```
 
 ```
-## [1] 5.831
+## [1] 4.123
 ```
 
 ```r
@@ -270,6 +267,6 @@ treeDist(tree_a,tree_b,1)
 ```
 
 ```
-## [1] 2.851
+## [1] 2.725
 ```
 

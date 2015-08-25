@@ -1,8 +1,6 @@
 ---
 title: "Exploration of landscapes of phylogenetic trees"
 author: "Thibaut Jombart, Michelle Kendall"
-header-includes:
-   - \usepackage{amsmath}
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
