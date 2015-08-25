@@ -1,7 +1,7 @@
 ---
 title: "Statistical exploration of landscapes of phylogenetic trees"
 author: "Thibaut Jombart, Michelle Kendall"
-date: "2015-08-24"
+date: "2015-08-25"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
