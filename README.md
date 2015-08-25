@@ -1,5 +1,23 @@
 [![Travis-CI Build Status](https://travis-ci.org/thibautjombart/treescape.png?branch=master)](https://travis-ci.org/thibautjombart/treescape)
 
+<style TYPE="text/css">
+code.has-jax {font: inherit; font-size: 100%; background: inherit; border: inherit;}
+</style>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'] // removed 'code' entry
+    }
+});
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
 
 
@@ -213,7 +231,7 @@ treeVec(tree)
 ```
 
 ```
-##  [1] 0 0 0 1 0 2 1 0 1 1 0 1 0 2 0 1 1 1 1 1 1
+##  [1] 1 2 0 0 0 1 0 0 0 0 0 0 1 2 1 1 1 1 1 1 1
 ```
 
 ```r
@@ -222,9 +240,9 @@ treeVec(tree,0.5)
 ```
 
 ```
-##  [1] 0.0000 0.0000 0.0000 0.6003 0.0000 1.7114 0.9103 0.0000 0.9103 0.9103
-## [11] 0.0000 0.9103 0.0000 1.4884 0.0000 0.9360 0.9574 0.9605 0.9645 0.8798
-## [21] 0.5002
+##  [1] 0.6423 1.6058 0.0000 0.0000 0.0000 0.6423 0.0000 0.0000 0.0000 0.0000
+## [11] 0.0000 0.0000 0.7501 1.5922 0.7501 0.8844 0.9326 0.9452 0.8141 0.9660
+## [21] 0.5127
 ```
 
 ```r
@@ -235,9 +253,9 @@ vecAsFunction(0.5)
 ```
 
 ```
-##  [1] 0.0000 0.0000 0.0000 0.6003 0.0000 1.7114 0.9103 0.0000 0.9103 0.9103
-## [11] 0.0000 0.9103 0.0000 1.4884 0.0000 0.9360 0.9574 0.9605 0.9645 0.8798
-## [21] 0.5002
+##  [1] 0.6423 1.6058 0.0000 0.0000 0.0000 0.6423 0.0000 0.0000 0.0000 0.0000
+## [11] 0.0000 0.0000 0.7501 1.5922 0.7501 0.8844 0.9326 0.9452 0.8141 0.9660
+## [21] 0.5127
 ```
 
 The metric -- the distance between two trees -- is the Euclidean distance between these vectors:
@@ -256,7 +274,7 @@ treeDist(tree_a,tree_b)
 ```
 
 ```
-## [1] 6.164
+## [1] 4
 ```
 
 ```r
@@ -265,6 +283,6 @@ treeDist(tree_a,tree_b,1)
 ```
 
 ```
-## [1] 4.585
+## [1] 3.208
 ```
 
