@@ -54,7 +54,7 @@ The main functions implemented in *treescape* are:
 
 
 Distributed datasets include:
-* __`woodmiceTrees`__: 
+* __`woodmiceTrees`__: illustrative set of 201 trees built using the neighbour-joining and bootstrapping example from the *woodmice* dataset in the *ape* documentation.
 
 
 
