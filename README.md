@@ -117,9 +117,7 @@ PCs <- woodmiceGroves$treescape$pco$li
 s.class(PCs, fac=woodmiceGroves$groups, col=funky(6))
 ```
 
-```
-## Error in s.class(PCs, fac = woodmiceGroves$groups, col = funky(6)): could not find function "funky"
-```
+![plot of chunk plotgroves](vignettes/figs/plotgroves-1.png) 
 
 These functions can be explored dynamically using __`treescapeServer`__, where there are further plotting options, clustering methods and ways to save the results of the analysis.
 
@@ -199,11 +197,17 @@ It differs in the placement of the **(1007S,1208S,0909S)** clade. Performing thi
 
 Characterising a tree by a vector
 --------------
-Kendall and Colijn proposed a [metric](http://arxiv.org/abs/1507.05211) for comparing rooted phylogenetic trees. Each tree is characterised by a vector which notes the placement of the most recent common ancestor (MRCA) of each pair of tips. Specifically, it records the distance between the MRCA of a pair of tips $(i,j)$ and the root in two ways: the number of edges $m_{i,j}$, and the path length $M_{i,j}$. It also records the length $p_i$ of each 'pendant' edge between a tip $i$ and its immediate ancestor. This procedure results in two vectors for a tree $T$:
-$$ m(T) = (m_{1,2}, m_{1,3},\dots,m_{k-1,k},\underbrace{1,\dots,1}_{k \text{ times}}), \quad
-M(T) = (M_{1,2}, M_{1,3},\dots,M_{k-1,k},p_1,\dots,p_k). $$
-In $m(T)$ we record the pendant lengths as 1, as each tip is 1 step from its immediate ancestor. 
-We combine $m$ and $M$ with a parameter $\lambda \in [0,1]$ to weight the contribution of branch lengths, characterising each tree with a vector $v_{\lambda}(T) = (1-\lambda)m(T) + \lambda M(T)$.
+Kendall and Colijn proposed a [metric](http://arxiv.org/abs/1507.05211) for comparing rooted phylogenetic trees. Each tree is characterised by a vector which notes the placement of the most recent common ancestor (MRCA) of each pair of tips. Specifically, it records the distance between the MRCA of a pair of tips *(i,j)* and the root in two ways: the number of edges *m(i,j)*, and the path length *M(i,j)*. It also records the length *p(i)* of each 'pendant' edge between a tip *i* and its immediate ancestor. This procedure results in two vectors for a tree *T*:
+
+*m(T) = (m(1,2), m(1,3),...,m(k-1,k),1,...,1)*
+
+and
+
+*M(T) = (M(1,2), M(1,3),...,M(k-1,k),p(1),...,p(k)).*
+
+In *m(T)* we record the pendant lengths as 1, as each tip is 1 step from its immediate ancestor. We combine *m* and *M* with a parameter lambda between zero and one to weight the contribution of branch lengths, characterising each tree with a vector 
+
+*vlambda(T) = (1-lambda)m(T) + lambda M(T)*.
 
 This is implemented as the function __`treeVec`__. For example,
 
@@ -215,7 +219,7 @@ treeVec(tree)
 ```
 
 ```
-##  [1] 0 0 0 1 2 2 1 0 0 1 0 0 0 0 1 1 1 1 1 1 1
+##  [1] 2 1 0 1 2 1 0 1 3 0 2 1 0 0 1 1 1 1 1 1 1
 ```
 
 ```r
@@ -224,9 +228,9 @@ treeVec(tree,0.5)
 ```
 
 ```
-##  [1] 0.0000 0.0000 0.0000 0.8334 1.4208 1.1972 0.5742 0.0000 0.0000 0.5742
-## [11] 0.0000 0.0000 0.0000 0.0000 0.8334 0.8949 0.7461 0.9339 0.7425 0.8930
-## [21] 0.9506
+##  [1] 1.7176 0.9858 0.0000 0.9858 1.7176 0.9858 0.0000 0.9858 2.6490 0.0000
+## [11] 1.7555 0.9858 0.0000 0.0000 0.9858 0.7757 0.9189 0.6671 0.7186 0.7100
+## [21] 0.5646
 ```
 
 ```r
@@ -237,15 +241,15 @@ vecAsFunction(0.5)
 ```
 
 ```
-##  [1] 0.0000 0.0000 0.0000 0.8334 1.4208 1.1972 0.5742 0.0000 0.0000 0.5742
-## [11] 0.0000 0.0000 0.0000 0.0000 0.8334 0.8949 0.7461 0.9339 0.7425 0.8930
-## [21] 0.9506
+##  [1] 1.7176 0.9858 0.0000 0.9858 1.7176 0.9858 0.0000 0.9858 2.6490 0.0000
+## [11] 1.7555 0.9858 0.0000 0.0000 0.9858 0.7757 0.9189 0.6671 0.7186 0.7100
+## [21] 0.5646
 ```
 
 The metric -- the distance between two trees -- is the Euclidean distance between these vectors:
-$$
-d_{\lambda}(T_a, T_b) = \| v_{\lambda}(T_a) - v_{\lambda}(T_b)\|.
-$$
+
+*dlambda(Ta, Tb) = || vlambda(Ta) - vlambda(Tb) ||.*
+
 
 This can be found using __`treeDist`__:
 
@@ -258,7 +262,7 @@ treeDist(tree_a,tree_b)
 ```
 
 ```
-## [1] 4.123
+## [1] 4.69
 ```
 
 ```r
@@ -267,6 +271,6 @@ treeDist(tree_a,tree_b,1)
 ```
 
 ```
-## [1] 2.725
+## [1] 2.885
 ```
 
