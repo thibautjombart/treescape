@@ -207,7 +207,7 @@ and
 
 In *m(T)* we record the pendant lengths as 1, as each tip is 1 step from its immediate ancestor. We combine *m* and *M* with a parameter lambda between zero and one to weight the contribution of branch lengths, characterising each tree with a vector 
 
-*vlambda(T) = (1-lambda)m(T) + lambda M(T)*.
+*v{lambda}(T) = (1-lambda)m(T) + lambda M(T)*.
 
 This is implemented as the function __`treeVec`__. For example,
 
@@ -219,7 +219,7 @@ treeVec(tree)
 ```
 
 ```
-##  [1] 2 1 0 1 2 1 0 1 3 0 2 1 0 0 1 1 1 1 1 1 1
+##  [1] 0 1 1 1 0 0 0 0 1 2 3 0 2 0 0 1 1 1 1 1 1
 ```
 
 ```r
@@ -228,9 +228,9 @@ treeVec(tree,0.5)
 ```
 
 ```
-##  [1] 1.7176 0.9858 0.0000 0.9858 1.7176 0.9858 0.0000 0.9858 2.6490 0.0000
-## [11] 1.7555 0.9858 0.0000 0.0000 0.9858 0.7757 0.9189 0.6671 0.7186 0.7100
-## [21] 0.5646
+##  [1] 0.0000 0.5180 0.5180 0.5180 0.0000 0.0000 0.0000 0.0000 0.6070 1.4826
+## [11] 2.2363 0.0000 1.4826 0.0000 0.0000 0.9053 0.8735 0.7733 0.5783 0.6659
+## [21] 0.5132
 ```
 
 ```r
@@ -241,14 +241,14 @@ vecAsFunction(0.5)
 ```
 
 ```
-##  [1] 1.7176 0.9858 0.0000 0.9858 1.7176 0.9858 0.0000 0.9858 2.6490 0.0000
-## [11] 1.7555 0.9858 0.0000 0.0000 0.9858 0.7757 0.9189 0.6671 0.7186 0.7100
-## [21] 0.5646
+##  [1] 0.0000 0.5180 0.5180 0.5180 0.0000 0.0000 0.0000 0.0000 0.6070 1.4826
+## [11] 2.2363 0.0000 1.4826 0.0000 0.0000 0.9053 0.8735 0.7733 0.5783 0.6659
+## [21] 0.5132
 ```
 
 The metric -- the distance between two trees -- is the Euclidean distance between these vectors:
 
-*dlambda(Ta, Tb) = || vlambda(Ta) - vlambda(Tb) ||.*
+*d{lambda}(Ta, Tb) = || v{lambda}(Ta) - v{lambda}(Tb) ||.*
 
 
 This can be found using __`treeDist`__:
@@ -262,7 +262,7 @@ treeDist(tree_a,tree_b)
 ```
 
 ```
-## [1] 4.69
+## [1] 4.472
 ```
 
 ```r
@@ -271,6 +271,6 @@ treeDist(tree_a,tree_b,1)
 ```
 
 ```
-## [1] 2.885
+## [1] 1.809
 ```
 

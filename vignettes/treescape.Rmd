@@ -185,7 +185,7 @@ and
 
 In *m(T)* we record the pendant lengths as 1, as each tip is 1 step from its immediate ancestor. We combine *m* and *M* with a parameter lambda between zero and one to weight the contribution of branch lengths, characterising each tree with a vector 
 
-*vlambda(T) = (1-lambda)m(T) + lambda M(T)*.
+*v{lambda}(T) = (1-lambda)m(T) + lambda M(T)*.
 
 This is implemented as the function __`treeVec`__. For example,
 ```{r treevec}
@@ -203,7 +203,7 @@ vecAsFunction(0.5)
 
 The metric -- the distance between two trees -- is the Euclidean distance between these vectors:
 
-*dlambda(Ta, Tb) = || vlambda(Ta) - vlambda(Tb) ||.*
+*d{lambda}(Ta, Tb) = || v{lambda}(Ta) - v{lambda}(Tb) ||.*
 
 
 This can be found using __`treeDist`__:
