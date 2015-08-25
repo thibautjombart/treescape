@@ -38,11 +38,6 @@ Then, to load the package, use:
 library("treescape")
 ```
 
-```
-## Loading required package: ape
-## Loading required package: ade4
-```
-
 
 Content overview
 -------------
