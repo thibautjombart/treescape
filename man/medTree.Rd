@@ -38,37 +38,36 @@ mymedian$mindist # the distance of the median tree(s) from the central vector
 \dontrun{
 ## Example with woodmice data:
 data(woodmiceTrees)
-woodmiceMed <- medTree(woodmiceTrees)
+woodmiceMed <- medTree(woodmiceTrees)$median[[1]]
 ## plot the (first) geometric median tree (there are seven topologically identical median trees):
-plot(woodmiceTrees[[woodmiceMed$median[[1]]]])
+plot(woodmiceTrees[[woodmiceMed]],type="cladogram",edge.width=3, cex=0.8)
 
 ## finding the geometric median tree from a single cluster:
-woodmiceDists <- multiDist(woodmiceTrees)
-woodmiceMDS <- dudi.pco(as.dist(woodmiceDists), scannf=FALSE, nf=2)
+woodmiceDists <- treescape(woodmiceTrees,nf=2)
+wmx <- woodmiceDists$pco$li[,1] # simplifying notation
+wmy <- woodmiceDists$pco$li[,2]
 ## isolate the trees from the largest cluster
-woodmiceCluster1 <- woodmiceTrees[intersect(
-   intersect(which(woodmiceMDS$li[,1]>(-2)),which(woodmiceMDS$li[,1]<2)),
-   intersect(which(woodmiceMDS$li[,2]>(-2.5)),which(woodmiceMDS$li[,1]<2.5))
-   )]
+wmCluster1 <- woodmiceTrees[intersect(
+  intersect(which(wmx>(-2)),which(wmx<2)),
+  intersect(which(wmy>(-2.5)),which(wmy<2.5))
+  )]
 ## find the geometric median
-geomMedWoodmice1 <- medTree(woodmiceCluster1)
-plot(woodmiceCluster1[[geomMedWoodmice1$median[[1]]]])
-# this has the same topology as the overall median tree:
-treeDist(woodmiceTrees[[woodmiceMed$median[[1]]]],
-  woodmiceCluster1[[geomMedWoodmice1$median[[1]]]])
+geomMedwm1 <- medTree(wmCluster1)$median[[1]]
+plot(wmCluster1[[geomMedwm1]],type="cladogram",edge.width=3, cex=0.8)
+# this is identical to the overall median tree:
+treeDist(woodmiceTrees[[woodmiceMed]],wmCluster1[[geomMedwm1]],1)
 
 ## However, median trees from other clusters have different topologies, for example:
 ## isolate the trees from the second largest cluster:
-woodmiceCluster2 <- woodmiceTrees[intersect(
- intersect(which(woodmiceMDS$li[,1]>(-1)),which(woodmiceMDS$li[,1]<8)),
- intersect(which(woodmiceMDS$li[,2]>1),which(woodmiceMDS$li[,1]<6))
-)]
+wmCluster2 <- woodmiceTrees[intersect(
+ intersect(which(wmx>(-1)),which(wmx<8)),
+ intersect(which(wmy>1),which(wmy<6))
+ )]
 ## find the geometric median
-geomMedWoodmice2 <- medTree(woodmiceCluster2)
-plot(woodmiceCluster2[[geomMedWoodmice2$median[[1]]]])
-## This is another representative topology, which is different from those we found above:
-treeDist(woodmiceCluster2[[geomMedWoodmice2$median[[1]]]],
-  woodmiceCluster2[[geomMedWoodmice2$median[[1]]]])
+geomMedwm2 <- medTree(wmCluster2)$median[[1]]
+plot(wmCluster2[[geomMedwm2]],type="cladogram",edge.width=3, cex=0.8)
+## This is another representative summary tree which is different from those we found above:
+treeDist(wmCluster1[[geomMedwm1]],wmCluster2[[geomMedwm2]])
 }
 }
 \author{

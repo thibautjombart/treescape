@@ -16,7 +16,7 @@ treescape(x, method = treeVec, nf = NULL, ...)
 \item{...}{further arguments to be passed to \code{method}}
 }
 \description{
-This functions are under development. Please do not use them without contacting the author first.
+Compares phylogenetic trees and maps them into a small number of dimensions for easy visualisation and identification of clusters.
 }
 \examples{
 ## generate list of trees
@@ -27,8 +27,26 @@ names(x) <- paste("tree", 1:10, sep = "")
 res <- treescape(x, nf=3)
 table.paint(as.matrix(res$D))
 scatter(res$pco)
+
+data(woodmiceTrees)
+woodmiceDists <- treescape(woodmiceTrees,nf=3)
+plot(woodmiceDists$pco$li[,1],woodmiceDists$pco$li[,2])
+woodmicedf <- woodmiceDists$pco$li
+if(require(ggplot2)){
+woodmiceplot <- ggplot(woodmicedf, aes(x=A1, y=A2)) # create plot
+woodmiceplot + geom_density2d(colour="gray80") + # contour lines
+geom_point(size=6, shape=1, colour="gray50") + # grey edges
+geom_point(size=6, alpha=0.2, colour="navy") + # transparent blue points
+xlab("") + ylab("") + theme_bw(base_family="") # remove axis labels and grey background
+}
+\dontrun{
+if(require(rgl)){
+plot3d(woodmiceDists$pco$li[,1], woodmiceDists$pco$li[,2], woodmiceDists$pco$li[,3], type="s", size=1.5,
+col="navy", alpha=0.5, xlab="", ylab="", zlab="")
+}
+}
 }
 \author{
-Thibaut Jombart \email{thibautjombart@gmail.com}, Michelle Kendall \email{michelle.louise.kendall@gmail.com}, Caroline Colijn \email{c.colijn@imperial.ac.uk}
+Thibaut Jombart \email{thibautjombart@gmail.com}, Michelle Kendall \email{michelle.louise.kendall@gmail.com}
 }
 

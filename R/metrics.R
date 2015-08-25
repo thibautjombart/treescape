@@ -93,7 +93,7 @@ penEdgeTreematch <- compiler::cmpfun(penEdgeTreematch)
 
 #' Tree vector function
 #'
-#' Function which takes an object of class phylo as input and outputs the vector for the metric.
+#' Function which takes an object of class phylo as input and outputs the vector for the Kendall Colijn metric.
 #' The elements of the vector are numeric if \code{return_lambda_function=FALSE} (default),
 #' and otherwise they are functions of lambda.
 #'
@@ -121,9 +121,9 @@ penEdgeTreematch <- compiler::cmpfun(penEdgeTreematch)
 #' ## vector of mrca distances from root when lambda=0.5:
 #' treeVec(tree,0.5)
 #' ## vector of mrca distances as a function of lambda:
-#' vec.func <- treeVec(tree,return_lambda_function=TRUE)
+#' vecAsFunction <- treeVec(tree,return_lambda_function=TRUE)
 #' ## evaluate the vector at lambda=0.5:
-#' vec.func(0.5)
+#' vecAsFunction(0.5)
 #'
 treeVec <- function(tree, lambda=0, return_lambda_function=F) {
   if(lambda<0 || lambda>1) stop("Pick lambda in [0,1]")
@@ -258,7 +258,6 @@ treeVec <- function(tree, lambda=0, return_lambda_function=F) {
       return(l * length_root_distances + (1-l) * topological_root_distances) })
   }
 }
-#treeVec <- compiler::cmpfun(treeVec)
 
 
 
@@ -317,7 +316,7 @@ treeDist <- function(tree_a, tree_b, lambda=0, return_lambda_function=F) {
 
 #' Metric function for \code{multiPhylo} input
 #'
-#' Comparison of a list of trees using the Kendall Colijn metric. Output is given as a pairwise distance matrix.
+#' Comparison of a list of trees using the Kendall Colijn metric. Output is given as a pairwise distance matrix. This is equivalent to the \code{$D} output from \code{treescape} but may be preferable for large datasets, and when principal co-ordinate analysis is not required. It includes an option to save memory at the expense of computation time.
 #'
 #' @export
 #'
@@ -349,51 +348,9 @@ treeDist <- function(tree_a, tree_b, lambda=0, return_lambda_function=F) {
 #' ## evaluate at lambda=0. Equivalent to multiDist(trees).
 #' m0 <- m(0)
 #'
-#' ## A method to visualise these distances with MDS:
-#' require(ade4)
+#' ## save memory by recomputing each tree vector for each pairwise tree comparison (for fixed lambda):
+#' m0.5 <- multiDist(trees,0.5,save_memory=TRUE)
 #'
-#' ## find an optimum projection of the points in 2 dimensions:
-#' mMDS <- dudi.pco(as.dist(m0), scannf=FALSE,nf=2)
-#'
-#' ## put the coordinates of these points into a data frame
-#' mdf <-mMDS$li
-#'
-#' ## basic ade4 plot
-#' s.label(mdf)
-#'
-#' ## ggplot2 version
-#' if(require(ggplot2) && require(RColorBrewer)){
-#' mplot <- ggplot(mdf, aes(x=A1, y=A2))
-#'
-#' mpalette <- brewer.pal(10,"Paired") # create colour palette
-#'
-#' mplot + geom_point(colour=mpalette,size=5) +
-#'   xlab("") + ylab("") + theme_bw(base_family = "")
-#' }
-#'
-#'
-#' ## An example using data:
-#' ## These woodmice phylogenies were created using the bootstrapping example in package \code{ape}
-#' data(woodmiceTrees)
-#' woodmiceDists <- multiDist(woodmiceTrees) # find topological distances
-#' woodmiceMDS <- dudi.pco(as.dist(woodmiceDists), scannf=FALSE, nf=2)
-#' woodmicedf <- woodmiceMDS$li
-#'
-#' if(require(ggplot2)){
-#' woodmiceplot <- ggplot(woodmicedf, aes(x=A1, y=A2)) # create plot
-#' woodmiceplot + geom_density2d(colour="gray80") + # contour lines
-#'  geom_point(size=6, shape=1, colour="gray50") + # grey edges
-#'  geom_point(size=6, alpha=0.2, colour="navy") + # transparent blue points
-#'  xlab("") + ylab("") + theme_bw(base_family="") # remove axis labels and grey background
-#' }
-#'
-#' \dontrun{
-#' if(require(rgl)){
-#' woodmiceMDS3D <- dudi.pco(as.dist(woodmiceDists), scannf=FALSE, nf=3)
-#' plot3d(woodmiceMDS3D$li[,1], woodmiceMDS3D$li[,2], woodmiceMDS3D$li[,3], type="s", size=1.5,
-#'    col="navy", alpha=0.5, xlab="", ylab="", zlab="")
-#' }
-#' }
 multiDist <- function(trees, lambda=0, return_lambda_function=F, save_memory=F) {
 
   num_trees <- length(trees)
@@ -486,37 +443,36 @@ multiDist <- function(trees, lambda=0, return_lambda_function=F, save_memory=F) 
 #' \dontrun{
 #' ## Example with woodmice data:
 #' data(woodmiceTrees)
-#' woodmiceMed <- medTree(woodmiceTrees)
+#' woodmiceMed <- medTree(woodmiceTrees)$median[[1]]
 #' ## plot the (first) geometric median tree (there are seven topologically identical median trees):
-#' plot(woodmiceTrees[[woodmiceMed$median[[1]]]])
+#' plot(woodmiceTrees[[woodmiceMed]],type="cladogram",edge.width=3, cex=0.8)
 #'
 #' ## finding the geometric median tree from a single cluster:
-#' woodmiceDists <- multiDist(woodmiceTrees)
-#' woodmiceMDS <- dudi.pco(as.dist(woodmiceDists), scannf=FALSE, nf=2)
+#' woodmiceDists <- treescape(woodmiceTrees,nf=2)
+#' wmx <- woodmiceDists$pco$li[,1] # simplifying notation
+#' wmy <- woodmiceDists$pco$li[,2]
 #' ## isolate the trees from the largest cluster
-#' woodmiceCluster1 <- woodmiceTrees[intersect(
-#'    intersect(which(woodmiceMDS$li[,1]>(-2)),which(woodmiceMDS$li[,1]<2)),
-#'    intersect(which(woodmiceMDS$li[,2]>(-2.5)),which(woodmiceMDS$li[,1]<2.5))
-#'    )]
+#' wmCluster1 <- woodmiceTrees[intersect(
+#'   intersect(which(wmx>(-2)),which(wmx<2)),
+#'   intersect(which(wmy>(-2.5)),which(wmy<2.5))
+#'   )]
 #' ## find the geometric median
-#' geomMedWoodmice1 <- medTree(woodmiceCluster1)
-#' plot(woodmiceCluster1[[geomMedWoodmice1$median[[1]]]])
-#' # this has the same topology as the overall median tree:
-#' treeDist(woodmiceTrees[[woodmiceMed$median[[1]]]],
-#'   woodmiceCluster1[[geomMedWoodmice1$median[[1]]]])
+#' geomMedwm1 <- medTree(wmCluster1)$median[[1]]
+#' plot(wmCluster1[[geomMedwm1]],type="cladogram",edge.width=3, cex=0.8)
+#' # this is identical to the overall median tree:
+#' treeDist(woodmiceTrees[[woodmiceMed]],wmCluster1[[geomMedwm1]],1)
 #'
 #' ## However, median trees from other clusters have different topologies, for example:
 #' ## isolate the trees from the second largest cluster:
-#' woodmiceCluster2 <- woodmiceTrees[intersect(
-#'  intersect(which(woodmiceMDS$li[,1]>(-1)),which(woodmiceMDS$li[,1]<8)),
-#'  intersect(which(woodmiceMDS$li[,2]>1),which(woodmiceMDS$li[,1]<6))
-#' )]
+#' wmCluster2 <- woodmiceTrees[intersect(
+#'  intersect(which(wmx>(-1)),which(wmx<8)),
+#'  intersect(which(wmy>1),which(wmy<6))
+#'  )]
 #' ## find the geometric median
-#' geomMedWoodmice2 <- medTree(woodmiceCluster2)
-#' plot(woodmiceCluster2[[geomMedWoodmice2$median[[1]]]])
-#' ## This is another representative topology, which is different from those we found above:
-#' treeDist(woodmiceCluster2[[geomMedWoodmice2$median[[1]]]],
-#'   woodmiceCluster2[[geomMedWoodmice2$median[[1]]]])
+#' geomMedwm2 <- medTree(wmCluster2)$median[[1]]
+#' plot(wmCluster2[[geomMedwm2]],type="cladogram",edge.width=3, cex=0.8)
+#' ## This is another representative summary tree which is different from those we found above:
+#' treeDist(wmCluster1[[geomMedwm1]],wmCluster2[[geomMedwm2]])
 #' }
 medTree <- function(trees, lambda=0, weights=rep(1,length(trees)), return_lambda_function=F, save_memory=F) {
 

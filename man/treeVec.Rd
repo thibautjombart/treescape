@@ -17,7 +17,7 @@ treeVec(tree, lambda = 0, return_lambda_function = F)
 The vector with the metric values or a function that produces the vector given a value of lambda.
 }
 \description{
-Function which takes an object of class phylo as input and outputs the vector for the metric.
+Function which takes an object of class phylo as input and outputs the vector for the Kendall Colijn metric.
 The elements of the vector are numeric if \code{return_lambda_function=FALSE} (default),
 and otherwise they are functions of lambda.
 }
@@ -29,9 +29,9 @@ treeVec(tree)
 ## vector of mrca distances from root when lambda=0.5:
 treeVec(tree,0.5)
 ## vector of mrca distances as a function of lambda:
-vec.func <- treeVec(tree,return_lambda_function=TRUE)
+vecAsFunction <- treeVec(tree,return_lambda_function=TRUE)
 ## evaluate the vector at lambda=0.5:
-vec.func(0.5)
+vecAsFunction(0.5)
 }
 \author{
 Jacob Almagro-Garcia \email{nativecoder@gmail.com}

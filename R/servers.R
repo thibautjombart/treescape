@@ -1,7 +1,7 @@
 #'
 #' Web-based tree explorer
 #'
-#' This function opens up an application in a web browser for an interactive exploration of the diversity in a set of trees. This function is under development. Please do not use without contacting the author.
+#' This function opens up an application in a web browser for an interactive exploration of the diversity in a set of trees. 
 #'
 #' @author Thibaut Jombart \email{thibautjombart@@gmail.com}
 #'

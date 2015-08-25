@@ -39,6 +39,11 @@ test_that("treeDist equals Euclidean distance between corresponding vectors", {
 test_that("treeDist equals corresponding entry of multiDist", {
   expect_equal(treeDist(trees[[1]],trees[[2]]), multiDist(trees)[[1]])
   })
+  
+test_that("multiDist equals the distance matrix from treescape", {
+  treedistMatrix <- treescape(trees,nf=2)$D
+  expect_equal(multiDist(trees)[[n]],treedistMatrix[[n]])
+  })
 
 test_that("medTree results are consistent with treeVec", {
   geom <- medTree(trees)

@@ -20,7 +20,7 @@ This function returns the matrix of metric values for the given lambda.}
 The distance matrix or a function that produces the distance matrix given a value for lambda.
 }
 \description{
-Comparison of a list of trees using the Kendall Colijn metric. Output is given as a pairwise distance matrix.
+Comparison of a list of trees using the Kendall Colijn metric. Output is given as a pairwise distance matrix. This is equivalent to the \code{$D} output from \code{treescape} but may be preferable for large datasets, and when principal co-ordinate analysis is not required. It includes an option to save memory at the expense of computation time.
 }
 \examples{
 ## generate 10 random trees, each with 6 tips
@@ -35,51 +35,8 @@ m <- multiDist(trees, return_lambda_function=TRUE)
 ## evaluate at lambda=0. Equivalent to multiDist(trees).
 m0 <- m(0)
 
-## A method to visualise these distances with MDS:
-require(ade4)
-
-## find an optimum projection of the points in 2 dimensions:
-mMDS <- dudi.pco(as.dist(m0), scannf=FALSE,nf=2)
-
-## put the coordinates of these points into a data frame
-mdf <-mMDS$li
-
-## basic ade4 plot
-s.label(mdf)
-
-## ggplot2 version
-if(require(ggplot2) && require(RColorBrewer)){
-mplot <- ggplot(mdf, aes(x=A1, y=A2))
-
-mpalette <- brewer.pal(10,"Paired") # create colour palette
-
-mplot + geom_point(colour=mpalette,size=5) +
-  xlab("") + ylab("") + theme_bw(base_family = "")
-}
-
-
-## An example using data:
-## These woodmice phylogenies were created using the bootstrapping example in package \\code{ape}
-data(woodmiceTrees)
-woodmiceDists <- multiDist(woodmiceTrees) # find topological distances
-woodmiceMDS <- dudi.pco(as.dist(woodmiceDists), scannf=FALSE, nf=2)
-woodmicedf <- woodmiceMDS$li
-
-if(require(ggplot2)){
-woodmiceplot <- ggplot(woodmicedf, aes(x=A1, y=A2)) # create plot
-woodmiceplot + geom_density2d(colour="gray80") + # contour lines
- geom_point(size=6, shape=1, colour="gray50") + # grey edges
- geom_point(size=6, alpha=0.2, colour="navy") + # transparent blue points
- xlab("") + ylab("") + theme_bw(base_family="") # remove axis labels and grey background
-}
-
-\dontrun{
-if(require(rgl)){
-woodmiceMDS3D <- dudi.pco(as.dist(woodmiceDists), scannf=FALSE, nf=3)
-plot3d(woodmiceMDS3D$li[,1], woodmiceMDS3D$li[,2], woodmiceMDS3D$li[,3], type="s", size=1.5,
-   col="navy", alpha=0.5, xlab="", ylab="", zlab="")
-}
-}
+## save memory by recomputing each tree vector for each pairwise tree comparison (for fixed lambda):
+m0.5 <- multiDist(trees,0.5,save_memory=TRUE)
 }
 \author{
 Jacob Almagro-Garcia \email{nativecoder@gmail.com}
