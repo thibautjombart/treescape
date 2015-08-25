@@ -40,7 +40,7 @@
 #' }
 #' \dontrun{
 #' if(require(rgl)){
-#' plot3d(woodmiceDists$pco$li[,1], woodmiceDists$pco$li[,2], woodmiceDists$pco$li[,3], type="s", size=1.5,
+#' plot3d(woodmicedf[,1], woodmicedf[,2], woodmicedf[,3], type="s", size=1.5,
 #' col="navy", alpha=0.5, xlab="", ylab="", zlab="")
 #' }
 #' }
