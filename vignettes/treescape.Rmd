@@ -7,6 +7,7 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteIndexEntry{treescape: exploration of landscapes of phylogenetic trees}
   \usepackage[utf8]{inputenc}
+  \usepackage{amsmath}
 ---
 
 
