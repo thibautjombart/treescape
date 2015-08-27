@@ -31,7 +31,7 @@ Finds the geometric median of a set of trees according to the Kendall Colijn met
 ## EXAMPLE WITH WOODMICE DATA
 data(woodmiceTrees)
 
-## LOOKING FOR A SINGLE MEDIA
+## LOOKING FOR A SINGLE MEDIAN
 ## get median tree(s)
 res <- medTree(woodmiceTrees)
 res
