@@ -12,7 +12,7 @@ vignette: >
 
 ```{r setup, echo=FALSE}
 # set global chunk options: images will be 7x5 inches
-knitr::opts_chunk$set(dpi=200, out.width="800px", fig.path="figs/")
+knitr::opts_chunk$set(dpi=200, out.width="400px", fig.path="figs/")
 options(digits = 4)
 ```
 
