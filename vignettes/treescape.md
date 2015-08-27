@@ -306,9 +306,8 @@ plotGroves(wm.groves, xax=2, yax=3)
 <img src="figs/plotgroves-3.png" title="plot of chunk plotgroves" alt="plot of chunk plotgroves" width="400px" />
 
 
-## customize graphics
-
 ```r
+## customize graphics
 plotGroves(wm.groves, bg="black", col.pal=lightseasun, lab.show=TRUE, lab.col="white", lab.cex=1.5)
 ```
 

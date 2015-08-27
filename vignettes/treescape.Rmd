@@ -179,9 +179,8 @@ plotGroves(wm.groves, type="ellipse")
 plotGroves(wm.groves, xax=2, yax=3)
 ```
 
-
-## customize graphics
 ```{r plotgroves2, fig.keep="last"}
+## customize graphics
 plotGroves(wm.groves, bg="black", col.pal=lightseasun, lab.show=TRUE, lab.col="white", lab.cex=1.5)
 
 ```
