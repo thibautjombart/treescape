@@ -4,17 +4,18 @@
 \alias{multiDist}
 \title{Metric function for \code{multiPhylo} input}
 \usage{
-multiDist(trees, lambda = 0, return_lambda_function = F, save_memory = F)
+multiDist(trees, lambda = 0, return.lambda.function = FALSE,
+  save.memory = FALSE)
 }
 \arguments{
 \item{trees}{an object of the class \code{multiPhylo} containing the trees to be compared}
 
-\item{lambda}{a number in [0,1] which specifies the extent to which topology (default, with lambda=0)  or branch lengths (lambda=1) are emphasised. This argument is ignored if \code{return_lambda_function=TRUE}.}
+\item{lambda}{a number in [0,1] which specifies the extent to which topology (default, with lambda=0)  or branch lengths (lambda=1) are emphasised. This argument is ignored if \code{return.lambda.function=TRUE}.}
 
-\item{return_lambda_function}{If true, a function that can be invoked with different lambda values is returned.
+\item{return.lambda.function}{If true, a function that can be invoked with different lambda values is returned.
 This function returns the matrix of metric values for the given lambda.}
 
-\item{save_memory}{A flag that saves a lot of memory but increases the execution time (not compatible with return_lambda_function=TRUE).}
+\item{save.memory}{A flag that saves a lot of memory but increases the execution time (not compatible with return.lambda.function=TRUE).}
 }
 \value{
 The distance matrix or a function that produces the distance matrix given a value for lambda.
@@ -30,13 +31,13 @@ trees <- rmtree(10,6)
 multiDist(trees)
 
 ## pairwise distance matrix as a function of lambda:
-m <- multiDist(trees, return_lambda_function=TRUE)
+m <- multiDist(trees, return.lambda.function=TRUE)
 
 ## evaluate at lambda=0. Equivalent to multiDist(trees).
 m0 <- m(0)
 
 ## save memory by recomputing each tree vector for each pairwise tree comparison (for fixed lambda):
-m0.5 <- multiDist(trees,0.5,save_memory=TRUE)
+m0.5 <- multiDist(trees,0.5,save.memory=TRUE)
 }
 \author{
 Jacob Almagro-Garcia \email{nativecoder@gmail.com}

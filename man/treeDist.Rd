@@ -4,16 +4,16 @@
 \alias{treeDist}
 \title{Metric function}
 \usage{
-treeDist(tree_a, tree_b, lambda = 0, return_lambda_function = F)
+treeDist(tree.a, tree.b, lambda = 0, return.lambda.function = FALSE)
 }
 \arguments{
-\item{tree_a}{an object of the class \code{phylo}}
+\item{tree.a}{an object of the class \code{phylo}}
 
-\item{tree_b}{an object of the class \code{phylo} (with the same tip labels as tree_a)}
+\item{tree.b}{an object of the class \code{phylo} (with the same tip labels as tree.a)}
 
 \item{lambda}{a number in [0,1] which specifies the extent to which topology (default, with lambda=0)  or branch lengths (lambda=1) are emphasised. This argument is ignored if \code{type="function"}.}
 
-\item{return_lambda_function}{If true, a function that can be invoked with different lambda values is returned.
+\item{return.lambda.function}{If true, a function that can be invoked with different lambda values is returned.
 This function returns the vector of metric values for the given lambda.}
 }
 \value{
@@ -24,12 +24,12 @@ Comparison of two trees using the Kendall Colijn metric
 }
 \examples{
 ## generate random trees
-tree_a <- rtree(6)
-tree_b <- rtree(6)
-treeDist(tree_a,tree_b) # lambda=0
-treeDist(tree_a,tree_b,1)  # lambda=1
-dist.func <- treeDist(tree_a,tree_b,return_lambda_function=TRUE) # distance as a function of lambda
-dist.func(0) # evaluate at lambda=0. Equivalent to treeDist(tree_a,tree_b).
+tree.a <- rtree(6)
+tree.b <- rtree(6)
+treeDist(tree.a,tree.b) # lambda=0
+treeDist(tree.a,tree.b,1)  # lambda=1
+dist.func <- treeDist(tree.a,tree.b,return.lambda.function=TRUE) # distance as a function of lambda
+dist.func(0) # evaluate at lambda=0. Equivalent to treeDist(tree.a,tree.b).
 ## We can see how the distance changes when moving from focusing on topology to length:
 plot(sapply(seq(0,1,length.out=100), function(x) dist.func(x)), type="l",ylab="",xlab="")
 }
