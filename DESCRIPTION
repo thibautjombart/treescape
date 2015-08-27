@@ -14,4 +14,4 @@ Suggests: RColorBrewer, ggplot2, rgl,
     testthat
 License: GPL (>=2)
 LazyData: true
-Collate: RcppExports.R metrics.R treescape.R findGroves.R plotGroves.R servers.R
+Collate: RcppExports.R metrics.R medTree.R treescape.R findGroves.R plotGroves.R servers.R
