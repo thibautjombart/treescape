@@ -28,18 +28,10 @@ A list with the median metric vector, distances, indices of the tree(s) that are
 Finds the geometric median of a set of trees according to the Kendall Colijn metric.
 }
 \examples{
-## generate 10 random trees, each with 6 tips
-trees <- rmtree(10,6)
-## Geometric median tree:
-mymedian <- medTree(trees)
-mymedian$centre # the vector at the 'centre' of the trees; may not correspond to an actual tree
-mymedian$trees # the tree(s) closest to the central vector (multiPhylo object)
-mymedian$mindist # the distance of the median tree(s) from the central vector
-
-\dontrun{
-## Example with woodmice data
+## EXAMPLE WITH WOODMICE DATA
 data(woodmiceTrees)
 
+## LOOKING FOR A SINGLE MEDIA
 ## get median tree(s)
 res <- medTree(woodmiceTrees)
 res
@@ -48,36 +40,22 @@ res
 med.tree <- res$trees[[1]]
 plot(med.tree)
 
-## plot the (first) geometric median tree (there are seven topologically identical median trees):
-plot(woodmiceTrees[[woodmiceMed]],type="cladogram",edge.width=3, cex=0.8)
+## LOOKING FOR MEDIANS IN SEVERAL CLUSTERS
+## identify 6 clusters
+groves <- findGroves(woodmiceTrees, nf=3, nclust=6)
 
-## finding the geometric median tree from a single cluster:
-woodmiceDists <- treescape(woodmiceTrees,nf=2)
-wmx <- woodmiceDists$pco$li[,1] # simplifying notation
-wmy <- woodmiceDists$pco$li[,2]
-## isolate the trees from the largest cluster
-wmCluster1 <- woodmiceTrees[intersect(
-  intersect(which(wmx>(-2)),which(wmx<2)),
-  intersect(which(wmy>(-2.5)),which(wmy<2.5))
-  )]
-## find the geometric median
-geomMedwm1 <- medTree(wmCluster1)$trees[[1]]
-plot(wmCluster1[[geomMedwm1]],type="cladogram",edge.width=3, cex=0.8)
-# this is identical to the overall median tree:
-treeDist(woodmiceTrees[[woodmiceMed]],wmCluster1[[geomMedwm1]],1)
+## find median trees
+res.with.grp <- medTree(woodmiceTrees, groves$groups)
 
-## However, median trees from other clusters have different topologies, for example:
-## isolate the trees from the second largest cluster:
-wmCluster2 <- woodmiceTrees[intersect(
- intersect(which(wmx>(-1)),which(wmx<8)),
- intersect(which(wmy>1),which(wmy<6))
- )]
-## find the geometric median
-geomMedwm2 <- medTree(wmCluster2)$trees[[1]]
-plot(wmCluster2[[geomMedwm2]],type="cladogram",edge.width=3, cex=0.8)
-## This is another representative summary tree which is different from those we found above:
-treeDist(wmCluster1[[geomMedwm1]],wmCluster2[[geomMedwm2]])
-}
+## there isone output per cluster
+names(res.with.grp)
+
+## get the first median of each
+med.trees <- lapply(res.with.grp, function(e) ladderize(e$trees[[1]]))
+
+## plot trees
+par(mfrow=c(2,3))
+for(i in 1:length(med.trees)) plot(med.trees[[i]], main=paste("cluster",i))
 }
 \author{
 Jacob Almagro-Garcia \email{nativecoder@gmail.com}
