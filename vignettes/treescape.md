@@ -309,14 +309,13 @@ plotGroves(wm.groves, type="ellipse")
 plotGroves(wm.groves, xax=2, yax=3)
 ```
 
-<img src="figs/plotgroves-3.png" title="plot of chunk plotgroves" alt="plot of chunk plotgroves" width="400px" />
+<img src="figs/plotgroves2-1.png" title="plot of chunk plotgroves2" alt="plot of chunk plotgroves2" width="400px" />
 
-```r
+
 ## customize graphics
 plotGroves(wm.groves, bg="black", col.pal=lightseasun, lab.show=TRUE, lab.col="white", lab.cex=1.5)
-```
 
-<img src="figs/plotgroves-4.png" title="plot of chunk plotgroves" alt="plot of chunk plotgroves" width="400px" /><img src="figs/plotgroves-5.png" title="plot of chunk plotgroves" alt="plot of chunk plotgroves" width="400px" />
+```
 
 
 
@@ -377,7 +376,7 @@ par(mfrow=c(2,3))
 for(i in 1:length(med.trees)) plot(med.trees[[i]], main=paste("cluster",i))
 ```
 
-<img src="figs/woodmiceCluster1-1.png" title="plot of chunk woodmiceCluster1" alt="plot of chunk woodmiceCluster1" width="400px" />
+<img src="figs/woodmiceCluster1-1.png" title="plot of chunk woodmiceCluster1" alt="plot of chunk woodmiceCluster1" width="600px" />
 
 These trees exhibit a number of topological differences, e.g. in the placement of the **(1007S,1208S,0909S)** clade. 
 Performing this analysis enables the detection of distinct representative trees supported by data.
@@ -408,7 +407,7 @@ treeVec(tree)
 ```
 
 ```
-##  [1] 1 1 1 0 0 2 3 0 0 2 0 0 0 0 1 1 1 1 1 1 1
+##  [1] 1 1 0 2 0 2 0 1 0 0 1 0 0 1 0 1 1 1 1 1 1
 ```
 
 ```r
@@ -417,9 +416,9 @@ treeVec(tree,0.5)
 ```
 
 ```
-##  [1] 0.7473 0.7473 0.7473 0.0000 0.0000 1.3366 2.2140 0.0000 0.0000 1.3366
-## [11] 0.0000 0.0000 0.0000 0.0000 0.8248 0.5023 0.6922 0.7611 0.9299 0.9121
-## [21] 0.9191
+##  [1] 0.6775 0.6775 0.0000 1.3465 0.0000 1.3670 0.0000 0.6775 0.0000 0.0000
+## [11] 0.6775 0.0000 0.0000 0.9442 0.0000 0.6646 0.8074 0.7531 0.5180 0.7866
+## [21] 0.5690
 ```
 
 ```r
@@ -430,9 +429,9 @@ vecAsFunction(0.5)
 ```
 
 ```
-##  [1] 0.7473 0.7473 0.7473 0.0000 0.0000 1.3366 2.2140 0.0000 0.0000 1.3366
-## [11] 0.0000 0.0000 0.0000 0.0000 0.8248 0.5023 0.6922 0.7611 0.9299 0.9121
-## [21] 0.9191
+##  [1] 0.6775 0.6775 0.0000 1.3465 0.0000 1.3670 0.0000 0.6775 0.0000 0.0000
+## [11] 0.6775 0.0000 0.0000 0.9442 0.0000 0.6646 0.8074 0.7531 0.5180 0.7866
+## [21] 0.5690
 ```
 
 The metric -- the distance between two trees -- is the Euclidean distance between these vectors:
@@ -452,7 +451,7 @@ treeDist(tree_a,tree_b)
 ```
 
 ```
-## [1] 5.196
+## [1] 5.477
 ```
 
 ```r
@@ -461,7 +460,7 @@ treeDist(tree_a,tree_b,1)
 ```
 
 ```
-## [1] 2.197
+## [1] 3.149
 ```
 
 

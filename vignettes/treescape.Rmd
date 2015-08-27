@@ -170,15 +170,18 @@ names(wm.groves)
 Note that when the number of clusters (`nclust`) is not provided, the function will display a dendrogram and ask for a cut-off height. 
 
 The results can be plotted directly using `plotGroves` (see `?plotGroves` for options):
-```{r plotgroves, fig.height=8}
+```{r plotgroves}
 ## basic plot
 plotGroves(wm.groves)
 
 ## alternative with inertia ellipses
 plotGroves(wm.groves, type="ellipse")
 
+```{r plotgroves2, fig.keep="last"}
 ## plot axes 2-3
 plotGroves(wm.groves, xax=2, yax=3)
+```
+
 
 ## customize graphics
 plotGroves(wm.groves, bg="black", col.pal=lightseasun, lab.show=TRUE, lab.col="white", lab.cex=1.5)
@@ -216,7 +219,7 @@ plot(tre,type="cladogram",edge.width=3, cex=0.8)
 
 However, a more complete and accurate summary of the data can be given by finding a summary tree from each cluster.
 This is achieved using the `groups` argument of `medTree`:
-```{r woodmiceCluster1}
+```{r woodmiceCluster1, out.width="600px"}
 ## identify 6 clusters
 groves <- findGroves(woodmiceTrees, nf=3, nclust=6)
 
