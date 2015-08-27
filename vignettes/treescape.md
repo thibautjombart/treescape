@@ -71,9 +71,11 @@ library("adegraphics")
 library("ggplot2")
 ```
 
-The function `treescape` defines typologies of phylogenetic trees using a two-steps approach:
-1. perform pairwise comparisons of trees using various (Euclidean) metrics; by default, comparison uses the Kendall and Colijn metric (Kendall & Colijn, 2015) which is described in more detail below; other metrics rely on tips distances implemented in *adephylo* (Jombart *et al.* 2010).
-2. use Metric Multidimensional Scaling (MDS, aka Principal Coordinates Analysis, PCoA) to summarise pairwise distances between the trees as well as possible into a few dimensions; output of MDS is typically visualised using scatterplots of the first few Principal Components (PCs); this step relies on the PCoA implemented in *ade4* (Dray & Dufour 2007).
+The function `treescape` defines typologies of phylogenetic trees using a two-step approach:
+
+1. perform pairwise comparisons of trees using various (Euclidean) metrics; by default, the comparison uses the Kendall and Colijn metric (Kendall & Colijn, 2015) which is described in more detail below; other metrics rely on tips distances implemented in *adephylo* (Jombart *et al.* 2010).
+
+2. use Metric Multidimensional Scaling (MDS, aka Principal Coordinates Analysis, PCoA) to summarise pairwise distances between the trees as well as possible into a few dimensions; the output of the MDS is typically visualised using scatterplots of the first few Principal Components (PCs); this step relies on the PCoA implemented in *ade4* (Dray & Dufour 2007).
 
 The function `treescape` performs both tasks, returning both the matrix of pairwise tree comparisons (`$D`), and the PCoA (`$pco`).
 This can be illustrated using randomly generated trees:
@@ -167,7 +169,7 @@ plotGroves(res$pco, lab.show=TRUE, lab.cex=1.5)
 
 <img src="figs/plotgroves-1.png" title="plot of chunk plotgroves" alt="plot of chunk plotgroves" width="400px" />
 
-`treecsape` can be further illustrated using *ape*'s dataset *woodmouse*, from which we built the 201 trees supplied in `woodmiceTrees` using the neighbour-joining and bootstrapping example from the *ape* documentation. 
+The functionality of `treecsape` can be further illustrated using *ape*'s dataset *woodmouse*, from which we built the 201 trees supplied in `woodmiceTrees` using the neighbour-joining and bootstrapping example from the *ape* documentation. 
 
 ```r
 data(woodmiceTrees)
@@ -265,9 +267,13 @@ Identifying clusters of trees
 --------------
 Once a typology of trees has been derived using the approach described above, one may want to formally identify clusters of similar trees.
 One simple approach is:
+
 1. select a few first PCs of the MDS (retaining signal but getting rid of random noise)
+
 2. derive pairwise Euclidean distances between trees based on these PCs
+
 3. use hierarchical clustering to obtain a dendrogram of these trees
+
 4. cut the dendrogram to obtain clusters
  
 In *treescape*, the function `findGroves` implements this approach, offering various clustering options (see `?findGroves`):
