@@ -60,7 +60,12 @@ Distributed datasets include:
 Exploring trees with *treescape*
 --------------
 
-The function __`treescape`__ compares a set of trees and maps them in the 2D plane according to their relative distances from each other. The default comparison uses the Kendall Colijn metric which is described in more detail below.
+The function __`treescape`__ defines typologies of phylogenetic trees using a two-steps approach:
+1. perform pairwise comparisons of trees using various (Euclidean) metrics; by default, comparison uses the Kendall and Colijn metric (Kendall & Colijn, submitted) which is described in more detail below; other metrics rely on tips distances implemented in *adephylo* (Jombart *et al.* 2010).
+2. use Metric Multidimensional Scaling (MDS, aka Principal Coordinates Analysis, PCoA) to summarise pairwise distances between the trees as well as possible into a few dimensions; output of MDS is typically visualised using scatterplots of the first few Principal Components (PCs); this step relies on the PCoA implemented in *ade4* (Dray & Dufour 2007).
+
+The function `treescape` performs both tasks, returning both the matrix of pairwise tree comparisons, and the PCoA:
+
 ```{r treescape, fig.width=3, fig.height=3}
 ## generate list of trees
 x <- rmtree(10, 20)
