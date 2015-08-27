@@ -25,15 +25,6 @@
 #'
 #' @examples
 #'
-#' ## generate 10 random trees, each with 6 tips
-#' trees <- rmtree(10,6)
-#' ## Geometric median tree:
-#' mymedian <- medTree(trees)
-#' mymedian$centre # the vector at the 'centre' of the trees; may not correspond to an actual tree
-#' mymedian$trees # the tree(s) closest to the central vector (multiPhylo object)
-#' mymedian$mindist # the distance of the median tree(s) from the central vector
-#'
-#' \dontrun{
 #' ## EXAMPLE WITH WOODMICE DATA
 #' data(woodmiceTrees)
 #'
@@ -53,12 +44,22 @@
 #' ## find median trees
 #' res.with.grp <- medTree(woodmiceTrees, groves$groups)
 #'
-#' }
+#' ## there isone output per cluster
+#' names(res.with.grp)
+#'
+#' ## get the first median of each
+#' med.trees <- lapply(res.with.grp, function(e) ladderize(e$trees[[1]]))
+#'
+#' ## plot trees
+#' par(mfrow=c(2,3))
+#' for(i in 1:length(med.trees)) plot(med.trees[[i]], main=paste("cluster",i))
+#'
+#'
 medTree <- function(x, groups=NULL, lambda=0, weights=rep(1,length(x)),
                     return.lambda.function=FALSE, save.memory=FALSE) {
 
     ## DEFINE MAIN FUNCTION FINDING MEDIAN TREE ##
-    findMedian <- function(trees){
+    findMedian <- function(trees, weights){
         ## checks, general variables
         if(is.null(weights)) weights <- rep(1, length(trees))
         num_trees <- length(trees)
@@ -148,7 +149,7 @@ medTree <- function(x, groups=NULL, lambda=0, weights=rep(1,length(x)),
 
     ## APPLY FUNCTION TO TREES ##
     if(is.null(groups)){     ## no groups provided
-        out <- findMedian(x)
+        out <- findMedian(x, weights)
     } else { ## groups provided
         out <- tapply(x, groups, findMedian, weights=NULL)
     }
