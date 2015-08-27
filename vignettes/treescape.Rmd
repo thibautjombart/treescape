@@ -57,21 +57,6 @@ Distributed datasets include:
 * __`woodmiceTrees`__: illustrative set of 201 trees built using the neighbour-joining and bootstrapping example from the *woodmice* dataset in the *ape* documentation.
 
 
-
-Authors / Contributors
---------------
-Authors:
-* [Thibaut Jombart](https://sites.google.com/site/thibautjombart/)
-* [Michelle Kendall](http://www.imperial.ac.uk/people/m.kendall)
-* [Jacob Almagro Garcia](http://www.well.ox.ac.uk/jacob-almagro-garcia)
-
-Contributors:
-* [Caroline Colijn](http://www.imperial.ac.uk/people/c.colijn)
-
-Maintainer of the CRAN version:
-* [Michelle Kendall](http://www.imperial.ac.uk/people/m.kendall)
-
-
 Exploring trees with *treescape*
 --------------
 
@@ -218,3 +203,18 @@ treeDist(tree_a,tree_b,1)
 ```
 
 
+
+
+
+Authors / Contributors
+--------------
+Authors:
+* [Thibaut Jombart](https://sites.google.com/site/thibautjombart/)
+* [Michelle Kendall](http://www.imperial.ac.uk/people/m.kendall)
+* [Jacob Almagro Garcia](http://www.well.ox.ac.uk/jacob-almagro-garcia)
+
+Contributors:
+* [Caroline Colijn](http://www.imperial.ac.uk/people/c.colijn)
+
+Maintainer of the CRAN version:
+* [Michelle Kendall](http://www.imperial.ac.uk/people/m.kendall)
