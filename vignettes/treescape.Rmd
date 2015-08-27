@@ -95,7 +95,7 @@ Pairwise distances can be visualised using *adegraphics*:
 table.image(res$D, nclass=30)
 
 ## table.value
-table.value(res$D, nclass=10)
+table.value(res$D, nclass=5)
 
 ## with some customization
 table.value(res$D, nclass=5, method="color" , symbol="circle", col=redpal(5))

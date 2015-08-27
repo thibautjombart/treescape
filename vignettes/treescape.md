@@ -143,7 +143,7 @@ table.image(res$D, nclass=30)
 
 ```r
 ## table.value
-table.value(res$D, nclass=10)
+table.value(res$D, nclass=5)
 ```
 
 <img src="figs/distances-2.png" title="plot of chunk distances" alt="plot of chunk distances" width="400px" />
