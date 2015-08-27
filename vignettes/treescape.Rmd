@@ -187,11 +187,13 @@ plotGroves(wm.groves, bg="black", col.pal=lightseasun, lab.show=TRUE, lab.col="w
 
 `treescapeServer`: a web application for *treescape*
 --------------
+The essential functionalities of `treescape` are also available via a user-friendly web interface, running locally on the default web browser.
+It can be started using by simply typing `treescapeServer()`.
+The interface allows one to import data, run `treescape` to explore the tree space, look for clusters using `findGroves`, customize MDS plots, visualise specific trees and saves results in various formats.
+It is fully documented in the *help* tab.
 
+![example of treescapeServer running](figs/server.png) 
 
-
-
-These functions can be explored dynamically using __`treescapeServer`__, where there are further plotting options, clustering methods and ways to save the results of the analysis.
 
 
 
