@@ -144,18 +144,52 @@ xlab("") + ylab("") + theme_bw(base_family="") # remove axis labels and grey bac
 ```
 
 
-Alternatively, the function __`multiDist`__ simply performs the pairwise comparison of trees and outputs a distance matrix. This function may be preferable for large datasets, and when principal co-ordinate analysis is not required. It includes an option to save memory at the expense of computation time.
+Note that alternatively, the function __`multiDist`__ simply performs the pairwise comparison of trees and outputs a distance matrix. 
+This function may be preferable for large datasets, and when principal co-ordinate analysis is not required. 
+It includes an option to save memory at the expense of computation time.
 
-The functions __`findGroves`__ and __`plotGroves`__ can be used to identify clusters in the tree landscape
+
+
+
+Identifying clusters of trees
+--------------
+Once a typology of trees has been derived using the approach described above, one may want to formally identify clusters of similar trees.
+One simple approach is:
+1. select a few first PCs of the MDS (retaining signal but getting rid of random noise)
+2. derive pairwise Euclidean distances between trees based on these PCs
+3. use hierarchical clustering to obtain a dendrogram of these trees
+4. cut the dendrogram to obtain clusters
+ 
+In *treescape*, the function __`findGroves`__ implements this approach, offering various clustering options (see `?findGroves`):
 ```{r findgroves}
-woodmiceGroves <- findGroves(woodmiceTrees, nf=2, nclust=6)
+wm.groves <- findGroves(woodmiceTrees, nf=3, nclust=6)
+names(wm.groves)
 ```
-and plot them:
+Note that when the number of clusters (`nclust`) is not provided, the function will display a dendrogram and ask for a cut-off height. 
+
+The results can be plotted directly using `plotGroves` (see `?plotGroves` for options):
 ```{r plotgroves, fig.height=8}
-## plot results on first 2 axes
-PCs <- woodmiceGroves$treescape$pco$li
-s.class(PCs, fac=woodmiceGroves$groups, col=funky(6))
+## basic plot
+plotGroves(wm.groves)
+
+## alternative with inertia ellipses
+plotGroves(wm.groves, type="ellipse")
+
+## plot axes 2-3
+plotGroves(wm.groves, xax=2, yax=3)
+
+## customize graphics
+plotGroves(wm.groves, bg="black", col.pal=lightseasun, lab.show=TRUE, lab.col="white", lab.cex=1.5)
+
 ```
+
+
+
+`treescapeServer`: a web application for *treescape*
+--------------
+
+
+
 
 These functions can be explored dynamically using __`treescapeServer`__, where there are further plotting options, clustering methods and ways to save the results of the analysis.
 
@@ -215,7 +249,7 @@ It differs in the placement of the **(1007S,1208S,0909S)** clade. Performing thi
 
 
 
-Characterising a tree by a vector
+Method: characterising a tree by a vector
 --------------
 Kendall and Colijn proposed a [metric](http://arxiv.org/abs/1507.05211) for comparing rooted phylogenetic trees. Each tree is characterised by a vector which notes the placement of the most recent common ancestor (MRCA) of each pair of tips. Specifically, it records the distance between the MRCA of a pair of tips *(i,j)* and the root in two ways: the number of edges *m(i,j)*, and the path length *M(i,j)*. It also records the length *p(i)* of each 'pendant' edge between a tip *i* and its immediate ancestor. This procedure results in two vectors for a tree *T*:
 
