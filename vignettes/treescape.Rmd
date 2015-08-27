@@ -108,7 +108,7 @@ scatter(res$pco)
 
 Alternatively, the function `plotGroves` can be used:
 
-```{r plotGroves}
+```{r plotgroves}
 plotGroves(res$pco, lab.show=TRUE, lab.cex=1.5)
 ```
 
@@ -168,7 +168,7 @@ names(wm.groves)
 Note that when the number of clusters (`nclust`) is not provided, the function will display a dendrogram and ask for a cut-off height. 
 
 The results can be plotted directly using `plotGroves` (see `?plotGroves` for options):
-```{r plotgroves}
+```{r plotgroves2}
 ## basic plot
 plotGroves(wm.groves)
 
@@ -179,7 +179,7 @@ plotGroves(wm.groves, type="ellipse")
 plotGroves(wm.groves, xax=2, yax=3)
 ```
 
-```{r plotgroves2, fig.keep="last"}
+```{r plotgroves3, fig.keep="last"}
 ## customize graphics
 plotGroves(wm.groves, bg="black", col.pal=lightseasun, lab.show=TRUE, lab.col="white", lab.cex=1.5)
 

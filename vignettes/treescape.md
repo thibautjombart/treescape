@@ -165,7 +165,7 @@ Alternatively, the function `plotGroves` can be used:
 plotGroves(res$pco, lab.show=TRUE, lab.cex=1.5)
 ```
 
-<img src="figs/plotGroves-1.png" title="plot of chunk plotGroves" alt="plot of chunk plotGroves" width="400px" />
+<img src="figs/plotgroves-1.png" title="plot of chunk plotgroves" alt="plot of chunk plotgroves" width="400px" />
 
 `treecsape` can be further illustrated using *ape*'s dataset *woodmouse*, from which we built the 201 trees supplied in __`woodmiceTrees`__ using the neighbour-joining and bootstrapping example from the *ape* documentation. 
 
@@ -289,21 +289,21 @@ The results can be plotted directly using `plotGroves` (see `?plotGroves` for op
 plotGroves(wm.groves)
 ```
 
-<img src="figs/plotgroves-1.png" title="plot of chunk plotgroves" alt="plot of chunk plotgroves" width="400px" />
+<img src="figs/plotgroves2-1.png" title="plot of chunk plotgroves2" alt="plot of chunk plotgroves2" width="400px" />
 
 ```r
 ## alternative with inertia ellipses
 plotGroves(wm.groves, type="ellipse")
 ```
 
-<img src="figs/plotgroves-2.png" title="plot of chunk plotgroves" alt="plot of chunk plotgroves" width="400px" />
+<img src="figs/plotgroves2-2.png" title="plot of chunk plotgroves2" alt="plot of chunk plotgroves2" width="400px" />
 
 ```r
 ## plot axes 2-3
 plotGroves(wm.groves, xax=2, yax=3)
 ```
 
-<img src="figs/plotgroves-3.png" title="plot of chunk plotgroves" alt="plot of chunk plotgroves" width="400px" />
+<img src="figs/plotgroves2-3.png" title="plot of chunk plotgroves2" alt="plot of chunk plotgroves2" width="400px" />
 
 
 ```r
@@ -311,7 +311,7 @@ plotGroves(wm.groves, xax=2, yax=3)
 plotGroves(wm.groves, bg="black", col.pal=lightseasun, lab.show=TRUE, lab.col="white", lab.cex=1.5)
 ```
 
-<img src="figs/plotgroves2-1.png" title="plot of chunk plotgroves2" alt="plot of chunk plotgroves2" width="400px" />
+<img src="figs/plotgroves3-1.png" title="plot of chunk plotgroves3" alt="plot of chunk plotgroves3" width="400px" />
 
 
 
