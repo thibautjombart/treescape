@@ -99,15 +99,15 @@ res
 ```
 ## $D
 ##        tree1 tree2 tree3 tree4 tree5 tree6 tree7 tree8 tree9
-## tree2  27.59                                                
-## tree3  32.60 35.58                                          
-## tree4  29.38 35.50 33.05                                    
-## tree5  26.17 31.30 30.82 29.53                              
-## tree6  25.75 29.70 32.12 31.87 26.98                        
-## tree7  22.80 28.12 32.63 30.61 26.44 25.32                  
-## tree8  26.29 29.80 31.14 31.05 27.60 27.71 23.52            
-## tree9  28.12 30.43 33.97 32.53 28.14 28.32 26.29 28.32      
-## tree10 27.11 29.90 32.43 32.86 27.09 28.67 24.88 27.64 28.95
+## tree2  28.28                                                
+## tree3  24.86 28.60                                          
+## tree4  27.53 29.77 27.46                                    
+## tree5  25.02 27.82 25.46 25.69                              
+## tree6  30.00 33.23 31.87 32.77 28.11                        
+## tree7  26.08 28.07 28.25 27.96 23.15 27.96                  
+## tree8  26.27 30.85 25.88 31.11 26.00 33.05 28.81            
+## tree9  38.64 41.10 38.04 38.28 36.07 36.59 34.16 37.24      
+## tree10 26.23 29.80 22.05 29.60 28.21 31.91 29.50 26.91 36.07
 ## 
 ## $pco
 ## Duality diagramm
@@ -116,7 +116,7 @@ res
 ## 
 ## $nf: 3 axis-components saved
 ## $rank: 9
-## eigen values: 75.55 56.99 47.58 42.96 40.71 ...
+## eigen values: 102.1 65.11 51.69 44.63 42.93 ...
 ##   vector length mode    content       
 ## 1 $cw    9      numeric column weights
 ## 2 $lw    10     numeric row weights   
@@ -172,19 +172,318 @@ plotGroves(res$pco, lab.show=TRUE, lab.cex=1.5)
 
 <img src="figs/plotGroves-1.png" title="plot of chunk plotGroves" alt="plot of chunk plotGroves" width="400px" />
 
+`treecsape` can be further illustrated using *ape*'s dataset *woodmouse*, from which we built the 201 trees supplied in __`woodmiceTrees`__ using the neighbour-joining and bootstrapping example from the *ape* documentation. 
 
-`treecsape` can be furthe illustrated using *ape*'s dataset *woodmouse*, from which we built the 201 trees supplied in __`woodmiceTrees`__ using the neighbour-joining and bootstrapping example from the *ape* documentation. 
+```r
+data(woodmiceTrees)
+wm.res <- treescape(woodmiceTrees,nf=3)
+
+## this is the PCoA / MDS:
+wm.res$pco
+```
+
+```
+## Duality diagramm
+## class: pco dudi
+## $call: dudi.pco(d = D, scannf = is.null(nf), nf = nf)
+## 
+## $nf: 3 axis-components saved
+## $rank: 54
+## eigen values: 32.69 24.41 6.952 6.348 4.363 ...
+##   vector length mode    content       
+## 1 $cw    54     numeric column weights
+## 2 $lw    201    numeric row weights   
+## 3 $eig   54     numeric eigen values  
+## 
+##   data.frame nrow ncol content             
+## 1 $tab       201  54   modified array      
+## 2 $li        201  3    row coordinates     
+## 3 $l1        201  3    row normed scores   
+## 4 $co        54   3    column coordinates  
+## 5 $c1        54   3    column normed scores
+## other elements: NULL
+```
+
+```r
+## PCs are stored in:
+head(wm.res$pco$li)
+```
+
+```
+##         A1     A2      A3
+## 1  -0.9949 -1.363 -0.7918
+## 2  -0.6137 -1.014 -0.6798
+## 3   2.6667  4.219 -2.9293
+## 4 -13.6081  1.854  1.0947
+## 5   2.1980  4.176 -3.1960
+## 6   3.6013  4.865  2.9853
+```
+
+```r
+## plot results
+plotGroves(wm.res$pco, lab.show=TRUE, lab.optim=FALSE)
+```
+
+<img src="figs/woodmice-1.png" title="plot of chunk woodmice" alt="plot of chunk woodmice" width="400px" />
+
+```r
+## visualising density of points
+s.kde2d(wm.res$pco$li)
+```
+
+<img src="figs/woodmice-2.png" title="plot of chunk woodmice" alt="plot of chunk woodmice" width="400px" />
+
+```r
+## alternative visualisation
+s.density(wm.res$pco$li, col=redpal(100), bandwidth=3)
+```
+
+<img src="figs/woodmice-3.png" title="plot of chunk woodmice" alt="plot of chunk woodmice" width="400px" />
+
+```r
+## same, other palette (see ?spectral)
+s.density(wm.res$pco$li, col=rev(transp(spectral(100),.5)), bandwidth=3)
+```
+
+<img src="figs/woodmice-4.png" title="plot of chunk woodmice" alt="plot of chunk woodmice" width="400px" />
+
+## alternative using ggplot2
+woodmiceplot <- ggplot(wm.res$pco$li, aes(x=A1, y=A2)) # create plot
+woodmiceplot + geom_density2d(colour="gray80") + # contour lines
+geom_point(size=6, shape=1, colour="gray50") + # grey edges
+geom_point(size=6, alpha=0.2, colour="navy") + # transparent blue points
+xlab("") + ylab("") + theme_bw(base_family="") # remove axis labels and grey background
+```
+
+
+Note that alternatively, the function __`multiDist`__ simply performs the pairwise comparison of trees and outputs a distance matrix. 
+This function may be preferable for large datasets, and when principal co-ordinate analysis is not required. 
+It includes an option to save memory at the expense of computation time.
 
 
 
 
+Identifying clusters of trees
+--------------
+Once a typology of trees has been derived using the approach described above, one may want to formally identify clusters of similar trees.
+One simple approach is:
+1. select a few first PCs of the MDS (retaining signal but getting rid of random noise)
+2. derive pairwise Euclidean distances between trees based on these PCs
+3. use hierarchical clustering to obtain a dendrogram of these trees
+4. cut the dendrogram to obtain clusters
+ 
+In *treescape*, the function __`findGroves`__ implements this approach, offering various clustering options (see `?findGroves`):
+
+```r
+wm.groves <- findGroves(woodmiceTrees, nf=3, nclust=6)
+names(wm.groves)
+```
+
+```
+## [1] "groups"    "treescape"
+```
+Note that when the number of clusters (`nclust`) is not provided, the function will display a dendrogram and ask for a cut-off height. 
+
+The results can be plotted directly using `plotGroves` (see `?plotGroves` for options):
+
+```r
+## basic plot
+plotGroves(wm.groves)
+```
+
+<img src="figs/plotgroves-1.png" title="plot of chunk plotgroves" alt="plot of chunk plotgroves" width="400px" />
+
+```r
+## alternative with inertia ellipses
+plotGroves(wm.groves, type="ellipse")
+```
+
+<img src="figs/plotgroves-2.png" title="plot of chunk plotgroves" alt="plot of chunk plotgroves" width="400px" />
+
+```r
+## plot axes 2-3
+plotGroves(wm.groves, xax=2, yax=3)
+```
+
+<img src="figs/plotgroves-3.png" title="plot of chunk plotgroves" alt="plot of chunk plotgroves" width="400px" />
+
+```r
+## customize graphics
+plotGroves(wm.groves, bg="black", col.pal=lightseasun, lab.show=TRUE, lab.col="white", lab.cex=1.5)
+```
+
+<img src="figs/plotgroves-4.png" title="plot of chunk plotgroves" alt="plot of chunk plotgroves" width="400px" /><img src="figs/plotgroves-5.png" title="plot of chunk plotgroves" alt="plot of chunk plotgroves" width="400px" />
+
+
+
+`treescapeServer`: a web application for *treescape*
+--------------
+The essential functionalities of `treescape` are also available via a user-friendly web interface, running locally on the default web browser.
+It can be started using by simply typing `treescapeServer()`.
+The interface allows one to import data, run `treescape` to explore the tree space, look for clusters using `findGroves`, customize MDS plots, visualise specific trees and saves results in various formats.
+It is fully documented in the *help* tab.
+
+![example of treescapeServer running](figs/server.png) 
 
 
 
 
+Finding median trees
+--------------
+
+When a set of trees have very similar structures, it makes sense to summarize them into as single tree, 'consensus' tree.
+In `treescape`, this is achieved by finding the *median tree* is defined for a set of trees, as the tree which is closest to the centre of the set of trees in the tree landscape defined by `treescape`.
+This procedure is implemented by the function **`medTree`**:
+
+
+```r
+## get first median tree
+tre <- medTree(woodmiceTrees)$trees[[1]]
+
+## plot tree
+plot(tre,type="cladogram",edge.width=3, cex=0.8)
+```
+
+<img src="figs/woodmiceMedian-1.png" title="plot of chunk woodmiceMedian" alt="plot of chunk woodmiceMedian" width="400px" />
+
+However, a more complete and accurate summary of the data can be given by finding a summary tree from each cluster.
+This is achieved using the `groups` argument of `medTree`:
+
+```r
+## identify 6 clusters
+groves <- findGroves(woodmiceTrees, nf=3, nclust=6)
+
+## find median trees
+res <- medTree(woodmiceTrees, groves$groups)
+
+## there isone output per cluster
+names(res)
+```
+
+```
+## [1] "1" "2" "3" "4" "5" "6"
+```
+
+```r
+## get the first median of each
+med.trees <- lapply(res, function(e) ladderize(e$trees[[1]]))
+
+## plot trees
+par(mfrow=c(2,3))
+for(i in 1:length(med.trees)) plot(med.trees[[i]], main=paste("cluster",i))
+```
+
+<img src="figs/woodmiceCluster1-1.png" title="plot of chunk woodmiceCluster1" alt="plot of chunk woodmiceCluster1" width="400px" />
+
+These trees exhibit a number of topological differences, e.g. in the placement of the **(1007S,1208S,0909S)** clade. 
+Performing this analysis enables the detection of distinct representative trees supported by data.
+
+
+
+Method: characterising a tree by a vector
+--------------
+Kendall and Colijn proposed a [metric](http://arxiv.org/abs/1507.05211) for comparing rooted phylogenetic trees. Each tree is characterised by a vector which notes the placement of the most recent common ancestor (MRCA) of each pair of tips. Specifically, it records the distance between the MRCA of a pair of tips *(i,j)* and the root in two ways: the number of edges *m(i,j)*, and the path length *M(i,j)*. It also records the length *p(i)* of each 'pendant' edge between a tip *i* and its immediate ancestor. This procedure results in two vectors for a tree *T*:
+
+*m(T) = (m(1,2), m(1,3),...,m(k-1,k),1,...,1)*
+
+and
+
+*M(T) = (M(1,2), M(1,3),...,M(k-1,k),p(1),...,p(k)).*
+
+In *m(T)* we record the pendant lengths as 1, as each tip is 1 step from its immediate ancestor. We combine *m* and *M* with a parameter lambda between zero and one to weight the contribution of branch lengths, characterising each tree with a vector 
+
+*v{lambda}(T) = (1-lambda)m(T) + lambda M(T)*.
+
+This is implemented as the function __`treeVec`__. For example,
+
+```r
+## generate a random tree:
+tree <- rtree(6)
+## topological vector of mrca distances from root:
+treeVec(tree)
+```
+
+```
+##  [1] 1 2 0 0 2 1 0 0 1 0 0 3 1 0 0 1 1 1 1 1 1
+```
+
+```r
+## vector of mrca distances from root when lambda=0.5:
+treeVec(tree,0.5)
+```
+
+```
+##  [1] 0.9774 1.8303 0.0000 0.0000 1.8303 0.9774 0.0000 0.0000 0.9774 0.0000
+## [11] 0.0000 2.7220 0.6438 0.0000 0.0000 0.7441 0.9490 0.8739 0.6234 0.6945
+## [21] 0.7099
+```
+
+```r
+## vector of mrca distances as a function of lambda:
+vecAsFunction <- treeVec(tree,return_lambda_function=TRUE)
+```
+
+```
+## Error in treeVec(tree, return_lambda_function = TRUE): unused argument (return_lambda_function = TRUE)
+```
+
+```r
+## evaluate the vector at lambda=0.5:
+vecAsFunction(0.5)
+```
+
+```
+## Error in eval(expr, envir, enclos): could not find function "vecAsFunction"
+```
+
+The metric -- the distance between two trees -- is the Euclidean distance between these vectors:
+
+*d{lambda}(Ta, Tb) = || v{lambda}(Ta) - v{lambda}(Tb) ||.*
+
+
+This can be found using __`treeDist`__:
+
+```r
+## generate random trees
+tree_a <- rtree(6)
+tree_b <- rtree(6)
+## topological (lambda=0) distance:
+treeDist(tree_a,tree_b) 
+```
+
+```
+## [1] 8.367
+```
+
+```r
+## branch-length focused (lambda=1) distance:
+treeDist(tree_a,tree_b,1)
+```
+
+```
+## [1] 5.532
+```
+
+
+
+References
+--------------
+* Kendall M & Colijn C (submitted) ...
+* Dray S & Dufour AB (2007): The ade4 package: implementing the duality diagram for ecologists. Journal of Statistical Software 22(4): 1-20.
+* Jombart R, Balloux F & Dray S (2010) adephylo: new tools for investigating the phylogenetic signal in biological traits. Bioinformatics 26: 1907-1909. Doi: 10.1093/bioinformatics/btq292
 
 
 
 
+Authors / Contributors
+--------------
+Authors:
+* [Thibaut Jombart](https://sites.google.com/site/thibautjombart/)
+* [Michelle Kendall](http://www.imperial.ac.uk/people/m.kendall)
+* [Jacob Almagro Garcia](http://www.well.ox.ac.uk/jacob-almagro-garcia)
 
+Contributors:
+* [Caroline Colijn](http://www.imperial.ac.uk/people/c.colijn)
 
+Maintainer of the CRAN version:
+* [Michelle Kendall](http://www.imperial.ac.uk/people/m.kendall)

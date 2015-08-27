@@ -125,7 +125,7 @@ wm.res$pco
 head(wm.res$pco$li)
 
 ## plot results
-plotGroves(wm.res$pco, lab=show=TRUE, lab.optim=FALSE)
+plotGroves(wm.res$pco, lab.show=TRUE, lab.optim=FALSE)
 
 ## visualising density of points
 s.kde2d(wm.res$pco$li)
@@ -163,7 +163,7 @@ One simple approach is:
 4. cut the dendrogram to obtain clusters
  
 In *treescape*, the function __`findGroves`__ implements this approach, offering various clustering options (see `?findGroves`):
-```{r findgroves}
+```{r findgroves, cache=TRUE}
 wm.groves <- findGroves(woodmiceTrees, nf=3, nclust=6)
 names(wm.groves)
 ```
