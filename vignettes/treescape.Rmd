@@ -87,7 +87,7 @@ res
 ```
 
 Pairwise distances can be visualised using *adegraphics*:
-```{r distances, fig.width=3, fig.height=3}
+```{r distances, fig.width=6, fig.height=6}
 ## table.image
 table.image(res$D, nclass=30)
 
@@ -197,57 +197,44 @@ It is fully documented in the *help* tab.
 
 
 
-Summarising complex tree spaces
+Finding median trees
 --------------
 
-When a collection of trees contains clusters, a single summary tree may be insufficient to represent the different topologies supported by data. The function __`medTree`__ finds the geometric median tree(s) for a collection of trees by comparing their vectors, for example:
+When a set of trees have very similar structures, it makes sense to summarize them into as single tree, 'consensus' tree.
+In `treescape`, this is achieved by finding the *median tree* is defined for a set of trees, as the tree which is closest to the centre of the set of trees in the tree landscape defined by `treescape`.
+This procedure is implemented by the function **`medTree`**:
 
 ```{r woodmiceMedian, fig.width=5, fig.height=5}
-woodmiceMed <- medTree(woodmiceTrees)$median[[1]]
-## plot the (first) geometric median tree (there are seven topologically identical median trees):
-plot(woodmiceTrees[[woodmiceMed]],type="cladogram",edge.width=3, cex=0.8)
+## get first median tree
+tre <- medTree(woodmiceTrees)$trees[[1]]
+
+## plot tree
+plot(tre,type="cladogram",edge.width=3, cex=0.8)
 ```
 
-However, a more complete and accurate summary of the data can be given by finding a summary tree from each cluster. For example, we can isolate the trees from the largest cluster:
-
+However, a more complete and accurate summary of the data can be given by finding a summary tree from each cluster.
+This is achieved using the `groups` argument of `medTree`:
 ```{r woodmiceCluster1}
-wmx <- woodmiceDists$pco$li[,1] # simplifying notation
-wmy <- woodmiceDists$pco$li[,2]
-wmCluster1 <- woodmiceTrees[intersect(
-   intersect(which(wmx>(-2)),which(wmx<2)),
-   intersect(which(wmy>(-2.5)),which(wmy<2.5))
-   )]
+## identify 6 clusters
+groves <- findGroves(woodmiceTrees, nf=3, nclust=6)
+
+## find median trees
+res <- medTree(woodmiceTrees, groves$groups)
+
+## there isone output per cluster
+names(res)
+
+## get the first median of each
+med.trees <- lapply(res, function(e) ladderize(e$trees[[1]]))
+
+## plot trees
+par(mfrow=c(2,3))
+for(i in 1:length(med.trees)) plot(med.trees[[i]], main=paste("cluster",i))
+
 ```
 
-and find the geometric median:
-```{r woodmice1med, fig.width=5, fig.height=5}
-geomMedwm1 <- medTree(wmCluster1)$median[[1]]
-plot(wmCluster1[[geomMedwm1]],type="cladogram",edge.width=3, cex=0.8)
-```
-
-This is identical to the overall median tree:
-```{r comparemedians}
-treeDist(woodmiceTrees[[woodmiceMed]],wmCluster1[[geomMedwm1]],1)
-```
-
-Median trees from other clusters have different topologies, for example:
-```{r woodmiceCluster2, fig.width=5, fig.height=5}
-## isolate the trees from the second largest cluster:
-wmCluster2 <- woodmiceTrees[intersect(
- intersect(which(wmx>(-1)),which(wmx<8)),
- intersect(which(wmy>1),which(wmy<6))
-)]
-## find the geometric median
-geomMedwm2 <- medTree(wmCluster2)$median[[1]]
-plot(wmCluster2[[geomMedwm2]],type="cladogram",edge.width=3, cex=0.8)
-```
-
-This is another representative summary tree which is different from those we found above:
-```{r comparemedians2}
-treeDist(wmCluster1[[geomMedwm1]],wmCluster2[[geomMedwm2]])
-```
-
-It differs in the placement of the **(1007S,1208S,0909S)** clade. Performing this analysis enables the detection of distinct representative trees supported by data.
+These trees exhibit a number of topological differences, e.g. in the placement of the **(1007S,1208S,0909S)** clade. 
+Performing this analysis enables the detection of distinct representative trees supported by data.
 
 
 

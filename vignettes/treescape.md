@@ -1,7 +1,7 @@
 ---
 title: "Exploration of landscapes of phylogenetic trees"
 author: "Thibaut Jombart, Michelle Kendall"
-date: "2015-08-25"
+date: "2015-08-27"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
@@ -56,232 +56,174 @@ Distributed datasets include:
 * __`woodmiceTrees`__: illustrative set of 201 trees built using the neighbour-joining and bootstrapping example from the *woodmice* dataset in the *ape* documentation.
 
 
-
-Authors / Contributors
---------------
-Authors:
-* [Thibaut Jombart](https://sites.google.com/site/thibautjombart/)
-* [Michelle Kendall](http://www.imperial.ac.uk/people/m.kendall)
-* [Jacob Almagro Garcia](http://www.well.ox.ac.uk/jacob-almagro-garcia)
-
-Contributors:
-* [Caroline Colijn](http://www.imperial.ac.uk/people/c.colijn)
-
-Maintainer of the CRAN version:
-* [Michelle Kendall](http://www.imperial.ac.uk/people/m.kendall)
-
-
 Exploring trees with *treescape*
 --------------
 
-The function __`treescape`__ compares a set of trees and maps them in the 2D plane according to their relative distances from each other. The default comparison uses the Kendall Colijn metric which is described in more detail below.
+We first load *treescape*, and packages required for graphics:
+
+```r
+library("treescape")
+library("ade4")
+library("adegenet")
+```
+
+```
+## 
+##    /// adegenet 2.0.1 is loaded ////////////
+## 
+##    > overview: '?adegenet'
+##    > tutorials/doc/questions: 'adegenetWeb()' 
+##    > bug reports/feature resquests: adegenetIssues()
+## 
+## 
+## 
+## Attaching package: 'adegenet'
+## 
+## The following object is masked from 'package:treescape':
+## 
+##     .render.server.info
+```
+
+```r
+library("adegraphics")
+```
+
+```
+## 
+## Attaching package: 'adegraphics'
+## 
+## The following objects are masked from 'package:ade4':
+## 
+##     kplotsepan.coa, s.arrow, s.class, s.corcircle, s.distri,
+##     s.image, s.label, s.logo, s.match, s.traject, s.value,
+##     table.value, triangle.class
+## 
+## The following object is masked from 'package:ape':
+## 
+##     zoom
+```
+
+```r
+library("ggplot")
+```
+
+```
+## Error in library("ggplot"): there is no package called 'ggplot'
+```
+
+The function __`treescape`__ defines typologies of phylogenetic trees using a two-steps approach:
+1. perform pairwise comparisons of trees using various (Euclidean) metrics; by default, comparison uses the Kendall and Colijn metric (Kendall & Colijn, submitted) which is described in more detail below; other metrics rely on tips distances implemented in *adephylo* (Jombart *et al.* 2010).
+2. use Metric Multidimensional Scaling (MDS, aka Principal Coordinates Analysis, PCoA) to summarise pairwise distances between the trees as well as possible into a few dimensions; output of MDS is typically visualised using scatterplots of the first few Principal Components (PCs); this step relies on the PCoA implemented in *ade4* (Dray & Dufour 2007).
+
+The function `treescape` performs both tasks, returning both the matrix of pairwise tree comparisons (`$D`), and the PCoA (`$pco`).
+This can be illustrated using randomly generated trees:
 
 ```r
 ## generate list of trees
 x <- rmtree(10, 20)
 names(x) <- paste("tree", 1:10, sep = "")
+
 ## use treescape
 res <- treescape(x, nf=3)
-table.paint(as.matrix(res$D))
+names(res)
 ```
 
-![plot of chunk treescape](figs/treescape-1.png) 
+```
+## [1] "D"   "pco"
+```
 
-We can visualise these distances in a 2D map:
+```r
+res
+```
+
+```
+## $D
+##        tree1 tree2 tree3 tree4 tree5 tree6 tree7 tree8 tree9
+## tree2  33.00                                                
+## tree3  41.40 34.01                                          
+## tree4  39.08 30.40 36.21                                    
+## tree5  33.24 32.80 38.22 34.70                              
+## tree6  33.94 26.29 35.67 29.24 32.02                        
+## tree7  35.69 26.78 37.82 32.11 31.35 29.36                  
+## tree8  38.55 31.13 38.63 33.24 37.35 30.00 31.43            
+## tree9  37.07 29.92 38.65 35.40 35.96 31.62 28.74 33.62      
+## tree10 36.40 28.21 38.82 33.65 35.75 29.24 29.55 31.89 30.68
+## 
+## $pco
+## Duality diagramm
+## class: pco dudi
+## $call: dudi.pco(d = D, scannf = is.null(nf), nf = nf)
+## 
+## $nf: 3 axis-components saved
+## $rank: 9
+## eigen values: 93.73 91.12 65.21 59.6 50.85 ...
+##   vector length mode    content       
+## 1 $cw    9      numeric column weights
+## 2 $lw    10     numeric row weights   
+## 3 $eig   9      numeric eigen values  
+## 
+##   data.frame nrow ncol content             
+## 1 $tab       10   9    modified array      
+## 2 $li        10   3    row coordinates     
+## 3 $l1        10   3    row normed scores   
+## 4 $co        9    3    column coordinates  
+## 5 $c1        9    3    column normed scores
+## other elements: NULL
+```
+
+Pairwise distances can be visualised using *adegraphics*:
+
+```r
+## table.image
+table.image(res$D, nclass=30)
+```
+
+![plot of chunk distances](figs/distances-1.png) 
+
+```r
+## table.value
+table.value(res$D, nclass=10)
+```
+
+![plot of chunk distances](figs/distances-2.png) 
+
+```r
+## with some customization
+table.value(res$D, nclass=5, method="color" , symbol="circle", col=heat.colors(10))
+```
+
+![plot of chunk distances](figs/distances-3.png) 
+
+The best representation of these distances in a 2-dimensional space is given by the first 2 PCs of the MDS.
+These can be visualised using *adegraphics*'s function `scatter`:
 
 ```r
 scatter(res$pco)
 ```
 
 ![plot of chunk treescapescatter](figs/treescapescatter-1.png) 
-
-We illustrate this with *ape*'s dataset *woodmouse*, from which we built the 201 trees supplied in __`woodmiceTrees`__ using the neighbour-joining and bootstrapping example from the *ape* documentation. Here we plot the 2D map with *ggplot2*.
-
-```r
-data(woodmiceTrees)
-woodmiceDists <- treescape(woodmiceTrees,nf=3)
-require(ggplot2)
-woodmiceplot <- ggplot(woodmiceDists$pco$li, aes(x=A1, y=A2)) # create plot
-woodmiceplot + geom_density2d(colour="gray80") + # contour lines
-geom_point(size=6, shape=1, colour="gray50") + # grey edges
-geom_point(size=6, alpha=0.2, colour="navy") + # transparent blue points
-xlab("") + ylab("") + theme_bw(base_family="") # remove axis labels and grey background
-```
-
-![plot of chunk woodmice](figs/woodmice-1.png) 
-
-Alternatively, the function __`multiDist`__ simply performs the pairwise comparison of trees and outputs a distance matrix. This function may be preferable for large datasets, and when principal co-ordinate analysis is not required. It includes an option to save memory at the expense of computation time.
-
-The functions __`findGroves`__ and __`plotGroves`__ can be used to identify clusters in the tree landscape
-
-```r
-woodmiceGroves <- findGroves(woodmiceTrees, nf=2, nclust=6)
-```
-and plot them:
-
-```r
-## plot results on first 2 axes
-PCs <- woodmiceGroves$treescape$pco$li
-s.class(PCs, fac=woodmiceGroves$groups, col=funky(6))
-```
-
-![plot of chunk plotgroves](figs/plotgroves-1.png) 
-
-These functions can be explored dynamically using __`treescapeServer`__, where there are further plotting options, clustering methods and ways to save the results of the analysis.
-
-
-
-Summarising complex tree spaces
---------------
-
-When a collection of trees contains clusters, a single summary tree may be insufficient to represent the different topologies supported by data. The function __`medTree`__ finds the geometric median tree(s) for a collection of trees by comparing their vectors, for example:
+Alternatively, the function `plotGroves` can be used:
 
 
 ```r
-woodmiceMed <- medTree(woodmiceTrees)$median[[1]]
-## plot the (first) geometric median tree (there are seven topologically identical median trees):
-plot(woodmiceTrees[[woodmiceMed]],type="cladogram",edge.width=3, cex=0.8)
+plotGroves(res$pco, lab.show=TRUE, lab.cex=1.5)
 ```
 
-![plot of chunk woodmiceMedian](figs/woodmiceMedian-1.png) 
-
-However, a more complete and accurate summary of the data can be given by finding a summary tree from each cluster. For example, we can isolate the trees from the largest cluster:
+![plot of chunk plotGroves](figs/plotGroves-1.png) 
 
 
-```r
-wmx <- woodmiceDists$pco$li[,1] # simplifying notation
-wmy <- woodmiceDists$pco$li[,2]
-wmCluster1 <- woodmiceTrees[intersect(
-   intersect(which(wmx>(-2)),which(wmx<2)),
-   intersect(which(wmy>(-2.5)),which(wmy<2.5))
-   )]
-```
-
-and find the geometric median:
-
-```r
-geomMedwm1 <- medTree(wmCluster1)$median[[1]]
-plot(wmCluster1[[geomMedwm1]],type="cladogram",edge.width=3, cex=0.8)
-```
-
-![plot of chunk woodmice1med](figs/woodmice1med-1.png) 
-
-This is identical to the overall median tree:
-
-```r
-treeDist(woodmiceTrees[[woodmiceMed]],wmCluster1[[geomMedwm1]],1)
-```
-
-```
-## [1] 0
-```
-
-Median trees from other clusters have different topologies, for example:
-
-```r
-## isolate the trees from the second largest cluster:
-wmCluster2 <- woodmiceTrees[intersect(
- intersect(which(wmx>(-1)),which(wmx<8)),
- intersect(which(wmy>1),which(wmy<6))
-)]
-## find the geometric median
-geomMedwm2 <- medTree(wmCluster2)$median[[1]]
-plot(wmCluster2[[geomMedwm2]],type="cladogram",edge.width=3, cex=0.8)
-```
-
-![plot of chunk woodmiceCluster2](figs/woodmiceCluster2-1.png) 
-
-This is another representative summary tree which is different from those we found above:
-
-```r
-treeDist(wmCluster1[[geomMedwm1]],wmCluster2[[geomMedwm2]])
-```
-
-```
-## [1] 7.28
-```
-
-It differs in the placement of the **(1007S,1208S,0909S)** clade. Performing this analysis enables the detection of distinct representative trees supported by data.
+`treecsape` can be furthe illustrated using *ape*'s dataset *woodmouse*, from which we built the 201 trees supplied in __`woodmiceTrees`__ using the neighbour-joining and bootstrapping example from the *ape* documentation. 
 
 
 
-Characterising a tree by a vector
---------------
-Kendall and Colijn proposed a [metric](http://arxiv.org/abs/1507.05211) for comparing rooted phylogenetic trees. Each tree is characterised by a vector which notes the placement of the most recent common ancestor (MRCA) of each pair of tips. Specifically, it records the distance between the MRCA of a pair of tips *(i,j)* and the root in two ways: the number of edges *m(i,j)*, and the path length *M(i,j)*. It also records the length *p(i)* of each 'pendant' edge between a tip *i* and its immediate ancestor. This procedure results in two vectors for a tree *T*:
-
-*m(T) = (m(1,2), m(1,3),...,m(k-1,k),1,...,1)*
-
-and
-
-*M(T) = (M(1,2), M(1,3),...,M(k-1,k),p(1),...,p(k)).*
-
-In *m(T)* we record the pendant lengths as 1, as each tip is 1 step from its immediate ancestor. We combine *m* and *M* with a parameter lambda between zero and one to weight the contribution of branch lengths, characterising each tree with a vector 
-
-*v{lambda}(T) = (1-lambda)m(T) + lambda M(T)*.
-
-This is implemented as the function __`treeVec`__. For example,
-
-```r
-## generate a random tree:
-tree <- rtree(6)
-## topological vector of mrca distances from root:
-treeVec(tree)
-```
-
-```
-##  [1] 0 1 1 1 0 0 0 0 1 2 3 0 2 0 0 1 1 1 1 1 1
-```
-
-```r
-## vector of mrca distances from root when lambda=0.5:
-treeVec(tree,0.5)
-```
-
-```
-##  [1] 0.0000 0.5180 0.5180 0.5180 0.0000 0.0000 0.0000 0.0000 0.6070 1.4826
-## [11] 2.2363 0.0000 1.4826 0.0000 0.0000 0.9053 0.8735 0.7733 0.5783 0.6659
-## [21] 0.5132
-```
-
-```r
-## vector of mrca distances as a function of lambda:
-vecAsFunction <- treeVec(tree,return_lambda_function=TRUE)
-## evaluate the vector at lambda=0.5:
-vecAsFunction(0.5)
-```
-
-```
-##  [1] 0.0000 0.5180 0.5180 0.5180 0.0000 0.0000 0.0000 0.0000 0.6070 1.4826
-## [11] 2.2363 0.0000 1.4826 0.0000 0.0000 0.9053 0.8735 0.7733 0.5783 0.6659
-## [21] 0.5132
-```
-
-The metric -- the distance between two trees -- is the Euclidean distance between these vectors:
-
-*d{lambda}(Ta, Tb) = || v{lambda}(Ta) - v{lambda}(Tb) ||.*
 
 
-This can be found using __`treeDist`__:
 
-```r
-## generate random trees
-tree_a <- rtree(6)
-tree_b <- rtree(6)
-## topological (lambda=0) distance:
-treeDist(tree_a,tree_b) 
-```
 
-```
-## [1] 4.472
-```
 
-```r
-## branch-length focused (lambda=1) distance:
-treeDist(tree_a,tree_b,1)
-```
 
-```
-## [1] 1.809
-```
+
+
+
 
 
