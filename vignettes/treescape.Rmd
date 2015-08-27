@@ -66,14 +66,15 @@ library("treescape")
 library("ade4")
 library("adegenet")
 library("adegraphics")
+library("ggplot")
 ```
 
 The function __`treescape`__ defines typologies of phylogenetic trees using a two-steps approach:
 1. perform pairwise comparisons of trees using various (Euclidean) metrics; by default, comparison uses the Kendall and Colijn metric (Kendall & Colijn, submitted) which is described in more detail below; other metrics rely on tips distances implemented in *adephylo* (Jombart *et al.* 2010).
 2. use Metric Multidimensional Scaling (MDS, aka Principal Coordinates Analysis, PCoA) to summarise pairwise distances between the trees as well as possible into a few dimensions; output of MDS is typically visualised using scatterplots of the first few Principal Components (PCs); this step relies on the PCoA implemented in *ade4* (Dray & Dufour 2007).
 
-The function `treescape` performs both tasks, returning both the matrix of pairwise tree comparisons (`$D`), and the PCoA (`$pco`):
-
+The function `treescape` performs both tasks, returning both the matrix of pairwise tree comparisons (`$D`), and the PCoA (`$pco`).
+This can be illustrated using randomly generated trees:
 ```{r treescape, fig.width=3, fig.height=3}
 ## generate list of trees
 x <- rmtree(10, 20)
@@ -86,7 +87,7 @@ res
 ```
 
 Pairwise distances can be visualised using *adegraphics*:
-```{r treescape, fig.width=3, fig.height=3}
+```{r distances, fig.width=3, fig.height=3}
 ## table.image
 table.image(res$D, nclass=30)
 
@@ -98,22 +99,50 @@ table.value(res$D, nclass=5, method="color" , symbol="circle", col=heat.colors(1
 
 ```
 
-We can visualise these distances in a 2D map:
+The best representation of these distances in a 2-dimensional space is given by the first 2 PCs of the MDS.
+These can be visualised using *adegraphics*'s function `scatter`:
 ```{r treescapescatter, fig.width=5, fig.height=5}
 scatter(res$pco)
 ```
+Alternatively, the function `plotGroves` can be used:
 
-We illustrate this with *ape*'s dataset *woodmouse*, from which we built the 201 trees supplied in __`woodmiceTrees`__ using the neighbour-joining and bootstrapping example from the *ape* documentation. Here we plot the first 2 PCs  with *ggplot2*.
-```{r woodmice, fig.width=8, fig.height=8}
+```{r plotGroves, fig.width=5, fig.height=5}
+plotGroves(res$pco, lab.show=TRUE, lab.cex=1.5)
+```
+
+
+`treecsape` can be furthe illustrated using *ape*'s dataset *woodmouse*, from which we built the 201 trees supplied in __`woodmiceTrees`__ using the neighbour-joining and bootstrapping example from the *ape* documentation. 
+```{r woodmice, fig.width=8, fig.height=8, cache=TRUE}
 data(woodmiceTrees)
-woodmiceDists <- treescape(woodmiceTrees,nf=3)
-require(ggplot2)
-woodmiceplot <- ggplot(woodmiceDists$pco$li, aes(x=A1, y=A2)) # create plot
+wm.res <- treescape(woodmiceTrees,nf=3)
+
+## this is the PCoA / MDS:
+wm.res$pco
+
+## PCs are stored in:
+head(wm.res$pco$li)
+
+## plot results
+plotGroves(wm.res$pco, lab=show=TRUE, lab.optim=FALSE)
+
+## visualising density of points
+s.kde2d(wm.res$pco$li)
+
+## alternative visualisation
+s.density(wm.res$pco$li, col=redpal(100), bandwidth=3)
+
+## same, other palette (see ?spectral)
+s.density(wm.res$pco$li, col=rev(transp(spectral(100),.5)), bandwidth=3)
+```
+
+## alternative using ggplot2
+woodmiceplot <- ggplot(wm.res$pco$li, aes(x=A1, y=A2)) # create plot
 woodmiceplot + geom_density2d(colour="gray80") + # contour lines
 geom_point(size=6, shape=1, colour="gray50") + # grey edges
 geom_point(size=6, alpha=0.2, colour="navy") + # transparent blue points
 xlab("") + ylab("") + theme_bw(base_family="") # remove axis labels and grey background
 ```
+
 
 Alternatively, the function __`multiDist`__ simply performs the pairwise comparison of trees and outputs a distance matrix. This function may be preferable for large datasets, and when principal co-ordinate analysis is not required. It includes an option to save memory at the expense of computation time.
 
@@ -230,6 +259,13 @@ treeDist(tree_a,tree_b)
 treeDist(tree_a,tree_b,1)
 ```
 
+
+
+References
+--------------
+* Kendall M & Colijn C (submitted) ...
+* Dray S & Dufour AB (2007): The ade4 package: implementing the duality diagram for ecologists. Journal of Statistical Software 22(4): 1-20.
+* Jombart R, Balloux F & Dray S (2010) adephylo: new tools for investigating the phylogenetic signal in biological traits. Bioinformatics 26: 1907-1909. Doi: 10.1093/bioinformatics/btq292
 
 
 
