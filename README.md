@@ -97,15 +97,15 @@ res
 ```
 ## $D
 ##        tree1 tree2 tree3 tree4 tree5 tree6 tree7 tree8 tree9
-## tree2  34.26                                                
-## tree3  27.75 33.02                                          
-## tree4  26.50 35.01 24.78                                    
-## tree5  31.24 33.20 29.05 32.19                              
-## tree6  32.50 34.96 27.53 30.76 31.18                        
-## tree7  25.32 34.19 24.88 25.75 32.76 30.81                  
-## tree8  43.73 43.22 42.83 44.02 41.88 41.23 45.38            
-## tree9  29.17 35.87 27.59 28.27 30.74 31.10 27.50 43.67      
-## tree10 25.42 35.04 26.04 25.53 30.98 31.05 26.06 46.26 28.05
+## tree2  37.42                                                
+## tree3  32.53 25.26                                          
+## tree4  28.02 27.66 24.76                                    
+## tree5  35.45 23.69 22.65 26.98                              
+## tree6  38.41 26.48 25.90 28.81 28.25                        
+## tree7  35.47 28.95 26.98 27.62 25.04 29.61                  
+## tree8  38.99 23.75 24.29 27.04 26.59 24.52 29.63            
+## tree9  42.76 32.50 29.43 33.96 32.66 30.05 30.63 30.36      
+## tree10 39.03 26.13 28.12 28.04 27.06 26.53 27.44 25.94 30.35
 ## 
 ## $pco
 ## Duality diagramm
@@ -114,7 +114,7 @@ res
 ## 
 ## $nf: 3 axis-components saved
 ## $rank: 9
-## eigen values: 146.6 74.07 58.56 50.59 42.33 ...
+## eigen values: 113.4 60.53 49.27 41.18 33.28 ...
 ##   vector length mode    content       
 ## 1 $cw    9      numeric column weights
 ## 2 $lw    10     numeric row weights   
@@ -136,21 +136,21 @@ Pairwise distances can be visualised using *adegraphics*:
 table.image(res$D, nclass=30)
 ```
 
-![plot of chunk distances](vignettes/figs/distances-1.png) 
+<img src="vignettes/figs/distances-1.png" title="plot of chunk distances" alt="plot of chunk distances" width="800" />
 
 ```r
 ## table.value
 table.value(res$D, nclass=10)
 ```
 
-![plot of chunk distances](vignettes/figs/distances-2.png) 
+<img src="vignettes/figs/distances-2.png" title="plot of chunk distances" alt="plot of chunk distances" width="800" />
 
 ```r
 ## with some customization
 table.value(res$D, nclass=5, method="color" , symbol="circle", col=heat.colors(10))
 ```
 
-![plot of chunk distances](vignettes/figs/distances-3.png) 
+<img src="vignettes/figs/distances-3.png" title="plot of chunk distances" alt="plot of chunk distances" width="800" />
 
 The best representation of these distances in a 2-dimensional space is given by the first 2 PCs of the MDS.
 These can be visualised using *adegraphics*'s function `scatter`:
@@ -159,14 +159,15 @@ These can be visualised using *adegraphics*'s function `scatter`:
 scatter(res$pco)
 ```
 
-![plot of chunk treescapescatter](vignettes/figs/treescapescatter-1.png) 
+<img src="vignettes/figs/treescapescatter-1.png" title="plot of chunk treescapescatter" alt="plot of chunk treescapescatter" width="800" />
+
 Alternatively, the function `plotGroves` can be used:
 
 ```r
 plotGroves(res$pco, lab.show=TRUE, lab.cex=1.5)
 ```
 
-![plot of chunk plotGroves](vignettes/figs/plotGroves-1.png) 
+<img src="vignettes/figs/plotGroves-1.png" title="plot of chunk plotGroves" alt="plot of chunk plotGroves" width="800" />
 
 
 `treecsape` can be furthe illustrated using *ape*'s dataset *woodmouse*, from which we built the 201 trees supplied in __`woodmiceTrees`__ using the neighbour-joining and bootstrapping example from the *ape* documentation. 

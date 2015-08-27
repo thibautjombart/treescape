@@ -12,7 +12,7 @@ vignette: >
 
 ```{r setup, echo=FALSE}
 # set global chunk options: images will be 7x5 inches
-knitr::opts_chunk$set(fig.width=10, fig.height=10, dpi=200, fig.path="figs/")
+knitr::opts_chunk$set(fig.width=10, fig.height=10, dpi=200, out.width="800", fig.path="figs/")
 options(digits = 4)
 ```
 
@@ -106,6 +106,7 @@ These can be visualised using *adegraphics*'s function `scatter`:
 ```{r treescapescatter, fig.width=5, fig.height=5}
 scatter(res$pco)
 ```
+
 Alternatively, the function `plotGroves` can be used:
 
 ```{r plotGroves, fig.width=5, fig.height=5}
