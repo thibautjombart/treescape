@@ -33,13 +33,21 @@ trees <- rmtree(10,6)
 ## Geometric median tree:
 mymedian <- medTree(trees)
 mymedian$centre # the vector at the 'centre' of the trees; may not correspond to an actual tree
-mymedian$median # the identifier(s) of the tree(s) closest to the central vector
+mymedian$trees # the tree(s) closest to the central vector (multiPhylo object)
 mymedian$mindist # the distance of the median tree(s) from the central vector
 
 \dontrun{
-## Example with woodmice data:
+## Example with woodmice data
 data(woodmiceTrees)
-woodmiceMed <- medTree(woodmiceTrees)$median[[1]]
+
+## get median tree(s)
+res <- medTree(woodmiceTrees)
+res
+
+## plot first tree
+med.tree <- res$trees[[1]]
+plot(med.tree)
+
 ## plot the (first) geometric median tree (there are seven topologically identical median trees):
 plot(woodmiceTrees[[woodmiceMed]],type="cladogram",edge.width=3, cex=0.8)
 
@@ -53,7 +61,7 @@ wmCluster1 <- woodmiceTrees[intersect(
   intersect(which(wmy>(-2.5)),which(wmy<2.5))
   )]
 ## find the geometric median
-geomMedwm1 <- medTree(wmCluster1)$median[[1]]
+geomMedwm1 <- medTree(wmCluster1)$trees[[1]]
 plot(wmCluster1[[geomMedwm1]],type="cladogram",edge.width=3, cex=0.8)
 # this is identical to the overall median tree:
 treeDist(woodmiceTrees[[woodmiceMed]],wmCluster1[[geomMedwm1]],1)
@@ -65,7 +73,7 @@ wmCluster2 <- woodmiceTrees[intersect(
  intersect(which(wmy>1),which(wmy<6))
  )]
 ## find the geometric median
-geomMedwm2 <- medTree(wmCluster2)$median[[1]]
+geomMedwm2 <- medTree(wmCluster2)$trees[[1]]
 plot(wmCluster2[[geomMedwm2]],type="cladogram",edge.width=3, cex=0.8)
 ## This is another representative summary tree which is different from those we found above:
 treeDist(wmCluster1[[geomMedwm1]],wmCluster2[[geomMedwm2]])

@@ -34,48 +34,33 @@
 #' mymedian$mindist # the distance of the median tree(s) from the central vector
 #'
 #' \dontrun{
-#' ## Example with woodmice data
+#' ## EXAMPLE WITH WOODMICE DATA
 #' data(woodmiceTrees)
 #'
-#' ## get a single median tree
-#' woodmiceMed <- medTree(woodmiceTrees)$trees[[1]]
+#' ## LOOKING FOR A SINGLE MEDIA
+#' ## get median tree(s)
+#' res <- medTree(woodmiceTrees)
+#' res
 #'
+#' ## plot first tree
+#' med.tree <- res$trees[[1]]
+#' plot(med.tree)
 #'
-#' ## plot the (first) geometric median tree (there are seven topologically identical median trees):
-#' plot(woodmiceTrees[[woodmiceMed]],type="cladogram",edge.width=3, cex=0.8)
+#' ## LOOKING FOR MEDIANS IN SEVERAL CLUSTERS
+#' ## identify 6 clusters
+#' groves <- findGroves(woodmiceTrees, nf=3, nclust=6)
 #'
-#' ## finding the geometric median tree from a single cluster:
-#' woodmiceDists <- treescape(woodmiceTrees,nf=2)
-#' wmx <- woodmiceDists$pco$li[,1] # simplifying notation
-#' wmy <- woodmiceDists$pco$li[,2]
-#' ## isolate the trees from the largest cluster
-#' wmCluster1 <- woodmiceTrees[intersect(
-#'   intersect(which(wmx>(-2)),which(wmx<2)),
-#'   intersect(which(wmy>(-2.5)),which(wmy<2.5))
-#'   )]
-#' ## find the geometric median
-#' geomMedwm1 <- medTree(wmCluster1)$trees[[1]]
-#' plot(wmCluster1[[geomMedwm1]],type="cladogram",edge.width=3, cex=0.8)
-#' # this is identical to the overall median tree:
-#' treeDist(woodmiceTrees[[woodmiceMed]],wmCluster1[[geomMedwm1]],1)
+#' ## find median trees
+#' res.with.grp <- medTree(woodmiceTrees, groves$groups)
 #'
-#' ## However, median trees from other clusters have different topologies, for example:
-#' ## isolate the trees from the second largest cluster:
-#' wmCluster2 <- woodmiceTrees[intersect(
-#'  intersect(which(wmx>(-1)),which(wmx<8)),
-#'  intersect(which(wmy>1),which(wmy<6))
-#'  )]
-#' ## find the geometric median
-#' geomMedwm2 <- medTree(wmCluster2)$trees[[1]]
-#' plot(wmCluster2[[geomMedwm2]],type="cladogram",edge.width=3, cex=0.8)
-#' ## This is another representative summary tree which is different from those we found above:
-#' treeDist(wmCluster1[[geomMedwm1]],wmCluster2[[geomMedwm2]])
 #' }
 medTree <- function(x, groups=NULL, lambda=0, weights=rep(1,length(x)),
                     return.lambda.function=FALSE, save.memory=FALSE) {
 
     ## DEFINE MAIN FUNCTION FINDING MEDIAN TREE ##
     findMedian <- function(trees){
+        ## checks, general variables
+        if(is.null(weights)) weights <- rep(1, length(trees))
         num_trees <- length(trees)
         num_leaves <- length(trees[[1]]$tip.label)
 
@@ -165,7 +150,7 @@ medTree <- function(x, groups=NULL, lambda=0, weights=rep(1,length(x)),
     if(is.null(groups)){     ## no groups provided
         out <- findMedian(x)
     } else { ## groups provided
-        out <- tapply(x, groups, findMedian)
+        out <- tapply(x, groups, findMedian, weights=NULL)
     }
 
     ## RETURN ##
