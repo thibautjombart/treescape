@@ -134,18 +134,11 @@ table.image(res$D, nclass=30)
 <img src="vignettes/figs/distances-1.png" title="plot of chunk distances" alt="plot of chunk distances" width="400px" />
 
 ```r
-## table.value
-table.value(res$D, nclass=5)
+## table.value with some customization
+table.value(res$D, nclass=5, method="color", symbol="circle", col=redpal(5))
 ```
 
 <img src="vignettes/figs/distances-2.png" title="plot of chunk distances" alt="plot of chunk distances" width="400px" />
-
-```r
-## with some customization
-table.value(res$D, nclass=5, method="color" , symbol="circle", col=redpal(5))
-```
-
-<img src="vignettes/figs/distances-3.png" title="plot of chunk distances" alt="plot of chunk distances" width="400px" />
 
 The best representation of these distances in a 2-dimensional space is given by the first 2 PCs of the MDS.
 These can be visualised using *adegraphics*'s function `scatter`:
@@ -300,13 +293,16 @@ plotGroves(wm.groves, type="ellipse")
 plotGroves(wm.groves, xax=2, yax=3)
 ```
 
-<img src="vignettes/figs/plotgroves2-1.png" title="plot of chunk plotgroves2" alt="plot of chunk plotgroves2" width="400px" />
+<img src="vignettes/figs/plotgroves-3.png" title="plot of chunk plotgroves" alt="plot of chunk plotgroves" width="400px" />
 
 
 ## customize graphics
-plotGroves(wm.groves, bg="black", col.pal=lightseasun, lab.show=TRUE, lab.col="white", lab.cex=1.5)
 
+```r
+plotGroves(wm.groves, bg="black", col.pal=lightseasun, lab.show=TRUE, lab.col="white", lab.cex=1.5)
 ```
+
+<img src="vignettes/figs/plotgroves2-1.png" title="plot of chunk plotgroves2" alt="plot of chunk plotgroves2" width="400px" />
 
 
 
@@ -363,7 +359,7 @@ med.trees <- lapply(res, function(e) ladderize(e$trees[[1]]))
 
 ## plot trees
 par(mfrow=c(2,3))
-for(i in 1:length(med.trees)) plot(med.trees[[i]], main=paste("cluster",i))
+for(i in 1:length(med.trees)) plot(med.trees[[i]], main=paste("cluster",i),cex=2)
 ```
 
 <img src="vignettes/figs/woodmiceCluster1-1.png" title="plot of chunk woodmiceCluster1" alt="plot of chunk woodmiceCluster1" width="600px" />
@@ -397,7 +393,7 @@ treeVec(tree)
 ```
 
 ```
-##  [1] 1 1 0 2 0 2 0 1 0 0 1 0 0 1 0 1 1 1 1 1 1
+##  [1] 0 0 0 0 0 1 3 1 2 1 2 1 1 2 1 1 1 1 1 1 1
 ```
 
 ```r
@@ -406,9 +402,9 @@ treeVec(tree,0.5)
 ```
 
 ```
-##  [1] 0.6775 0.6775 0.0000 1.3465 0.0000 1.3670 0.0000 0.6775 0.0000 0.0000
-## [11] 0.6775 0.0000 0.0000 0.9442 0.0000 0.6646 0.8074 0.7531 0.5180 0.7866
-## [21] 0.5690
+##  [1] 0.0000 0.0000 0.0000 0.0000 0.0000 0.6410 2.4276 0.6410 1.5522 0.6410
+## [11] 1.5136 0.6410 0.6410 1.5522 0.6410 0.6007 0.9904 0.6281 0.8500 0.5161
+## [21] 0.6318
 ```
 
 ```r
@@ -419,9 +415,9 @@ vecAsFunction(0.5)
 ```
 
 ```
-##  [1] 0.6775 0.6775 0.0000 1.3465 0.0000 1.3670 0.0000 0.6775 0.0000 0.0000
-## [11] 0.6775 0.0000 0.0000 0.9442 0.0000 0.6646 0.8074 0.7531 0.5180 0.7866
-## [21] 0.5690
+##  [1] 0.0000 0.0000 0.0000 0.0000 0.0000 0.6410 2.4276 0.6410 1.5522 0.6410
+## [11] 1.5136 0.6410 0.6410 1.5522 0.6410 0.6007 0.9904 0.6281 0.8500 0.5161
+## [21] 0.6318
 ```
 
 The metric -- the distance between two trees -- is the Euclidean distance between these vectors:
@@ -441,7 +437,7 @@ treeDist(tree_a,tree_b)
 ```
 
 ```
-## [1] 5.477
+## [1] 6.245
 ```
 
 ```r
@@ -450,7 +446,7 @@ treeDist(tree_a,tree_b,1)
 ```
 
 ```
-## [1] 3.149
+## [1] 3.453
 ```
 
 

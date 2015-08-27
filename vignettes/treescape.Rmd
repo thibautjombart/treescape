@@ -94,11 +94,8 @@ Pairwise distances can be visualised using *adegraphics*:
 ## table.image
 table.image(res$D, nclass=30)
 
-## table.value
-table.value(res$D, nclass=5)
-
-## with some customization
-table.value(res$D, nclass=5, method="color" , symbol="circle", col=redpal(5))
+## table.value with some customization
+table.value(res$D, nclass=5, method="color", symbol="circle", col=redpal(5))
 
 ```
 
@@ -177,13 +174,13 @@ plotGroves(wm.groves)
 ## alternative with inertia ellipses
 plotGroves(wm.groves, type="ellipse")
 
-```{r plotgroves2, fig.keep="last"}
 ## plot axes 2-3
 plotGroves(wm.groves, xax=2, yax=3)
 ```
 
 
 ## customize graphics
+```{r plotgroves2, fig.keep="last"}
 plotGroves(wm.groves, bg="black", col.pal=lightseasun, lab.show=TRUE, lab.col="white", lab.cex=1.5)
 
 ```
@@ -234,7 +231,7 @@ med.trees <- lapply(res, function(e) ladderize(e$trees[[1]]))
 
 ## plot trees
 par(mfrow=c(2,3))
-for(i in 1:length(med.trees)) plot(med.trees[[i]], main=paste("cluster",i))
+for(i in 1:length(med.trees)) plot(med.trees[[i]], main=paste("cluster",i),cex=2)
 
 ```
 
