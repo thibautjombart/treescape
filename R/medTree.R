@@ -30,13 +30,17 @@
 #' ## Geometric median tree:
 #' mymedian <- medTree(trees)
 #' mymedian$centre # the vector at the 'centre' of the trees; may not correspond to an actual tree
-#' mymedian$median # the identifier(s) of the tree(s) closest to the central vector
+#' mymedian$tree # the identifier(s) of the tree(s) closest to the central vector
 #' mymedian$mindist # the distance of the median tree(s) from the central vector
 #'
 #' \dontrun{
-#' ## Example with woodmice data:
+#' ## Example with woodmice data
 #' data(woodmiceTrees)
-#' woodmiceMed <- medTree(woodmiceTrees)$median[[1]]
+#'
+#' ## get a single median tree
+#' woodmiceMed <- medTree(woodmiceTrees)$tree[[1]]
+#'
+#'
 #' ## plot the (first) geometric median tree (there are seven topologically identical median trees):
 #' plot(woodmiceTrees[[woodmiceMed]],type="cladogram",edge.width=3, cex=0.8)
 #'
@@ -50,7 +54,7 @@
 #'   intersect(which(wmy>(-2.5)),which(wmy<2.5))
 #'   )]
 #' ## find the geometric median
-#' geomMedwm1 <- medTree(wmCluster1)$median[[1]]
+#' geomMedwm1 <- medTree(wmCluster1)$tree[[1]]
 #' plot(wmCluster1[[geomMedwm1]],type="cladogram",edge.width=3, cex=0.8)
 #' # this is identical to the overall median tree:
 #' treeDist(woodmiceTrees[[woodmiceMed]],wmCluster1[[geomMedwm1]],1)
@@ -62,7 +66,7 @@
 #'  intersect(which(wmy>1),which(wmy<6))
 #'  )]
 #' ## find the geometric median
-#' geomMedwm2 <- medTree(wmCluster2)$median[[1]]
+#' geomMedwm2 <- medTree(wmCluster2)$tree[[1]]
 #' plot(wmCluster2[[geomMedwm2]],type="cladogram",edge.width=3, cex=0.8)
 #' ## This is another representative summary tree which is different from those we found above:
 #' treeDist(wmCluster1[[geomMedwm1]],wmCluster2[[geomMedwm2]])
@@ -96,7 +100,7 @@ medTree <- function(x, groups=NULL, lambda=0, weights=rep(1,length(x)),
                 min_distance <- min(distances)
                 median_trees <- which(min_distance == distances)
 
-                return(list(centre=centre, distances=distances, mindist=min_distance, median=median_trees))
+                return(list(centre=centre, distances=distances, mindist=min_distance, tree=median_trees))
             }
 
             ## To save memory we recompute the vectors on the fly (way slower but we don't eat a ton of memory).
@@ -120,7 +124,7 @@ medTree <- function(x, groups=NULL, lambda=0, weights=rep(1,length(x)),
                 min_distance <- min(distances)
                 median_trees <- which(min_distance == distances)
 
-                return(list(centre=centre, distances=distances, mindist=min_distance, median=median_trees))
+                return(list(centre=centre, distances=distances, mindist=min_distance, tree=median_trees))
             }
         }
 
