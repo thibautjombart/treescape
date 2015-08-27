@@ -71,7 +71,7 @@ library("adegraphics")
 library("ggplot2")
 ```
 
-The function __`treescape`__ defines typologies of phylogenetic trees using a two-steps approach:
+The function `treescape` defines typologies of phylogenetic trees using a two-steps approach:
 1. perform pairwise comparisons of trees using various (Euclidean) metrics; by default, comparison uses the Kendall and Colijn metric (Kendall & Colijn, 2015) which is described in more detail below; other metrics rely on tips distances implemented in *adephylo* (Jombart *et al.* 2010).
 2. use Metric Multidimensional Scaling (MDS, aka Principal Coordinates Analysis, PCoA) to summarise pairwise distances between the trees as well as possible into a few dimensions; output of MDS is typically visualised using scatterplots of the first few Principal Components (PCs); this step relies on the PCoA implemented in *ade4* (Dray & Dufour 2007).
 
@@ -167,7 +167,7 @@ plotGroves(res$pco, lab.show=TRUE, lab.cex=1.5)
 
 <img src="figs/plotgroves-1.png" title="plot of chunk plotgroves" alt="plot of chunk plotgroves" width="400px" />
 
-`treecsape` can be further illustrated using *ape*'s dataset *woodmouse*, from which we built the 201 trees supplied in __`woodmiceTrees`__ using the neighbour-joining and bootstrapping example from the *ape* documentation. 
+`treecsape` can be further illustrated using *ape*'s dataset *woodmouse*, from which we built the 201 trees supplied in `woodmiceTrees` using the neighbour-joining and bootstrapping example from the *ape* documentation. 
 
 ```r
 data(woodmiceTrees)
@@ -254,7 +254,7 @@ xlab("") + ylab("") + theme_bw(base_family="") # remove axis labels and grey bac
 <img src="figs/woodmicePlots-5.png" title="plot of chunk woodmicePlots" alt="plot of chunk woodmicePlots" width="400px" />
 
 
-Note that alternatively, the function __`multiDist`__ simply performs the pairwise comparison of trees and outputs a distance matrix. 
+Note that alternatively, the function `multiDist` simply performs the pairwise comparison of trees and outputs a distance matrix. 
 This function may be preferable for large datasets, and when principal co-ordinate analysis is not required. 
 It includes an option to save memory at the expense of computation time.
 
@@ -270,7 +270,7 @@ One simple approach is:
 3. use hierarchical clustering to obtain a dendrogram of these trees
 4. cut the dendrogram to obtain clusters
  
-In *treescape*, the function __`findGroves`__ implements this approach, offering various clustering options (see `?findGroves`):
+In *treescape*, the function `findGroves` implements this approach, offering various clustering options (see `?findGroves`):
 
 ```r
 wm.groves <- findGroves(woodmiceTrees, nf=3, nclust=6)
@@ -318,8 +318,8 @@ plotGroves(wm.groves, bg="black", col.pal=lightseasun, lab.show=TRUE, lab.col="w
 `treescapeServer`: a web application for *treescape*
 --------------
 The essential functionalities of `treescape` are also available via a user-friendly web interface, running locally on the default web browser.
-It can be started using by simply typing `treescapeServer()`.
-The interface allows one to import data, run `treescape` to explore the tree space, look for clusters using `findGroves`, customize MDS plots, visualise specific trees and saves results in various formats.
+It can be started by simply typing `treescapeServer()`.
+The interface allows one to import data, run `treescape` to explore the tree space, look for clusters using `findGroves`, customize MDS plots, visualise specific trees and save results in various formats.
 It is fully documented in the *help* tab.
 
 ![example of treescapeServer running](figs/server.png) 
@@ -330,8 +330,9 @@ It is fully documented in the *help* tab.
 Finding median trees
 --------------
 
-When a set of trees have very similar structures, it makes sense to summarize them into as single tree, 'consensus' tree.
-In `treescape`, this is achieved by finding the *median tree* is defined for a set of trees, as the tree which is closest to the centre of the set of trees in the tree landscape defined by `treescape`.
+When a set of trees have very similar structures, it makes sense to summarize them into a single 'consensus' tree.
+In `treescape`, this is achieved by finding the *median tree* for a set of trees according to the Kendall and Colijn metric.
+That is, we find the tree which is closest to the centre of the set of trees in the tree landscape defined in `treescape`.
 This procedure is implemented by the function **`medTree`**:
 
 
@@ -403,7 +404,7 @@ treeVec(tree)
 ```
 
 ```
-##  [1] 0 0 0 0 0 1 3 1 2 1 2 1 1 2 1 1 1 1 1 1 1
+##  [1] 0 3 1 2 4 0 0 0 0 1 2 3 1 1 2 1 1 1 1 1 1
 ```
 
 ```r
@@ -412,9 +413,9 @@ treeVec(tree,0.5)
 ```
 
 ```
-##  [1] 0.0000 0.0000 0.0000 0.0000 0.0000 0.6410 2.4276 0.6410 1.5522 0.6410
-## [11] 1.5136 0.6410 0.6410 1.5522 0.6410 0.6007 0.9904 0.6281 0.8500 0.5161
-## [21] 0.6318
+##  [1] 0.0000 2.1653 0.6671 1.4171 2.8537 0.0000 0.0000 0.0000 0.0000 0.6671
+## [11] 1.4171 2.1653 0.6671 0.6671 1.4171 0.5646 0.7231 0.6609 0.5466 0.6653
+## [21] 0.5655
 ```
 
 ```r
@@ -425,9 +426,9 @@ vecAsFunction(0.5)
 ```
 
 ```
-##  [1] 0.0000 0.0000 0.0000 0.0000 0.0000 0.6410 2.4276 0.6410 1.5522 0.6410
-## [11] 1.5136 0.6410 0.6410 1.5522 0.6410 0.6007 0.9904 0.6281 0.8500 0.5161
-## [21] 0.6318
+##  [1] 0.0000 2.1653 0.6671 1.4171 2.8537 0.0000 0.0000 0.0000 0.0000 0.6671
+## [11] 1.4171 2.1653 0.6671 0.6671 1.4171 0.5646 0.7231 0.6609 0.5466 0.6653
+## [21] 0.5655
 ```
 
 The metric -- the distance between two trees -- is the Euclidean distance between these vectors:
@@ -447,7 +448,7 @@ treeDist(tree_a,tree_b)
 ```
 
 ```
-## [1] 6.245
+## [1] 5.657
 ```
 
 ```r
@@ -456,7 +457,7 @@ treeDist(tree_a,tree_b,1)
 ```
 
 ```
-## [1] 3.453
+## [1] 3.544
 ```
 
 
