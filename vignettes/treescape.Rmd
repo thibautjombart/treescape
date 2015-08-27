@@ -114,7 +114,7 @@ plotGroves(res$pco, lab.show=TRUE, lab.cex=1.5)
 ```
 
 `treecsape` can be further illustrated using *ape*'s dataset *woodmouse*, from which we built the 201 trees supplied in __`woodmiceTrees`__ using the neighbour-joining and bootstrapping example from the *ape* documentation. 
-```{r woodmice}
+```{r woodmicePlots}
 data(woodmiceTrees)
 wm.res <- treescape(woodmiceTrees,nf=3)
 
@@ -133,9 +133,8 @@ s.kde2d(wm.res$pco$li)
 ## alternative visualisation
 s.density(wm.res$pco$li, col=redpal(100), bandwidth=3)
 
-## same, other palette (see ?spectral)
+## same, other palette
 s.density(wm.res$pco$li, col=rev(transp(spectral(100),.5)), bandwidth=3)
-```
 
 ## alternative using ggplot2
 woodmiceplot <- ggplot(wm.res$pco$li, aes(x=A1, y=A2)) # create plot

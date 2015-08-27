@@ -91,15 +91,15 @@ res
 ```
 ## $D
 ##        tree1 tree2 tree3 tree4 tree5 tree6 tree7 tree8 tree9
-## tree2  28.28                                                
-## tree3  24.86 28.60                                          
-## tree4  27.53 29.77 27.46                                    
-## tree5  25.02 27.82 25.46 25.69                              
-## tree6  30.00 33.23 31.87 32.77 28.11                        
-## tree7  26.08 28.07 28.25 27.96 23.15 27.96                  
-## tree8  26.27 30.85 25.88 31.11 26.00 33.05 28.81            
-## tree9  38.64 41.10 38.04 38.28 36.07 36.59 34.16 37.24      
-## tree10 26.23 29.80 22.05 29.60 28.21 31.91 29.50 26.91 36.07
+## tree2  27.53                                                
+## tree3  29.85 29.95                                          
+## tree4  43.76 44.89 43.91                                    
+## tree5  34.68 32.73 33.23 38.29                              
+## tree6  31.27 34.67 34.51 42.13 36.59                        
+## tree7  33.03 35.23 31.65 36.74 36.69 29.92                  
+## tree8  26.19 27.60 28.09 42.77 32.88 32.19 34.68            
+## tree9  28.09 31.22 32.16 40.52 36.50 30.81 31.59 27.29      
+## tree10 30.59 33.88 32.23 39.46 37.24 32.86 31.42 27.64 21.93
 ## 
 ## $pco
 ## Duality diagramm
@@ -108,7 +108,7 @@ res
 ## 
 ## $nf: 3 axis-components saved
 ## $rank: 9
-## eigen values: 102.1 65.11 51.69 44.63 42.93 ...
+## eigen values: 136.7 91.33 68.85 54.05 45.94 ...
 ##   vector length mode    content       
 ## 1 $cw    9      numeric column weights
 ## 2 $lw    10     numeric row weights   
@@ -215,29 +215,30 @@ head(wm.res$pco$li)
 plotGroves(wm.res$pco, lab.show=TRUE, lab.optim=FALSE)
 ```
 
-<img src="vignettes/figs/woodmice-1.png" title="plot of chunk woodmice" alt="plot of chunk woodmice" width="400px" />
+<img src="vignettes/figs/woodmicePlots-1.png" title="plot of chunk woodmicePlots" alt="plot of chunk woodmicePlots" width="400px" />
 
 ```r
 ## visualising density of points
 s.kde2d(wm.res$pco$li)
 ```
 
-<img src="vignettes/figs/woodmice-2.png" title="plot of chunk woodmice" alt="plot of chunk woodmice" width="400px" />
+<img src="vignettes/figs/woodmicePlots-2.png" title="plot of chunk woodmicePlots" alt="plot of chunk woodmicePlots" width="400px" />
 
 ```r
 ## alternative visualisation
 s.density(wm.res$pco$li, col=redpal(100), bandwidth=3)
 ```
 
-<img src="vignettes/figs/woodmice-3.png" title="plot of chunk woodmice" alt="plot of chunk woodmice" width="400px" />
+<img src="vignettes/figs/woodmicePlots-3.png" title="plot of chunk woodmicePlots" alt="plot of chunk woodmicePlots" width="400px" />
 
 ```r
-## same, other palette (see ?spectral)
+## same, other palette
 s.density(wm.res$pco$li, col=rev(transp(spectral(100),.5)), bandwidth=3)
 ```
 
-<img src="vignettes/figs/woodmice-4.png" title="plot of chunk woodmice" alt="plot of chunk woodmice" width="400px" />
+<img src="vignettes/figs/woodmicePlots-4.png" title="plot of chunk woodmicePlots" alt="plot of chunk woodmicePlots" width="400px" />
 
+```r
 ## alternative using ggplot2
 woodmiceplot <- ggplot(wm.res$pco$li, aes(x=A1, y=A2)) # create plot
 woodmiceplot + geom_density2d(colour="gray80") + # contour lines
@@ -245,6 +246,8 @@ geom_point(size=6, shape=1, colour="gray50") + # grey edges
 geom_point(size=6, alpha=0.2, colour="navy") + # transparent blue points
 xlab("") + ylab("") + theme_bw(base_family="") # remove axis labels and grey background
 ```
+
+<img src="vignettes/figs/woodmicePlots-5.png" title="plot of chunk woodmicePlots" alt="plot of chunk woodmicePlots" width="400px" />
 
 
 Note that alternatively, the function __`multiDist`__ simply performs the pairwise comparison of trees and outputs a distance matrix. 
@@ -394,7 +397,7 @@ treeVec(tree)
 ```
 
 ```
-##  [1] 1 2 0 0 2 1 0 0 1 0 0 3 1 0 0 1 1 1 1 1 1
+##  [1] 1 1 1 0 0 2 3 0 0 2 0 0 0 0 1 1 1 1 1 1 1
 ```
 
 ```r
@@ -403,9 +406,9 @@ treeVec(tree,0.5)
 ```
 
 ```
-##  [1] 0.9774 1.8303 0.0000 0.0000 1.8303 0.9774 0.0000 0.0000 0.9774 0.0000
-## [11] 0.0000 2.7220 0.6438 0.0000 0.0000 0.7441 0.9490 0.8739 0.6234 0.6945
-## [21] 0.7099
+##  [1] 0.7473 0.7473 0.7473 0.0000 0.0000 1.3366 2.2140 0.0000 0.0000 1.3366
+## [11] 0.0000 0.0000 0.0000 0.0000 0.8248 0.5023 0.6922 0.7611 0.9299 0.9121
+## [21] 0.9191
 ```
 
 ```r
@@ -442,7 +445,7 @@ treeDist(tree_a,tree_b)
 ```
 
 ```
-## [1] 8.367
+## [1] 5.196
 ```
 
 ```r
@@ -451,7 +454,7 @@ treeDist(tree_a,tree_b,1)
 ```
 
 ```
-## [1] 5.532
+## [1] 2.197
 ```
 
 
