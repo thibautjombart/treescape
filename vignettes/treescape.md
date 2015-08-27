@@ -46,10 +46,12 @@ The main functions implemented in *treescape* are:
 * __`treescapeServer`__: open up an application in a web browser for an interactive exploration of the diversity in a set of trees
 * __`findGroves`__: identify clusters of similar trees
 * __`plotGroves`__: scatterplot of groups of trees
+* __`medTree`__: find geometric median tree(s) to summarise a group of trees
+
+Other functions are central to the computations of distances between trees:
 * __`treeVec`__: characterise a tree by a vector
 * __`treeDist`__: find the distance between two tree vectors
 * __`multiDist`__: find the pairwise distances of a list of trees
-* __`medTree`__: find geometric median tree(s) to summarise a group of trees
 
 
 Distributed datasets include:
@@ -97,15 +99,15 @@ res
 ```
 ## $D
 ##        tree1 tree2 tree3 tree4 tree5 tree6 tree7 tree8 tree9
-## tree2  31.29                                                
-## tree3  26.94 25.98                                          
-## tree4  32.43 28.41 32.68                                    
-## tree5  34.74 26.50 34.37 32.08                              
-## tree6  28.43 26.44 23.11 33.11 34.39                        
-## tree7  34.70 31.51 31.97 33.14 35.09 34.70                  
-## tree8  28.04 30.90 28.07 29.70 32.42 30.50 34.23            
-## tree9  34.10 31.34 37.40 32.05 32.03 38.33 34.80 36.62      
-## tree10 30.48 34.41 33.00 32.73 37.26 32.14 34.66 33.66 39.34
+## tree2  30.25                                                
+## tree3  28.39 33.36                                          
+## tree4  29.53 32.45 31.14                                    
+## tree5  28.35 33.60 29.53 29.73                              
+## tree6  43.16 36.74 46.01 45.40 45.84                        
+## tree7  27.48 32.83 31.03 31.92 29.21 41.55                  
+## tree8  34.60 35.36 38.59 35.82 36.46 44.14 34.29            
+## tree9  46.71 48.32 45.56 45.39 48.93 49.57 48.53 49.47      
+## tree10 33.38 32.85 32.68 31.69 32.50 38.30 28.23 37.96 44.18
 ## 
 ## $pco
 ## Duality diagramm
@@ -114,7 +116,7 @@ res
 ## 
 ## $nf: 3 axis-components saved
 ## $rank: 9
-## eigen values: 106.6 73.06 63.47 55.6 52.41 ...
+## eigen values: 167.2 134 80.94 59.99 51.14 ...
 ##   vector length mode    content       
 ## 1 $cw    9      numeric column weights
 ## 2 $lw    10     numeric row weights   

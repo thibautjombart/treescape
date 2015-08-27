@@ -47,10 +47,12 @@ The main functions implemented in *treescape* are:
 * __`treescapeServer`__: open up an application in a web browser for an interactive exploration of the diversity in a set of trees
 * __`findGroves`__: identify clusters of similar trees
 * __`plotGroves`__: scatterplot of groups of trees
+* __`medTree`__: find geometric median tree(s) to summarise a group of trees
+
+Other functions are central to the computations of distances between trees:
 * __`treeVec`__: characterise a tree by a vector
 * __`treeDist`__: find the distance between two tree vectors
 * __`multiDist`__: find the pairwise distances of a list of trees
-* __`medTree`__: find geometric median tree(s) to summarise a group of trees
 
 
 Distributed datasets include:
