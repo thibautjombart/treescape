@@ -12,7 +12,7 @@ vignette: >
 
 ```{r setup, echo=FALSE}
 # set global chunk options: images will be 7x5 inches
-knitr::opts_chunk$set(fig.width=10, fig.height=10, dpi=200, out.width="800", fig.path="figs/")
+knitr::opts_chunk$set(dpi=200, out.width="800px", fig.path="figs/")
 options(digits = 4)
 ```
 
@@ -77,7 +77,7 @@ The function __`treescape`__ defines typologies of phylogenetic trees using a tw
 
 The function `treescape` performs both tasks, returning both the matrix of pairwise tree comparisons (`$D`), and the PCoA (`$pco`).
 This can be illustrated using randomly generated trees:
-```{r treescape, fig.width=3, fig.height=3}
+```{r treescape}
 ## generate list of trees
 x <- rmtree(10, 20)
 names(x) <- paste("tree", 1:10, sep = "")
@@ -89,7 +89,7 @@ res
 ```
 
 Pairwise distances can be visualised using *adegraphics*:
-```{r distances, fig.width=6, fig.height=6}
+```{r distances}
 ## table.image
 table.image(res$D, nclass=30)
 
@@ -103,19 +103,19 @@ table.value(res$D, nclass=5, method="color" , symbol="circle", col=heat.colors(1
 
 The best representation of these distances in a 2-dimensional space is given by the first 2 PCs of the MDS.
 These can be visualised using *adegraphics*'s function `scatter`:
-```{r treescapescatter, fig.width=5, fig.height=5}
+```{r treescapescatter}
 scatter(res$pco)
 ```
 
 Alternatively, the function `plotGroves` can be used:
 
-```{r plotGroves, fig.width=5, fig.height=5}
+```{r plotGroves}
 plotGroves(res$pco, lab.show=TRUE, lab.cex=1.5)
 ```
 
 
 `treecsape` can be furthe illustrated using *ape*'s dataset *woodmouse*, from which we built the 201 trees supplied in __`woodmiceTrees`__ using the neighbour-joining and bootstrapping example from the *ape* documentation. 
-```{r woodmice, fig.width=8, fig.height=8, cache=TRUE}
+```{r woodmice}
 data(woodmiceTrees)
 wm.res <- treescape(woodmiceTrees,nf=3)
 
@@ -207,7 +207,7 @@ When a set of trees have very similar structures, it makes sense to summarize th
 In `treescape`, this is achieved by finding the *median tree* is defined for a set of trees, as the tree which is closest to the centre of the set of trees in the tree landscape defined by `treescape`.
 This procedure is implemented by the function **`medTree`**:
 
-```{r woodmiceMedian, fig.width=5, fig.height=5}
+```{r woodmiceMedian}
 ## get first median tree
 tre <- medTree(woodmiceTrees)$trees[[1]]
 
