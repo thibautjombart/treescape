@@ -79,6 +79,7 @@ The function `treescape` performs both tasks, returning both the matrix of pairw
 This can be illustrated using randomly generated trees:
 ```{r treescape}
 ## generate list of trees
+set.seed(1)
 x <- rmtree(10, 20)
 names(x) <- paste("tree", 1:10, sep = "")
 
@@ -97,7 +98,7 @@ table.image(res$D, nclass=30)
 table.value(res$D, nclass=10)
 
 ## with some customization
-table.value(res$D, nclass=5, method="color" , symbol="circle", col=heat.colors(10))
+table.value(res$D, nclass=5, method="color" , symbol="circle", col=redpal(5))
 
 ```
 

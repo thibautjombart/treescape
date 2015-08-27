@@ -72,6 +72,7 @@ This can be illustrated using randomly generated trees:
 
 ```r
 ## generate list of trees
+set.seed(1)
 x <- rmtree(10, 20)
 names(x) <- paste("tree", 1:10, sep = "")
 
@@ -91,15 +92,15 @@ res
 ```
 ## $D
 ##        tree1 tree2 tree3 tree4 tree5 tree6 tree7 tree8 tree9
-## tree2  33.65                                                
-## tree3  26.87 32.12                                          
-## tree4  28.76 31.16 21.98                                    
-## tree5  31.62 34.50 25.69 27.91                              
-## tree6  26.53 29.46 24.25 24.39 28.04                        
-## tree7  30.40 30.27 26.68 28.23 31.84 28.64                  
-## tree8  30.20 33.20 25.69 25.24 29.97 24.78 29.33            
-## tree9  35.04 37.01 32.77 30.87 33.17 34.03 33.32 33.79      
-## tree10 25.69 31.08 22.05 22.16 28.91 22.32 28.50 26.04 33.35
+## tree2  26.00                                                
+## tree3  31.06 26.74                                          
+## tree4  42.85 42.12 44.44                                    
+## tree5  30.66 27.71 27.37 44.79                              
+## tree6  36.50 31.18 30.18 41.81 31.59                        
+## tree7  34.64 28.71 29.48 40.35 31.11 32.37                  
+## tree8  28.97 26.29 24.45 43.74 23.47 30.41 29.00            
+## tree9  29.63 27.42 27.48 45.61 26.31 30.89 29.77 24.60      
+## tree10 34.87 30.00 29.44 44.97 34.06 31.05 34.41 31.54 32.59
 ## 
 ## $pco
 ## Duality diagramm
@@ -108,7 +109,7 @@ res
 ## 
 ## $nf: 3 axis-components saved
 ## $rank: 9
-## eigen values: 74.78 68.99 50.26 46.13 43.43 ...
+## eigen values: 142.1 76.52 62.69 49.88 41.07 ...
 ##   vector length mode    content       
 ## 1 $cw    9      numeric column weights
 ## 2 $lw    10     numeric row weights   
@@ -141,7 +142,7 @@ table.value(res$D, nclass=10)
 
 ```r
 ## with some customization
-table.value(res$D, nclass=5, method="color" , symbol="circle", col=heat.colors(10))
+table.value(res$D, nclass=5, method="color" , symbol="circle", col=redpal(5))
 ```
 
 <img src="vignettes/figs/distances-3.png" title="plot of chunk distances" alt="plot of chunk distances" width="400px" />
