@@ -60,19 +60,42 @@ Distributed datasets include:
 Exploring trees with *treescape*
 --------------
 
+We first load *treescape*, and packages required for graphics:
+```{r}
+library("treescape")
+library("ade4")
+library("adegenet")
+library("adegraphics")
+```
+
 The function __`treescape`__ defines typologies of phylogenetic trees using a two-steps approach:
 1. perform pairwise comparisons of trees using various (Euclidean) metrics; by default, comparison uses the Kendall and Colijn metric (Kendall & Colijn, submitted) which is described in more detail below; other metrics rely on tips distances implemented in *adephylo* (Jombart *et al.* 2010).
 2. use Metric Multidimensional Scaling (MDS, aka Principal Coordinates Analysis, PCoA) to summarise pairwise distances between the trees as well as possible into a few dimensions; output of MDS is typically visualised using scatterplots of the first few Principal Components (PCs); this step relies on the PCoA implemented in *ade4* (Dray & Dufour 2007).
 
-The function `treescape` performs both tasks, returning both the matrix of pairwise tree comparisons, and the PCoA:
+The function `treescape` performs both tasks, returning both the matrix of pairwise tree comparisons (`$D`), and the PCoA (`$pco`):
 
 ```{r treescape, fig.width=3, fig.height=3}
 ## generate list of trees
 x <- rmtree(10, 20)
 names(x) <- paste("tree", 1:10, sep = "")
+
 ## use treescape
 res <- treescape(x, nf=3)
-table.paint(as.matrix(res$D))
+names(res)
+res
+```
+
+Pairwise distances can be visualised using *adegraphics*:
+```{r treescape, fig.width=3, fig.height=3}
+## table.image
+table.image(res$D, nclass=30)
+
+## table.value
+table.value(res$D, nclass=10)
+
+## with some customization
+table.value(res$D, nclass=5, method="color" , symbol="circle", col=heat.colors(10))
+
 ```
 
 We can visualise these distances in a 2D map:
@@ -80,7 +103,7 @@ We can visualise these distances in a 2D map:
 scatter(res$pco)
 ```
 
-We illustrate this with *ape*'s dataset *woodmouse*, from which we built the 201 trees supplied in __`woodmiceTrees`__ using the neighbour-joining and bootstrapping example from the *ape* documentation. Here we plot the 2D map with *ggplot2*.
+We illustrate this with *ape*'s dataset *woodmouse*, from which we built the 201 trees supplied in __`woodmiceTrees`__ using the neighbour-joining and bootstrapping example from the *ape* documentation. Here we plot the first 2 PCs  with *ggplot2*.
 ```{r woodmice, fig.width=8, fig.height=8}
 data(woodmiceTrees)
 woodmiceDists <- treescape(woodmiceTrees,nf=3)
