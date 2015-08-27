@@ -147,7 +147,7 @@ plotGroves <- function(x, groups=NULL, xax=1, yax=2,
     }
     ## add inset
     if(!is.null(scree.posi[1]) && !is.na(scree.posi[1]) && scree.posi[1]!="none"){
-        screeplot <- s1d.barchart(c(rep(0,3),eig), p1d.horizontal=FALSE, ppolygons.col=scree.pal(length(eig)),
+        screeplot <- s1d.barchart(c(0,eig), p1d.horizontal=FALSE, ppolygons.col=scree.pal(length(eig)+1),
                                   pbackground=list(col=transp("white"), box=TRUE),
                                   layout.width=list(left.padding=2),
                                   pgrid.draw=FALSE, plot=FALSE)
