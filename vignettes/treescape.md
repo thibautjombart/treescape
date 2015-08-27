@@ -65,50 +65,8 @@ We first load *treescape*, and packages required for graphics:
 library("treescape")
 library("ade4")
 library("adegenet")
-```
-
-```
-## 
-##    /// adegenet 2.0.1 is loaded ////////////
-## 
-##    > overview: '?adegenet'
-##    > tutorials/doc/questions: 'adegenetWeb()' 
-##    > bug reports/feature resquests: adegenetIssues()
-## 
-## 
-## 
-## Attaching package: 'adegenet'
-## 
-## The following object is masked from 'package:treescape':
-## 
-##     .render.server.info
-```
-
-```r
 library("adegraphics")
-```
-
-```
-## 
-## Attaching package: 'adegraphics'
-## 
-## The following objects are masked from 'package:ade4':
-## 
-##     kplotsepan.coa, s.arrow, s.class, s.corcircle, s.distri,
-##     s.image, s.label, s.logo, s.match, s.traject, s.value,
-##     table.value, triangle.class
-## 
-## The following object is masked from 'package:ape':
-## 
-##     zoom
-```
-
-```r
-library("ggplot")
-```
-
-```
-## Error in library("ggplot"): there is no package called 'ggplot'
+library("ggplot2")
 ```
 
 The function __`treescape`__ defines typologies of phylogenetic trees using a two-steps approach:
@@ -139,15 +97,15 @@ res
 ```
 ## $D
 ##        tree1 tree2 tree3 tree4 tree5 tree6 tree7 tree8 tree9
-## tree2  33.00                                                
-## tree3  41.40 34.01                                          
-## tree4  39.08 30.40 36.21                                    
-## tree5  33.24 32.80 38.22 34.70                              
-## tree6  33.94 26.29 35.67 29.24 32.02                        
-## tree7  35.69 26.78 37.82 32.11 31.35 29.36                  
-## tree8  38.55 31.13 38.63 33.24 37.35 30.00 31.43            
-## tree9  37.07 29.92 38.65 35.40 35.96 31.62 28.74 33.62      
-## tree10 36.40 28.21 38.82 33.65 35.75 29.24 29.55 31.89 30.68
+## tree2  31.29                                                
+## tree3  26.94 25.98                                          
+## tree4  32.43 28.41 32.68                                    
+## tree5  34.74 26.50 34.37 32.08                              
+## tree6  28.43 26.44 23.11 33.11 34.39                        
+## tree7  34.70 31.51 31.97 33.14 35.09 34.70                  
+## tree8  28.04 30.90 28.07 29.70 32.42 30.50 34.23            
+## tree9  34.10 31.34 37.40 32.05 32.03 38.33 34.80 36.62      
+## tree10 30.48 34.41 33.00 32.73 37.26 32.14 34.66 33.66 39.34
 ## 
 ## $pco
 ## Duality diagramm
@@ -156,7 +114,7 @@ res
 ## 
 ## $nf: 3 axis-components saved
 ## $rank: 9
-## eigen values: 93.73 91.12 65.21 59.6 50.85 ...
+## eigen values: 106.6 73.06 63.47 55.6 52.41 ...
 ##   vector length mode    content       
 ## 1 $cw    9      numeric column weights
 ## 2 $lw    10     numeric row weights   
