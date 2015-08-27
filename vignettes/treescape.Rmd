@@ -113,8 +113,7 @@ Alternatively, the function `plotGroves` can be used:
 plotGroves(res$pco, lab.show=TRUE, lab.cex=1.5)
 ```
 
-
-`treecsape` can be furthe illustrated using *ape*'s dataset *woodmouse*, from which we built the 201 trees supplied in __`woodmiceTrees`__ using the neighbour-joining and bootstrapping example from the *ape* documentation. 
+`treecsape` can be further illustrated using *ape*'s dataset *woodmouse*, from which we built the 201 trees supplied in __`woodmiceTrees`__ using the neighbour-joining and bootstrapping example from the *ape* documentation. 
 ```{r woodmice}
 data(woodmiceTrees)
 wm.res <- treescape(woodmiceTrees,nf=3)
