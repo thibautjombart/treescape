@@ -1,7 +1,7 @@
 [![Travis-CI Build Status](https://travis-ci.org/thibautjombart/treescape.png?branch=master)](https://travis-ci.org/thibautjombart/treescape)
 
 
-```{r compileVignette, results="hide",echo=FALSE,message=FALSE}
+```{r compileVignette, results="hide",echo=FALSE,message=FALSE, fig.keep="none"}
 ## recompile vignette
 setwd("vignettes")
 knit("treescape.Rmd")

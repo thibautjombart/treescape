@@ -1,9 +1,6 @@
 [![Travis-CI Build Status](https://travis-ci.org/thibautjombart/treescape.png?branch=master)](https://travis-ci.org/thibautjombart/treescape)
 
 
-![plot of chunk compileVignette](figure/compileVignette-1.png) 
-
-
 *treescape*: exploration of landscapes of phylogenetic trees
 =================================================
 *treescape* implements new methods for the exploration and analysis of distributions of phylogenetic trees for a given set of taxa.
