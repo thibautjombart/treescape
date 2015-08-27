@@ -99,15 +99,15 @@ res
 ```
 ## $D
 ##        tree1 tree2 tree3 tree4 tree5 tree6 tree7 tree8 tree9
-## tree2  27.53                                                
-## tree3  29.85 29.95                                          
-## tree4  43.76 44.89 43.91                                    
-## tree5  34.68 32.73 33.23 38.29                              
-## tree6  31.27 34.67 34.51 42.13 36.59                        
-## tree7  33.03 35.23 31.65 36.74 36.69 29.92                  
-## tree8  26.19 27.60 28.09 42.77 32.88 32.19 34.68            
-## tree9  28.09 31.22 32.16 40.52 36.50 30.81 31.59 27.29      
-## tree10 30.59 33.88 32.23 39.46 37.24 32.86 31.42 27.64 21.93
+## tree2  33.65                                                
+## tree3  26.87 32.12                                          
+## tree4  28.76 31.16 21.98                                    
+## tree5  31.62 34.50 25.69 27.91                              
+## tree6  26.53 29.46 24.25 24.39 28.04                        
+## tree7  30.40 30.27 26.68 28.23 31.84 28.64                  
+## tree8  30.20 33.20 25.69 25.24 29.97 24.78 29.33            
+## tree9  35.04 37.01 32.77 30.87 33.17 34.03 33.32 33.79      
+## tree10 25.69 31.08 22.05 22.16 28.91 22.32 28.50 26.04 33.35
 ## 
 ## $pco
 ## Duality diagramm
@@ -116,7 +116,7 @@ res
 ## 
 ## $nf: 3 axis-components saved
 ## $rank: 9
-## eigen values: 136.7 91.33 68.85 54.05 45.94 ...
+## eigen values: 74.78 68.99 50.26 46.13 43.43 ...
 ##   vector length mode    content       
 ## 1 $cw    9      numeric column weights
 ## 2 $lw    10     numeric row weights   
@@ -423,20 +423,15 @@ treeVec(tree,0.5)
 
 ```r
 ## vector of mrca distances as a function of lambda:
-vecAsFunction <- treeVec(tree,return_lambda_function=TRUE)
-```
-
-```
-## Error in treeVec(tree, return_lambda_function = TRUE): unused argument (return_lambda_function = TRUE)
-```
-
-```r
+vecAsFunction <- treeVec(tree,return.lambda.function=TRUE)
 ## evaluate the vector at lambda=0.5:
 vecAsFunction(0.5)
 ```
 
 ```
-## Error in eval(expr, envir, enclos): could not find function "vecAsFunction"
+##  [1] 0.7473 0.7473 0.7473 0.0000 0.0000 1.3366 2.2140 0.0000 0.0000 1.3366
+## [11] 0.0000 0.0000 0.0000 0.0000 0.8248 0.5023 0.6922 0.7611 0.9299 0.9121
+## [21] 0.9191
 ```
 
 The metric -- the distance between two trees -- is the Euclidean distance between these vectors:
@@ -450,6 +445,7 @@ This can be found using __`treeDist`__:
 ## generate random trees
 tree_a <- rtree(6)
 tree_b <- rtree(6)
+
 ## topological (lambda=0) distance:
 treeDist(tree_a,tree_b) 
 ```

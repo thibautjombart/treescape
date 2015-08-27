@@ -262,7 +262,7 @@ treeVec(tree)
 ## vector of mrca distances from root when lambda=0.5:
 treeVec(tree,0.5)
 ## vector of mrca distances as a function of lambda:
-vecAsFunction <- treeVec(tree,return_lambda_function=TRUE)
+vecAsFunction <- treeVec(tree,return.lambda.function=TRUE)
 ## evaluate the vector at lambda=0.5:
 vecAsFunction(0.5)
 ```
@@ -277,8 +277,10 @@ This can be found using __`treeDist`__:
 ## generate random trees
 tree_a <- rtree(6)
 tree_b <- rtree(6)
+
 ## topological (lambda=0) distance:
 treeDist(tree_a,tree_b) 
+
 ## branch-length focused (lambda=1) distance:
 treeDist(tree_a,tree_b,1)
 ```
