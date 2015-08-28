@@ -30,7 +30,7 @@ shinyUI(
                              conditionalPanel(condition = "input.datatype=='expl'",
                                               selectInput("dataset",
                                                           HTML('<font size="4"> Select an example dataset:</font>'),
-                                                          choices=c("woodmiceTrees"))
+                                                          choices=c("woodmiceTrees","fluBeast"))
                                               ),
 
                              ## choice of dataset if source is a file

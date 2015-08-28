@@ -31,6 +31,7 @@ shinyServer(function(input, output) {
         ## data is a distributed dataset
         if(input$datatype=="expl"){
             if(input$dataset=="woodmiceTrees") data("woodmiceTrees", package="treescape", envir=environment())
+            if(input$dataset=="fluBeast") data("fluBeast", package="treescape", envir=environment())
             out <- get(input$dataset)
         }
 
