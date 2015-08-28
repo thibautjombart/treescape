@@ -1,6 +1,6 @@
 Package: treescape
 Title: Statistical exploration of landscapes of phylogenetic trees
-Version: 0.0.0.9000
+Version: 1.0.0
 Authors@R: c(TJ=person("Thibaut", "Jombart", email="thibaut.jombart@gmail.com", role = c("aut", "cre")), 
 	   MK=person("Michelle", "Kendall", role = c("aut")), 
 	   JAG=person("Jacob", "Almagro-Garcia", role = c("aut")),	
