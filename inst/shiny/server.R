@@ -1,6 +1,7 @@
 ## library(shiny)
 ## library(treescape)
 
+options(shiny.maxRequestSize=500*1024^2)
 
 ## DEFINE THE SERVER SIDE OF THE APPLICATION
 shinyServer(function(input, output) {
