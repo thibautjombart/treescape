@@ -471,7 +471,7 @@ Authors / Contributors
 Authors:
 * [Thibaut Jombart](https://sites.google.com/site/thibautjombart/)
 * [Michelle Kendall](http://www.imperial.ac.uk/people/m.kendall)
-* [Jacob Almagro Garcia](http://www.well.ox.ac.uk/jacob-almagro-garcia-2)
+* [Jacob Almagro-Garcia](http://www.well.ox.ac.uk/jacob-almagro-garcia-2)
 
 Contributors:
 * [Caroline Colijn](http://www.imperial.ac.uk/people/c.colijn)
