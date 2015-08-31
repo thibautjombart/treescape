@@ -1,7 +1,7 @@
 ---
 title: "Exploration of landscapes of phylogenetic trees"
 author: "Thibaut Jombart, Michelle Kendall"
-date: "2015-08-28"
+date: "2015-08-31"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
@@ -38,10 +38,6 @@ Then, to load the package, use:
 library("treescape")
 ```
 
-```
-## Error in library("treescape"): there is no package called 'treescape'
-```
-
 
 Content overview
 -------------
@@ -69,13 +65,6 @@ We first load *treescape*, and packages required for graphics:
 
 ```r
 library("treescape")
-```
-
-```
-## Error in library("treescape"): there is no package called 'treescape'
-```
-
-```r
 library("ade4")
 library("adegenet")
 ```
@@ -87,6 +76,14 @@ library("adegenet")
 ##    > overview: '?adegenet'
 ##    > tutorials/doc/questions: 'adegenetWeb()' 
 ##    > bug reports/feature resquests: adegenetIssues()
+## 
+## 
+## 
+## Attaching package: 'adegenet'
+## 
+## The following object is masked from 'package:treescape':
+## 
+##     .render.server.info
 ```
 
 ```r
@@ -102,6 +99,10 @@ library("adegraphics")
 ##     kplotsepan.coa, s.arrow, s.class, s.corcircle, s.distri,
 ##     s.image, s.label, s.logo, s.match, s.traject, s.value,
 ##     table.value, triangle.class
+## 
+## The following object is masked from 'package:ape':
+## 
+##     zoom
 ```
 
 ```r
@@ -121,35 +122,15 @@ This can be illustrated using randomly generated trees:
 ## generate list of trees
 set.seed(1)
 x <- rmtree(10, 20)
-```
-
-```
-## Error in eval(expr, envir, enclos): could not find function "rmtree"
-```
-
-```r
 names(x) <- paste("tree", 1:10, sep = "")
-```
 
-```
-## Error in names(x) <- paste("tree", 1:10, sep = ""): object 'x' not found
-```
-
-```r
 ## use treescape
 res <- treescape(x, nf=3)
-```
-
-```
-## Error in eval(expr, envir, enclos): could not find function "treescape"
-```
-
-```r
 names(res)
 ```
 
 ```
-## Error in eval(expr, envir, enclos): object 'res' not found
+## [1] "D"   "pco"
 ```
 
 ```r
@@ -157,7 +138,38 @@ res
 ```
 
 ```
-## Error in eval(expr, envir, enclos): object 'res' not found
+## $D
+##        tree1 tree2 tree3 tree4 tree5 tree6 tree7 tree8 tree9
+## tree2  26.00                                                
+## tree3  31.06 26.74                                          
+## tree4  42.85 42.12 44.44                                    
+## tree5  30.66 27.71 27.37 44.79                              
+## tree6  36.50 31.18 30.18 41.81 31.59                        
+## tree7  34.64 28.71 29.48 40.35 31.11 32.37                  
+## tree8  28.97 26.29 24.45 43.74 23.47 30.41 29.00            
+## tree9  29.63 27.42 27.48 45.61 26.31 30.89 29.77 24.60      
+## tree10 34.87 30.00 29.44 44.97 34.06 31.05 34.41 31.54 32.59
+## 
+## $pco
+## Duality diagramm
+## class: pco dudi
+## $call: dudi.pco(d = D, scannf = is.null(nf), nf = nf)
+## 
+## $nf: 3 axis-components saved
+## $rank: 9
+## eigen values: 142.1 76.52 62.69 49.88 41.07 ...
+##   vector length mode    content       
+## 1 $cw    9      numeric column weights
+## 2 $lw    10     numeric row weights   
+## 3 $eig   9      numeric eigen values  
+## 
+##   data.frame nrow ncol content             
+## 1 $tab       10   9    modified array      
+## 2 $li        10   3    row coordinates     
+## 3 $l1        10   3    row normed scores   
+## 4 $co        9    3    column coordinates  
+## 5 $c1        9    3    column normed scores
+## other elements: NULL
 ```
 
 Pairwise distances can be visualised using *adegraphics*:
@@ -167,9 +179,7 @@ Pairwise distances can be visualised using *adegraphics*:
 table.image(res$D, nclass=30)
 ```
 
-```
-## Error in eval(expr, envir, enclos): object 'res' not found
-```
+<img src="figs/distances-1.png" title="plot of chunk distances" alt="plot of chunk distances" width="400px" />
 
 ```r
 ## table.value with some customization
@@ -177,9 +187,7 @@ table.value(res$D, nclass=5, method="color",
             symbol="circle", col=redpal(5))
 ```
 
-```
-## Error in eval(expr, envir, enclos): object 'res' not found
-```
+<img src="figs/distances-2.png" title="plot of chunk distances" alt="plot of chunk distances" width="400px" />
 
 The best representation of these distances in a 2-dimensional space is given by the first 2 PCs of the MDS.
 These can be visualised using *adegraphics*'s function `scatter`:
@@ -188,9 +196,7 @@ These can be visualised using *adegraphics*'s function `scatter`:
 scatter(res$pco)
 ```
 
-```
-## Error in scatter(res$pco): object 'res' not found
-```
+<img src="figs/treescapescatter-1.png" title="plot of chunk treescapescatter" alt="plot of chunk treescapescatter" width="400px" />
 
 Alternatively, the function `plotGroves` can be used:
 
@@ -199,35 +205,38 @@ Alternatively, the function `plotGroves` can be used:
 plotGroves(res$pco, lab.show=TRUE, lab.cex=1.5)
 ```
 
-```
-## Error in eval(expr, envir, enclos): could not find function "plotGroves"
-```
+<img src="figs/plotgroves-1.png" title="plot of chunk plotgroves" alt="plot of chunk plotgroves" width="400px" />
 
 The functionality of `treecsape` can be further illustrated using *ape*'s dataset *woodmouse*, from which we built the 201 trees supplied in `woodmiceTrees` using the neighbour-joining and bootstrapping example from the *ape* documentation. 
 
 ```r
 data(woodmiceTrees)
-```
-
-```
-## Warning in data(woodmiceTrees): data set 'woodmiceTrees' not found
-```
-
-```r
 wm.res <- treescape(woodmiceTrees,nf=3)
-```
 
-```
-## Error in eval(expr, envir, enclos): could not find function "treescape"
-```
-
-```r
 ## this is the PCoA / MDS:
 wm.res$pco
 ```
 
 ```
-## Error in eval(expr, envir, enclos): object 'wm.res' not found
+## Duality diagramm
+## class: pco dudi
+## $call: dudi.pco(d = D, scannf = is.null(nf), nf = nf)
+## 
+## $nf: 3 axis-components saved
+## $rank: 54
+## eigen values: 32.69 24.41 6.952 6.348 4.363 ...
+##   vector length mode    content       
+## 1 $cw    54     numeric column weights
+## 2 $lw    201    numeric row weights   
+## 3 $eig   54     numeric eigen values  
+## 
+##   data.frame nrow ncol content             
+## 1 $tab       201  54   modified array      
+## 2 $li        201  3    row coordinates     
+## 3 $l1        201  3    row normed scores   
+## 4 $co        54   3    column coordinates  
+## 5 $c1        54   3    column normed scores
+## other elements: NULL
 ```
 
 ```r
@@ -236,7 +245,13 @@ head(wm.res$pco$li)
 ```
 
 ```
-## Error in head(wm.res$pco$li): object 'wm.res' not found
+##         A1     A2      A3
+## 1  -0.9949 -1.363 -0.7918
+## 2  -0.6137 -1.014 -0.6798
+## 3   2.6667  4.219 -2.9293
+## 4 -13.6081  1.854  1.0947
+## 5   2.1980  4.176 -3.1960
+## 6   3.6013  4.865  2.9853
 ```
 
 ```r
@@ -244,56 +259,39 @@ head(wm.res$pco$li)
 plotGroves(wm.res$pco, lab.show=TRUE, lab.optim=FALSE)
 ```
 
-```
-## Error in eval(expr, envir, enclos): could not find function "plotGroves"
-```
+<img src="figs/woodmicePlots-1.png" title="plot of chunk woodmicePlots" alt="plot of chunk woodmicePlots" width="400px" />
 
 ```r
 ## visualising density of points
 s.kde2d(wm.res$pco$li)
 ```
 
-```
-## Error in data.frame(dfxy): object 'wm.res' not found
-```
+<img src="figs/woodmicePlots-2.png" title="plot of chunk woodmicePlots" alt="plot of chunk woodmicePlots" width="400px" />
 
 ```r
 ## alternative visualisation
 s.density(wm.res$pco$li, col=redpal(100), bandwidth=3)
 ```
 
-```
-## Error in s.density(wm.res$pco$li, col = redpal(100), bandwidth = 3): non convenient selection for dfxy (can not be converted to dataframe)
-```
+<img src="figs/woodmicePlots-3.png" title="plot of chunk woodmicePlots" alt="plot of chunk woodmicePlots" width="400px" />
 
 ```r
 ## same, other palette
 s.density(wm.res$pco$li, col=rev(transp(spectral(100),.5)), bandwidth=3)
 ```
 
-```
-## Error in s.density(wm.res$pco$li, col = rev(transp(spectral(100), 0.5)), : non convenient selection for dfxy (can not be converted to dataframe)
-```
+<img src="figs/woodmicePlots-4.png" title="plot of chunk woodmicePlots" alt="plot of chunk woodmicePlots" width="400px" />
 
 ```r
 ## alternative using ggplot2
 woodmiceplot <- ggplot(wm.res$pco$li, aes(x=A1, y=A2)) # create plot
-```
-
-```
-## Error in ggplot(wm.res$pco$li, aes(x = A1, y = A2)): object 'wm.res' not found
-```
-
-```r
 woodmiceplot + geom_density2d(colour="gray80") + # contour lines
 geom_point(size=6, shape=1, colour="gray50") + # grey edges
 geom_point(size=6, alpha=0.2, colour="navy") + # transparent blue points
 xlab("") + ylab("") + theme_bw(base_family="") # remove axis labels and grey background
 ```
 
-```
-## Error in eval(expr, envir, enclos): object 'woodmiceplot' not found
-```
+<img src="figs/woodmicePlots-5.png" title="plot of chunk woodmicePlots" alt="plot of chunk woodmicePlots" width="400px" />
 
 
 Note that alternatively, the function `multiDist` simply performs the pairwise comparison of trees and outputs a distance matrix. 
@@ -320,18 +318,11 @@ In *treescape*, the function `findGroves` implements this approach, offering var
 
 ```r
 wm.groves <- findGroves(woodmiceTrees, nf=3, nclust=6)
-```
-
-```
-## Error in eval(expr, envir, enclos): could not find function "findGroves"
-```
-
-```r
 names(wm.groves)
 ```
 
 ```
-## Error in eval(expr, envir, enclos): object 'wm.groves' not found
+## [1] "groups"    "treescape"
 ```
 Note that when the number of clusters (`nclust`) is not provided, the function will display a dendrogram and ask for a cut-off height. 
 
@@ -342,27 +333,21 @@ The results can be plotted directly using `plotGroves` (see `?plotGroves` for op
 plotGroves(wm.groves)
 ```
 
-```
-## Error in eval(expr, envir, enclos): could not find function "plotGroves"
-```
+<img src="figs/plotgroves2-1.png" title="plot of chunk plotgroves2" alt="plot of chunk plotgroves2" width="400px" />
 
 ```r
 ## alternative with inertia ellipses
 plotGroves(wm.groves, type="ellipse")
 ```
 
-```
-## Error in eval(expr, envir, enclos): could not find function "plotGroves"
-```
+<img src="figs/plotgroves2-2.png" title="plot of chunk plotgroves2" alt="plot of chunk plotgroves2" width="400px" />
 
 ```r
 ## plot axes 2-3
 plotGroves(wm.groves, xax=2, yax=3)
 ```
 
-```
-## Error in eval(expr, envir, enclos): could not find function "plotGroves"
-```
+<img src="figs/plotgroves2-3.png" title="plot of chunk plotgroves2" alt="plot of chunk plotgroves2" width="400px" />
 
 
 ```r
@@ -370,9 +355,7 @@ plotGroves(wm.groves, xax=2, yax=3)
 plotGroves(wm.groves, bg="black", col.pal=lightseasun, lab.show=TRUE, lab.col="white", lab.cex=1.5)
 ```
 
-```
-## Error in eval(expr, envir, enclos): could not find function "plotGroves"
-```
+<img src="figs/plotgroves3-1.png" title="plot of chunk plotgroves3" alt="plot of chunk plotgroves3" width="400px" />
 
 
 
@@ -400,20 +383,12 @@ This procedure is implemented by the function **`medTree`**:
 ```r
 ## get first median tree
 tre <- medTree(woodmiceTrees)$trees[[1]]
-```
 
-```
-## Error in eval(expr, envir, enclos): could not find function "medTree"
-```
-
-```r
 ## plot tree
 plot(tre,type="cladogram",edge.width=3, cex=0.8)
 ```
 
-```
-## Error in plot(tre, type = "cladogram", edge.width = 3, cex = 0.8): error in evaluating the argument 'x' in selecting a method for function 'plot': Error: object 'tre' not found
-```
+<img src="figs/woodmiceMedian-1.png" title="plot of chunk woodmiceMedian" alt="plot of chunk woodmiceMedian" width="400px" />
 
 However, a more complete and accurate summary of the data can be given by finding a summary tree from each cluster.
 This is achieved using the `groups` argument of `medTree`:
@@ -421,48 +396,28 @@ This is achieved using the `groups` argument of `medTree`:
 ```r
 ## identify 6 clusters
 groves <- findGroves(woodmiceTrees, nf=3, nclust=6)
-```
 
-```
-## Error in eval(expr, envir, enclos): could not find function "findGroves"
-```
-
-```r
 ## find median trees
 res <- medTree(woodmiceTrees, groves$groups)
-```
 
-```
-## Error in eval(expr, envir, enclos): could not find function "medTree"
-```
-
-```r
 ## there isone output per cluster
 names(res)
 ```
 
 ```
-## Error in eval(expr, envir, enclos): object 'res' not found
+## [1] "1" "2" "3" "4" "5" "6"
 ```
 
 ```r
 ## get the first median of each
 med.trees <- lapply(res, function(e) ladderize(e$trees[[1]]))
-```
 
-```
-## Error in lapply(res, function(e) ladderize(e$trees[[1]])): object 'res' not found
-```
-
-```r
 ## plot trees
 par(mfrow=c(2,3))
 for(i in 1:length(med.trees)) plot(med.trees[[i]], main=paste("cluster",i),cex=1.5)
 ```
 
-```
-## Error in eval(expr, envir, enclos): object 'med.trees' not found
-```
+<img src="figs/woodmiceCluster1-1.png" title="plot of chunk woodmiceCluster1" alt="plot of chunk woodmiceCluster1" width="600px" />
 
 These trees exhibit a number of topological differences, e.g. in the placement of the **(1007S,1208S,0909S)** clade. 
 Performing this analysis enables the detection of distinct representative trees supported by data.
@@ -488,19 +443,12 @@ This is implemented as the function __`treeVec`__. For example,
 ```r
 ## generate a random tree:
 tree <- rtree(6)
-```
-
-```
-## Error in eval(expr, envir, enclos): could not find function "rtree"
-```
-
-```r
 ## topological vector of mrca distances from root:
 treeVec(tree)
 ```
 
 ```
-## Error in eval(expr, envir, enclos): could not find function "treeVec"
+##  [1] 0 3 1 2 4 0 0 0 0 1 2 3 1 1 2 1 1 1 1 1 1
 ```
 
 ```r
@@ -509,25 +457,22 @@ treeVec(tree,0.5)
 ```
 
 ```
-## Error in eval(expr, envir, enclos): could not find function "treeVec"
+##  [1] 0.0000 2.1653 0.6671 1.4171 2.8537 0.0000 0.0000 0.0000 0.0000 0.6671
+## [11] 1.4171 2.1653 0.6671 0.6671 1.4171 0.5646 0.7231 0.6609 0.5466 0.6653
+## [21] 0.5655
 ```
 
 ```r
 ## vector of mrca distances as a function of lambda:
 vecAsFunction <- treeVec(tree,return.lambda.function=TRUE)
-```
-
-```
-## Error in eval(expr, envir, enclos): could not find function "treeVec"
-```
-
-```r
 ## evaluate the vector at lambda=0.5:
 vecAsFunction(0.5)
 ```
 
 ```
-## Error in eval(expr, envir, enclos): could not find function "vecAsFunction"
+##  [1] 0.0000 2.1653 0.6671 1.4171 2.8537 0.0000 0.0000 0.0000 0.0000 0.6671
+## [11] 1.4171 2.1653 0.6671 0.6671 1.4171 0.5646 0.7231 0.6609 0.5466 0.6653
+## [21] 0.5655
 ```
 
 The metric -- the distance between two trees -- is the Euclidean distance between these vectors:
@@ -540,27 +485,14 @@ This can be found using __`treeDist`__:
 ```r
 ## generate random trees
 tree_a <- rtree(6)
-```
-
-```
-## Error in eval(expr, envir, enclos): could not find function "rtree"
-```
-
-```r
 tree_b <- rtree(6)
-```
 
-```
-## Error in eval(expr, envir, enclos): could not find function "rtree"
-```
-
-```r
 ## topological (lambda=0) distance:
 treeDist(tree_a,tree_b) 
 ```
 
 ```
-## Error in eval(expr, envir, enclos): could not find function "treeDist"
+## [1] 5.657
 ```
 
 ```r
@@ -569,7 +501,7 @@ treeDist(tree_a,tree_b,1)
 ```
 
 ```
-## Error in eval(expr, envir, enclos): could not find function "treeDist"
+## [1] 3.544
 ```
 
 
