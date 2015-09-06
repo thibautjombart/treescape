@@ -332,6 +332,7 @@ treeDist <- function(tree.a, tree.b, lambda=0, return.lambda.function=FALSE) {
 #'
 #'
 #' @import ape
+#' @importFrom stats as.dist
 #'
 #'
 #' @examples

@@ -16,6 +16,11 @@
 #'
 #' @import ape
 #' @importFrom stats hclust
+#' @importFrom stats dist
+#' @importFrom stats cutree
+#' @importFrom graphics plot
+#' @importFrom graphics abline
+#' 
 #'
 #' @seealso \code{\link{plotGroves}} to display results
 #'
