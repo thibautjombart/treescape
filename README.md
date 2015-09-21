@@ -59,45 +59,7 @@ We first load *treescape*, and packages required for graphics:
 library("treescape")
 library("ade4")
 library("adegenet")
-```
-
-```
-## 
-##    /// adegenet 2.0.0 is loaded ////////////
-## 
-##    > overview: '?adegenet'
-##    > tutorials/doc/questions: 'adegenetWeb()' 
-##    > bug reports/feature resquests: adegenetIssues()
-## 
-## 
-## 
-## Attaching package: 'adegenet'
-## 
-## The following object is masked from 'package:treescape':
-## 
-##     .render.server.info
-```
-
-```r
 library("adegraphics")
-```
-
-```
-## 
-## Attaching package: 'adegraphics'
-## 
-## The following objects are masked from 'package:ade4':
-## 
-##     kplotsepan.coa, s.arrow, s.class, s.corcircle, s.distri,
-##     s.image, s.label, s.logo, s.match, s.traject, s.value,
-##     table.value, triangle.class
-## 
-## The following object is masked from 'package:ape':
-## 
-##     zoom
-```
-
-```r
 library("ggplot2")
 ```
 
@@ -284,7 +246,6 @@ xlab("") + ylab("") + theme_bw(base_family="") # remove axis labels and grey bac
 
 <img src="vignettes/figs/woodmicePlots-5.png" title="plot of chunk woodmicePlots" alt="plot of chunk woodmicePlots" width="400px" />
 
-
 Note that alternatively, the function `multiDist` simply performs the pairwise comparison of trees and outputs a distance matrix. 
 This function may be preferable for large datasets, and when principal co-ordinate analysis is not required. 
 It includes an option to save memory at the expense of computation time.
@@ -411,7 +372,30 @@ for(i in 1:length(med.trees)) plot(med.trees[[i]], main=paste("cluster",i),cex=1
 These trees exhibit a number of topological differences, e.g. in the placement of the **(1007S,1208S,0909S)** clade. 
 Performing this analysis enables the detection of distinct representative trees supported by data.
 
+Emphasising the placement of certain tips or clades
+--------------
 
+In some cases it may be informative to emphasise the placement of particular tips or clades within a set of trees. This can be particularly useful in large trees where a study is focussed on a smaller clade, or where the topology or branch lengths of a particular clade are not of interest (for example, lineages within an outgroup which was only included for rooting purposes). Priority can be given to a list of tips using the argument `emphasise.tips`, whose corresponding values in the vector comparison will be given a weight of `emphasise.weight` times the others (the default is 2, i.e. twice the weight).
+
+For example, if we wanted to emphasise where the woodmice trees agree and disagree on the placement of the **(1007S,1208S,0909S)** clade, we can simply emphasise that clade as follows: 
+
+```r
+wm3.res <- treescape(woodmiceTrees,nf=2,emphasise.tips=c("No1007S","No1208S","No0909S"),emphasise.weight=3)
+
+## plot results
+plotGroves(wm3.res$pco, lab.show=TRUE, lab.optim=FALSE)
+```
+
+<img src="vignettes/figs/woodmice tip emphasis-1.png" title="plot of chunk woodmice tip emphasis" alt="plot of chunk woodmice tip emphasis" width="400px" />
+
+It can be seen from the scale of the plot and the density of clustering that the trees are now separated into more distinct clusters.
+
+```r
+wm3.groves <- findGroves(woodmiceTrees,nf=3,nclust=6,emphasise.tips=c("No1007S","No1208S","No0909S"),emphasise.weight=3)
+plotGroves(wm3.groves, type="ellipse")
+```
+
+<img src="vignettes/figs/findgroves with emphasis-1.png" title="plot of chunk findgroves with emphasis" alt="plot of chunk findgroves with emphasis" width="400px" />
 
 Method: characterising a tree by a vector
 --------------
