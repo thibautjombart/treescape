@@ -4,7 +4,8 @@
 \alias{treeVec}
 \title{Tree vector function}
 \usage{
-treeVec(tree, lambda = 0, return.lambda.function = FALSE)
+treeVec(tree, lambda = 0, return.lambda.function = FALSE,
+  emphasise.tips = NULL, emphasise.weight = 2)
 }
 \arguments{
 \item{tree}{an object of the class \code{phylo}}
@@ -12,6 +13,10 @@ treeVec(tree, lambda = 0, return.lambda.function = FALSE)
 \item{lambda}{a number in [0,1] which specifies the extent to which topology (default, with lambda=0)  or branch lengths (lambda=1) are emphasised. This argument is ignored if \code{return.lambda.function=TRUE}.}
 
 \item{return.lambda.function}{If true, a function that can be invoked with different lambda values is returned. This function returns the vector of metric values for the given lambda.}
+
+\item{emphasise.tips}{an optional list of tips whose entries in the tree vector should be emphasised. Defaults to \code{NULL}.}
+
+\item{emphasise.weight}{applicable only if a list is supplied to \code{emphasise.tips}, this value (default 2) is the number by which vector entries corresponding to those tips are emphasised.}
 }
 \value{
 The vector with the metric values or a function that produces the vector given a value of lambda.

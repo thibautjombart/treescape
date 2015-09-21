@@ -5,7 +5,7 @@
 \title{Metric function for \code{multiPhylo} input}
 \usage{
 multiDist(trees, lambda = 0, return.lambda.function = FALSE,
-  save.memory = FALSE)
+  save.memory = FALSE, emphasise.tips = NULL, emphasise.weight = 2)
 }
 \arguments{
 \item{trees}{an object of the class \code{multiPhylo} containing the trees to be compared}
@@ -16,6 +16,10 @@ multiDist(trees, lambda = 0, return.lambda.function = FALSE,
 This function returns the matrix of metric values for the given lambda.}
 
 \item{save.memory}{A flag that saves a lot of memory but increases the execution time (not compatible with return.lambda.function=TRUE).}
+
+\item{emphasise.tips}{an optional list of tips whose entries in the tree vectors should be emphasised. Defaults to \code{NULL}.}
+
+\item{emphasise.weight}{applicable only if a list is supplied to \code{emphasise.tips}, this value (default 2) is the number by which vector entries corresponding to those tips are emphasised.}
 }
 \value{
 The distance matrix or a function that produces the distance matrix given a value for lambda.

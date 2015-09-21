@@ -105,11 +105,14 @@ penEdgeTreematch <- compiler::cmpfun(penEdgeTreematch)
 #' @param tree an object of the class \code{phylo}
 #' @param lambda a number in [0,1] which specifies the extent to which topology (default, with lambda=0)  or branch lengths (lambda=1) are emphasised. This argument is ignored if \code{return.lambda.function=TRUE}.
 #' @param return.lambda.function If true, a function that can be invoked with different lambda values is returned. This function returns the vector of metric values for the given lambda.
+#' @param emphasise.tips an optional list of tips whose entries in the tree vector should be emphasised. Defaults to \code{NULL}.
+#' @param emphasise.weight applicable only if a list is supplied to \code{emphasise.tips}, this value (default 2) is the number by which vector entries corresponding to those tips are emphasised.
 #'
 #' @return The vector with the metric values or a function that produces the vector given a value of lambda.
 #'
 #' @import ape
 #' @importFrom Rcpp evalCpp
+#' @importFrom combinat combn2
 #' @useDynLib treescape
 #'
 #' @examples
@@ -124,8 +127,9 @@ penEdgeTreematch <- compiler::cmpfun(penEdgeTreematch)
 #' vecAsFunction <- treeVec(tree,return.lambda.function=TRUE)
 #' ## evaluate the vector at lambda=0.5:
 #' vecAsFunction(0.5)
+#' 
 #'
-treeVec <- function(tree, lambda=0, return.lambda.function=FALSE) {
+treeVec <- function(tree, lambda=0, return.lambda.function=FALSE, emphasise.tips=NULL, emphasise.weight=2) {
   if(lambda<0 || lambda>1) stop("Pick lambda in [0,1]")
   if(class(tree)!="phylo") stop("Tree should be of class phylo")
   if(is.rooted(tree)!=TRUE) stop("Metric is for rooted trees only")
@@ -140,6 +144,20 @@ treeVec <- function(tree, lambda=0, return.lambda.function=FALSE) {
   # We work with ordered labels, using this vector to transform indices.
   tip_order <- match(1:num_leaves, order(tree$tip.label))
 
+  if (is.null(emphasise.tips)==FALSE){
+    # To emphasise the position of certain tips:
+    # translate important tip label names into order
+    emphasise.tips.order <- tip_order[which(tree$tip.label%in%emphasise.tips)]
+    # find the positions where these tips appear in the k choose 2 elements of the final vector
+    pairs <- combn2(1:num_leaves)
+    emphasise.vector.elements <- union(which(pairs[,1]%in%emphasise.tips.order ),which(pairs[,2]%in%emphasise.tips.order ))
+    # make a vector to multiply positions concerning important tips by chosen weighting
+    tip.weighting <- c(sapply(1:length(pairs[,1]), function(x) if(x%in%emphasise.vector.elements){emphasise.weight} else{1}),
+                       sapply(1:num_leaves, function(y) if(y%in%emphasise.tips.order){emphasise.weight} else{1}))
+  }
+  else{tip.weighting <- rep(1,0.5*num_leaves*(num_leaves+1))}
+  
+  
   # Ordering the edges by first column places the root at the bottom.
   # Descendants will be placed always before parents.
   edge_order <- order(tree$edge[,1], decreasing=T)
@@ -251,11 +269,11 @@ treeVec <- function(tree, lambda=0, return.lambda.function=FALSE) {
   })
 
   if(!return.lambda.function)
-    return(lambda * length_root_distances + (1-lambda) * topological_root_distances)
+    return(tip.weighting * (lambda * length_root_distances + (1-lambda) * topological_root_distances))
   else {
     return(function(l) {
       if(l<0 || l>1) stop("Pick lambda in [0,1]")
-      return(l * length_root_distances + (1-l) * topological_root_distances) })
+      return(tip.weighting * (l * length_root_distances + (1-l) * topological_root_distances)) })
   }
 }
 
@@ -276,6 +294,9 @@ treeVec <- function(tree, lambda=0, return.lambda.function=FALSE) {
 #' @param lambda a number in [0,1] which specifies the extent to which topology (default, with lambda=0)  or branch lengths (lambda=1) are emphasised. This argument is ignored if \code{type="function"}.
 #' @param return.lambda.function If true, a function that can be invoked with different lambda values is returned.
 #'  This function returns the vector of metric values for the given lambda.
+#' @param emphasise.tips an optional list of tips whose entries in the tree vectors should be emphasised. Defaults to \code{NULL}.
+#' @param emphasise.weight applicable only if a list is supplied to \code{emphasise.tips}, this value (default 2) is the number by which vector entries corresponding to those tips are emphasised.
+#'
 #' @return The vector with the metric values or a function that produces the vector given a value of lambda.
 #'
 #'
@@ -294,15 +315,18 @@ treeVec <- function(tree, lambda=0, return.lambda.function=FALSE) {
 #' ## We can see how the distance changes when moving from focusing on topology to length:
 #' plot(sapply(seq(0,1,length.out=100), function(x) dist.func(x)), type="l",ylab="",xlab="")
 #'
+#' ## The distance may also change if we emphasise the position of certain tips:
+#' plot(sapply(tree.a$tip.label, function(x) treeDist(tree.a,tree.b,emphasise.tips=x)),
+#'      xlab="Tip number",ylab="Distance when  vector entries corresponding to tip are doubled")
 #'
-treeDist <- function(tree.a, tree.b, lambda=0, return.lambda.function=FALSE) {
+treeDist <- function(tree.a, tree.b, lambda=0, return.lambda.function=FALSE, emphasise.tips=NULL, emphasise.weight=2) {
 
     if(length(tree.a$tip.label) != length(tree.b$tip.label)) stop("Trees must have the same number of tips")
 
     if(setequal(tree.a$tip.label,tree.b$tip.label) == FALSE) stop("Trees must have the same tip label sets")
 
-    metric_a <- treeVec(tree.a, lambda, return.lambda.function)
-    metric_b <- treeVec(tree.b, lambda, return.lambda.function)
+    metric_a <- treeVec(tree.a, lambda, return.lambda.function, emphasise.tips, emphasise.weight)
+    metric_b <- treeVec(tree.b, lambda, return.lambda.function, emphasise.tips, emphasise.weight)
     if(!return.lambda.function) {
         return(sqrt(sum((metric_a - metric_b)^2)))
     }
@@ -328,6 +352,9 @@ treeDist <- function(tree.a, tree.b, lambda=0, return.lambda.function=FALSE) {
 #' @param return.lambda.function If true, a function that can be invoked with different lambda values is returned.
 #'  This function returns the matrix of metric values for the given lambda.
 #' @param save.memory A flag that saves a lot of memory but increases the execution time (not compatible with return.lambda.function=TRUE).
+#' @param emphasise.tips an optional list of tips whose entries in the tree vectors should be emphasised. Defaults to \code{NULL}.
+#' @param emphasise.weight applicable only if a list is supplied to \code{emphasise.tips}, this value (default 2) is the number by which vector entries corresponding to those tips are emphasised.
+#'
 #' @return The distance matrix or a function that produces the distance matrix given a value for lambda.
 #'
 #'
@@ -353,7 +380,8 @@ treeDist <- function(tree.a, tree.b, lambda=0, return.lambda.function=FALSE) {
 #' m0.5 <- multiDist(trees,0.5,save.memory=TRUE)
 #'
 multiDist <- function(trees, lambda=0,
-                      return.lambda.function=FALSE, save.memory=FALSE) {
+                      return.lambda.function=FALSE, save.memory=FALSE,
+                      emphasise.tips=NULL, emphasise.weight=2) {
 
   num_trees <- length(trees)
 
@@ -366,7 +394,7 @@ multiDist <- function(trees, lambda=0,
     if(!save.memory) {
 
       # Compute the metric vector for all trees.
-      tree_metrics <- t(sapply(trees, function(tree) {treeVec(tree, lambda, F)}))
+      tree_metrics <- t(sapply(trees, function(tree) {treeVec(tree, lambda, F, emphasise.tips, emphasise.weight)}))
       sapply(1:(num_trees-1), function(i) {
         sapply((i+1):num_trees, function(j) {
           distances[i,j] <<- distances[j,i] <<- sqrt(sum((tree_metrics[i,] - tree_metrics[j,])^2))
@@ -378,7 +406,7 @@ multiDist <- function(trees, lambda=0,
     else {
       sapply(1:(num_trees-1), function(i) {
         sapply((i+1):num_trees, function(j) {
-          distances[i,j] <<- distances[j,i] <<- treeDist(trees[[i]], trees[[j]], lambda, F)
+          distances[i,j] <<- distances[j,i] <<- treeDist(trees[[i]], trees[[j]], lambda, F, emphasise.tips, emphasise.weight)
         })
       })
     }
@@ -393,7 +421,7 @@ multiDist <- function(trees, lambda=0,
       warning("save.memory=TRUE is incompatible with return.lambda.function=TRUE, setting save.memory=FALSE")
 
     # Compute the list of metric functions for all trees.
-    tree_metric_functions <- sapply(trees, function(tree) {treeVec(tree, lambda, T)})
+    tree_metric_functions <- sapply(trees, function(tree) {treeVec(tree, lambda, T, emphasise.tips, emphasise.weight)})
 
     # Inner function that we'll return, computes the distance matrix given lambda.
     compute_distance_matrix_function <- function(l) {

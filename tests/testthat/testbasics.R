@@ -29,15 +29,17 @@ test_that("multiDist calculated at lambda equals multiDist function evaluated at
   })
 
 ############################
-# test that functions match as they should
+# test that functions match as they should, including when tips are emphasised
 ############################
 
 test_that("treeDist equals Euclidean distance between corresponding vectors", {
   expect_equal(treeDist(tree_a,tree_b), sqrt(sum((treeVec(tree_a) - treeVec(tree_b))^2)))
+  expect_equal(treeDist(tree_a,tree_b,emphasise.tips = c("t1","t2")), sqrt(sum((treeVec(tree_a,emphasise.tips = c("t1","t2")) - treeVec(tree_b,emphasise.tips = c("t1","t2")))^2)))
   })
 
 test_that("treeDist equals corresponding entry of multiDist", {
   expect_equal(treeDist(trees[[1]],trees[[2]]), multiDist(trees)[[1]])
+  expect_equal(treeDist(trees[[1]],trees[[2]],emphasise.tips = c("t1","t2")), multiDist(trees,emphasise.tips = c("t1","t2"))[[1]])
   })
 
 test_that("multiDist equals the distance matrix from treescape", {

@@ -4,7 +4,8 @@
 \alias{treeDist}
 \title{Metric function}
 \usage{
-treeDist(tree.a, tree.b, lambda = 0, return.lambda.function = FALSE)
+treeDist(tree.a, tree.b, lambda = 0, return.lambda.function = FALSE,
+  emphasise.tips = NULL, emphasise.weight = 2)
 }
 \arguments{
 \item{tree.a}{an object of the class \code{phylo}}
@@ -15,6 +16,10 @@ treeDist(tree.a, tree.b, lambda = 0, return.lambda.function = FALSE)
 
 \item{return.lambda.function}{If true, a function that can be invoked with different lambda values is returned.
 This function returns the vector of metric values for the given lambda.}
+
+\item{emphasise.tips}{an optional list of tips whose entries in the tree vectors should be emphasised. Defaults to \code{NULL}.}
+
+\item{emphasise.weight}{applicable only if a list is supplied to \code{emphasise.tips}, this value (default 2) is the number by which vector entries corresponding to those tips are emphasised.}
 }
 \value{
 The vector with the metric values or a function that produces the vector given a value of lambda.
@@ -32,6 +37,10 @@ dist.func <- treeDist(tree.a,tree.b,return.lambda.function=TRUE) # distance as a
 dist.func(0) # evaluate at lambda=0. Equivalent to treeDist(tree.a,tree.b).
 ## We can see how the distance changes when moving from focusing on topology to length:
 plot(sapply(seq(0,1,length.out=100), function(x) dist.func(x)), type="l",ylab="",xlab="")
+
+## The distance may also change if we emphasise the position of certain tips:
+plot(sapply(tree.a$tip.label, function(x) treeDist(tree.a,tree.b,emphasise.tips=x)),
+     xlab="Tip number",ylab="Distance when  vector entries corresponding to tip are doubled")
 }
 \author{
 Jacob Almagro-Garcia \email{nativecoder@gmail.com}
