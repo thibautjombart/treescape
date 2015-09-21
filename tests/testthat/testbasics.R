@@ -44,15 +44,18 @@ test_that("treeDist equals corresponding entry of multiDist", {
 
 test_that("multiDist equals the distance matrix from treescape", {
   treedistMatrix <- treescape(trees,nf=2)$D
-  expect_equal(multiDist(trees)[[n]],treedistMatrix[[n]])
+  treedistMatrix0.5 <- treescape(trees,nf=2,lambda=l)$D 
+  multidistMatrixFunction <- multiDist(trees,return.lambda.function=TRUE)
+  expect_equal(multidistMatrixFunction(0)[[n]],treedistMatrix[[n]])
+  expect_equal(multidistMatrixFunction(l)[[n]],treedistMatrix0.5[[n]])
+  expect_equal(treescape(trees,nf=2,emphasise.tips=c("t1","t2"))$D[[n]],multiDist(trees,emphasise.tips=c("t1","t2"))[[n]])
   })
 
-## !! this one no longer works as $median is now $trees
-## test_that("medTree results are consistent with treeVec", {
-##   geom <- medTree(trees)
-##   expect_equal(geom$mindist,sqrt(sum((geom$centre - treeVec(trees[[geom$median[[1]]]]))^2))) # mindist, centre and median are internally consistent, and consistent with treeVec
-##   expect_equal(geom$mindist,geom$distances[[geom$median[[1]]]]) # mindist equals the entry in `distances' corresponding to the (first) median tree
-##  })
+test_that("medTree results are consistent with treeVec", {
+   geom <- medTree(trees)
+   expect_equal(geom$mindist,sqrt(sum((geom$centre - treeVec(geom$trees[[1]]))^2))) # mindist, centre and median are internally consistent, and consistent with treeVec
+   expect_equal(geom$mindist,min(geom$distances)) # mindist equals the minimum entry in `distances' 
+  })
 
 ############################
 # test that save_memory versions match non-save_memory versions
