@@ -1,7 +1,7 @@
 ---
 title: "Exploration of landscapes of phylogenetic trees"
 author: "Thibaut Jombart, Michelle Kendall"
-date: "2015-09-21"
+date: "2015-09-22"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
@@ -361,7 +361,7 @@ groves <- findGroves(woodmiceTrees, nf=3, nclust=6)
 ## find median trees
 res <- medTree(woodmiceTrees, groves$groups)
 
-## there isone output per cluster
+## there is one output per cluster
 names(res)
 ```
 
@@ -382,6 +382,7 @@ for(i in 1:length(med.trees)) plot(med.trees[[i]], main=paste("cluster",i),cex=1
 
 These trees exhibit a number of topological differences, e.g. in the placement of the **(1007S,1208S,0909S)** clade. 
 Performing this analysis enables the detection of distinct representative trees supported by data.
+
 
 Emphasising the placement of certain tips or clades
 --------------
