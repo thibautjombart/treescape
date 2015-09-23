@@ -144,8 +144,14 @@ treeVec <- function(tree, lambda=0, return.lambda.function=FALSE, emphasise.tips
   # We work with ordered labels, using this vector to transform indices.
   tip_order <- match(1:num_leaves, order(tree$tip.label))
 
+  # Ordering the edges by first column places the root at the bottom.
+  # Descendants will be placed always before parents.
+  edge_order <- ape::reorder.phylo(tree, "postorder", index.only=T)
+  edges <- tree$edge[edge_order,]
+  edge_lengths <- tree$edge.length[edge_order]
+  
+  # To emphasise the position of certain tips, if needed:
   if (is.null(emphasise.tips)==FALSE){
-    # To emphasise the position of certain tips:
     # translate important tip label names into order
     emphasise.tips.order <- tip_order[which(tree$tip.label%in%emphasise.tips)]
     # find the positions where these tips appear in the k choose 2 elements of the final vector
@@ -158,13 +164,7 @@ treeVec <- function(tree, lambda=0, return.lambda.function=FALSE, emphasise.tips
   else{tip.weighting <- rep(1,0.5*num_leaves*(num_leaves+1))}
   
   
-  # Ordering the edges by first column places the root at the bottom.
-  # Descendants will be placed always before parents.
-  edge_order <- order(tree$edge[,1], decreasing=T)
-  edges <- tree$edge[edge_order,]
-  edge_lengths <- tree$edge.length[edge_order]
-
-  # We annotated the nodes of the tree in this list. In two passes we are going to
+    # We annotated the nodes of the tree in this list. In two passes we are going to
   # compute the partition each node induces in the tips (bottom-up pass) and the distance
   # (in branch length and number of branches) from the root to each node (top-down pass).
   annotated_nodes <- list()

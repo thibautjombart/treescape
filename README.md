@@ -30,6 +30,15 @@ Then, to load the package, use:
 library("treescape")
 ```
 
+```
+## 
+## Attaching package: 'treescape'
+## 
+## The following object is masked from 'package:adegenet':
+## 
+##     .render.server.info
+```
+
 
 Content overview
 -------------
@@ -270,11 +279,18 @@ In *treescape*, the function `findGroves` implements this approach, offering var
 
 ```r
 wm.groves <- findGroves(woodmiceTrees, nf=3, nclust=6)
+```
+
+```
+## Error in eval(expr, envir, enclos): could not find function "findGroves"
+```
+
+```r
 names(wm.groves)
 ```
 
 ```
-## [1] "groups"    "treescape"
+## Error in eval(expr, envir, enclos): object 'wm.groves' not found
 ```
 Note that when the number of clusters (`nclust`) is not provided, the function will display a dendrogram and ask for a cut-off height. 
 
@@ -285,28 +301,36 @@ The results can be plotted directly using `plotGroves` (see `?plotGroves` for op
 plotGroves(wm.groves)
 ```
 
-<img src="vignettes/figs/plotgroves2-1.png" title="plot of chunk plotgroves2" alt="plot of chunk plotgroves2" width="400px" />
+```
+## Error in plotGroves(wm.groves): object 'wm.groves' not found
+```
 
 ```r
 ## alternative with inertia ellipses
 plotGroves(wm.groves, type="ellipse")
 ```
 
-<img src="vignettes/figs/plotgroves2-2.png" title="plot of chunk plotgroves2" alt="plot of chunk plotgroves2" width="400px" />
+```
+## Error in plotGroves(wm.groves, type = "ellipse"): object 'wm.groves' not found
+```
 
 ```r
 ## plot axes 2-3
 plotGroves(wm.groves, xax=2, yax=3)
 ```
 
-<img src="vignettes/figs/plotgroves2-3.png" title="plot of chunk plotgroves2" alt="plot of chunk plotgroves2" width="400px" />
+```
+## Error in plotGroves(wm.groves, xax = 2, yax = 3): object 'wm.groves' not found
+```
 
 ```r
 ## customize graphics
 plotGroves(wm.groves, bg="black", col.pal=lightseasun, lab.show=TRUE, lab.col="white", lab.cex=1.5)
 ```
 
-<img src="vignettes/figs/plotgroves3-1.png" title="plot of chunk plotgroves3" alt="plot of chunk plotgroves3" width="400px" />
+```
+## Error in plotGroves(wm.groves, bg = "black", col.pal = lightseasun, lab.show = TRUE, : object 'wm.groves' not found
+```
 
 
 
@@ -387,7 +411,7 @@ wm3.res <- treescape(woodmiceTrees,nf=2,emphasise.tips=c("No1007S","No1208S","No
 plotGroves(wm3.res$pco, lab.show=TRUE, lab.optim=FALSE)
 ```
 
-<img src="vignettes/figs/woodmice tip emphasis-1.png" title="plot of chunk woodmice tip emphasis" alt="plot of chunk woodmice tip emphasis" width="400px" />
+<img src="vignettes/figs/woodmice-tip-emphasis-1.png" title="plot of chunk woodmice-tip-emphasis" alt="plot of chunk woodmice-tip-emphasis" width="400px" />
 
 It can be seen from the scale of the plot and the density of clustering that the trees are now separated into more distinct clusters.
 
@@ -396,7 +420,7 @@ wm3.groves <- findGroves(woodmiceTrees,nf=3,nclust=6,emphasise.tips=c("No1007S",
 plotGroves(wm3.groves, type="ellipse")
 ```
 
-<img src="vignettes/figs/findgroves with emphasis-1.png" title="plot of chunk findgroves with emphasis" alt="plot of chunk findgroves with emphasis" width="400px" />
+<img src="vignettes/figs/findgroves-with-emphasis-1.png" title="plot of chunk findgroves-with-emphasis" alt="plot of chunk findgroves-with-emphasis" width="400px" />
 
 Conversely, where the structure of a particular clade is not of interest (for example, lineages within an outgroup which was only included for rooting purposes), those tips can be given a weight less than 1 so as to give them less emphasis in the comparison. We note that although it is possible to give tips a weighting of 0, we advise caution with this as the underlying function will no longer be guaranteed to be a metric. That is, a distance of 0 between two trees will no longer necessarily imply that the trees are identical. In most cases it would be wiser to assign a very small weighting to tips which are not of interest.
 
@@ -424,7 +448,7 @@ treeVec(tree)
 ```
 
 ```
-##  [1] 0 3 1 2 4 0 0 0 0 1 2 3 1 1 2 1 1 1 1 1 1
+##  [1] 0 2 1 1 0 0 0 0 1 1 1 0 2 0 0 1 1 1 1 1 1
 ```
 
 ```r
@@ -433,9 +457,9 @@ treeVec(tree,0.5)
 ```
 
 ```
-##  [1] 0.0000 2.1653 0.6671 1.4171 2.8537 0.0000 0.0000 0.0000 0.0000 0.6671
-## [11] 1.4171 2.1653 0.6671 0.6671 1.4171 0.5646 0.7231 0.6609 0.5466 0.6653
-## [21] 0.5655
+##  [1] 0.0000 1.2952 0.7351 0.7351 0.0000 0.0000 0.0000 0.0000 0.7113 0.7351
+## [11] 0.7351 0.0000 1.4508 0.0000 0.0000 0.8915 0.8836 0.7191 0.5733 0.5137
+## [21] 0.5024
 ```
 
 ```r
@@ -446,9 +470,9 @@ vecAsFunction(0.5)
 ```
 
 ```
-##  [1] 0.0000 2.1653 0.6671 1.4171 2.8537 0.0000 0.0000 0.0000 0.0000 0.6671
-## [11] 1.4171 2.1653 0.6671 0.6671 1.4171 0.5646 0.7231 0.6609 0.5466 0.6653
-## [21] 0.5655
+##  [1] 0.0000 1.2952 0.7351 0.7351 0.0000 0.0000 0.0000 0.0000 0.7113 0.7351
+## [11] 0.7351 0.0000 1.4508 0.0000 0.0000 0.8915 0.8836 0.7191 0.5733 0.5137
+## [21] 0.5024
 ```
 
 The metric -- the distance between two trees -- is the Euclidean distance between these vectors:
@@ -468,7 +492,7 @@ treeDist(tree_a,tree_b)
 ```
 
 ```
-## [1] 5.657
+## [1] 5.099
 ```
 
 ```r
@@ -477,7 +501,7 @@ treeDist(tree_a,tree_b,1)
 ```
 
 ```
-## [1] 3.544
+## [1] 3.571
 ```
 
 
