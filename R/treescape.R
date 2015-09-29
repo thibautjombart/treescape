@@ -49,8 +49,19 @@ treescape <- function(x, method=treeVec, nf=NULL, ...){
     ## CHECKS ##
     if(!inherits(x, "multiPhylo")) stop("x should be a multiphylo object")
     num_trees <- length(x) # number of trees
-    if(is.null(names(x))) names(x) <- 1:num_trees # make name labels well defined
+    ## fix potential bug with input of two trees
+    if(num_trees<3) {
+      stop("treescape expects at least three trees. The function treeDist is suitable for comparing two trees.")
+    }
+    
+    # make name labels well defined
+    if(is.null(names(x))) names(x) <- 1:num_trees 
+    else if(length(unique(names(x)))!=num_trees){
+      warning("duplicates detected in tree labels - using generic names")
+      names(x) <- 1:num_trees
+      }
     lab <- names(x)
+    
     
     # check all trees have same tip labels
     for (i in 1:num_trees) {

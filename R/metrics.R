@@ -385,8 +385,16 @@ multiDist <- function(trees, lambda=0,
   
   if(!inherits(trees, "multiPhylo")) stop("trees should be a multiphylo object")
   num_trees <- length(trees) 
+  if(num_trees<2) {
+    stop("multiDist expects at least two trees")
+  }
   
-  if(is.null(names(trees))) names(trees) <- 1:num_trees # make name labels well defined
+  # make name labels well defined
+  if(is.null(names(trees))) names(trees) <- 1:num_trees 
+  else if(length(unique(names(trees)))!=num_trees){
+    warning("duplicates detected in tree labels - using generic names")
+    names(trees) <- 1:num_trees
+    }
   lab <- names(trees)
   
   # check all trees have same tip labels

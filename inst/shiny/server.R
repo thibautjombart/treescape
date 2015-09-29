@@ -48,11 +48,16 @@ shinyServer(function(input, output) {
                 if(!require(ape)) stop("ape is required to read in NEXUS (.nex, .nexus) files")
                 out <- read.nexus(file=newName)
             }
-
+            
             ## fix potential bug with names - they need to be unique
             if(length(unique(names(out)))!=length(out)){
                 warning("duplicates detected in tree labels - using generic names")
                 names(out) <- 1:length(out)
+            }
+            
+            ## fix potential bug with input of two trees
+            if(length(out)<3) {
+              stop("treescape expects at least three trees. The function treeDist is suitable for comparing two trees.")
             }
             
             ## fix potential bug with tip labels - they need to match
@@ -61,6 +66,7 @@ shinyServer(function(input, output) {
                 stop("trees have different tip labels")
               } 
             }
+            
         }
 
         ## return data
