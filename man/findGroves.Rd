@@ -8,11 +8,11 @@ findGroves(x, method = treeVec, nf = NULL, clustering = "ward.D2",
   nclust = NULL, ...)
 }
 \arguments{
-\item{x}{an object of the class multiPhylo}
+\item{x}{an object of the class multiPhylo or the output of the function \code{treescape}}
 
-\item{method}{a function outputting the summary of a tree (phylo object) in the form of a vector}
+\item{method}{(ignored if x is from \code{treescape}) this specifies a function which outputs the summary of a tree in the form of a vector. Defaults to \code{treeVec}.}
 
-\item{nf}{the number of principal components to retain}
+\item{nf}{(ignored if x is from \code{treescape}) the number of principal components to retain}
 
 \item{clustering}{a character string indicating the clustering method to be used; defaults to Ward's method; see argument \code{method} in \code{?hclust} for more details.}
 

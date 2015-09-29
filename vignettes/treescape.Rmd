@@ -165,9 +165,9 @@ One simple approach is:
 
 4. cut the dendrogram to obtain clusters
  
-In *treescape*, the function `findGroves` implements this approach, offering various clustering options (see `?findGroves`):
+In *treescape*, the function `findGroves` implements this approach, offering various clustering options (see `?findGroves`). Here we supply the function with our `treescape` output `wm.res` since we have already calculated it, but it is also possible to skip the steps above and directly supply `findGroves` with a multiPhylo list of trees.
 ```{r findgroves, cache=TRUE}
-wm.groves <- findGroves(woodmiceTrees, nf=3, nclust=6)
+wm.groves <- findGroves(wm.res, nclust=6)
 names(wm.groves)
 ```
 Note that when the number of clusters (`nclust`) is not provided, the function will display a dendrogram and ask for a cut-off height. 

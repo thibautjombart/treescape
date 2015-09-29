@@ -91,6 +91,7 @@ test_that("error is given if input is not of class phylo / multiphylo", {
   expect_error(treeDist(trees))
   expect_error(multiDist(tree_a))
   expect_error(medTree(tree_a))
+  expect_error(findGroves(tree_a))
   })
 
 test_that("error is given if input tree is unrooted", {

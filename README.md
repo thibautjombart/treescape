@@ -30,15 +30,6 @@ Then, to load the package, use:
 library("treescape")
 ```
 
-```
-## 
-## Attaching package: 'treescape'
-## 
-## The following object is masked from 'package:adegenet':
-## 
-##     .render.server.info
-```
-
 
 Content overview
 -------------
@@ -275,22 +266,15 @@ One simple approach is:
 
 4. cut the dendrogram to obtain clusters
  
-In *treescape*, the function `findGroves` implements this approach, offering various clustering options (see `?findGroves`):
+In *treescape*, the function `findGroves` implements this approach, offering various clustering options (see `?findGroves`). Here we supply the function with our `treescape` output `wm.res` since we have already calculated it, but it is also possible to skip the steps above and directly supply `findGroves` with a multiPhylo list of trees.
 
 ```r
-wm.groves <- findGroves(woodmiceTrees, nf=3, nclust=6)
-```
-
-```
-## Error in eval(expr, envir, enclos): could not find function "findGroves"
-```
-
-```r
+wm.groves <- findGroves(wm.res, nclust=6)
 names(wm.groves)
 ```
 
 ```
-## Error in eval(expr, envir, enclos): object 'wm.groves' not found
+## [1] "groups"    "treescape"
 ```
 Note that when the number of clusters (`nclust`) is not provided, the function will display a dendrogram and ask for a cut-off height. 
 
@@ -301,36 +285,28 @@ The results can be plotted directly using `plotGroves` (see `?plotGroves` for op
 plotGroves(wm.groves)
 ```
 
-```
-## Error in plotGroves(wm.groves): object 'wm.groves' not found
-```
+<img src="vignettes/figs/plotgroves2-1.png" title="plot of chunk plotgroves2" alt="plot of chunk plotgroves2" width="400px" />
 
 ```r
 ## alternative with inertia ellipses
 plotGroves(wm.groves, type="ellipse")
 ```
 
-```
-## Error in plotGroves(wm.groves, type = "ellipse"): object 'wm.groves' not found
-```
+<img src="vignettes/figs/plotgroves2-2.png" title="plot of chunk plotgroves2" alt="plot of chunk plotgroves2" width="400px" />
 
 ```r
 ## plot axes 2-3
 plotGroves(wm.groves, xax=2, yax=3)
 ```
 
-```
-## Error in plotGroves(wm.groves, xax = 2, yax = 3): object 'wm.groves' not found
-```
+<img src="vignettes/figs/plotgroves2-3.png" title="plot of chunk plotgroves2" alt="plot of chunk plotgroves2" width="400px" />
 
 ```r
 ## customize graphics
 plotGroves(wm.groves, bg="black", col.pal=lightseasun, lab.show=TRUE, lab.col="white", lab.cex=1.5)
 ```
 
-```
-## Error in plotGroves(wm.groves, bg = "black", col.pal = lightseasun, lab.show = TRUE, : object 'wm.groves' not found
-```
+<img src="vignettes/figs/plotgroves3-1.png" title="plot of chunk plotgroves3" alt="plot of chunk plotgroves3" width="400px" />
 
 
 
@@ -448,7 +424,7 @@ treeVec(tree)
 ```
 
 ```
-##  [1] 0 2 1 1 0 0 0 0 1 1 1 0 2 0 0 1 1 1 1 1 1
+##  [1] 0 3 1 2 4 0 0 0 0 1 2 3 1 1 2 1 1 1 1 1 1
 ```
 
 ```r
@@ -457,9 +433,9 @@ treeVec(tree,0.5)
 ```
 
 ```
-##  [1] 0.0000 1.2952 0.7351 0.7351 0.0000 0.0000 0.0000 0.0000 0.7113 0.7351
-## [11] 0.7351 0.0000 1.4508 0.0000 0.0000 0.8915 0.8836 0.7191 0.5733 0.5137
-## [21] 0.5024
+##  [1] 0.0000 2.1653 0.6671 1.4171 2.8537 0.0000 0.0000 0.0000 0.0000 0.6671
+## [11] 1.4171 2.1653 0.6671 0.6671 1.4171 0.5646 0.7231 0.6609 0.5466 0.6653
+## [21] 0.5655
 ```
 
 ```r
@@ -470,9 +446,9 @@ vecAsFunction(0.5)
 ```
 
 ```
-##  [1] 0.0000 1.2952 0.7351 0.7351 0.0000 0.0000 0.0000 0.0000 0.7113 0.7351
-## [11] 0.7351 0.0000 1.4508 0.0000 0.0000 0.8915 0.8836 0.7191 0.5733 0.5137
-## [21] 0.5024
+##  [1] 0.0000 2.1653 0.6671 1.4171 2.8537 0.0000 0.0000 0.0000 0.0000 0.6671
+## [11] 1.4171 2.1653 0.6671 0.6671 1.4171 0.5646 0.7231 0.6609 0.5466 0.6653
+## [21] 0.5655
 ```
 
 The metric -- the distance between two trees -- is the Euclidean distance between these vectors:
@@ -492,7 +468,7 @@ treeDist(tree_a,tree_b)
 ```
 
 ```
-## [1] 5.099
+## [1] 5.657
 ```
 
 ```r
@@ -501,7 +477,7 @@ treeDist(tree_a,tree_b,1)
 ```
 
 ```
-## [1] 3.571
+## [1] 3.544
 ```
 
 

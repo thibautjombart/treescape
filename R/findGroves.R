@@ -3,9 +3,9 @@
 #'
 #' This function uses hierarchical clustering on principal components output by \code{\link{treescape}} to identify groups of similar trees. Clustering relies on \code{\link{hclust}}, using Ward's method by default.
 #'
-#' @param x an object of the class multiPhylo
-#' @param method a function outputting the summary of a tree (phylo object) in the form of a vector
-#' @param nf the number of principal components to retain
+#' @param x an object of the class multiPhylo or the output of the function \code{treescape}
+#' @param method (ignored if x is from \code{treescape}) this specifies a function which outputs the summary of a tree in the form of a vector. Defaults to \code{treeVec}.
+#' @param nf (ignored if x is from \code{treescape}) the number of principal components to retain
 #' @param clustering a character string indicating the clustering method to be used; defaults to Ward's method; see argument \code{method} in \code{?hclust} for more details.
 #' @param nclust an integer indicating the number of clusters to find; if not provided, an interactive process based on cutoff threshold selection is used.
 #' @param ... further arguments to be passed to \code{treescape}
@@ -50,12 +50,21 @@
 #'
 findGroves <- function(x, method=treeVec, nf=NULL, clustering="ward.D2",
                         nclust=NULL, ...){
-    ## CHECKS ##
-    if(!inherits(x, "multiPhylo")) stop("x should be a multiphylo object")
-
-    ## GET OUTPUT OF TREESCAPE ##
-    res <- treescape(x, method=method, nf=nf, ...)
-
+    ## CHECK input type ##
+    if (inherits(x, "multiPhylo")) {
+       ## GET OUTPUT OF TREESCAPE ##
+       type <- "multiPhylo_object"
+       res <- treescape(x, method=method, nf=nf, ...)
+       }
+    else if (inherits(x, "list")) { 
+      # test if it is an output from treescape
+      inherits(x$D,"dist")
+      inherits(x$pco,c("pco","dudi"))
+      type <- "treescape_output"
+      res <- x 
+      } 
+    else stop("x should be a multiphylo object or output of function treescape")
+      
     ## GET CLUSTERS ##
     ## hierharchical clustering
     clust <- hclust(dist(res$pco$li), method=clustering)
@@ -79,7 +88,10 @@ findGroves <- function(x, method=treeVec, nf=NULL, clustering="ward.D2",
     }
 
     ## BUILD RESULT AND RETURN ##
-    names(grp) <- names(x)
+    # retrieve tree names:
+    if (type=="multiPhylo_object") names(grp) <- names(x)
+    if (type=="treescape_output") names(grp) <- colnames(as.matrix(x$D)) 
+    
     out <- list(groups=factor(grp), treescape=res)
 
     return(out)
