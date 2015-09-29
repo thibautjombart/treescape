@@ -54,6 +54,13 @@ shinyServer(function(input, output) {
                 warning("duplicates detected in tree labels - using generic names")
                 names(out) <- 1:length(out)
             }
+            
+            ## fix potential bug with tip labels - they need to match
+            for (i in 1:length(out)) {
+              if (!setequal(out[[i]]$tip.label,out[[1]]$tip.label)) {
+                stop("trees have different tip labels")
+              } 
+            }
         }
 
         ## return data
