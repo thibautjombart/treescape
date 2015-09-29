@@ -382,8 +382,20 @@ treeDist <- function(tree.a, tree.b, lambda=0, return.lambda.function=FALSE, emp
 multiDist <- function(trees, lambda=0,
                       return.lambda.function=FALSE, save.memory=FALSE,
                       emphasise.tips=NULL, emphasise.weight=2) {
-
-  num_trees <- length(trees)
+  
+  if(!inherits(trees, "multiPhylo")) stop("trees should be a multiphylo object")
+  num_trees <- length(trees) 
+  
+  if(is.null(names(trees))) names(trees) <- 1:num_trees # make name labels well defined
+  lab <- names(trees)
+  
+  # check all trees have same tip labels
+  for (i in 1:num_trees) {
+    if (!setequal(trees[[i]]$tip.label,trees[[1]]$tip.label)) {
+      stop(paste0("Tree ",lab[[i]]," has different tip labels from the first tree."))
+    } 
+  }
+  
 
   # Working with numbers (no functions).
   if(!return.lambda.function) {

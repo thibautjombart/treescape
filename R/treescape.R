@@ -48,9 +48,16 @@
 treescape <- function(x, method=treeVec, nf=NULL, ...){
     ## CHECKS ##
     if(!inherits(x, "multiPhylo")) stop("x should be a multiphylo object")
-    if(is.null(names(x))) names(x) <- 1:length(x)
+    num_trees <- length(x) # number of trees
+    if(is.null(names(x))) names(x) <- 1:num_trees # make name labels well defined
     lab <- names(x)
-
+    
+    # check all trees have same tip labels
+    for (i in 1:num_trees) {
+      if (!setequal(x[[i]]$tip.label,x[[1]]$tip.label)) {
+        stop(paste0("Tree ",lab[[i]]," has different tip labels from the first tree."))
+      } 
+    }
 
     ## GET DISTANCES BETWEEN TREES ##
     ## get data.frame of all summary vectors ##
