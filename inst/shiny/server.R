@@ -10,8 +10,8 @@ shinyServer(function(input, output) {
     if(!require("adegraphics")) stop("ade4 is required")
     if(!require("treescape")) stop("treescape is required")
     if(!require("adegenet")) stop("adegenet is required")
-
-
+    
+	
     ## GET DYNAMIC ANNOTATION
     graphTitle <- reactive({
         paste(input$dataset, ": MDS scatterplot, axes ", input$xax,"-", input$yax, sep="")
@@ -59,6 +59,12 @@ shinyServer(function(input, output) {
             if(length(out)<3) {
               stop("treescape expects at least three trees. The function treeDist is suitable for comparing two trees.")
             }
+			
+					
+			## warn of potential problems with input of too many / large trees
+            if(length(out)*length(out[[1]]$tip.label)>=500) {
+              warning("You have supplied many and/or large trees, so Shiny is likely to be slow. If no output appears soon, consider supplying fewer trees or comparing them using the standard R functions in treescape.")
+            }
             
             ## fix potential bug with tip labels - they need to match
             for (i in 1:length(out)) {
@@ -76,8 +82,20 @@ shinyServer(function(input, output) {
 
     ## GET ANALYSIS ##
     getAnalysis <- reactive({
+
         ## get dataset
         x <- getData()
+		
+		## the following removes the lambda error messages:
+	    validate(
+          need(input$lambda != "", "Loading data set")
+          )	
+        
+		## Trying to remove the error message "only defined on a data frame with all numeric variables"
+		## This doesn't work, but presumably it's something like this?!
+	    #validate(
+        #  need(input$treeMethod != "", "My test")
+        #  )		
 
         ## stop if not data
         if(is.null(x)) return(NULL)
@@ -99,7 +117,7 @@ shinyServer(function(input, output) {
                 treeMethod <- adephylo::distTips
             }
         }
-
+		
         ## run treescape
         res <- treescape(x, method=treeMethod, nf=naxes)
 
@@ -221,7 +239,7 @@ shinyServer(function(input, output) {
     output$scatterplot <- renderPlot({
         ## get dataset
         x <- getData()
-
+		  
         if(!is.null(x)){
             ## get analysis
             res <- getAnalysis()
