@@ -1,4 +1,3 @@
-
 #' Geometric median tree function
 #'
 #' Finds the geometric median of a set of trees according to the Kendall Colijn metric.
@@ -6,7 +5,7 @@
 #' @export
 #'
 #' @author Jacob Almagro-Garcia \email{nativecoder@@gmail.com}
-#' @author  Michelle Kendall \email{michelle.louise.kendall@@gmail.com}
+#' @author Michelle Kendall \email{michelle.louise.kendall@@gmail.com}
 #' @author Thibaut Jombart \email{thibautjombart@@gmail.com}
 #'
 #' @param x An object of the class multiPhylo, containing the trees for which the median tree will be computed.
@@ -17,10 +16,12 @@
 #'  This function returns the vector of metric values for the given lambda.
 #' @param save.memory A flag that saves a lot of memory but increases the execution time (not compatible with return.lambda.function=TRUE).
 #'
-#' @return A list of four objects: $centre is the "central vector", that is, the (weighted) mean of the tree vectors (which typically does not correspond to a tree itself); 
+#' @return A list of five objects: 
+#' $centre is the "central vector", that is, the (weighted) mean of the tree vectors (which typically does not correspond to a tree itself); 
 #' $distances gives the distance of each tree from the central vector; 
 #' $mindist is the minimum of these distances; 
-#' $trees gives the indices of the "median tree(s)": the tree(s) which achieve this minimum distance to the centre. 
+#' $trees gives the "median tree(s)": the tree(s) which achieve this minimum distance to the centre; 
+#' $treenumbers gives the numbers (and, if supplied, names) of the median trees 
 #' If groups are provided, then one list is returned for each group.
 #' If \code{return.lambda.function=TRUE} a function that produces this list for a given value of lambda is returned. 
 #'
@@ -91,7 +92,7 @@ medTree <- function(x, groups=NULL, lambda=0, weights=rep(1,length(x)),
                 min_distance <- min(distances)
                 median_trees <- which(min_distance == distances)
 
-                return(list(centre=centre, distances=distances, mindist=min_distance, trees=trees[median_trees]))
+                return(list(centre=centre, distances=distances, mindist=min_distance, trees=trees[median_trees], treenumbers=median_trees))
             }
 
             ## To save memory we recompute the vectors on the fly (way slower but we don't eat a ton of memory).
