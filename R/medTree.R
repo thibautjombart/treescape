@@ -116,7 +116,7 @@ medTree <- function(x, groups=NULL, lambda=0, weights=rep(1,length(x)),
                 min_distance <- min(distances)
                 median_trees <- which(min_distance == distances)
 
-                return(list(centre=centre, distances=distances, mindist=min_distance, trees=trees[median_trees]))
+                return(list(centre=centre, distances=distances, mindist=min_distance, trees=trees[median_trees], treenumbers=median_trees))
             }
         }
 
@@ -145,7 +145,7 @@ medTree <- function(x, groups=NULL, lambda=0, weights=rep(1,length(x)),
                 min_distance <- min(distances)
                 median_trees <- which(min_distance == distances)
 
-                return(list(centre=centre, distances=distances, mindist=min_distance, median=median_trees))
+                return(list(centre=centre, distances=distances, mindist=min_distance, trees=trees[median_trees], treenumbers=median_trees))
             }
 
             return(compute_median_tree_function)
