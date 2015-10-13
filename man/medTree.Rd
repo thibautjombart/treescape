@@ -10,7 +10,7 @@ medTree(x, groups = NULL, lambda = 0, weights = rep(1, length(x)),
 \arguments{
 \item{x}{An object of the class multiPhylo, containing the trees for which the median tree will be computed.}
 
-\item{groups}{an optional factor defining groups of trees; if provided, one median tree will be seeked for each group.}
+\item{groups}{an optional factor defining groups of trees; if provided, one median tree will be found for each group.}
 
 \item{lambda}{a number in [0,1] which specifies the extent to which topology (default, with lambda=0)  or branch lengths (lambda=1) are emphasised. This argument is ignored if \code{return.lambda.function=TRUE}.}
 
@@ -22,7 +22,12 @@ This function returns the vector of metric values for the given lambda.}
 \item{save.memory}{A flag that saves a lot of memory but increases the execution time (not compatible with return.lambda.function=TRUE).}
 }
 \value{
-A list with the median metric vector, distances, indices of the tree(s) that are closest to the median tree and the value of this distance or a function that produces this list for a given value of lambda. If groups are provided, then one list is returned for each group.
+A list of four objects: $centre is the "central vector", that is, the (weighted) mean of the tree vectors (which typically does not correspond to a tree itself);
+$distances gives the distance of each tree from the central vector;
+$mindist is the minimum of these distances;
+$trees gives the indices of the "median tree(s)": the tree(s) which achieve this minimum distance to the centre.
+If groups are provided, then one list is returned for each group.
+If \code{return.lambda.function=TRUE} a function that produces this list for a given value of lambda is returned.
 }
 \description{
 Finds the geometric median of a set of trees according to the Kendall Colijn metric.
