@@ -10,14 +10,19 @@
 #' @author Thibaut Jombart \email{thibautjombart@@gmail.com}
 #'
 #' @param x An object of the class multiPhylo, containing the trees for which the median tree will be computed.
-#' @param groups an optional factor defining groups of trees; if provided, one median tree will be seeked for each group.
+#' @param groups an optional factor defining groups of trees; if provided, one median tree will be found for each group.
 #' @param lambda a number in [0,1] which specifies the extent to which topology (default, with lambda=0)  or branch lengths (lambda=1) are emphasised. This argument is ignored if \code{return.lambda.function=TRUE}.
 #' @param weights A vector of weights for the trees. Defaults to a vector of 1's so that all trees are equally weighted, but can be used to encode likelihood, posterior probabilities or other characteristics.
 #' @param return.lambda.function If true, a function that can be invoked with different lambda values is returned.
 #'  This function returns the vector of metric values for the given lambda.
 #' @param save.memory A flag that saves a lot of memory but increases the execution time (not compatible with return.lambda.function=TRUE).
 #'
-#' @return A list with the median metric vector, distances, indices of the tree(s) that are closest to the median tree and the value of this distance or a function that produces this list for a given value of lambda. If groups are provided, then one list is returned for each group.
+#' @return A list of four objects: $centre is the "central vector", that is, the (weighted) mean of the tree vectors (which typically does not correspond to a tree itself); 
+#' $distances gives the distance of each tree from the central vector; 
+#' $mindist is the minimum of these distances; 
+#' $trees gives the indices of the "median tree(s)": the tree(s) which achieve this minimum distance to the centre. 
+#' If groups are provided, then one list is returned for each group.
+#' If \code{return.lambda.function=TRUE} a function that produces this list for a given value of lambda is returned. 
 #'
 #'
 #' @import ape
