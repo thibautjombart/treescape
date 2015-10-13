@@ -6,9 +6,11 @@
 #' @param x an object of the class multiPhylo
 #' @param method a function outputting the summary of a tree (phylo object) in the form of a vector
 #' @param nf the number of principal components to retain
-#' @param ... further arguments to be passed to \code{method}
+#' @param return.tree.vectors option to also return the tree vectors. Note that this can take a lot of memory so defaults to \code{FALSE}.
+#' @param ... further arguments to be passed to \code{method}. 
 #'
-#' @author Thibaut Jombart \email{thibautjombart@@gmail.com}, Michelle Kendall \email{michelle.louise.kendall@@gmail.com}
+#' @author Thibaut Jombart \email{thibautjombart@@gmail.com}
+#' @author Michelle Kendall \email{michelle.louise.kendall@@gmail.com}
 #'
 #' @export
 #'
@@ -45,7 +47,7 @@
 #' col="navy", alpha=0.5, xlab="", ylab="", zlab="")
 #' }
 #' }
-treescape <- function(x, method=treeVec, nf=NULL, ...){
+treescape <- function(x, method=treeVec, nf=NULL, return.tree.vectors=FALSE, ...){
     ## CHECKS ##
     if(!inherits(x, "multiPhylo")) stop("x should be a multiphylo object")
     num_trees <- length(x) # number of trees
@@ -54,6 +56,11 @@ treescape <- function(x, method=treeVec, nf=NULL, ...){
       stop("treescape expects at least three trees. The function treeDist is suitable for comparing two trees.")
     }
     
+    # check for user supplying invalid options (these gave unhelpful error messages before)
+    dots <- list(...)
+    if(!is.null(dots$return.lambda.function)) stop("return.lambda.function is not compatible with treescape. Consider using multiDist instead.")
+    if(!is.null(dots$save.memory)) stop("save.memory is not compatible with treescape. Consider using multiDist instead.")
+    
     # make name labels well defined
     if(is.null(names(x))) names(x) <- 1:num_trees 
     else if(length(unique(names(x)))!=num_trees){
@@ -61,7 +68,6 @@ treescape <- function(x, method=treeVec, nf=NULL, ...){
       names(x) <- 1:num_trees
       }
     lab <- names(x)
-    
     
     # check all trees have same tip labels
     for (i in 1:num_trees) {
@@ -83,6 +89,11 @@ treescape <- function(x, method=treeVec, nf=NULL, ...){
 
 
     ## BUILD RESULT AND RETURN ##
-    out <- list(D=D, pco=pco)
+    if (return.tree.vectors==TRUE) {
+    out <- list(D=D, pco=pco, vectors=df)
+    }
+    else {
+    out <- list(D=D, pco=pco)  
+    }
     return(out)
 } # end treescape

@@ -4,7 +4,8 @@
 \alias{treescape}
 \title{Phylogenetic tree exploration}
 \usage{
-treescape(x, method = treeVec, nf = NULL, ...)
+treescape(x, method = treeVec, nf = NULL, return.tree.vectors = FALSE,
+  ...)
 }
 \arguments{
 \item{x}{an object of the class multiPhylo}
@@ -13,7 +14,9 @@ treescape(x, method = treeVec, nf = NULL, ...)
 
 \item{nf}{the number of principal components to retain}
 
-\item{...}{further arguments to be passed to \code{method}}
+\item{return.tree.vectors}{option to also return the tree vectors. Note that this can take a lot of memory so defaults to \code{FALSE}.}
+
+\item{...}{further arguments to be passed to \code{method}.}
 }
 \description{
 Compares phylogenetic trees and maps them into a small number of dimensions for easy visualisation and identification of clusters.
@@ -47,6 +50,8 @@ col="navy", alpha=0.5, xlab="", ylab="", zlab="")
 }
 }
 \author{
-Thibaut Jombart \email{thibautjombart@gmail.com}, Michelle Kendall \email{michelle.louise.kendall@gmail.com}
+Thibaut Jombart \email{thibautjombart@gmail.com}
+
+Michelle Kendall \email{michelle.louise.kendall@gmail.com}
 }
 

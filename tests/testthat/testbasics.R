@@ -57,6 +57,10 @@ test_that("medTree results are consistent with treeVec", {
    expect_equal(geom$mindist,min(geom$distances)) # mindist equals the minimum entry in `distances' 
   })
 
+test_that("medTree results are consistent whether the trees or their vectors are supplied", {
+   expect_equal(medTree(trees)$mindist,medTree(treescape(trees,nf=2, return.tree.vectors = TRUE)$vectors)$mindist)
+  })
+
 ############################
 # test that save_memory versions match non-save_memory versions
 ############################
