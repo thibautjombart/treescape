@@ -76,7 +76,7 @@ medTree <- function(x, groups=NULL, lambda=0, weights=NULL,
 
 if (type=="multiPhylo_object") {  
     ## DEFINE MAIN FUNCTION FINDING MEDIAN TREE ##
-    findMedian <- function(trees, weights){
+    findMedianPhylo <- function(trees, weights){
         ## checks, general variables
         num_trees <- length(trees)
         num_leaves <- length(trees[[1]]$tip.label)
@@ -165,15 +165,15 @@ if (type=="multiPhylo_object") {
 
     ## APPLY FUNCTION TO TREES ##
     if(is.null(groups)){     ## no groups provided
-        out <- findMedian(x, weights)
+        out <- findMedianPhylo(x, weights)
     } else { ## groups provided
-        out <- tapply(x, groups, findMedian, weights=NULL)
+        out <- tapply(x, groups, findMedianPhylo, weights=NULL)
     }
 } # end if multiPhylo object
 
 if (type=="tree_vectors"){
   ## Can define a much simpler version of the function to find a median tree ##
-  findMedian <- function(vectors, weights){
+  findMedianVectors <- function(vectors, weights){
     ## checks, general variables
     num_trees <- length(vectors[,1])
     if(is.null(weights)) {weights <- rep(1,num_trees)}
@@ -198,9 +198,9 @@ if (type=="tree_vectors"){
   
   ## APPLY FUNCTION TO TREES ##
   if(is.null(groups)){     ## no groups provided
-    out <- findMedian(x, weights)
+    out <- findMedianVectors(x, weights)
   } else { ## groups provided
-    out <- tapply(x, groups, findMedian, weights=NULL)
+    out <- tapply(x, groups, findMedianVectors, weights=NULL)
   }
 }  
     ## RETURN ##
