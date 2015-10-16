@@ -108,14 +108,20 @@ shinyServer(function(input, output) {
    input$lambda
   }) # end getLambda
   
-  ## GET KC matrix, evaluated at lambda
-  getKCmatrix <- reactive({
-    x <- getData()
+  # compute the tree vectors (as functions of lambda) only once per dataset to save on recomputation
+  getKCmatrixfunction <- reactive({
+   x <- getData()
     validate(
       need(!is.null(x), "Loading data set")
     )
+   multiDist(x, return.lambda.function = TRUE)
+  })
+  
+  
+  ## GET KC matrix, evaluated at lambda
+  getKCmatrix <- reactive({
     l <- getLambda()
-    M <- getKCmatrixfunction(x)
+    M <- getKCmatrixfunction()
     return(M(l))
   }) # end getKCmatrix
   
@@ -181,7 +187,7 @@ getClustmethod <- reactive({
 
 getClusters <- reactive({
     ## stop if clusters not required
-    if(!input$findgroups) return(NULL)
+    if(!input$findGroves) return(NULL)
     
     ## get dataset
     x <- getData()
@@ -365,11 +371,11 @@ getPlot <- reactive({
 
   
   
-  ## TREESCAPE IMAGE ##
-  output$scatterplot <- renderPlot({
+## TREESCAPE IMAGE ##
+output$scatterplot <- renderPlot({
     myplot <- getPlot()
     plot(myplot)
-  }, res=120)
+}, res=120)
   
 # get tree and aesthetics for plotting tree  
 
@@ -490,6 +496,35 @@ output$tree <- renderPlot({
       contentType = 'image/png'
     }
     )
+  
+#  # Clicking
+#  output$plot_click <- renderPrint({
+#    res <- getAnalysis()
+#    xax <- getXax()
+#    yax <- getYax()
+#    ## need to get the scaling right:
+#    ## the input$plot_click points are in [0,1]x[0,1] (roughly but not quite!)
+#    ## also need to know how scatter places the points...
+#    minx <- min(res$pco$li[,xax])
+#    miny <- min(res$pco$li[,yax])
+#    res$pco$li[,xax] <- res$pco$li[,xax] - minx # since minx is negative
+#    res$pco$li[,yax] <- res$pco$li[,yax] - miny
+#    maxx <- max(res$pco$li[,xax])
+#    maxy <- max(res$pco$li[,yax])
+#    longestaxis <- max(maxx,maxy)
+#    scaledCoords <- res$pco$li/longestaxis
+#    if(!is.null(input$plot_click)){
+#      test <- nearPoints(scaledCoords,input$plot_click,
+#                         xvar=paste0("A",xax),yvar=paste0("A",yax),
+#                         threshold=100,maxpoints=1)
+#      nearTree <- intersect(which(res$pco$li[,xax]==test[[1]]),
+#                            which(res$pco$li[,yax]==test[[2]]))
+#    paste0(#"Click coordinates: x=",input$plot_click$x,", y=",input$plot_click$y,", giving tree ",
+#      nearTree)
+#           #intersect(which(res$pco$li[,as.numeric(xax)]==signif(input$plot_click$x,2)),
+#          #           which(res$pco$li[,as.numeric(yax)]==signif(input$plot_click$y,2))))
+#    }
+#      })
   
   ## RENDER SYSTEM INFO ##
   output$systeminfo <- .render.server.info()

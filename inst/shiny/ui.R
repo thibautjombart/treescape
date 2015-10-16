@@ -74,11 +74,11 @@ shinyUI(
                        uiOutput("naxes"),
                        
                        ## group stuff
-                       checkboxInput("findgroups", label=strong("Identify clusters?"), value=FALSE),
+                       checkboxInput("findGroves", label=strong("Identify clusters?"), value=FALSE),
                        
                        conditionalPanel(
                          ## condition
-                         condition="input.findgroups",
+                         condition="input.findGroves",
                          
                          ## clustering method
                          selectInput("clustmethod", "Clustering method:",
@@ -102,7 +102,7 @@ shinyUI(
                        ## type of graph (if clusters detected)
                        conditionalPanel(
                          ## condition
-                         condition="input.findgroups",
+                         condition="input.findGroves",
                          
                          ## type of plot
                          radioButtons("scattertype", "Type of scatterplot",
@@ -145,7 +145,7 @@ shinyUI(
                        ## choose color palette (if clusters detected)
                        conditionalPanel(
                          ## condition
-                         condition="input.findgroups",
+                         condition="input.findGroves",
                          
                          selectInput("palette", "Palette for the clusters",
                                      choices=c("funky", "spectral",
@@ -197,7 +197,12 @@ shinyUI(
       tabsetPanel(
         
         tabPanel("Tree landscape explorer",
-                 plotOutput("scatterplot", height = "800px"),
+                 ## function I was using for testing:
+                 #verbatimTextOutput("plot_click"),
+                 
+                 plotOutput("scatterplot", height = "800px"
+                            #, click="plot_click" # get this working later
+                            ),
                  
                  ## add tree selector
                  textInput("selectedTree", "Choose tree (number or label)", value = ""),
