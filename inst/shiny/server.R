@@ -1,6 +1,7 @@
 ## library(shiny)
 ## library(treescape)
 
+source("helpers.R")
 
 ## DEFINE THE SERVER SIDE OF THE APPLICATION
 shinyServer(function(input, output) {
@@ -14,14 +15,19 @@ shinyServer(function(input, output) {
   
   ## GET DYNAMIC ANNOTATION
   graphTitle <- reactive({
-    paste(input$dataset, ": MDS scatterplot, axes ", input$xax,"-", input$yax, sep="")
+    xax <- getXax()
+    yax <- getYax()
+    paste(input$dataset, ": MDS scatterplot, axes ", xax,"-", yax, sep="")
   })
   
   ## DEFINE CAPTION
   output$caption <- renderText({
     graphTitle()
   })
-  
+
+  ######################################
+  ### Define main reactive functions
+  ######################################
   
   ## GET DATA ##
   getData <- reactive({
@@ -79,93 +85,133 @@ shinyServer(function(input, output) {
     return(out)
   }) # end getData
   
+  ## GET tree method
+  getTreemethod <- reactive({
+    input$treemethod
+  }) # end getTreemethod
   
-  ## GET ANALYSIS ##
-  getAnalysis <- reactive({
-    
-    ## get dataset
-    x <- getData()
-    
-    ## the following removes the lambda error messages:
-    validate(
-      need(input$lambda != "", "Loading data set")
-    )	
-    
-    ## Trying to remove the error message "only defined on a data frame with all numeric variables"
-    ## This doesn't work, but presumably it's something like this?!
-    #validate(
-    #  need(input$treeMethod != "", "My test")
-    #  )		
-    
-    ## stop if not data
-    if(is.null(x)) return(NULL)
-    
-    ## get number of axes retained
+  ## GET number of axes retained
+  getNaxes <- reactive({
     if(!is.null(input$naxes)) {
       naxes <- input$naxes
     } else {
       naxes <- 2
-    }
+    } 
+  }) # end getNaxes
+  
+  ## GET lambda
+  getLambda <- reactive({
+    ## the following removes the lambda error messages:
+    validate(
+      need(input$lambda != "", "Loading data set")
+    )	
+   input$lambda
+  }) # end getLambda
+  
+  ## GET KC matrix, evaluated at lambda
+  getKCmatrix <- reactive({
+    x <- getData()
+    validate(
+      need(!is.null(x), "Loading data set")
+    )
+    l <- getLambda()
+    M <- getKCmatrixfunction(x)
+    return(M(l))
+  }) # end getKCmatrix
+  
+  ## GET PCO analysis ##
+  getPCO <- reactive({
+    D <- getKCmatrix()
+    naxes <- getNaxes()
+    dudi.pco(D,scannf=is.null(naxes),nf=naxes)
+  }) # end getPCO
+
+  ## GET ANALYSIS ##
+  getAnalysis <- reactive({
+    x <- getData()
+    validate(
+      need(!is.null(x), "Loading data set")
+    )
     
+    naxes <- getNaxes()
+    TM <- getTreemethod()
+
     ## select method used to summarise tree
-    if(!is.null(input$treemethod)){
-      if(input$treemethod %in% c("patristic","nNodes","Abouheif","sumDD")){
-        treeMethod <- function(x){return(adephylo::distTips(x, method=input$treemethod))}
-      } else if(input$treemethod=="metric"){
-        treeMethod <- function(x){return(treeVec(x, lambda=input$lambda))}
+    if(!is.null(TM)){
+      if(TM %in% c("patristic","nNodes","Abouheif","sumDD")){
+        treeMethod <- function(x){return(adephylo::distTips(x, method=TM))}
+        ## run treescape
+        res <- treescape(x, method=treeMethod, nf=naxes)
+      } else if(TM=="metric"){
+        ## don't actually need to call treescape here, to save on recomputation for varying lambda
+        D <- getKCmatrix()
+        pco <- getPCO()
+        res <- list(D=D, pco=pco) 
       } else {
         treeMethod <- adephylo::distTips
+        ## run treescape
+        res <- treescape(x, method=treeMethod, nf=naxes)
       }
     }
-    
-    ## run treescape
-    res <- treescape(x, method=treeMethod, nf=naxes)
     
     ## return results
     return(res)
   }) # end getAnalysis
+
+#################################################
+### Little "get" functions to support getClusters
+#################################################
+
+getNclust <- reactive({
+  if(!is.null(input$nclust)) {
+    input$nclust
+  } else {
+    2
+  }
+})  
   
+getClustmethod <- reactive({
+  input$clustmethod
+})
   
-  ## GET CLUSTERS ##
-  getClusters <- reactive({
+
+################
+## GET CLUSTERS
+################
+
+getClusters <- reactive({
     ## stop if clusters not required
     if(!input$findgroups) return(NULL)
     
     ## get dataset
     x <- getData()
+    validate(
+      need(!is.null(x), "Loading data set")
+    )
     
-    ## stop if not data
-    if(is.null(x)) return(NULL)
-    
-    ## get number of axes retained
-    if(!is.null(input$naxes)) {
-      naxes <- input$naxes
-    } else {
-      naxes <- 2
-    }
-    
-    ## get number of clusters
-    if(!is.null(input$nclust)) {
-      nclust <- input$nclust
-    } else {
-      nclust <- 2
-    }
-    
-    
+    naxes <- getNaxes()
+    TM <- getTreemethod()
+    nclust <- getNclust()
+    clustmethod <- getClustmethod()
+ 
     ## select method used to summarise tree
-    if(!is.null(input$treemethod)){
-      if(input$treemethod %in% c("patristic","nNodes","Abouheif","sumDD")){
-        treeMethod <- function(x){return(adephylo::distTips(x, method=input$treemethod))}
-      } else if(input$treemethod=="metric"){
-        treeMethod <- function(x){return(treeVec(x, lambda=input$lambda))}
+    if(!is.null(TM)){
+      if(TM %in% c("patristic","nNodes","Abouheif","sumDD")){
+        treeMethod <- function(x){return(adephylo::distTips(x, method=TM))}
+        ## run findGroves
+        res <- findGroves(x, method=treeMethod, nf=naxes,
+                          nclust=nclust, clustering=clustmethod)
+      } else if(TM=="metric"){
+        res <- findGroves(getAnalysis(), nclust=nclust, clustering=clustmethod)
       } else {
         treeMethod <- adephylo::distTips
+        ## run findGroves
+        res <- findGroves(x, method=treeMethod, nf=naxes,
+                          nclust=nclust, clustering=clustmethod)
       }
     }
     
-    ## run findGroves
-    res <- findGroves(x, method=treeMethod, nf=naxes,
-                      nclust=nclust, clustering=input$clustmethod)
+
     
     ## return results
     return(res)
@@ -207,7 +253,7 @@ shinyServer(function(input, output) {
   output$lambda <- renderUI({
     ## if metric has been chosen
     if(input$treemethod=="metric") {
-      sliderInput("lambda", "Value of lambda", min=0, max=1, value=0.5, step=0.01)
+      sliderInput("lambda", "Value of lambda", min=0, max=1, value=0, step=0.01)
     } else {
       NULL
     }
@@ -224,83 +270,156 @@ shinyServer(function(input, output) {
     sliderInput("nclust", "Number of clusters:", min=2, max=nmax, value=2, step=1)
   })
   
-  ## ## SELECTION OF BACKGROUND COLOR
-  ## output$bg <- renderUI({
-  ##     selectInput("bg", "Background color:", colors(), selected="white")
-  ## })
-  
-  ##  ## SELECTION OF LABELS COLOR
-  ## output$labcol <- renderUI({
-  ##     selectInput("labcol", "Label color:", colors(), selected="black")
-  ## })
-  
-  
-  ## ANALYSIS ##
-  output$scatterplot <- renderPlot({
+
+######################################################
+### Little "get" functions to support getPlot
+######################################################  
+
+getPalette  <- reactive({
+  get(input$palette)
+})
+
+getLabcol <- reactive({
+  ifelse(!is.null(input$labcol), input$labcol, "black")
+})
+
+getBgcol <- reactive({
+  ifelse(!is.null(input$bgcol), input$bgcol, "white")
+})
+
+getScattertype <- reactive({
+input$scattertype
+})
+
+getXax <- reactive({
+input$xax
+})  
+
+getYax <- reactive({
+  input$yax
+})  
+
+getScreemds <- reactive({
+  input$screemds
+})  
+
+getOptimlabels <- reactive({
+  input$optimlabels
+})  
+
+getShowlabels <- reactive({
+  input$showlabels
+})
+
+getLabelsize <- reactive({
+  input$labelsize
+})
+
+getPointsize <- reactive({
+  input$pointsize
+})
+
+##############  
+## GET plot
+##############
+
+getPlot <- reactive({
     ## get dataset
     x <- getData()
+    validate(
+      need(!is.null(x), "Loading data set")
+    )
     
-    if(!is.null(x)){
-      ## get analysis
-      res <- getAnalysis()
+    res <- getAnalysis()
+    groves <- getClusters()
+    
+    ## get aesthetics
+    pal <- getPalette()
+    labcol <- getLabcol()
+    bgcol <- getBgcol()
+    scattertype <- getScattertype()
+    xax <- getXax()
+    yax <- getYax()
+    screemds <- getScreemds()
+    optimlabels <- getOptimlabels()
+    showlabels <- getShowlabels()
+    labelsize <- getLabelsize()
+    pointsize <- getPointsize()
       
-      ## get clusters
-      groves <- getClusters()
-      
-      ## get palette
-      pal <- get(input$palette)
-      
-      ## get colors
-      labcol <- ifelse(!is.null(input$labcol), input$labcol, "black")
-      bgcol <- ifelse(!is.null(input$bgcol), input$bgcol, "white")
-      
-      ## plot without groups
-      if(is.null(groves)){
-        y <- plotGroves(res$pco, type=input$scattertype, xax=input$xax, yax=input$yax,
-                   scree.posi=input$screemds, lab.optim=input$optimlabels,
-                   lab.show=input$showlabels, lab.cex=input$labelsize,
-                   lab.col=labcol,
-                   point.cex=input$pointsize, bg=bgcol)
-      } else {
-        ## plot with groups
-        y <- plotGroves(groves, type=input$scattertype, xax=input$xax, yax=input$yax,
-                   scree.posi=input$screemds, lab.optim=input$optimlabels,
-                   lab.show=input$showlabels, lab.cex=input$labelsize,
-                   lab.col=labcol,
-                   point.cex=input$pointsize, bg=bgcol, col.pal=pal)
-      }
-    plot(y)
+    ## plot without groups
+    if(is.null(groves)){
+      plotGroves(res$pco, type=scattertype, xax=xax, yax=yax,
+                        scree.posi=screemds, lab.optim=optimlabels,
+                        lab.show=showlabels, lab.cex=labelsize,
+                        lab.col=labcol,
+                        point.cex=pointsize, bg=bgcol)
+    } else {
+    ## plot with groups
+      plotGroves(groves, type=scattertype, xax=xax, yax=yax,
+                        scree.posi=screemds, lab.optim=optimlabels,
+                        lab.show=showlabels, lab.cex=labelsize,
+                        lab.col=labcol,
+                        point.cex=pointsize, bg=bgcol, col.pal=pal)
     }
+  })
+
+  
+  
+  ## TREESCAPE IMAGE ##
+  output$scatterplot <- renderPlot({
+    myplot <- getPlot()
+    plot(myplot)
   }, res=120)
   
-  ## PHYLOGENY ##
-  output$tree <- renderPlot({
-    ## get dataset
-    x <- getData()
+# get tree and aesthetics for plotting tree  
+
+getTree <- reactive({
+  x <- getData()
+  validate(
+    need(!is.null(x), "Loading data set")
+  )
+  trelab <- input$selectedTree
+  if(trelab!=""){
+    ## numeric label
+    if(!is.na(as.numeric(trelab))){
+      validate(
+        need(as.numeric(trelab) %in% 1:length(x), paste0("Tree number must be in the range 1 to ",length(x)))
+      )	
+      tre <- x[[as.numeric(trelab)]]
+    } else {
+      ## text label
+      validate(
+        need(as.character(trelab) %in% names(x), "Tree name not recognised")
+      )	
+      tre <- x[[as.character(trelab)]]
+    }
     
-    ## get right tree ##
-    trelab <- input$selectedTree
-    if(trelab!=""){
-      ## numeric label
-      if(!is.na(as.numeric(trelab))){
-        tre <- x[[as.numeric(trelab)]]
-      } else {
-        ## text label
-        tre <- x[[as.numeric(trelab)]]
-      }
-      
+    # return tree
+    if(!is.null(tre)){
       if(input$ladderize){
         tre <- ladderize(tre)
       }
-      
-      ## plot tree ##
-      par(mar=rep(2,4), xpd=TRUE)
-      plot(tre, type=input$treetype,
-           show.tip.lab=input$showtiplabels, font=1, cex=input$tiplabelsize,
-           direction=input$treedirection,
-           edge.width=input$edgewidth)
+    return(tre)   
     }
-  })
+    else{
+      NULL
+    }
+  }
+})  
+
+## PHYLOGENY ##
+output$tree <- renderPlot({
+  tre <- getTree()
+  if(!is.null(tre)){
+  
+  ## plot tree ##
+  par(mar=rep(2,4), xpd=TRUE)
+  plot(tre, type=input$treetype,
+         show.tip.lab=input$showtiplabels, font=1, cex=input$tiplabelsize,
+         direction=input$treedirection,
+         edge.width=input$edgewidth)
+  }
+})
   
   
   
@@ -346,44 +465,12 @@ shinyServer(function(input, output) {
     })
   
   ## EXPORT MDS PLOT AS PNG ##
-  # Note this seems inefficient - is there a more direct way to call the plot?
   output$downloadMDS <- downloadHandler(
     filename = function() { paste0(input$dataset,".png") },
     content = function(file) {
-      x <- getData()
-      
-      if(!is.null(x)){
-        ## get analysis
-        res <- getAnalysis()
-        
-        ## get clusters
-        groves <- getClusters()
-        
-        ## get palette
-        pal <- get(input$palette)
-        
-        ## get colors
-        labcol <- ifelse(!is.null(input$labcol), input$labcol, "black")
-        bgcol <- ifelse(!is.null(input$bgcol), input$bgcol, "white")
-      
-        ## plot without groups
-        if(is.null(groves)){
-          y <- plotGroves(res$pco, type=input$scattertype, xax=input$xax, yax=input$yax,
-                          scree.posi=input$screemds, lab.optim=input$optimlabels,
-                          lab.show=input$showlabels, lab.cex=input$labelsize,
-                          lab.col=labcol,
-                          point.cex=input$pointsize, bg=bgcol)
-        } else {
-          ## plot with groups
-          y <- plotGroves(groves, type=input$scattertype, xax=input$xax, yax=input$yax,
-                          scree.posi=input$screemds, lab.optim=input$optimlabels,
-                          lab.show=input$showlabels, lab.cex=input$labelsize,
-                          lab.col=labcol,
-                          point.cex=input$pointsize, bg=bgcol, col.pal=pal)
-        }
-      }
+      myplot <- getPlot()
       png(file=file, width = 10, height = 10, units = 'in', res = 500)
-      plot(y)
+      plot(myplot)
       dev.off()
     contentType = 'image/png'
     })
@@ -393,34 +480,16 @@ shinyServer(function(input, output) {
   output$downloadTree <- downloadHandler(
     filename = function() { paste(input$dataset, 'Tree',input$selectedTree,'.png', sep='') },
     content = function(file) {
+      tre <- getTree()
       png(file=file)
-      x <- getData()
-      
-      ## get right tree ##
-      trelab <- input$selectedTree
-      if(trelab!=""){
-        ## numeric label
-        if(!is.na(as.numeric(trelab))){
-          tre <- x[[as.numeric(trelab)]]
-        } else {
-          ## text label
-          tre <- x[[as.numeric(trelab)]]
-        }
-        
-        if(input$ladderize){
-          tre <- ladderize(tre)
-        }
-        
-        ## plot tree ##
-        par(mar=rep(2,4), xpd=TRUE)
-        plot(tre, type=input$treetype,
+      plot(tre, type=input$treetype,
              show.tip.lab=input$showtiplabels, font=1, cex=input$tiplabelsize,
              direction=input$treedirection,
              edge.width=input$edgewidth)
-      }
       dev.off()
       contentType = 'image/png'
-    })
+    }
+    )
   
   ## RENDER SYSTEM INFO ##
   output$systeminfo <- .render.server.info()
