@@ -61,7 +61,7 @@
 #' for(i in 1:length(med.trees)) plot(med.trees[[i]], main=paste("cluster",i))
 #'
 #'
-medTree <- function(x, groups=NULL, lambda=0, weights=NULL,
+medTree <- function(x, groups=NULL, lambda=0, weights=NULL, emphasise.tips=NULL, emphasise.weight=2,
                     return.lambda.function=FALSE, save.memory=FALSE) {
 
   ## CHECK input type ##
@@ -90,7 +90,7 @@ if (type=="multiPhylo_object") {
             if(!save.memory) {
 
                 ## Compute the metric vector for all trees.
-                tree_metrics <- t(sapply(trees, function(tree) {treeVec(tree, lambda, F)}))
+                tree_metrics <- t(sapply(trees, function(tree) {treeVec(tree, lambda, emphasise.tips, emphasise.weight, return.lambda.function=F)}))
 
                 ## Compute the centre metric vector by weighting the metric vector of each tree.
                 centre <- (weights %*% tree_metrics)/num_trees
@@ -137,7 +137,7 @@ if (type=="multiPhylo_object") {
                 warning("save.memory=TRUE is incompatible with return.lambda.function=TRUE, setting save.memory=FALSE")
 
             ## Compute the list of metric functions for all trees.
-            tree_metric_functions <- sapply(trees, function(tree) {treeVec(tree, lambda, T)})
+            tree_metric_functions <- sapply(trees, function(tree) {treeVec(tree, lambda, emphasise.tips, emphasise.weight, return.lambda.function=T)})
 
             ## Inner function that we'll return, computes the distance matrix given lambda.
             compute_median_tree_function <- function(l) {
@@ -167,7 +167,7 @@ if (type=="multiPhylo_object") {
     if(is.null(groups)){     ## no groups provided
         out <- findMedianPhylo(x, weights)
     } else { ## groups provided
-        out <- tapply(x, groups, findMedianPhylo, weights=NULL)
+        out <- tapply(x, groups, findMedianPhylo, weights)
     }
 } # end if multiPhylo object
 
