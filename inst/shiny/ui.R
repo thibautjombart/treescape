@@ -62,8 +62,10 @@ shinyUI(
                                   uiOutput("lambda"),
                                   uiOutput("naxes"),
                                   
+                                  
                                   ## group stuff
                                   checkboxInput("findGroves", label=strong("Identify clusters?"), value=FALSE),
+                                  
                                   
                                   conditionalPanel(
                                     ## condition
@@ -87,7 +89,22 @@ shinyUI(
                                   
                                   h2(HTML('<font color="#6C6CC4" size="6"> > Aesthetics </font>')),
                                   
-                                  ## SCATTERPLOT AESTHETICS
+                                  ## 2D (default) or 3D plot (if 3 or more axes retained)
+                                  conditionalPanel(condition="input.naxes>2",
+                                  checkboxInput("plot3D", label="View in 3D?", value=FALSE)
+                                  ),
+                                  
+                                  ## select first axis to plot
+                                  uiOutput("xax"),
+                                  
+                                  ## select second axis to plot
+                                  uiOutput("yax"),
+                                  
+                                  ## if in 3D, need a z axis:
+                                  conditionalPanel(condition="input.plot3D",
+                                                   uiOutput("zax")
+                                                   ),
+                                  
                                   ## type of graph (if clusters detected)
                                   conditionalPanel(
                                     ## condition
@@ -98,12 +115,6 @@ shinyUI(
                                                  choices=c("chull","ellipse"),
                                                  selected="chull")
                                   ),
-                                  
-                                  ## select first axis to plot
-                                  uiOutput("xax"),
-                                  
-                                  ## select second axis to plot
-                                  uiOutput("yax"),
                                   
                                   ## symbol size
                                   sliderInput("pointsize", "Size of the points", value=1, min=0, max=10, step=0.2),
@@ -163,9 +174,7 @@ shinyUI(
                          ## function I was using for testing:
                          #verbatimTextOutput("plot_click"),
                          
-                         plotOutput("scatterplot", height = "800px"
-                                    #, click="plot_click" # get this working later
-                         ),
+                         uiOutput("treescapePlot"),
                          
                          br(), br(),
                          

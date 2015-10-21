@@ -5,6 +5,7 @@
 \title{Geometric median tree function}
 \usage{
 medTree(x, groups = NULL, lambda = 0, weights = NULL,
+  emphasise.tips = NULL, emphasise.weight = 2,
   return.lambda.function = FALSE, save.memory = FALSE)
 }
 \arguments{

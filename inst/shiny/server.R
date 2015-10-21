@@ -12,6 +12,10 @@ shinyServer(function(input, output, session) {
   if(!require("treescape")) stop("treescape is required")
   if(!require("adegenet")) stop("adegenet is required")
   if(!require("phangorn")) stop("phangorn is required")
+  if(!require("shinyRGL")) stop("shinyRGL is required")
+  
+  # suppress warning messages from creating temporary directories when 3d plotting
+  suppressWarnings(warning("dir.create(dir)"))
   
   # the following resets the DensiTree plot every time the number of clusters changes - it was really slow without this
   rvs <- reactiveValues(showDensiTree=NULL)
@@ -311,7 +315,7 @@ getClusters <- reactive({
     } else {
       nmax <- 100
     }
-    sliderInput("naxes", "Number of MDS axes retained:", min=2, max=nmax, value=2, step=1)
+    sliderInput("naxes", "Number of MDS axes retained:", min=2, max=nmax, value=3, step=1)
   })
   
   ## SELECTION OF PLOTTED AXES
@@ -331,6 +335,15 @@ getClusters <- reactive({
       nmax <- 100
     }
     numericInput("yax", "Indicate the y axis", value=2, min=1, max=nmax)
+  })
+  
+  output$zax <- renderUI({
+    if(!is.null(x <- getAnalysis())) {
+      nmax <- x$pco$nf
+    } else {
+      nmax <- 100
+    }
+    numericInput("zax", "Indicate the z axis", value=3, min=1, max=nmax)
   })
   
   ## VALUE OF LAMBDA FOR METRIC
@@ -383,6 +396,10 @@ getYax <- reactive({
   input$yax
 })  
 
+getZax <- reactive({
+  input$zax
+})  
+
 getScreemds <- reactive({
   input$screemds
 })  
@@ -407,13 +424,15 @@ getPointsize <- reactive({
 ## GET plot
 ##############
 
+## GET whether plot is 2D (default) or 3D
+getPlotDim <- reactive({
+  if(input$plot3D==TRUE) {3}
+  else {2}
+})
+
+## GET 2D plot
 getPlot <- reactive({
-    ## get dataset
-    x <- getData()
-    validate(
-      need(!is.null(x), "Loading data set")
-    )
-    
+
     res <- getAnalysis()
     groves <- getClusters()
     
@@ -447,13 +466,45 @@ getPlot <- reactive({
     }
   })
 
-  
-  
+
 ## TREESCAPE IMAGE ##
+output$treescapePlot <- renderUI({
+  dim <- getPlotDim()
+  if(dim==2){
+  plotOutput("scatterplot", height = "800px"
+             #, click="plot_click" # get this working later
+  )}
+  else{
+    validate(
+    need(packageVersion("rgl")!='0.95.1367',
+    "You are running version 0.95.1367 of the package rgl which contains a known bug for 3D plotting in Shiny. Try installing this patch: devtools::install_github('rgl', 'trestletech', 'js-class')")
+    )
+    webGLOutput("plot3D", height = "800px")
+  }
+})
+
+
 output$scatterplot <- renderPlot({
     myplot <- getPlot()
     plot(myplot)
 }, res=120)
+
+output$plot3D <- renderWebGL({
+  # warnings etc. for functions which I haven't written yet for 3d plotting
+  validate(
+    need(input$findGroves==FALSE, "Sorry, it is not yet possible to view clusters in the 3D plot")
+  )
+  updateCheckboxInput(session, "showlabels", label="Display labels?", value=FALSE)
+
+  res <- getAnalysis()
+  xax <- getXax()
+  yax <- getYax()
+  zax <- getZax()
+  rgl::plot3d(res$pco$li[,xax],res$pco$li[,yax],res$pco$li[,zax], 
+         type="s", size=getPointsize(),
+         xlab="",ylab="",zlab="",
+         col="navy")
+}) 
   
 # get tree and aesthetics for plotting tree  
 getTreeChoice <- reactive({

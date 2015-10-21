@@ -12,6 +12,8 @@
 #' @param groups an optional factor defining groups of trees; if provided, one median tree will be found for each group.
 #' @param lambda a number in [0,1] which specifies the extent to which topology (default, with lambda=0)  or branch lengths (lambda=1) are emphasised. This argument is ignored if \code{return.lambda.function=TRUE} or if the vectors are already supplied as the object \code{x}.
 #' @param weights A vector of weights for the trees. Defaults to a vector of 1's so that all trees are equally weighted, but can be used to encode likelihood, posterior probabilities or other characteristics.
+#' @param emphasise.tips an optional list of tips whose entries in the tree vectors should be emphasised. Defaults to \code{NULL}.
+#' @param emphasise.weight applicable only if a list is supplied to \code{emphasise.tips}, this value (default 2) is the number by which vector entries corresponding to those tips are emphasised.
 #' @param return.lambda.function If true, a function that can be invoked with different lambda values is returned.
 #'  This function returns the vector of metric values for the given lambda. Ignored if the tree vectors are already supplied as the object \code{x}.
 #' @param save.memory A flag that saves a lot of memory but increases the execution time (not compatible with return.lambda.function=TRUE). Ignored if the tree vectors are already supplied as the object \code{x}.
