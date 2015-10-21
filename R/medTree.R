@@ -193,14 +193,18 @@ if (type=="tree_vectors"){
     
     ## Note we cannot return $trees because the trees were not supplied!    
     return(list(centre=centre, distances=distances, mindist=min_distance, treenumbers=median_trees))
-    } # end findMedian
+    } # end findMedianVectors
   
   
   ## APPLY FUNCTION TO TREES ##
   if(is.null(groups)){     ## no groups provided
     out <- findMedianVectors(x, weights)
   } else { ## groups provided
-    out <- tapply(x, groups, findMedianVectors, weights=NULL)
+    # need to first convert the vector matrix into a list:
+    mylist <- lapply(1:length(x[,1]), function(a) x[a,])
+    # and then coerce back into matrix within the function. 
+    # Room for improvement here!
+    out <- tapply(mylist, groups, function(a) {findMedianVectors(t(sapply(a, function(b) b)), weights)})
   }
 }  
     ## RETURN ##
