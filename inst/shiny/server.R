@@ -477,7 +477,7 @@ output$treescapePlot <- renderUI({
   else{
     validate(
     need(packageVersion("rgl")!='0.95.1367',
-    "You are running version 0.95.1367 of the package rgl which contains a known bug for 3D plotting in Shiny. Try installing this patch: devtools::install_github('rgl', 'trestletech', 'js-class')")
+    "You are running version 0.95.1367 of the package rgl which contains a known bug for 3D plotting in Shiny. Recommend deleting the current version from your library then installing this patch: devtools::install_github('trestletech/rgl@js-class')")
     )
     webGLOutput("plot3D", height = "800px")
   }
