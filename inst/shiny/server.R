@@ -4,14 +4,23 @@
 source("helpers.R")
 
 ## DEFINE THE SERVER SIDE OF THE APPLICATION
-shinyServer(function(input, output) {
+shinyServer(function(input, output, session) {
   ## LOAD PACKAGES
   if(!require("ape")) stop("ape is required")
   if(!require("ade4")) stop("ade4 is required")
   if(!require("adegraphics")) stop("ade4 is required")
   if(!require("treescape")) stop("treescape is required")
   if(!require("adegenet")) stop("adegenet is required")
+  if(!require("phangorn")) stop("phangorn is required")
   
+  # the following resets the DensiTree plot every time the number of clusters changes - it was really slow without this
+  rvs <- reactiveValues(showDensiTree=NULL)
+  observeEvent(input$nclust, {
+    rvs$showDensiTree <- NULL
+  })
+  observeEvent(input$selectedDensiTree, {
+    rvs$showDensiTree <- 1  
+  })
   
   ## GET DYNAMIC ANNOTATION
   graphTitle <- reactive({
@@ -55,7 +64,8 @@ shinyServer(function(input, output) {
         out <- read.nexus(file=newName)
       }
       
-      ## fix potential bug with names - they need to be unique
+      ## fix potential bug with names - they need to be defined and unique
+      if(is.null(names(out))) {names(out) <- 1:length(out)}
       if(length(unique(names(out)))!=length(out)){
         warning("duplicates detected in tree labels - using generic names")
         names(out) <- 1:length(out)
@@ -85,6 +95,33 @@ shinyServer(function(input, output) {
     return(out)
   }) # end getData
   
+  ## GET number of trees
+  getLengthData <- reactive({
+    x <- getData()
+    validate(
+      need(!is.null(x), "Loading data set")
+    )
+    return(length(x))
+  })
+  
+  ## GET tree names
+  getTreeNames <- reactive({
+    x <- getData()
+    validate(
+      need(!is.null(x), "Loading data set")
+    )
+    return(names(x))
+  })
+  
+  ## GET tip labels
+  getTipLabels <- reactive({
+    x <- getData()
+    validate(
+      need(!is.null(x), "Loading data set")
+    )
+    return(x[[1]]$tip.label)
+  })
+  
   ## GET tree method
   getTreemethod <- reactive({
     input$treemethod
@@ -107,23 +144,56 @@ shinyServer(function(input, output) {
     )	
    input$lambda
   }) # end getLambda
-  
-  # compute the tree vectors (as functions of lambda) only once per dataset to save on recomputation
-  getKCmatrixfunction <- reactive({
-   x <- getData()
+
+  # GET the tree vectors as functions of lambda
+  getKCtreeVecs <- reactive({
+    x <- getData()
     validate(
       need(!is.null(x), "Loading data set")
     )
-   multiDist(x, return.lambda.function = TRUE)
+    df <-sapply(x, function(i) treeVec(i, return.lambda.function=TRUE)) 
   })
   
-  
+  # GET the tree vectors evaluated at lambda
+  getKCtreeVecsAtLambda <- reactive({
+  vectors <- getKCtreeVecs()
+  l <- getLambda()
+  t(sapply(vectors, function(i) i(l)))
+  })
+    
+
   ## GET KC matrix, evaluated at lambda
   getKCmatrix <- reactive({
-    l <- getLambda()
-    M <- getKCmatrixfunction()
-    return(M(l))
+    vls <- getKCtreeVecsAtLambda()
+    numtrees <- getLengthData()
+    as.dist(sapply(1:numtrees, function(a) sapply(1:numtrees, function(b) if(a<b) {sqrt(sum((vls[a,]-vls[b,])^2))} else{0})))
   }) # end getKCmatrix
+  
+  ## GET medTrees for all clusters
+  getMedTreesList <- reactive({
+    mat <- getKCtreeVecsAtLambda()
+    groves <- getClusters()
+    if(!is.null(groves$groups)){ # if clusters have been picked
+    numGroups <- length(unique(groves$groups))
+    med <- medTree(mat,groves$groups)
+    lapply(1:numGroups, function(x) med[[x]]$treenumbers[[1]])
+    }
+    else{
+      medTree(mat)$treenumbers[[1]]
+    }
+  })
+  
+  getMedTree <- reactive({
+    x <- getData()
+    whichClust <- input$selectedMedTree
+    medList <- getMedTreesList()
+    if(whichClust=="all"){
+    x[[medList[[1]]]]
+    }
+    else{
+    x[[medList[[as.numeric(whichClust)]]]]
+    }
+  })
   
   ## GET PCO analysis ##
   getPCO <- reactive({
@@ -174,7 +244,7 @@ getNclust <- reactive({
   } else {
     2
   }
-})  
+}) 
   
 getClustmethod <- reactive({
   input$clustmethod
@@ -188,7 +258,16 @@ getClustmethod <- reactive({
 getClusters <- reactive({
     ## stop if clusters not required
     if(!input$findGroves) return(NULL)
+  
+    ## reset the densiTree plot to accommodate number of clusters available
+    choices <- getClustChoices()
+    updateSelectInput(session, "selectedDensiTree", "Choose collection of trees to view in densiTree plot", 
+                    choices=choices, selected="")
     
+    ## reset the median tree choices to accommodate number of clusters available
+    updateSelectInput(session, "selectedMedTree", "Median tree from:", 
+                      choices=choices, selected="all")
+  
     ## get dataset
     x <- getData()
     validate(
@@ -217,10 +296,9 @@ getClusters <- reactive({
       }
     }
     
-
-    
     ## return results
     return(res)
+  
   }) # end getClusters
   
   
@@ -233,7 +311,7 @@ getClusters <- reactive({
     } else {
       nmax <- 100
     }
-    sliderInput("naxes", "Number of MDS axes retained:", min=1, max=nmax, value=2, step=1)
+    sliderInput("naxes", "Number of MDS axes retained:", min=2, max=nmax, value=2, step=1)
   })
   
   ## SELECTION OF PLOTTED AXES
@@ -378,27 +456,44 @@ output$scatterplot <- renderPlot({
 }, res=120)
   
 # get tree and aesthetics for plotting tree  
+getTreeChoice <- reactive({
+  input$treeChoice
+})
+
 
 getTree <- reactive({
   x <- getData()
   validate(
     need(!is.null(x), "Loading data set")
   )
-  trelab <- input$selectedTree
-  if(trelab!=""){
-    ## numeric label
-    if(!is.na(as.numeric(trelab))){
-      validate(
-        need(as.numeric(trelab) %in% 1:length(x), paste0("Tree number must be in the range 1 to ",length(x)))
-      )	
-      tre <- x[[as.numeric(trelab)]]
-    } else {
-      ## text label
-      validate(
-        need(as.character(trelab) %in% names(x), "Tree name not recognised")
-      )	
-      tre <- x[[as.character(trelab)]]
+  treechoice <- getTreeChoice()
+  if(treechoice=="med"){
+    tre <- getMedTree()
+  }
+  else{
+    g <- input$selectedGenTree
+    if(is.null(g)){tre <- NULL}  
+    else{
+    treeNum <- as.numeric(g)
+    tre <- x[[treeNum]]
     }
+  }
+  
+  #trelab <- input$selectedTree
+  #if(trelab!=""){
+  #  ## numeric label
+  #  if(!is.na(as.numeric(trelab))){
+  #    validate(
+  #      need(as.numeric(trelab) %in% 1:length(x), paste0("Tree number must be in the range 1 to ",length(x)))
+  #    )	
+  #    tre <- x[[as.numeric(trelab)]]
+  #  } else {
+  #    ## text label
+  #    validate(
+  #      need(as.character(trelab) %in% names(x), "Tree name not recognised")
+  #    )	
+  #    tre <- x[[as.character(trelab)]]
+  #  }
     
     # return tree
     if(!is.null(tre)){
@@ -410,7 +505,6 @@ getTree <- reactive({
     else{
       NULL
     }
-  }
 })  
 
 ## PHYLOGENY ##
@@ -421,14 +515,71 @@ output$tree <- renderPlot({
   ## plot tree ##
   par(mar=rep(2,4), xpd=TRUE)
   plot(tre, type=input$treetype,
-         show.tip.lab=input$showtiplabels, font=1, cex=input$tiplabelsize,
+         use.edge.length=as.logical(input$edgelengths),
+         show.tip.lab=input$showtiplabels, 
+         font=as.numeric(input$tiplabelfont), 
+         cex=input$tiplabelsize,
          direction=input$treedirection,
-         edge.width=input$edgewidth)
+         edge.width=input$edgewidth,
+         edge.color=input$edgecolor
+         )
   }
 })
   
-  
-  
+## DENSITREE
+
+# The slider bar is always at least 2 even when clusters haven't
+# been requested, so we can't just use getNclust.
+
+
+
+getNclustForDensiTree <- reactive({
+  if(input$findGroves==FALSE){NULL}
+  else{input$nclust}
+}) 
+
+getClustChoices <- reactive({
+  nclust <- getNclustForDensiTree()
+  if(is.null(nclust)){
+    choices <- c("","all")
+    names(choices) <- c("Choose one","All trees")
+  }
+  else{
+    choices <- c("",1:nclust,"all")
+    names(choices) <- c("Choose one",paste0("Cluster ",1:nclust),"All trees")
+  }
+  return(choices)
+})
+
+getDensiTree <- reactive({
+  clusterNo <- input$selectedDensiTree
+  if(clusterNo==""){
+    NULL
+  }
+  else if(clusterNo=="all"){
+    x <- getData()
+    return(x)
+  }
+  else{
+    x <- getData()
+    clusts <- getClusters()
+    clustTrees <- x[which(clusts$groups==as.numeric(clusterNo))]
+    return(clustTrees)
+  }
+})  
+
+output$densiTree <- renderPlot({
+  if(is.null(rvs$showDensiTree)) {NULL}
+  else{
+  clustTrees <- getDensiTree()
+  validate(
+    need(!is.null(clustTrees), "Loading densiTree plot")
+  )	
+  densiTree(clustTrees, col=4, alpha=input$alpha, scaleX=input$scaleX)
+  }
+})
+
+
   ## EXPORT TREES ##
   output$exporttrees <- downloadHandler(
     filename = function() { paste(input$dataset, '.nex', sep='') },
@@ -484,7 +635,7 @@ output$tree <- renderPlot({
   
   ## EXPORT TREE PLOT AS PNG ##
   output$downloadTree <- downloadHandler(
-    filename = function() { paste(input$dataset, 'Tree',input$selectedTree,'.png', sep='') },
+    filename = function() { paste(input$dataset, 'Tree',getTree(),'.png', sep='') },
     content = function(file) {
       tre <- getTree()
       png(file=file)
@@ -496,6 +647,30 @@ output$tree <- renderPlot({
       contentType = 'image/png'
     }
     )
+  
+  ## EXPORT DENSITREE PLOT AS PNG ##
+  output$downloadDensiTree <- downloadHandler(
+    filename = function() { paste(input$dataset, 'DensiTree',input$selectedDensiTree,'.png', sep='') },
+    content = function(file) {
+      tre <- getDensiTree()
+      png(file=file) 
+      plot(tre, type=input$treetype, # CHANGE THIS!
+           show.tip.lab=input$showtiplabels, font=1, cex=input$tiplabelsize,
+           direction=input$treedirection,
+           edge.width=input$edgewidth)
+      dev.off()
+      contentType = 'image/png'
+    }
+  )
+  
+output$selectedGenTree <- renderUI({
+  numTrees <- getLengthData()
+  treeNames <- getTreeNames()
+  choices <- c("",1:numTrees)
+  names(choices) <- c("Choose one",1:numTrees)
+  selectInput("selectedGenTree", "Choose individual tree", 
+              choices=choices, selected="")
+  })
   
 #  # Clicking
 #  output$plot_click <- renderPrint({
@@ -525,6 +700,8 @@ output$tree <- renderPlot({
 #          #           which(res$pco$li[,as.numeric(yax)]==signif(input$plot_click$y,2))))
 #    }
 #      })
+  
+  
   
   ## RENDER SYSTEM INFO ##
   output$systeminfo <- .render.server.info()
