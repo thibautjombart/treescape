@@ -490,9 +490,6 @@ output$scatterplot <- renderPlot({
 }, res=120)
 
 getPlot3d <- reactive({
-  # labels not yet available for 3d plotting
-  updateCheckboxInput(session, "showlabels", label="Display labels?", value=FALSE)
-  
   res <- getAnalysis()
   xax <- getXax()
   yax <- getYax()

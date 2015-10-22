@@ -109,38 +109,46 @@ shinyUI(
                                   conditionalPanel(
                                     ## condition
                                     condition="input.findGroves",
+                                    conditionalPanel(
+                                      condition="!input.plot3D",
                                     
-                                    ## type of plot
-                                    radioButtons("scattertype", "Type of scatterplot",
+                                      ## type of plot
+                                      radioButtons("scattertype", "Type of scatterplot",
                                                  choices=c("chull","ellipse"),
                                                  selected="chull")
+                                    )
                                   ),
                                   
                                   ## symbol size
                                   sliderInput("pointsize", "Size of the points", value=1, min=0, max=10, step=0.2),
                                   
-                                  ## display labels
-                                  checkboxInput("showlabels", label="Display labels?", value=TRUE),
-                                  
-                                  ## optimize labels?
                                   conditionalPanel(
-                                    ## condition
-                                    condition="input.showlabels",
-                                    checkboxInput("optimlabels", label="Optimize label position?", value=FALSE),
+                                    condition="!input.plot3D",
+                                    ## display labels
+                                    checkboxInput("showlabels", label="Display labels?", value=TRUE),
+                                  
+                                    ## optimize labels?
+                                    conditionalPanel(
+                                      ## condition
+                                      condition="input.showlabels",
+                                      checkboxInput("optimlabels", label="Optimize label position?", value=FALSE),
                                     
-                                    ## label size
-                                    sliderInput("labelsize", "Size of the labels", value=1, min=0, max=10, step=0.2)
-                                  ),
+                                      ## label size
+                                      sliderInput("labelsize", "Size of the labels", value=1, min=0, max=10, step=0.2)
+                                      ),
                                   
                                   
-                                  ## add screeplot of MDS?
-                                  selectInput("screemds", "Position of the MDS screeplot:",
+                                      ## add screeplot of MDS?
+                                      ## Could add this to 3d plot? 
+                                      selectInput("screemds", "Position of the MDS screeplot:",
                                               choices=c("None" = "none",
                                                         "Bottom right" = "bottomright",
                                                         "Bottom left" = "bottomleft",
                                                         "Top right" = "topright",
                                                         "Top left" = "topleft"),
-                                              selected="bottomleft"),
+                                              selected="bottomleft")
+                                  
+                                  ),
                                   
                                   ## choose color palette (if clusters detected)
                                   conditionalPanel(
@@ -154,12 +162,15 @@ shinyUI(
                                                 selected="funky")
                                   ),
                                   
-                                  ## choose background color
-                                  jscolorInput("bgcol", "Background color", value="#FFFFFF", close=TRUE),
+                                  conditionalPanel(
+                                    condition="!input.plot3D",
+                                    ## Could add this to 3d?
+                                    ## choose background color
+                                    jscolorInput("bgcol", "Background color", value="#FFFFFF", close=TRUE),
                                   
-                                  ## choose label colors
-                                  jscolorInput("labcol", "Label color", value="#000000", close=TRUE),
-                                  
+                                    ## choose label colors
+                                    jscolorInput("labcol", "Label color", value="#000000", close=TRUE)
+                                  ),
                                   
                                   br(),br(),br(),br(),br(),br(),br(), # add some blank space at the end of side panel
                                   br(),br(),br(),br(),br(),br(),br(), # add some blank space at the end of side panel
