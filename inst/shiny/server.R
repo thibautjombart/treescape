@@ -489,21 +489,31 @@ output$scatterplot <- renderPlot({
     plot(myplot)
 }, res=120)
 
-output$plot3D <- renderWebGL({
-  # warnings etc. for functions which I haven't written yet for 3d plotting
-  validate(
-    need(input$findGroves==FALSE, "Sorry, it is not yet possible to view clusters in the 3D plot")
-  )
+getPlot3d <- reactive({
+  # labels not yet available for 3d plotting
   updateCheckboxInput(session, "showlabels", label="Display labels?", value=FALSE)
-
+  
   res <- getAnalysis()
   xax <- getXax()
   yax <- getYax()
   zax <- getZax()
+  
+  # show clusters?
+  clusts <- getClusters()
+  if (!is.null(clusts)){
+    pal <- getPalette()
+    cols3d <- fac2col(clusts$groups,col.pal=pal)
+  }
+  else{cols3d <- "navy"}
+  
   rgl::plot3d(res$pco$li[,xax],res$pco$li[,yax],res$pco$li[,zax], 
-         type="s", size=getPointsize(),
-         xlab="",ylab="",zlab="",
-         col="navy")
+              type="s", size=getPointsize(),
+              xlab="",ylab="",zlab="",
+              col=cols3d)
+})
+
+output$plot3D <- renderWebGL({
+  plot <- getPlot3d() # separated these out to enable easier save function
 }) 
   
 # get tree and aesthetics for plotting tree  
@@ -676,12 +686,20 @@ output$densiTree <- renderPlot({
   output$downloadMDS <- downloadHandler(
     filename = function() { paste0(input$dataset,".png") },
     content = function(file) {
-      myplot <- getPlot()
-      png(file=file, width = 10, height = 10, units = 'in', res = 500)
-      plot(myplot)
-      dev.off()
-    contentType = 'image/png'
-    })
+      dim <- getPlotDim()
+      if (dim==2){
+        myplot <- getPlot()
+        png(file=file, width = 10, height = 10, units = 'in', res = 500)
+        plot(myplot)
+        dev.off()
+      }
+    else{
+        validate(
+          need(dim==2,"Sorry, saving is not yet enabled for 3D plots")
+        )
+        }
+    contentType = 'image/png'  }
+  )
   
   
   ## EXPORT TREE PLOT AS PNG ##
