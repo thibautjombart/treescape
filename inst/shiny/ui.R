@@ -336,7 +336,7 @@ shinyUI(
                                    
                                    ## add densiTree selector (gets updated to number of clusters by )
                                    selectInput("selectedDensiTree", "Choose collection of trees to view in densiTree plot", 
-                                               choices=c("Choose one"="","All trees"="all"), width='400px'),
+                                               choices=c("Choose one"="","All trees"="all"), width="100%"),
                                    h2(HTML('<font color="#6C6CC4" size="2"> Note: this can be slow for large sets of trees </font>')),
                                    
                                    ## DENSITREE AESTHETICS

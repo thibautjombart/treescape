@@ -48,7 +48,7 @@
 #' plotGroves(res)
 #' }
 #'
-findGroves <- function(x, method=treeVec, nf=NULL, clustering="ward.D2",
+findGroves <- function(x, method="treeVec", nf=NULL, clustering="ward.D2",
                         nclust=NULL, ...){
     ## CHECK input type ##
     if (inherits(x, "multiPhylo")) {

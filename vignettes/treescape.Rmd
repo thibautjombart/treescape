@@ -194,14 +194,18 @@ plotGroves(wm.groves, bg="black", col.pal=lightseasun, lab.show=TRUE, lab.col="w
 
 `treescapeServer`: a web application for *treescape*
 --------------
-The essential functionalities of `treescape` are also available via a user-friendly web interface, running locally on the default web browser.
+The functionalities of `treescape` are also available via a user-friendly web interface, running locally on the default web browser.
 It can be started by simply typing `treescapeServer()`.
-The interface allows one to import data, run `treescape` to explore the tree space, look for clusters using `findGroves`, customize MDS plots, visualise specific trees and save results in various formats.
+The interface allows one to import trees and run `treescape` to view and explore the tree space in 2 or 3 dimensions.
+It is then straightforward to analyse the space by varying lambda, looking for clusters using `findGroves` and saving results in various formats.
+Individual trees can be easily viewed, including median trees per cluster, and collections of trees can be seen together using `densiTree` from the package `phangorn`.
 It is fully documented in the *help* tab.
 
-![example of treescapeServer running](figs/server.png) 
+![example of treescapeServer 3d](figs/treescape3d.png) 
 
+![example of treescapeServer tree](figs/treescapeTree.png)
 
+![example of treescapeServer densiTree](figs/treescapeDensiTree.png)
 
 
 Finding median trees
