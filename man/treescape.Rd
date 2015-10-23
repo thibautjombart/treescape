@@ -4,13 +4,20 @@
 \alias{treescape}
 \title{Phylogenetic tree exploration}
 \usage{
-treescape(x, method = treeVec, nf = NULL, return.tree.vectors = FALSE,
+treescape(x, method = "treeVec", nf = NULL, return.tree.vectors = FALSE,
   ...)
 }
 \arguments{
 \item{x}{an object of the class multiPhylo}
 
-\item{method}{a function outputting the summary of a tree (phylo object) in the form of a vector}
+\item{method}{the method for summarising the tree as a vector.
+Choose from:
+\code{treeVec} (default) the Kendall Colijn metric vector.
+The others are inherited from \code{distTips} in \code{adephylo}:
+\code{patristic}: for each pair of tips, the sum of branch lengths on the path between them
+\code{nNodes}: for each pair of tips, the number of nodes on the path between them
+\code{Abouheif}: performs Abouheif's test. See Pavoine et al. (2008) and \code{adephylo}.
+\code{sumDD}: sum of direct descendants of all nodes on the path, related to Abouheif's test. See \code{adephylo}.}
 
 \item{nf}{the number of principal components to retain}
 

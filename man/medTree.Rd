@@ -17,6 +17,10 @@ medTree(x, groups = NULL, lambda = 0, weights = NULL,
 
 \item{weights}{A vector of weights for the trees. Defaults to a vector of 1's so that all trees are equally weighted, but can be used to encode likelihood, posterior probabilities or other characteristics.}
 
+\item{emphasise.tips}{an optional list of tips whose entries in the tree vectors should be emphasised. Defaults to \code{NULL}.}
+
+\item{emphasise.weight}{applicable only if a list is supplied to \code{emphasise.tips}, this value (default 2) is the number by which vector entries corresponding to those tips are emphasised.}
+
 \item{return.lambda.function}{If true, a function that can be invoked with different lambda values is returned.
 This function returns the vector of metric values for the given lambda. Ignored if the tree vectors are already supplied as the object \code{x}.}
 
