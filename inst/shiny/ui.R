@@ -63,7 +63,7 @@ shinyUI(
                                   uiOutput("naxes"),
                                   
                                   
-                                  ## group stuff
+                                  ## find clusters?
                                   checkboxInput("findGroves", label=strong("Identify clusters?"), value=FALSE),
                                   
                                   
@@ -83,6 +83,20 @@ shinyUI(
                                     uiOutput("nclust")
                                   ),
                                   
+                                  ## relevant if method = KC metric, allow tip emphasis
+                                  conditionalPanel(
+                                    condition="input.treemethod=='metric'",
+                                    ## Emphasise tips
+                                    checkboxInput("emphTips", label=strong("Emphasise tips?"), value=FALSE),
+                                      ## if tip emphasis is chosen, provide options:
+                                      conditionalPanel(
+                                        condition="input.emphTips",
+                                    
+                                        uiOutput("whichTips"),
+                                    
+                                        sliderInput("emphWeight", "Weight of emphasis", value=2,min=0.1,max=100)
+                                        )
+                                  ),
                                   
                                   ## AESTHETICS
                                   img(src="img/line.png", width="100%"),
@@ -91,7 +105,7 @@ shinyUI(
                                   
                                   ## 2D (default) or 3D plot (if 3 or more axes retained)
                                   conditionalPanel(condition="input.naxes>2",
-                                  checkboxInput("plot3D", label="View in 3D?", value=FALSE)
+                                  checkboxInput("plot3D", label=strong("View in 3D?"), value=FALSE)
                                   ),
                                   
                                   ## select first axis to plot

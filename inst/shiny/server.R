@@ -185,6 +185,27 @@ shinyServer(function(input, output, session) {
     )	
    return(l)
   }) # end getLambda
+  
+  #getEmphasiseOption <- reactive({
+  #  emphTips <- input$emphTips
+  #  if (emphTips==TRUE) {
+  #    # populate selection box with tip choices
+  #    allTips <- getTipLabels()
+  #   choices <- c("",allTips)
+  #    names(choices) <- c("Choose one",allTips)
+  #    updateSelectInput(session, "whichTips", "Choose tips to emphasise:", 
+  #                      choices=choices, selected=NULL, selectize=TRUE)
+  #  }
+  #  return(emphTips)
+  #})
+  
+  getTipsToEmphasise <- reactive({
+    input$whichTips
+  })
+  
+  getEmphWeight <- reactive({
+      input$emphWeight
+  })
 
   # GET the tree vectors as functions of lambda
   getKCtreeVecs <- reactive({
@@ -192,7 +213,9 @@ shinyServer(function(input, output, session) {
     validate(
       need(!is.null(x), "Loading data set")
     )
-    df <-sapply(x, function(i) treeVec(i, return.lambda.function=TRUE)) 
+    tips <- getTipsToEmphasise()
+    weight <- getEmphWeight()
+    df <- sapply(x, function(i) treeVec(i, return.lambda.function=TRUE, emphasise.tips=tips, emphasise.weight = weight)) 
   })
   
 
@@ -382,6 +405,15 @@ getClusters <- reactive({
     sliderInput("nclust", "Number of clusters:", min=2, max=nmax, value=2, step=1)
   })
   
+  ## SELECTION OF TIPS
+  output$whichTips <- renderUI({
+    # populate selection box with tip choices
+    allTips <- getTipLabels()
+    choices <- c("",allTips)
+    names(choices) <- c("Type here to search tip names",allTips)
+    selectInput("whichTips", "Select one or more tips to emphasise:", 
+                choices=choices, selected=NULL, selectize=TRUE, multiple=TRUE)
+  })
 
 ######################################################
 ### Little "get" functions to support getPlot
