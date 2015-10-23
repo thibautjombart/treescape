@@ -52,7 +52,7 @@ shinyUI(
                                   ## choose metric
                                   selectInput("treemethod", "Choose a tree summary:",
                                               choices=c(
-                                                "Metric" = "metric",
+                                                "Kendall Colijn Metric" = "metric",
                                                 "Patristic distances" = "patristic",
                                                 "Number of nodes" = "nNodes",
                                                 "Abouheif's metric" = "Abouheif",
@@ -95,14 +95,14 @@ shinyUI(
                                   ),
                                   
                                   ## select first axis to plot
-                                  uiOutput("xax"),
+                                  numericInput("xax", "Indicate the x axis", value=1, min=1, max=3),
                                   
                                   ## select second axis to plot
-                                  uiOutput("yax"),
+                                  numericInput("yax", "Indicate the y axis", value=2, min=1, max=3),
                                   
                                   ## if in 3D, need a z axis:
                                   conditionalPanel(condition="input.plot3D",
-                                                   uiOutput("zax")
+                                                   numericInput("zax", "Indicate the z axis", value=3, min=1, max=3)
                                                    ),
                                   
                                   ## type of graph (if clusters detected)
@@ -184,6 +184,9 @@ shinyUI(
                          
                          ## function I was using for testing:
                          #verbatimTextOutput("plot_click"),
+                         
+                         # Removed:
+                         #verbatimTextOutput("caption"),
                          
                          uiOutput("treescapePlot"),
                          

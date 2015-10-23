@@ -27,33 +27,46 @@ shinyServer(function(input, output, session) {
   })
   
   ## GET DYNAMIC ANNOTATION
-  graphTitle <- reactive({
-    xax <- getXax()
-    yax <- getYax()
-    paste(input$dataset, ": MDS scatterplot, axes ", xax,"-", yax, sep="")
-  })
+  ## not used:
+  #graphTitle <- reactive({
+  #  xax <- getXax()
+  #  yax <- getYax()
+  #  zax <- getZax()
+  #  paste0(input$dataset, ": MDS scatterplot, axes ", xax, yax, zax)
+  #})
   
   ## DEFINE CAPTION
-  output$caption <- renderText({
-    graphTitle()
-  })
-
+  ## not used:
+  #output$caption <- renderText({
+  #  graphTitle()
+  #})
+  
   ######################################
   ### Define main reactive functions
   ######################################
   
+  getDataType <- reactive({
+    input$datatype
+  })
+  
+  getDataSet <- reactive({
+    input$dataset
+  })
+
   ## GET DATA ##
   getData <- reactive({
     out <- NULL
+    dataType <- getDataType()
+    dataSet <- getDataSet()
     
     ## data is a distributed dataset
-    if(input$datatype=="expl"){
-      if(input$dataset=="woodmiceTrees") data("woodmiceTrees", package="treescape", envir=environment())
-      out <- get(input$dataset)
+    if(dataType=="expl"){
+      if(dataSet=="woodmiceTrees") data("woodmiceTrees", package="treescape", envir=environment())
+      out <- get(dataSet)
     }
     
     ## data is an input file
-    if(input$datatype=="file" && !is.null(input$datafile)){
+    if(dataType=="file" && !is.null(input$datafile)){
       ## need to rename input file
       oldName <- input$datafile$datapath
       extension <- adegenet::.readExt(input$datafile$name)
@@ -68,17 +81,10 @@ shinyServer(function(input, output, session) {
         out <- read.nexus(file=newName)
       }
       
-      ## fix potential bug with names - they need to be defined and unique
-      if(is.null(names(out))) {names(out) <- 1:length(out)}
-      if(length(unique(names(out)))!=length(out)){
-        warning("duplicates detected in tree labels - using generic names")
-        names(out) <- 1:length(out)
-      }
-      
       ## fix potential bug with input of two trees
-      if(length(out)<3) {
-        stop("treescape expects at least three trees. The function treeDist is suitable for comparing two trees.")
-      }
+      validate(
+        need(length(out)>2, "treescape expects at least three trees. The function treeDist is suitable for comparing two trees.")
+      )
       
       
       ## warn of potential problems with input of too many / large trees
@@ -87,12 +93,27 @@ shinyServer(function(input, output, session) {
       }
       
       ## fix potential bug with tip labels - they need to match
+      tipLabelProblem <- FALSE
       for (i in 1:length(out)) {
         if (!setequal(out[[i]]$tip.label,out[[1]]$tip.label)) {
-          stop("trees have different tip labels")
+          tipLabelProblem <- TRUE
+          validate(
+            need(!tipLabelProblem, "Trees must have identical tip labels for the current version of treescape")
+          )
         } 
       }
       
+    }
+    
+    validate(
+      need(!is.null(out), "Waiting for data")
+    )
+    
+    ## fix potential bug with names - they need to be defined and unique
+    if(is.null(names(out))) {names(out) <- 1:length(out)}
+    if(length(unique(names(out)))!=length(out)){
+      warning("duplicates detected in tree labels - using generic names")
+      names(out) <- 1:length(out)
     }
     
     ## return data
@@ -133,20 +154,36 @@ shinyServer(function(input, output, session) {
   
   ## GET number of axes retained
   getNaxes <- reactive({
-    if(!is.null(input$naxes)) {
-      naxes <- input$naxes
-    } else {
-      naxes <- 2
+    if(is.null(input$naxes)){
+      naxes <- 3
+    }
+    else {
+      naxes <- as.numeric(input$naxes)
+      # when naxes changes we update the options available for the axes 
+      # unfortunately I think they have to reset to their original 1,2,3 values
+      # but at least they now only do this when naxes changes; they used to also do it for lambda etc.
+      
+      updateNumericInput(session,"xax", "Indicate the x axis", value=1, min=1, max=naxes)
+      updateNumericInput(session,"yax", "Indicate the y axis", value=2, min=1, max=naxes)
+      
+      # (if relevant, update z axis selector too)
+      dim <- getPlotDim()
+      if (dim==3){
+       updateNumericInput(session,"zax", "Indicate the z axis", value=3, min=1, max=naxes)
+      }
+        
     } 
+  return(naxes)  
   }) # end getNaxes
   
   ## GET lambda
   getLambda <- reactive({
+    l <- input$lambda
     ## the following removes the lambda error messages:
     validate(
-      need(input$lambda != "", "Loading data set")
+      need(!is.null(l), "Loading data set")
     )	
-   input$lambda
+   return(l)
   }) # end getLambda
 
   # GET the tree vectors as functions of lambda
@@ -158,10 +195,14 @@ shinyServer(function(input, output, session) {
     df <-sapply(x, function(i) treeVec(i, return.lambda.function=TRUE)) 
   })
   
+
   # GET the tree vectors evaluated at lambda
   getKCtreeVecsAtLambda <- reactive({
   vectors <- getKCtreeVecs()
   l <- getLambda()
+  validate(
+    need(!is.null(vectors), "Analysing data")
+  )
   t(sapply(vectors, function(i) i(l)))
   })
     
@@ -203,7 +244,13 @@ shinyServer(function(input, output, session) {
   getPCO <- reactive({
     D <- getKCmatrix()
     naxes <- getNaxes()
-    dudi.pco(D,scannf=is.null(naxes),nf=naxes)
+    validate(
+      need(!is.null(D), "Analysing data")
+    )
+    validate(
+      need(!is.null(naxes), "Analysing data")
+    )
+    dudi.pco(D,scannf=FALSE,nf=naxes)
   }) # end getPCO
 
   ## GET ANALYSIS ##
@@ -305,46 +352,19 @@ getClusters <- reactive({
   ## DYNAMIC UI COMPONENTS ##
   ## SELECTION OF MDS AXES
   output$naxes <- renderUI({
-    if(!is.null(x <- getData())) {
-      nmax <- length(x)
+    if(!is.null(getLengthData())) {
+      nmax <- getLengthData()
     } else {
       nmax <- 100
     }
     sliderInput("naxes", "Number of MDS axes retained:", min=2, max=nmax, value=3, step=1)
-  })
-  
-  ## SELECTION OF PLOTTED AXES
-  output$xax <- renderUI({
-    if(!is.null(x <- getAnalysis())){
-      nmax <- x$pco$nf
-    } else {
-      nmax <- 100
-    }
-    numericInput("xax", "Indicate the x axis", value=1, min=1, max=nmax)
-  })
-  
-  output$yax <- renderUI({
-    if(!is.null(x <- getAnalysis())) {
-      nmax <- x$pco$nf
-    } else {
-      nmax <- 100
-    }
-    numericInput("yax", "Indicate the y axis", value=2, min=1, max=nmax)
-  })
-  
-  output$zax <- renderUI({
-    if(!is.null(x <- getAnalysis())) {
-      nmax <- x$pco$nf
-    } else {
-      nmax <- 100
-    }
-    numericInput("zax", "Indicate the z axis", value=3, min=1, max=nmax)
-  })
+    })
   
   ## VALUE OF LAMBDA FOR METRIC
   output$lambda <- renderUI({
-    ## if metric has been chosen
-    if(input$treemethod=="metric") {
+    ## if KC metric has been chosen
+    TM <- getTreemethod()
+    if(TM=="metric") {
       sliderInput("lambda", "Value of lambda", min=0, max=1, value=0, step=0.01)
     } else {
       NULL
@@ -384,7 +404,7 @@ input$scattertype
 })
 
 getXax <- reactive({
-input$xax
+  input$xax
 })  
 
 getYax <- reactive({
@@ -471,9 +491,9 @@ output$treescapePlot <- renderUI({
   )}
   else{
     validate(
-    need(packageVersion("rgl")!='0.95.1367',
-    "You are running version 0.95.1367 of the package rgl which contains a known bug for 3D plotting in Shiny. Recommend deleting the current version from your library then installing this patch: devtools::install_github('trestletech/rgl@js-class')")
-    )
+    need(packageVersion("rgl")<'0.95.1247',
+    paste0("You are running version ",packageVersion("rgl")," of the package rgl. The Shiny wrapper for rgl is not supported for versions >=0.95.1247. We recommend deleting the current version of rgl from your library then installing this patch: devtools::install_github('trestletech/rgl@js-class')")
+    ))
     webGLOutput("plot3D", height = "800px")
   }
 })
@@ -729,7 +749,7 @@ output$selectedGenTree <- renderUI({
   numTrees <- getLengthData()
   treeNames <- getTreeNames()
   choices <- c("",1:numTrees)
-  names(choices) <- c("Choose one",1:numTrees)
+  names(choices) <- c("Choose one",treeNames)
   selectInput("selectedGenTree", "Choose individual tree", 
               choices=choices, selected="")
   })
