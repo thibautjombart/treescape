@@ -30,11 +30,6 @@ Then, to load the package, use:
 library("treescape")
 ```
 
-```
-## Loading required package: ape
-## Loading required package: ade4
-```
-
 
 Content overview
 -------------
@@ -64,45 +59,7 @@ We first load *treescape*, and packages required for graphics:
 library("treescape")
 library("ade4")
 library("adegenet")
-```
-
-```
-## 
-##    /// adegenet 2.0.0 is loaded ////////////
-## 
-##    > overview: '?adegenet'
-##    > tutorials/doc/questions: 'adegenetWeb()' 
-##    > bug reports/feature resquests: adegenetIssues()
-## 
-## 
-## 
-## Attaching package: 'adegenet'
-## 
-## The following object is masked from 'package:treescape':
-## 
-##     .render.server.info
-```
-
-```r
 library("adegraphics")
-```
-
-```
-## 
-## Attaching package: 'adegraphics'
-## 
-## The following objects are masked from 'package:ade4':
-## 
-##     kplotsepan.coa, s.arrow, s.class, s.corcircle, s.distri,
-##     s.image, s.label, s.logo, s.match, s.traject, s.value,
-##     table.value, triangle.class
-## 
-## The following object is masked from 'package:ape':
-## 
-##     zoom
-```
-
-```r
 library("ggplot2")
 ```
 
@@ -357,9 +314,9 @@ plotGroves(wm.groves, bg="black", col.pal=lightseasun, lab.show=TRUE, lab.col="w
 --------------
 The functionalities of `treescape` are also available via a user-friendly web interface, running locally on the default web browser.
 It can be started by simply typing `treescapeServer()`.
-The interface allows one to import trees and run `treescape` to view and explore the tree space in 2 or 3 dimensions.
-It is then straightforward to analyse the space by varying lambda, looking for clusters using `findGroves` and saving results in various formats.
-Individual trees can be easily viewed, including median trees per cluster, and collections of trees can be seen together using `densiTree` from the package `phangorn`.
+The interface allows you to import trees and run `treescape` to view and explore the tree space in 2 or 3 dimensions.
+It is then straightforward to analyse the tree space by varying lambda, looking for clusters using `findGroves` and saving results in various formats.
+Individual trees can be easily viewed including median trees per cluster, and collections of trees can be seen together using `densiTree` from the package `phangorn`.
 It is fully documented in the *help* tab.
 
 ![example of treescapeServer 3d](vignettes/figs/treescape3d.png) 
@@ -393,48 +350,28 @@ This is achieved using the `groups` argument of `medTree`:
 ```r
 ## identify 6 clusters
 groves <- findGroves(woodmiceTrees, nf=3, nclust=6)
-```
 
-```
-## Error in method == "treeVec": comparison (1) is possible only for atomic and list types
-```
-
-```r
 ## find median trees
 res <- medTree(woodmiceTrees, groves$groups)
-```
 
-```
-## Error in medTree(woodmiceTrees, groves$groups): object 'groves' not found
-```
-
-```r
 ## there is one output per cluster
 names(res)
 ```
 
 ```
-## [1] "D"   "pco"
+## [1] "1" "2" "3" "4" "5" "6"
 ```
 
 ```r
 ## get the first median of each
 med.trees <- lapply(res, function(e) ladderize(e$trees[[1]]))
-```
 
-```
-## Error in e$trees: $ operator is invalid for atomic vectors
-```
-
-```r
 ## plot trees
 par(mfrow=c(2,3))
 for(i in 1:length(med.trees)) plot(med.trees[[i]], main=paste("cluster",i),cex=1.5)
 ```
 
-```
-## Error in eval(expr, envir, enclos): object 'med.trees' not found
-```
+<img src="vignettes/figs/woodmiceCluster1-1.png" title="plot of chunk woodmiceCluster1" alt="plot of chunk woodmiceCluster1" width="600px" />
 
 These trees exhibit a number of topological differences, e.g. in the placement of the **(1007S,1208S,0909S)** clade. 
 Performing this analysis enables the detection of distinct representative trees supported by data.
@@ -460,19 +397,10 @@ It can be seen from the scale of the plot and the density of clustering that the
 
 ```r
 wm3.groves <- findGroves(woodmiceTrees,nf=3,nclust=6,emphasise.tips=c("No1007S","No1208S","No0909S"),emphasise.weight=3)
-```
-
-```
-## Error in method == "treeVec": comparison (1) is possible only for atomic and list types
-```
-
-```r
 plotGroves(wm3.groves, type="ellipse")
 ```
 
-```
-## Error in plotGroves(wm3.groves, type = "ellipse"): object 'wm3.groves' not found
-```
+<img src="vignettes/figs/findgroves-with-emphasis-1.png" title="plot of chunk findgroves-with-emphasis" alt="plot of chunk findgroves-with-emphasis" width="400px" />
 
 Conversely, where the structure of a particular clade is not of interest (for example, lineages within an outgroup which was only included for rooting purposes), those tips can be given a weight less than 1 so as to give them less emphasis in the comparison. We note that although it is possible to give tips a weighting of 0, we advise caution with this as the underlying function will no longer be guaranteed to be a metric. That is, a distance of 0 between two trees will no longer necessarily imply that the trees are identical. In most cases it would be wiser to assign a very small weighting to tips which are not of interest.
 
