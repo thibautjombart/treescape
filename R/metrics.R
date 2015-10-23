@@ -1,13 +1,14 @@
 
 #' Linear MRCA function
 #'
-#' Function to make the MRCA matrix of a tree, where entry (i,j) gives the MRCA of tips i and j.
+#' Function to make the most recent common ancestor (MRCA) matrix of a tree, where entry (i,j) gives the MRCA of tips i and j.
+#' The function is linear, exploiting the fact that the tree is rooted.
 #'
 #' @author  Michelle Kendall \email{michelle.louise.kendall@@gmail.com}
 #'
 #' @export
 #'
-#' @param tree an object of the class \code{phylo}
+#' @param tree an object of the class \code{phylo} which should be rooted.
 #' @param k (optional) number of tips in tree, for faster computation
 #'
 #' @importFrom phangorn Descendants
@@ -24,6 +25,7 @@
 #' linearMrca(x,6)
 #'
 linearMrca <- function(tree,k=0) { # k is number of tips, which can be passed to the function to save on computation
+  if(!is.rooted(tree)){stop("This function requires the tree to be rooted")}
   if (k==0) {k <- length(tree$tip.label)}
   M <- matrix(0, nrow=k, ncol=k); # initialise matrix
   T <- tree$Nnode # total number of internal nodes
@@ -55,40 +57,6 @@ linearMrca <- function(tree,k=0) { # k is number of tips, which can be passed to
   return(M)
 }
 linearMrca <- compiler::cmpfun(linearMrca) # compile
-
-#' Pendant edges
-#'
-#' Extract just the pendant edges from the vector \code{tree$edge}.
-#'
-#' @export
-#'
-#' @author  Michelle Kendall \email{michelle.louise.kendall@@gmail.com}
-#'
-#' @param tree an object of the class \code{phylo}
-#' @param k number of tips in tree
-#'
-#' @importFrom compiler cmpfun
-#'
-penEdgeTree <- function(tree,k) {tree$edge[match(1:k, tree$edge[,2]),] }
-penEdgeTree <- compiler::cmpfun(penEdgeTree)
-
-
-
-#' Pendant edges, matched
-#'
-#' Extract the pendant edges from the vector \code{tree$edge}, in the order given by \code{labelmatch}.
-#'
-#' @export
-#'
-#' @author  Michelle Kendall \email{michelle.louise.kendall@@gmail.com}
-#'
-#' @param tree an object of the class \code{phylo}
-#' @param labelmatch a vector specifying the order of the tips in the output. This is used by other functions in the package to match the tip labels in the trees
-#'
-#' @importFrom compiler cmpfun
-#'
-penEdgeTreematch  <- function(tree,labelmatch) {tree$edge[match(labelmatch, tree$edge[,2]),] }
-penEdgeTreematch <- compiler::cmpfun(penEdgeTreematch)
 
 
 #' Tree vector function

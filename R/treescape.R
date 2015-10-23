@@ -13,7 +13,7 @@
 #' \code{Abouheif}: performs Abouheif's test. See Pavoine et al. (2008) and \code{adephylo}.
 #' \code{sumDD}: sum of direct descendants of all nodes on the path, related to Abouheif's test. See \code{adephylo}.
 #' @param nf the number of principal components to retain
-#' @param return.tree.vectors option to also return the tree vectors. Note that this can take a lot of memory so defaults to \code{FALSE}.
+#' @param return.tree.vectors option to also return the tree vectors. Note that this can use a lot of memory so defaults to \code{FALSE}.
 #' @param ... further arguments to be passed to \code{method}. 
 #'
 #' @author Thibaut Jombart \email{thibautjombart@@gmail.com}

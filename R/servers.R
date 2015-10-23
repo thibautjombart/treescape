@@ -4,6 +4,8 @@
 #' This function opens up an application in a web browser for an interactive exploration of the diversity in a set of trees. 
 #'
 #' @author Thibaut Jombart \email{thibautjombart@@gmail.com}
+#' @author Michelle Kendall \email{michelle.louise.kendall@@gmail.com}
+
 #'
 #' @export
 #' @import shiny

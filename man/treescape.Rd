@@ -21,7 +21,7 @@ The others are inherited from \code{distTips} in \code{adephylo}:
 
 \item{nf}{the number of principal components to retain}
 
-\item{return.tree.vectors}{option to also return the tree vectors. Note that this can take a lot of memory so defaults to \code{FALSE}.}
+\item{return.tree.vectors}{option to also return the tree vectors. Note that this can use a lot of memory so defaults to \code{FALSE}.}
 
 \item{...}{further arguments to be passed to \code{method}.}
 }

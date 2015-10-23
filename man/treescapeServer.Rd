@@ -11,5 +11,7 @@ This function opens up an application in a web browser for an interactive explor
 }
 \author{
 Thibaut Jombart \email{thibautjombart@gmail.com}
+
+Michelle Kendall \email{michelle.louise.kendall@gmail.com}
 }
 

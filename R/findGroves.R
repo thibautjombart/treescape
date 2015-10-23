@@ -11,6 +11,7 @@
 #' @param ... further arguments to be passed to \code{treescape}
 #'
 #' @author Thibaut Jombart \email{thibautjombart@@gmail.com}
+#' @author  Michelle Kendall \email{michelle.louise.kendall@@gmail.com}
 #'
 #' @export
 #'

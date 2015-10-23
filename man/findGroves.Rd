@@ -48,6 +48,8 @@ plotGroves(res)
 }
 \author{
 Thibaut Jombart \email{thibautjombart@gmail.com}
+
+Michelle Kendall \email{michelle.louise.kendall@gmail.com}
 }
 \seealso{
 \code{\link{plotGroves}} to display results

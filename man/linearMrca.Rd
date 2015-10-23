@@ -7,12 +7,13 @@
 linearMrca(tree, k = 0)
 }
 \arguments{
-\item{tree}{an object of the class \code{phylo}}
+\item{tree}{an object of the class \code{phylo} which should be rooted.}
 
 \item{k}{(optional) number of tips in tree, for faster computation}
 }
 \description{
-Function to make the MRCA matrix of a tree, where entry (i,j) gives the MRCA of tips i and j.
+Function to make the most recent common ancestor (MRCA) matrix of a tree, where entry (i,j) gives the MRCA of tips i and j.
+The function is linear, exploiting the fact that the tree is rooted.
 }
 \examples{
 ## generate a random tree
