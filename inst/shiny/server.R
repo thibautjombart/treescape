@@ -219,19 +219,14 @@ shinyServer(function(input, output, session) {
     ## select method used to summarise tree
     if(!is.null(TM)){
       if(TM %in% c("patristic","nNodes","Abouheif","sumDD")){
-        treeMethod <- function(x){return(adephylo::distTips(x, method=TM))}
         ## run treescape
-        res <- treescape(x, method=treeMethod, nf=naxes)
+        res <- treescape(x, method=TM, nf=naxes)
       } else if(TM=="metric"){
         ## don't actually need to call treescape here, to save on recomputation for varying lambda
         D <- getKCmatrix()
         pco <- getPCO()
         res <- list(D=D, pco=pco) 
-      } else {
-        treeMethod <- adephylo::distTips
-        ## run treescape
-        res <- treescape(x, method=treeMethod, nf=naxes)
-      }
+      } 
     }
     
     ## return results
@@ -694,6 +689,7 @@ output$densiTree <- renderPlot({
         validate(
           need(dim==2,"Sorry, saving is not yet enabled for 3D plots")
         )
+      # Note rgl.postscript may be the way forward. I think it will require a separate download button.
         }
     contentType = 'image/png'  }
   )
