@@ -19,21 +19,22 @@ shinyUI(
                    'form.well { max-height: 1600px; overflow-y: auto; }'
                  )),
                  
-                 ## SPECIFIC TO TREE LANDSCAPE EXPLORER ##
+      ## SPECIFIC TO TREE LANDSCAPE EXPLORER ##
                  conditionalPanel(condition = "$('li.active a').first().html()== 'Tree landscape explorer'",
                                   ## INPUT
                                   ## choice of type of data source
                                   img(src="img/line.png", width="100%"),
                                   h2(HTML('<font color="#6C6CC4" size="6"> > Input </font>')),
                                   radioButtons("datatype", HTML('<font size="4"> Choose data source:</font>'),
-                                               list("Example from treescape"="expl","Input file"="file")),
+                                               list("Example: woodmice trees"="expl","Input file"="file")),
                                   
                                   ## choice of dataset if source is an example
-                                  conditionalPanel(condition = "input.datatype=='expl'",
-                                                   selectInput("dataset",
-                                                               HTML('<font size="4"> Select an example dataset:</font>'),
-                                                               choices=c("woodmiceTrees"))
-                                  ),
+                                  ## PUT THIS BACK IN IF WE INTRODUCE MORE EXAMPLES
+                                  #conditionalPanel(condition = "input.datatype=='expl'",
+                                  #                 selectInput("dataset",
+                                  #                             HTML('<font size="4"> Select an example dataset:</font>'),
+                                  #                             choices=c("woodmiceTrees"))
+                                  #),
                                   
                                   ## choice of dataset if source is a file
                                   conditionalPanel(condition = "input.datatype=='file'",
@@ -45,7 +46,7 @@ shinyUI(
                                   ),
 
                                   
-                                  ## ANALYSIS
+    ## ANALYSIS
                                   img(src="img/line.png", width="100%"),
                                   h2(HTML('<font color="#6C6CC4" size="6"> > Analysis </font>')),
                                   
@@ -60,7 +61,11 @@ shinyUI(
                                   
                                   ## lambda, axes
                                   uiOutput("lambda"),
-                                  uiOutput("naxes"),
+    
+                                  conditionalPanel(
+                                    condition="input.plotType==1",
+                                  uiOutput("naxes")
+                                  ),
                                   
                                   
                                   ## find clusters?
@@ -98,16 +103,29 @@ shinyUI(
                                         )
                                   ),
                                   
-                                  ## AESTHETICS
+              ## AESTHETICS
                                   img(src="img/line.png", width="100%"),
                                   
                                   h2(HTML('<font color="#6C6CC4" size="6"> > Aesthetics </font>')),
                                   
-                                  ## 2D (default) or 3D plot (if 3 or more axes retained)
+                                  ## tree landscape or compare to single reference tree
+                                  radioButtons("plotType", "View",
+                                               choices=c("Full tree landscape"=1,"Distances from a reference tree"=2),
+                                               selected=1),
+                                  
+                                  ## Dimensions (3D possible if 3 or more axes retained, and full tree landscape)
                                   conditionalPanel(condition="input.naxes>2",
-                                  checkboxInput("plot3D", label=strong("View in 3D?"), value=FALSE)
+                                         conditionalPanel(
+                                           condition="input.plotType==1",
+                                                   radioButtons("plot3D", "Plot dimensions",
+                                                                choices=c("2D"=2,"3D"=3),
+                                                                selected=2)
+                                         )
                                   ),
                                   
+                                  # if plotType=1, pick the axes to view:
+                                  conditionalPanel(    
+                                    condition="input.plotType==1",
                                   ## select first axis to plot
                                   numericInput("xax", "Indicate the x axis", value=1, min=1, max=3),
                                   
@@ -115,16 +133,20 @@ shinyUI(
                                   numericInput("yax", "Indicate the y axis", value=2, min=1, max=3),
                                   
                                   ## if in 3D, need a z axis:
-                                  conditionalPanel(condition="input.plot3D",
+                                  conditionalPanel(condition="input.plot3D==3",
                                                    numericInput("zax", "Indicate the z axis", value=3, min=1, max=3)
-                                                   ),
-                                  
-                                  ## type of graph (if clusters detected)
+                                                   )
+                                  ),
+    
+                                  ## aesthetics for treel landscape view
+                                  conditionalPanel(
+                                    condition="input.plotType==1",
+                                  ## type of graph (if clusters detected, and 2D)
                                   conditionalPanel(
                                     ## condition
                                     condition="input.findGroves",
                                     conditionalPanel(
-                                      condition="!input.plot3D",
+                                      condition="input.plot3D==2",
                                     
                                       ## type of plot
                                       radioButtons("scattertype", "Type of scatterplot",
@@ -136,8 +158,9 @@ shinyUI(
                                   ## symbol size
                                   sliderInput("pointsize", "Size of the points", value=1, min=0, max=10, step=0.2),
                                   
+                                  ## more 2D aesthetics
                                   conditionalPanel(
-                                    condition="!input.plot3D",
+                                    condition="input.plot3D==2",
                                     ## display labels
                                     checkboxInput("showlabels", label="Display labels?", value=TRUE),
                                   
@@ -152,7 +175,7 @@ shinyUI(
                                       ),
                                   
                                   
-                                      ## add screeplot of MDS?
+                                      ## add screeplot of MDS
                                       ## Could add this to 3d plot? 
                                       selectInput("screemds", "Position of the MDS screeplot:",
                                               choices=c("None" = "none",
@@ -162,8 +185,20 @@ shinyUI(
                                                         "Top left" = "topleft"),
                                               selected="bottomleft")
                                   
+                                  )
                                   ),
-                                  
+    
+                                  # if plotType=2, option to stretch
+                                  conditionalPanel(
+                                    condition="input.plotType==2",
+                                    
+                                    uiOutput("selectedRefTree"),
+                                 
+                                    sliderInput("stretch", "Height of plot (pixels)", value=1600, min=800, max=12800, step=200)
+                                 
+                                  ),
+    
+                            
                                   ## choose color palette (if clusters detected)
                                   conditionalPanel(
                                     ## condition
@@ -176,15 +211,21 @@ shinyUI(
                                                 selected="funky")
                                   ),
                                   
+                                conditionalPanel(
+                                  condition="input.plotType==1",
                                   conditionalPanel(
-                                    condition="!input.plot3D",
+                                    condition="input.plot3D==2",
                                     ## Could add this to 3d?
                                     ## choose background color
                                     jscolorInput("bgcol", "Background color", value="#FFFFFF", close=TRUE),
                                   
                                     ## choose label colors
                                     jscolorInput("labcol", "Label color", value="#000000", close=TRUE)
-                                  ),
+                                  )
+                                ),
+    
+                              
+    
                                   
                                   br(),br(),br(),br(),br(),br(),br(), # add some blank space at the end of side panel
                                   br(),br(),br(),br(),br(),br(),br(), # add some blank space at the end of side panel
@@ -247,8 +288,7 @@ shinyUI(
                                        selected="med", width="100%"),
                           
                           conditionalPanel(condition = "input.treeChoice=='med'",
-                                           # eventually replace with uiOutput
-                                           selectInput("selectedMedTree", "Median tree from:", 
+                                         selectInput("selectedMedTree", "Median tree from:", 
                                                        choices=c("All trees"="all"))
                           ),
                           

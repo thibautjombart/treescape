@@ -59,8 +59,12 @@ shinyServer(function(input, output, session) {
     
     ## data is a distributed dataset
     if(dataType=="expl"){
-      if(dataSet=="woodmiceTrees") data("woodmiceTrees", package="treescape", envir=environment())
-      out <- get(dataSet)
+      ## PUT THIS BACK IN IF WE INTRODUCE OTHER EXAMPLES
+      #if(dataSet=="woodmiceTrees") 
+      data("woodmiceTrees", package="treescape", envir=environment())
+      #out <- get(dataSet)
+      out <- get("woodmiceTrees")
+      
     }
     
     ## data is an input file
@@ -349,9 +353,9 @@ getClusters <- reactive({
     ## select method used to summarise tree
     if(!is.null(TM)){
       if(TM %in% c("patristic","nNodes","Abouheif","sumDD")){
-        treeMethod <- function(x){return(adephylo::distTips(x, method=TM))}
+        #treeMethod <- function(x){return(adephylo::distTips(x, method=TM))}
         ## run findGroves
-        res <- findGroves(x, method=treeMethod, nf=naxes,
+        res <- findGroves(x, method=TM, nf=naxes,
                           nclust=nclust, clustering=clustmethod)
       } else if(TM=="metric"){
         res <- findGroves(getAnalysis(), nclust=nclust, clustering=clustmethod)
@@ -471,8 +475,9 @@ getPointsize <- reactive({
 
 ## GET whether plot is 2D (default) or 3D
 getPlotDim <- reactive({
-  if(input$plot3D==TRUE) {3}
-  else {2}
+  plotDim <- input$plot3D
+  if(is.null(plotDim)) {2} # needed during startup
+  else {return(plotDim)}
 })
 
 ## GET 2D plot
@@ -511,27 +516,64 @@ getPlot <- reactive({
     }
   })
 
+getDistPlot <- reactive({
+  res <- getAnalysis()
+  refTree <- input$selectedRefTree
+  validate(
+    need(refTree!="", "Select a reference tree")
+  )
+  groves <- getClusters()
+  treeNames <- getTreeNames()
+  dists <- as.matrix(res$D)[refTree,] 
+  g1 <- s1d.label(dists, labels=treeNames, poslabel="regular", p1d.horizontal=FALSE, p1d.reverse=TRUE, plot=FALSE)
+  if(!is.null(groves$groups)){
+  pal <- getPalette()
+  nclusts <- getNclust()
+  ordercols <- fac2col(1:nclusts, col.pal=funky)
+  g2 <- s1d.boxplot(dists,fac=groves$groups, col=ordercols, p1d.horizontal=FALSE, plot=FALSE)
+  ADEgS(c(g1, g2), layout = c(1, 2))
+  }
+  else{
+    g1
+  }
+   
+})
+
+getPlotType <- reactive({
+  input$plotType
+})
 
 ## TREESCAPE IMAGE ##
 output$treescapePlot <- renderUI({
-  dim <- getPlotDim()
-  if(dim==2){
-  plotOutput("scatterplot", height = "800px"
-             #, click="plot_click" # get this working later
-  )}
+  type <- getPlotType()
+  if (type==1){
+     dim <- getPlotDim()
+      if(dim==2){
+        plotOutput("scatterplot", height = "800px")
+      }
+     else{
+       validate(
+         need(packageVersion("rgl")<'0.95.1247',
+              paste0("You are running version ",packageVersion("rgl")," of the package rgl. The Shiny wrapper for rgl is not supported for versions >=0.95.1247. We recommend deleting the current version of rgl from your library then installing this patch: devtools::install_github('trestletech/rgl@js-class')")
+         ))
+       webGLOutput("plot3D", height = "800px")
+     }}
   else{
-    validate(
-    need(packageVersion("rgl")<'0.95.1247',
-    paste0("You are running version ",packageVersion("rgl")," of the package rgl. The Shiny wrapper for rgl is not supported for versions >=0.95.1247. We recommend deleting the current version of rgl from your library then installing this patch: devtools::install_github('trestletech/rgl@js-class')")
-    ))
-    webGLOutput("plot3D", height = "800px")
-  }
+    i <- input$stretch
+    height <- as.character(paste0(i,"px"))
+    plotOutput("DistPlot", height = height)  
+    }
 })
 
 
 output$scatterplot <- renderPlot({
     myplot <- getPlot()
     plot(myplot)
+}, res=120)
+
+output$DistPlot <- renderPlot({
+  myplot <- getDistPlot()
+  plot(myplot)
 }, res=120)
 
 getPlot3d <- reactive({
@@ -783,6 +825,15 @@ output$selectedGenTree <- renderUI({
   selectInput("selectedGenTree", "Choose individual tree", 
               choices=choices, selected="")
   })
+
+output$selectedRefTree <- renderUI({
+  numTrees <- getLengthData()
+  treeNames <- getTreeNames()
+  choices <- c("",1:numTrees)
+  names(choices) <- c("Choose one",treeNames)
+  selectInput("selectedRefTree", "Select a reference tree", 
+              choices=choices, selected="")
+})
   
 #  # Clicking
 #  output$plot_click <- renderPrint({
