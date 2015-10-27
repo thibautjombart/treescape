@@ -1,8 +1,6 @@
 ## library(shiny)
 ## library(treescape)
 
-source("helpers.R")
-
 ## DEFINE THE SERVER SIDE OF THE APPLICATION
 shinyServer(function(input, output, session) {
   ## LOAD PACKAGES
