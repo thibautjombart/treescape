@@ -1,1 +1,0 @@
-# a place to put permenant functions
