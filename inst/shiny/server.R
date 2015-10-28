@@ -424,7 +424,7 @@ getClusters <- reactive({
 ######################################################  
 
 getPalette  <- reactive({
-  get(input$palette)
+ get(input$palette)
 })
 
 getLabcol <- reactive({
@@ -583,6 +583,7 @@ getPlot3d <- reactive({
   xax <- getXax()
   yax <- getYax()
   zax <- getZax()
+  col <- getLabcol()
   
   # show clusters?
   clusts <- getClusters()
@@ -590,7 +591,7 @@ getPlot3d <- reactive({
     pal <- getPalette()
     cols3d <- fac2col(clusts$groups,col.pal=pal)
   }
-  else{cols3d <- "navy"}
+  else{cols3d <- col}
   
   rgl::plot3d(res$pco$li[,xax],res$pco$li[,yax],res$pco$li[,zax], 
               type="s", size=getPointsize(),

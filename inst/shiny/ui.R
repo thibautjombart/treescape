@@ -64,7 +64,9 @@ shinyUI(
     
                                   conditionalPanel(
                                     condition="input.plotType==1",
-                                  uiOutput("naxes")
+                                      uiOutput("naxes")
+                                      ## Future: highlight median trees (if plotType==1)
+                                      #checkboxInput("showMedians", label=strong("Highlight median tree(s)?"), value=FALSE)
                                   ),
                                   
                                   
@@ -198,7 +200,7 @@ shinyUI(
                                  
                                   ),
     
-                            
+                                  
                                   ## choose color palette (if clusters detected)
                                   conditionalPanel(
                                     ## condition
@@ -217,11 +219,11 @@ shinyUI(
                                     condition="input.plot3D==2",
                                     ## Could add this to 3d?
                                     ## choose background color
-                                    jscolorInput("bgcol", "Background color", value="#FFFFFF", close=TRUE),
+                                    jscolorInput("bgcol", "Background color", value="#FFFFFF", close=TRUE)
+                                    ),
+                                  ## choose label colors
+                                  jscolorInput("labcol", "Label / point color", value="#1B2266", close=TRUE)
                                   
-                                    ## choose label colors
-                                    jscolorInput("labcol", "Label color", value="#000000", close=TRUE)
-                                  )
                                 ),
     
                               
