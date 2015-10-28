@@ -1,7 +1,7 @@
 ---
 title: "Exploration of landscapes of phylogenetic trees"
 author: "Thibaut Jombart, Michelle Kendall"
-date: "2015-10-23"
+date: "2015-10-28"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
@@ -61,13 +61,51 @@ Distributed datasets include:
 Exploring trees with *treescape*
 --------------
 
-We first load *treescape*, and packages required for graphics:
+We first load *treescape*, and the packages required for graphics:
 
 ```r
 library("treescape")
 library("ade4")
 library("adegenet")
+```
+
+```
+## 
+##    /// adegenet 2.0.0 is loaded ////////////
+## 
+##    > overview: '?adegenet'
+##    > tutorials/doc/questions: 'adegenetWeb()' 
+##    > bug reports/feature resquests: adegenetIssues()
+## 
+## 
+## 
+## Attaching package: 'adegenet'
+## 
+## The following object is masked from 'package:treescape':
+## 
+##     .render.server.info
+```
+
+```r
 library("adegraphics")
+```
+
+```
+## 
+## Attaching package: 'adegraphics'
+## 
+## The following objects are masked from 'package:ade4':
+## 
+##     kplotsepan.coa, s.arrow, s.class, s.corcircle, s.distri,
+##     s.image, s.label, s.logo, s.match, s.traject, s.value,
+##     table.value, triangle.class
+## 
+## The following object is masked from 'package:ape':
+## 
+##     zoom
+```
+
+```r
 library("ggplot2")
 ```
 
@@ -359,11 +397,8 @@ However, a more complete and accurate summary of the data can be given by findin
 This is achieved using the `groups` argument of `medTree`:
 
 ```r
-## identify 6 clusters
-groves <- findGroves(woodmiceTrees, nf=3, nclust=6)
-
-## find median trees
-res <- medTree(woodmiceTrees, groves$groups)
+## find median trees for the 6 clusters identified earlier:
+res <- medTree(woodmiceTrees, wm.groves$groups)
 
 ## there is one output per cluster
 names(res)
@@ -387,6 +422,8 @@ for(i in 1:length(med.trees)) plot(med.trees[[i]], main=paste("cluster",i),cex=1
 These trees exhibit a number of topological differences, e.g. in the placement of the **(1007S,1208S,0909S)** clade. 
 Performing this analysis enables the detection of distinct representative trees supported by data.
 
+Note that we supplied the function `medTree` with the multiPhylo list of trees. A more computationally efficient process (at the expense of using more memory) is to use the option `return.tree.vectors` in the initial `treescape` call, and then supply these vectors directly to `medTree`.
+In this case, the tree indices are returned by `medTree` but the trees are not (since they were not supplied).
 
 Emphasising the placement of certain tips or clades
 --------------
@@ -439,7 +476,7 @@ treeVec(tree)
 ```
 
 ```
-##  [1] 0 3 1 2 4 0 0 0 0 1 2 3 1 1 2 1 1 1 1 1 1
+##  [1] 0 2 1 3 3 0 0 0 0 1 2 2 1 1 4 1 1 1 1 1 1
 ```
 
 ```r
@@ -448,9 +485,9 @@ treeVec(tree,0.5)
 ```
 
 ```
-##  [1] 0.0000 2.1653 0.6671 1.4171 2.8537 0.0000 0.0000 0.0000 0.0000 0.6671
-## [11] 1.4171 2.1653 0.6671 0.6671 1.4171 0.5646 0.7231 0.6609 0.5466 0.6653
-## [21] 0.5655
+##  [1] 0.0000 1.4141 0.5559 2.2289 2.2289 0.0000 0.0000 0.0000 0.0000 0.5559
+## [11] 1.4141 1.4141 0.5559 0.5559 3.1939 0.9110 0.6134 0.7738 0.5656 0.7345
+## [21] 0.6529
 ```
 
 ```r
@@ -461,9 +498,9 @@ vecAsFunction(0.5)
 ```
 
 ```
-##  [1] 0.0000 2.1653 0.6671 1.4171 2.8537 0.0000 0.0000 0.0000 0.0000 0.6671
-## [11] 1.4171 2.1653 0.6671 0.6671 1.4171 0.5646 0.7231 0.6609 0.5466 0.6653
-## [21] 0.5655
+##  [1] 0.0000 1.4141 0.5559 2.2289 2.2289 0.0000 0.0000 0.0000 0.0000 0.5559
+## [11] 1.4141 1.4141 0.5559 0.5559 3.1939 0.9110 0.6134 0.7738 0.5656 0.7345
+## [21] 0.6529
 ```
 
 The metric -- the distance between two trees -- is the Euclidean distance between these vectors:
@@ -483,7 +520,7 @@ treeDist(tree_a,tree_b)
 ```
 
 ```
-## [1] 5.657
+## [1] 5.916
 ```
 
 ```r
@@ -492,7 +529,7 @@ treeDist(tree_a,tree_b,1)
 ```
 
 ```
-## [1] 3.544
+## [1] 3.583
 ```
 
 

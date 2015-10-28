@@ -62,7 +62,7 @@ Distributed datasets include:
 Exploring trees with *treescape*
 --------------
 
-We first load *treescape*, and packages required for graphics:
+We first load *treescape*, and the packages required for graphics:
 ```{r}
 library("treescape")
 library("ade4")
@@ -227,11 +227,8 @@ plot(tre,type="cladogram",edge.width=3, cex=0.8)
 However, a more complete and accurate summary of the data can be given by finding a summary tree from each cluster.
 This is achieved using the `groups` argument of `medTree`:
 ```{r woodmiceCluster1, out.width="600px"}
-## identify 6 clusters
-groves <- findGroves(woodmiceTrees, nf=3, nclust=6)
-
-## find median trees
-res <- medTree(woodmiceTrees, groves$groups)
+## find median trees for the 6 clusters identified earlier:
+res <- medTree(woodmiceTrees, wm.groves$groups)
 
 ## there is one output per cluster
 names(res)
@@ -248,6 +245,8 @@ for(i in 1:length(med.trees)) plot(med.trees[[i]], main=paste("cluster",i),cex=1
 These trees exhibit a number of topological differences, e.g. in the placement of the **(1007S,1208S,0909S)** clade. 
 Performing this analysis enables the detection of distinct representative trees supported by data.
 
+Note that we supplied the function `medTree` with the multiPhylo list of trees. A more computationally efficient process (at the expense of using more memory) is to use the option `return.tree.vectors` in the initial `treescape` call, and then supply these vectors directly to `medTree`.
+In this case, the tree indices are returned by `medTree` but the trees are not (since they were not supplied).
 
 Emphasising the placement of certain tips or clades
 --------------
