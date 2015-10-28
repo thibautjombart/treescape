@@ -30,7 +30,7 @@ shinyServer(function(input, output, session) {
   #  xax <- getXax()
   #  yax <- getYax()
   #  zax <- getZax()
-  #  paste0(input$dataset, ": MDS scatterplot, axes ", xax, yax, zax)
+  #  paste0(getDataSet(), ": MDS scatterplot, axes ", xax, yax, zax)
   #})
   
   ## DEFINE CAPTION
@@ -48,7 +48,11 @@ shinyServer(function(input, output, session) {
   })
   
   getDataSet <- reactive({
-    input$dataset
+    dataType <- getDataType()
+    if(dataType=="expl"){
+     return("woodmiceTrees")
+      }
+    else input$dataset
   })
 
   ## GET DATA ##
@@ -353,10 +357,8 @@ getClusters <- reactive({
     ## select method used to summarise tree
     if(!is.null(TM)){
       if(TM %in% c("patristic","nNodes","Abouheif","sumDD")){
-        #treeMethod <- function(x){return(adephylo::distTips(x, method=TM))}
         ## run findGroves
-        res <- findGroves(x, method=TM, nf=naxes,
-                          nclust=nclust, clustering=clustmethod)
+        res <- findGroves(x, method=TM, nf=naxes, nclust=nclust, clustering=clustmethod)
       } else if(TM=="metric"){
         res <- findGroves(getAnalysis(), nclust=nclust, clustering=clustmethod)
       } else {
@@ -727,7 +729,7 @@ output$densiTree <- renderPlot({
 
   ## EXPORT TREES ##
   output$exporttrees <- downloadHandler(
-    filename = function() { paste(input$dataset, '.nex', sep='') },
+    filename = function() { paste(getDataSet(), '.nex', sep='') },
     content = function(file) {
       if(!require(ape)) stop("ape is required to save trees into nexus file")
       x <- getData()
@@ -736,7 +738,7 @@ output$densiTree <- renderPlot({
   
   ## EXPORT ANALYSIS TO CSV ##
   output$exportrestocsv <- downloadHandler(
-    filename = function() { paste(input$dataset, "-analysis", '.csv', sep='') },
+    filename = function() { paste(getDataSet(), "-analysis", '.csv', sep='') },
     content = function(file) {
       x <- getData()
       res <- getClusters()
@@ -756,7 +758,7 @@ output$densiTree <- renderPlot({
   
   ## EXPORT ANALYSIS TO RDATA ##
   output$exportrestordata <- downloadHandler(
-    filename = function() { paste(input$dataset, "-analysis", '.RData', sep='') },
+    filename = function() { paste(getDataSet(), "-analysis", '.RData', sep='') },
     content = function(file) {
       trees <- getData()
       analysis <- getClusters()
@@ -768,7 +770,7 @@ output$densiTree <- renderPlot({
   
   ## EXPORT MDS PLOT AS PNG ##
   output$downloadMDS <- downloadHandler(
-    filename = function() { paste0(input$dataset,".png") },
+    filename = function() { paste0(getDataSet(),".png") },
     content = function(file) {
       dim <- getPlotDim()
       if (dim==2){
@@ -789,7 +791,7 @@ output$densiTree <- renderPlot({
   
   ## EXPORT TREE PLOT AS PNG ##
   output$downloadTree <- downloadHandler(
-    filename = function() { paste(input$dataset, 'Tree',getTree(),'.png', sep='') },
+    filename = function() { paste0(getDataSet(),"SingleTree.png") },
     content = function(file) {
       tre <- getTree()
       png(file=file)
@@ -804,14 +806,11 @@ output$densiTree <- renderPlot({
   
   ## EXPORT DENSITREE PLOT AS PNG ##
   output$downloadDensiTree <- downloadHandler(
-    filename = function() { paste(input$dataset, 'DensiTree',input$selectedDensiTree,'.png', sep='') },
+    filename = function() { paste(getDataSet(), 'DensiTreeCluster',input$selectedDensiTree,'.png', sep='') },
     content = function(file) {
-      tre <- getDensiTree()
+      clustTrees <- getDensiTree()
       png(file=file) 
-      plot(tre, type=input$treetype, # CHANGE THIS!
-           show.tip.lab=input$showtiplabels, font=1, cex=input$tiplabelsize,
-           direction=input$treedirection,
-           edge.width=input$edgewidth)
+      densiTree(clustTrees, col=4, alpha=input$alpha, scaleX=input$scaleX)
       dev.off()
       contentType = 'image/png'
     }
