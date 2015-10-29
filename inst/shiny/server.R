@@ -707,13 +707,17 @@ getDensiTree <- reactive({
   }
   else if(clusterNo=="all"){
     x <- getData()
-    return(x)
+    medList <- getMedTreesList()
+    med <- x[[medList[[1]]]]
+    return(list(trees=x,con=med))
   }
   else{
     x <- getData()
     clusts <- getClusters()
     clustTrees <- x[which(clusts$groups==as.numeric(clusterNo))]
-    return(clustTrees)
+    medList <- getMedTreesList()
+    med <- x[[medList[[as.numeric(clusterNo)]]]]
+    return(list(trees=clustTrees, con=med))
   }
 })  
 
@@ -724,7 +728,7 @@ output$densiTree <- renderPlot({
   validate(
     need(!is.null(clustTrees), "Loading densiTree plot")
   )	
-  densiTree(clustTrees, col=4, alpha=input$alpha, scaleX=input$scaleX)
+  densiTree(clustTrees$trees, col=4, consensus=clustTrees$con, alpha=input$alpha, scaleX=input$scaleX)
   }
 })
 
