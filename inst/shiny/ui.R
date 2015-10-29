@@ -9,7 +9,7 @@ shinyUI(
              
       tabPanel("Tree landscape explorer",
              tags$link(rel = 'stylesheet', type = 'text/css', href = 'styles.css'),
-
+             tags$style(type="text/css", "body {padding-top: 40px;}"),
              pageWithSidebar(
                ##  TITLE ##
                headerPanel(
@@ -272,6 +272,7 @@ shinyUI(
              ), # end tabPanel
              tabPanel("Tree viewer",
                       tags$link(rel = 'stylesheet', type = 'text/css', href = 'styles.css'),
+                      tags$style(type="text/css", "body {padding-top: 40px;}"),
                       pageWithSidebar(
                         ##  TITLE ##
                         headerPanel(
@@ -378,7 +379,7 @@ shinyUI(
                       ), # end tabPanel "Tree Viewer"
                       tabPanel("densiTree viewer",
                                tags$link(rel = 'stylesheet', type = 'text/css', href = 'styles.css'),
-                               
+                               tags$style(type="text/css", "body {padding-top: 40px;}"),
                                pageWithSidebar(
                                  ##  TITLE ##
                                  headerPanel(
@@ -444,10 +445,13 @@ shinyUI(
                                ),# end of tabPanel "densiTree viewer"
     ## HELP SECTION
     tabPanel("Help",
+             tags$style(type="text/css", "body {padding-top: 40px;}"),
              HTML(paste(readLines("www/html/help.html"), collapse=" "))
     ),
     
     ## SERVER INFO ##
-    tabPanel("System info", verbatimTextOutput("systeminfo"))
+    tabPanel("System info", 
+             tags$style(type="text/css", "body {padding-top: 40px;}"),
+             verbatimTextOutput("systeminfo"))
                      ) # end of tabsetPanel
 ) # end of Shiny UI
