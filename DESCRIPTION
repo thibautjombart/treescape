@@ -1,6 +1,6 @@
 Package: treescape
 Title: Statistical Exploration of Landscapes of Phylogenetic Trees
-Version: 1.8.13
+Version: 1.8.12
 Authors@R: c(TJ=person("Thibaut", "Jombart", email="thibaut.jombart@gmail.com", role = c("aut")),
      MK=person("Michelle", "Kendall", email="m.kendall@imperial.ac.uk", role = c("aut", "cre")),
 	   JAG=person("Jacob", "Almagro-Garcia", role = c("aut")),	
@@ -28,7 +28,7 @@ LinkingTo: Rcpp
 Suggests:
     RColorBrewer,
     ggplot2,
-    rgl (<= 0.95.1227),
+    rgl,
     testthat
 License: GPL (>=2)
 LazyData: true
