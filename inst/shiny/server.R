@@ -526,19 +526,20 @@ getDistPlot <- reactive({
   )
   groves <- getClusters()
   treeNames <- getTreeNames()
+  pal <- getPalette()
   dists <- as.matrix(res$D)[refTree,] 
   g1 <- s1d.label(dists, labels=treeNames, poslabel="regular", p1d.horizontal=FALSE, p1d.reverse=TRUE, plot=FALSE)
   if(!is.null(groves$groups)){
-  pal <- getPalette()
-  nclusts <- getNclust()
-  ordercols <- fac2col(1:nclusts, col.pal=funky)
-  g2 <- s1d.boxplot(dists,fac=groves$groups, col=ordercols, p1d.horizontal=FALSE, plot=FALSE)
-  ADEgS(c(g1, g2), layout = c(1, 2))
+    pal <- getPalette()
+    nclusts <- getNclust()
+    ordercols <- fac2col(1:nclusts, col.pal=pal)
+    g2 <- s1d.boxplot(dists,fac=groves$groups, col=ordercols, p1d.horizontal=FALSE, plot=FALSE)
+    ADEgS(c(g1, g2), layout = c(1, 2))
   }
   else{
     g1
   }
-   
+  
 })
 
 getPlotType <- reactive({
