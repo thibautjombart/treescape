@@ -41,8 +41,6 @@
 #' @seealso
 #' \code{\link[adegraphics]{s.class}}
 #'
-#' @export
-#'
 #' @examples
 #'
 #' \dontrun{
@@ -76,6 +74,7 @@
 #' }
 #' }
 #'
+#' @export
 plotGroves <- function(x, groups=NULL, xax=1, yax=2,
                         type=c("chull","ellipse"), col.pal=funky, bg="white",
                         lab.show=FALSE, lab.col="black", lab.cex=1, lab.optim=TRUE,

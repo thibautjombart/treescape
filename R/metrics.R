@@ -6,8 +6,6 @@
 #'
 #' @author  Michelle Kendall \email{michelle.louise.kendall@@gmail.com}
 #'
-#' @export
-#'
 #' @param tree an object of the class \code{phylo} which should be rooted.
 #' @param k (optional) number of tips in tree, for faster computation
 #'
@@ -24,6 +22,8 @@
 #' ## create matrix of MRCAs: entry (i,j) is the node number of the MRCA of tips i and j
 #' linearMrca(x,6)
 #'
+#'
+#' @export
 linearMrca <- function(tree,k=0) { # k is number of tips, which can be passed to the function to save on computation
   if(!is.rooted(tree)){stop("This function requires the tree to be rooted")}
   if (k==0) {k <- length(tree$tip.label)}
@@ -65,8 +65,6 @@ linearMrca <- compiler::cmpfun(linearMrca) # compile
 #' The elements of the vector are numeric if \code{return.lambda.function=FALSE} (default),
 #' and otherwise they are functions of lambda.
 #'
-#' @export
-#'
 #' @author Jacob Almagro-Garcia \email{nativecoder@@gmail.com}
 #' @author Michelle Kendall \email{michelle.louise.kendall@@gmail.com}
 #'
@@ -97,6 +95,7 @@ linearMrca <- compiler::cmpfun(linearMrca) # compile
 #' vecAsFunction(0.5)
 #' 
 #'
+#' @export
 treeVec <- function(tree, lambda=0, return.lambda.function=FALSE, emphasise.tips=NULL, emphasise.weight=2) {
   if(lambda<0 || lambda>1) stop("Pick lambda in [0,1]")
   if(class(tree)!="phylo") stop("Tree should be of class phylo")
@@ -252,8 +251,6 @@ treeVec <- function(tree, lambda=0, return.lambda.function=FALSE, emphasise.tips
 #'
 #' Comparison of two trees using the Kendall Colijn metric
 #'
-#' @export
-#'
 #' @author Jacob Almagro-Garcia \email{nativecoder@@gmail.com}
 #' @author Michelle Kendall \email{michelle.louise.kendall@@gmail.com}
 #'
@@ -287,6 +284,8 @@ treeVec <- function(tree, lambda=0, return.lambda.function=FALSE, emphasise.tips
 #' plot(sapply(tree.a$tip.label, function(x) treeDist(tree.a,tree.b,emphasise.tips=x)),
 #'      xlab="Tip number",ylab="Distance when  vector entries corresponding to tip are doubled")
 #'
+#'
+#' @export
 treeDist <- function(tree.a, tree.b, lambda=0, return.lambda.function=FALSE, emphasise.tips=NULL, emphasise.weight=2) {
 
     if(length(tree.a$tip.label) != length(tree.b$tip.label)) stop("Trees must have the same number of tips")
@@ -309,8 +308,6 @@ treeDist <- function(tree.a, tree.b, lambda=0, return.lambda.function=FALSE, emp
 #' Metric function for \code{multiPhylo} input
 #'
 #' Comparison of a list of trees using the Kendall Colijn metric. Output is given as a pairwise distance matrix. This is equivalent to the \code{$D} output from \code{treescape} but may be preferable for large datasets, and when principal co-ordinate analysis is not required. It includes an option to save memory at the expense of computation time.
-#'
-#' @export
 #'
 #' @author Jacob Almagro-Garcia \email{nativecoder@@gmail.com}
 #' @author Michelle Kendall \email{michelle.louise.kendall@@gmail.com}
@@ -347,6 +344,8 @@ treeDist <- function(tree.a, tree.b, lambda=0, return.lambda.function=FALSE, emp
 #' ## save memory by recomputing each tree vector for each pairwise tree comparison (for fixed lambda):
 #' m0.5 <- multiDist(trees,0.5,save.memory=TRUE)
 #'
+#'
+#' @export
 multiDist <- function(trees, lambda=0,
                       return.lambda.function=FALSE, save.memory=FALSE,
                       emphasise.tips=NULL, emphasise.weight=2) {

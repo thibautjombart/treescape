@@ -5,13 +5,13 @@
 #'
 #' @author Thibaut Jombart \email{thibautjombart@@gmail.com}
 #' @author Michelle Kendall \email{michelle.louise.kendall@@gmail.com}
-
 #'
-#' @export
 #' @import shiny
 #' @importFrom adephylo distTips
 #' @importFrom utils packageDescription
 #' @importFrom RLumShiny jscolorInput
+#' 
+#' @export
 treescapeServer <- function(){
     ## RUN APP
     runApp(system.file("shiny",package="treescape"))
@@ -29,10 +29,10 @@ treescapeServer <- function(){
 #'
 #' @author Thibaut Jombart \email{thibautjombart@@gmail.com}
 #'
-#' @export
 #'
 #' @importFrom adegenet .readExt
 #'
+#' @export
 .render.server.info <- function(){
     renderPrint(
             {

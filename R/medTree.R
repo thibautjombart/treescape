@@ -2,8 +2,6 @@
 #'
 #' Finds the geometric median of a set of trees according to the Kendall Colijn metric.
 #'
-#' @export
-#'
 #' @author Jacob Almagro-Garcia \email{nativecoder@@gmail.com}
 #' @author Michelle Kendall \email{michelle.louise.kendall@@gmail.com}
 #' @author Thibaut Jombart \email{thibautjombart@@gmail.com}
@@ -63,6 +61,7 @@
 #' for(i in 1:length(med.trees)) plot(med.trees[[i]], main=paste("cluster",i))
 #'
 #'
+#' @export
 medTree <- function(x, groups=NULL, lambda=0, weights=NULL, emphasise.tips=NULL, emphasise.weight=2,
                     return.lambda.function=FALSE, save.memory=FALSE) {
 

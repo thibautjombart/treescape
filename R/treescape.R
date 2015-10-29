@@ -19,7 +19,6 @@
 #' @author Thibaut Jombart \email{thibautjombart@@gmail.com}
 #' @author Michelle Kendall \email{michelle.louise.kendall@@gmail.com}
 #'
-#' @export
 #'
 #' @import ape
 #' @importFrom ade4 dudi.pco
@@ -54,6 +53,8 @@
 #' col="navy", alpha=0.5, xlab="", ylab="", zlab="")
 #' }
 #' }
+#' 
+#' @export
 treescape <- function(x, method="treeVec", nf=NULL, return.tree.vectors=FALSE, ...){
     ## CHECKS ##
     if(!inherits(x, "multiPhylo")) stop("x should be a multiphylo object")

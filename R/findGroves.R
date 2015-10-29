@@ -13,8 +13,6 @@
 #' @author Thibaut Jombart \email{thibautjombart@@gmail.com}
 #' @author  Michelle Kendall \email{michelle.louise.kendall@@gmail.com}
 #'
-#' @export
-#'
 #' @import ape
 #' @importFrom stats hclust
 #' @importFrom stats dist
@@ -49,6 +47,8 @@
 #' plotGroves(res)
 #' }
 #'
+#'
+#' @export
 findGroves <- function(x, method="treeVec", nf=NULL, clustering="ward.D2",
                         nclust=NULL, ...){
     ## CHECK input type ##
