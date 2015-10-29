@@ -5,7 +5,3 @@ updateDistancesWithCombinations <- function(length_root_distances, topological_r
     invisible(.Call('treescape_updateDistancesWithCombinations', PACKAGE = 'treescape', length_root_distances, topological_root_distances, left_partition, right_partition, index_offsets, distance_to_root, edges_to_root))
 }
 
-rcpp_hello_world <- function() {
-    .Call('treescape_rcpp_hello_world', PACKAGE = 'treescape')
-}
-
