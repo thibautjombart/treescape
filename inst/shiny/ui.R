@@ -4,8 +4,12 @@ if(!require("RLumShiny")) stop("RLumShiny is required")
 
 ## DEFINE UI ##
 shinyUI(
-  tabsetPanel(
-    tabPanel("Tree landscape explorer",
+  navbarPage("",position="fixed-top", collapsible = TRUE,
+             theme = "bootstrap.simplex.css", 
+             
+      tabPanel("Tree landscape explorer",
+             tags$link(rel = 'stylesheet', type = 'text/css', href = 'styles.css'),
+
              pageWithSidebar(
                ##  TITLE ##
                headerPanel(
@@ -164,7 +168,7 @@ shinyUI(
                                   conditionalPanel(
                                     condition="input.plot3D==2",
                                     ## display labels
-                                    checkboxInput("showlabels", label="Display labels?", value=TRUE),
+                                    checkboxInput("showlabels", label="Display tree labels?", value=FALSE),
                                   
                                     ## optimize labels?
                                     conditionalPanel(
@@ -267,6 +271,7 @@ shinyUI(
              ) # end page with sidebar
              ), # end tabPanel
              tabPanel("Tree viewer",
+                      tags$link(rel = 'stylesheet', type = 'text/css', href = 'styles.css'),
                       pageWithSidebar(
                         ##  TITLE ##
                         headerPanel(
@@ -372,6 +377,8 @@ shinyUI(
                       ) # end page with sidebar
                       ), # end tabPanel "Tree Viewer"
                       tabPanel("densiTree viewer",
+                               tags$link(rel = 'stylesheet', type = 'text/css', href = 'styles.css'),
+                               
                                pageWithSidebar(
                                  ##  TITLE ##
                                  headerPanel(
@@ -393,7 +400,7 @@ shinyUI(
                                    ## add densiTree selector (gets updated to number of clusters by )
                                    selectInput("selectedDensiTree", "Choose collection of trees to view in densiTree plot", 
                                                choices=c("Choose one"="","All trees"="all"), width="100%"),
-                                   h2(HTML('<font color="#6C6CC4" size="2"> Note: this can be slow for large sets of trees </font>')),
+                                   #h2(HTML('<font color="#6C6CC4" size="2"> Note: this can be slow for large sets of trees </font>')),
                                    
                                    ## DENSITREE AESTHETICS
                                    img(src="img/line.png", width="100%"),

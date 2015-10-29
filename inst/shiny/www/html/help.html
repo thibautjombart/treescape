@@ -1,5 +1,5 @@
 <h1 id="top"> </h1>
-<img src="img/logo.png", height="70"> 
+<img src="img/logo.png", height="160"> 
 <br> 
 <font color="#6C6CC4" size="3"> [statistical exploration of landscapes of phylogenetic trees]  </font>
 <br>
@@ -14,19 +14,20 @@ and a main panel displaying results.
 
 <br>
 <br>
- <h3 id="io"> <font color="#6C6CC4"> Tree landscape explorer </font></h3>
+ <h3 id="tle"> <font color="#6C6CC4"> Tree landscape explorer </font></h3>
 The <i>Tree landscape explorer</i> tab is where the whole tree space can be explored. 
 Choose between a two- or three-dimensional plot to visualise the trees using Metric Multidimensional Scaling (MDS, a.k.a. Principal Coordinates Analysis, PCoA),
 which calculates the best reduced-spaced visualisation of the distances between trees.
 
 The <i>sidebar</i> contains the following sections:
  <ul>
-  <li><font color="#6C6CC4"><a href="#io">Input</a></font>: to upload the set of trees to analyse </li>
-  <li><font color="#6C6CC4"><a href="#analysis">Analysis</a></font>: to customize the analysis </li>
-  <li><font color="#6C6CC4"><a href="#aesthetics">Aesthetics</a></font>: to customize the graphics </li>
+  <li><font color="#6C6CC4"><a href="#tlein">Input</a></font>: to upload the set of trees to analyse </li>
+  <li><font color="#6C6CC4"><a href="#tleanalysis">Analysis</a></font>: to customize the analysis </li>
+  <li><font color="#6C6CC4"><a href="#tleaesthetics">Aesthetics</a></font>: to customize the graphics </li>
 </ul>
 
- <h4 id="io"> <font color="#6C6CC4"> Input </font></h4>
+<br>
+ <h4 id="tlein"> <font color="#6C6CC4"> Input </font></h4>
  <font color="#6C6CC4"> <i>treescape</i> </font> takes a list of phylogenetic trees as input. 
 The user can choose between data distributed with the package, or provide input files.
 Two types of input files can be used:
@@ -38,7 +39,8 @@ Two types of input files can be used:
   New">write.nexus(x, file="x.nex")</font> in R.</li>
 </ul>
 
- <h4 id="analysis"> <font color="#6C6CC4"> Analysis </font></h4>
+<br>
+ <h4 id="tleanalysis"> <font color="#6C6CC4"> Analysis </font></h4>
 
  <b><font color="#6C6CC4">  Metric: </font></b>
  the metric to be used to measure distances between tips of the trees. Choose from:
@@ -57,18 +59,21 @@ Two types of input files can be used:
  <b><font color="#6C6CC4">  Lambda: </font></b>
  The value of lambda used in Kendall & Colijn's metric.
 
+ <br>
  <b><font color="#6C6CC4">  Number of MDS axes retained : </font></b>
  The number of principal components to retain in the Metric Multidimensional Scaling (MDS). 
 
+ <br>
  <b><font color="#6C6CC4">  Identify clusters? </font></b>
  Whether to find clusters using the <font face="Courier New"> findGroves </font> function.
  When this option is selected, you will also have the option to choose the clustering method and number of clusters.
 
-<br>
- <h4 id="aesthetics"> <font color="#6C6CC4"> Aesthetics </font></h4>
+<br> <br>
+ <h4 id="tleaesthetics"> <font color="#6C6CC4"> Aesthetics </font></h4>
 A number of graphical options are available. 
 
- <b><font color="#6C6CC4">  View </font></b>
+<br>
+ <b><font color="#6C6CC4">  View: </font></b>
  The default is to view the entire "tree landscape", that is, a 2- or 3-dimensional map where the points correspond to trees 
  and the distances between points approximate their relative distances in tree space, according to the chosen measure.
  The rest of the options detailed below correspond to this view.
@@ -82,7 +87,8 @@ A number of graphical options are available.
  Clusters can overlap in this view: it is quite possible for multiple clusters of trees to be equidistant from the reference tree
  in different "directions" in the space.
 
- <b><font color="#6C6CC4">  View in 3D? </font></b>
+ <br>
+ <b><font color="#6C6CC4">  Plot dimensions: </font></b>
  If three or more axes have been retained, the option to view the space in three dimensions will be available.
  It is possible to rotate the image by clicking on it and dragging the mouse, and to zoom in and out with the mouse scroll button.
  Note that 3D plotting depends on the <i> shinyRGL </i> package, which (currently) is <b> not supported </b> on the latest versions
@@ -93,12 +99,13 @@ A number of graphical options are available.
  For more details and to track progress on this issue, see 
  <a href="https://github.com/trestletech/shinyRGL" target="_blank">shinyRGL on GitHub</a>.
 
+ <br>
  <b><font color="#6C6CC4"> x/y/z axes: </font></b>
  Used to select which principal components are represented as x and y axes 
 (and, if viewing in 3D, the z axis) on the scatterplot.
 
-<br>
- <h4 id="output"> <font color="#6C6CC4"> Output </font></h4>
+<br><br>
+ <h4 id="tleoutput"> <font color="#6C6CC4"> Output </font></h4>
 Beneath the scatterplot are output options: the scatterplot, trees and analysis results can be exported in various formats.
 Currently available options are:
 <ul>
@@ -116,33 +123,33 @@ Currently available options are:
 </ul>
 
 <br>
-<br>
- <h3 id="io"> <font color="#6C6CC4"> Tree viewer </font></h3>
+ <h3 id="tv"> <font color="#6C6CC4"> Tree viewer </font></h3>
 The <i>Tree viewer</i> tab is where individual trees can be examined.
 The <i>sidebar</i> contains the following sections:
  <ul>
-  <li><font color="#6C6CC4"><a href="#io">Input</a></font>: to pick the tree to view </li>
-  <li><font color="#6C6CC4"><a href="#aesthetics">Aesthetics</a></font>: to customize the graphics </li>
+  <li><font color="#6C6CC4"><a href="#tvin">Input</a></font>: to pick the tree to view </li>
+  <li><font color="#6C6CC4"><a href="#tvaesthetics">Aesthetics</a></font>: to customize the graphics </li>
 </ul>
 
- <h4 id="io"> <font color="#6C6CC4"> Input </font></h4>
+ <h4 id="tvin"> <font color="#6C6CC4"> Input </font></h4>
 The tree selection options are as follows:
  <ul>
   <li>Median tree: select the overall median tree, or, if clusters have been identified, the median from each cluster</li>
   <li>General tree selection: select an individual tree by its name (if provided) or number in the list of trees supplied</li>
 </ul>
 
- <h4 id="aesthetics"> <font color="#6C6CC4"> Aesthetics </font></h4>
+<br>
+ <h4 id="tvaesthetics"> <font color="#6C6CC4"> Aesthetics </font></h4>
 A number of graphical options are available. 
 See <font face="Courier New">?plot.phylo</font> from the package <i>ape</i> for more details.
 
 <br>
- <h4 id="output"> <font color="#6C6CC4"> Output </font></h4>
+ <h4 id="tvoutput"> <font color="#6C6CC4"> Output </font></h4>
 Beneath the tree is the option to save the image as a .png file.
 
 <br>
 <br>
- <h3 id="io"> <font color="#6C6CC4"> densiTree viewer </font></h3>
+ <h3 id="dtv"> <font color="#6C6CC4"> densiTree viewer </font></h3>
 The <i>densiTree viewer</i> tab is where collections of trees can be viewed together using the 
 <font face="Courier New">densiTree</font> function from the package <i>phangorn</i>, which is based on the
 software <a href="https://www.cs.auckland.ac.nz/~remco/DensiTree/" target="_blank">densiTree</a>, which provides
@@ -150,21 +157,21 @@ considerably more functionality.
 
 The <i>sidebar</i> contains the following sections:
  <ul>
-  <li><font color="#6C6CC4"><a href="#io">Input</a></font>: to pick the collection of trees to view </li>
-  <li><font color="#6C6CC4"><a href="#aesthetics">Aesthetics</a></font>: to customize the graphics </li>
+  <li><font color="#6C6CC4"><a href="#dtvin">Input</a></font>: to pick the collection of trees to view </li>
+  <li><font color="#6C6CC4"><a href="#dtvaesthetics">Aesthetics</a></font>: to customize the graphics </li>
 </ul>
 
- <h4 id="io"> <font color="#6C6CC4"> Input </font></h4>
+ <h4 id="dtvin"> <font color="#6C6CC4"> Input </font></h4>
 The entire tree set can be viewed using the option 'All trees'. Note that this is likely to be slow for large sets of trees.
 If clusters have been detected in the <i>Tree landscape explorer</i> tab then the collection of trees from each cluster can also be selected.
 This can help to show the variation within the cluster.
 
 <br>
- <h4 id="aesthetics"> <font color="#6C6CC4"> Aesthetics </font></h4>
+ <h4 id="dtvaesthetics"> <font color="#6C6CC4"> Aesthetics </font></h4>
  A number of graphical options are available; further options will be added soon.
 
 <br>
- <h4 id="output"> <font color="#6C6CC4"> Output </font></h4>
+ <h4 id="dtvoutput"> <font color="#6C6CC4"> Output </font></h4>
 Beneath the densiTree plot is the option to save the image as a .png file. 
 
 <br>

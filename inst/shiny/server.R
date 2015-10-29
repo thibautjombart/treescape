@@ -221,8 +221,8 @@ shinyServer(function(input, output, session) {
     )
     tips <- getTipsToEmphasise()
     weight <- getEmphWeight()
-    df <- sapply(x, function(i) treeVec(i, return.lambda.function=TRUE, emphasise.tips=tips, emphasise.weight = weight)) 
-  })
+   df <- sapply(x, function(i) treeVec(i, return.lambda.function=TRUE, emphasise.tips=tips, emphasise.weight = weight)) 
+ })
   
 
   # GET the tree vectors evaluated at lambda
@@ -552,31 +552,46 @@ output$treescapePlot <- renderUI({
   if (type==1){
      dim <- getPlotDim()
       if(dim==2){
-        plotOutput("scatterplot", height = "800px")
-      }
+       plotOutput("scatterplot", height = "800px")
+       }
      else{
        validate(
          need(packageVersion("rgl")<'0.95.1247',
               paste0("You are running version ",packageVersion("rgl")," of the package rgl. The Shiny wrapper for rgl is not supported for versions >=0.95.1247. We recommend deleting the current version of rgl from your library then installing this patch: devtools::install_github('trestletech/rgl@js-class')")
          ))
-       webGLOutput("plot3D", height = "800px")
+         webGLOutput("plot3D", height = "800px")
      }}
   else{
     i <- input$stretch
     height <- as.character(paste0(i,"px"))
-    plotOutput("DistPlot", height = height)  
+                      plotOutput("DistPlot", height = height)  
     }
 })
 
 
 output$scatterplot <- renderPlot({
-    myplot <- getPlot()
-    plot(myplot)
+  withProgress(message = 'Loading plot',
+               value = 0, {
+                 for (i in 1:15) {
+                   incProgress(1/15)
+                 }
+                 myplot <- getPlot()
+                 plot(myplot)
+               })
 }, res=120)
 
 output$DistPlot <- renderPlot({
   myplot <- getDistPlot()
-  plot(myplot)
+  if (!is.null(myplot)){
+  withProgress(message = 'Loading plot',
+               value = 0, {
+                 for (i in 1:15) {
+                   incProgress(1/15)
+                 }
+                
+                plot(myplot)
+               })
+  }
 }, res=120)
 
 getPlot3d <- reactive({
@@ -601,7 +616,13 @@ getPlot3d <- reactive({
 })
 
 output$plot3D <- renderWebGL({
-  plot <- getPlot3d() # separated these out to enable easier save function
+  withProgress(message = 'Loading plot',
+               value = 0, {
+                 for (i in 1:15) {
+                   incProgress(1/15)
+                 }
+                 plot <- getPlot3d()  # separated these out to enable easier save function
+               })
 }) 
   
 # get tree and aesthetics for plotting tree  
@@ -680,8 +701,6 @@ output$tree <- renderPlot({
 # The slider bar is always at least 2 even when clusters haven't
 # been requested, so we can't just use getNclust.
 
-
-
 getNclustForDensiTree <- reactive({
   if(input$findGroves==FALSE){NULL}
   else{input$nclust}
@@ -725,10 +744,14 @@ output$densiTree <- renderPlot({
   if(is.null(rvs$showDensiTree)) {NULL}
   else{
   clustTrees <- getDensiTree()
-  validate(
-    need(!is.null(clustTrees), "Loading densiTree plot")
-  )	
-  densiTree(clustTrees$trees, col=4, consensus=clustTrees$con, alpha=input$alpha, scaleX=input$scaleX)
+  withProgress(message = 'Loading densiTree plot',
+               detail = 'Note: the final stage of this process may take a while for large sets of trees',
+               value = 0, {
+                 for (i in 1:30) {
+                   incProgress(1/30)
+                 }
+                 densiTree(clustTrees$trees, col=4, consensus=clustTrees$con, alpha=input$alpha, scaleX=input$scaleX)
+                 })
   }
 })
 
