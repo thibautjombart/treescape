@@ -11,6 +11,7 @@ shinyServer(function(input, output, session) {
   if(!require("adegenet")) stop("adegenet is required")
   if(!require("phangorn")) stop("phangorn is required")
   if(!require("shinyRGL")) stop("shinyRGL is required")
+  if(!require("shinyBS")) stop("shinyBS is required")
   
   # suppress warning messages from creating temporary directories when 3d plotting
   suppressWarnings(warning("dir.create(dir)"))
@@ -54,7 +55,14 @@ shinyServer(function(input, output, session) {
       }
     else input$dataset
   })
+  
+  getSampleSize <- reactive({
+    input$sampleSize
+  })
 
+  getRandSamp <- reactive({
+    input$randSamp
+  })
   ## GET DATA ##
   getData <- reactive({
     out <- NULL
@@ -87,15 +95,25 @@ shinyServer(function(input, output, session) {
         out <- read.nexus(file=newName)
       }
       
+      l <- length(out)
+      
       ## fix potential bug with input of two trees
       validate(
-        need(length(out)>2, "treescape expects at least three trees. The function treeDist is suitable for comparing two trees.")
+        need(l>2, "treescape expects at least three trees. The function treeDist is suitable for comparing two trees.")
       )
       
+      # get a manageable number of trees by sampling if necessary
+      randSamp <- getRandSamp()
+      if(randSamp == TRUE){
+      sampleSize <- getSampleSize()
+      if (l>sampleSize) {
+        updateSliderInput(session, "sampleSize", "Size of random sample:", value=sampleSize, min=10, max=l, step=10)
+        out <- out[sample(1:l,sampleSize)]
+      }
+      else{ # could only happen initially if <=10 trees supplied
+        updateSliderInput(session, "sampleSize", "Size of random sample:", value=l, min=3, max=l, step=1)
+      }
       
-      ## warn of potential problems with input of too many / large trees
-      if(length(out)*length(out[[1]]$tip.label)>=500) {
-        warning("You have supplied many and/or large trees, so Shiny is likely to be slow. If no output appears soon, consider supplying fewer trees or comparing them using the standard R functions in treescape.")
       }
       
       ## fix potential bug with tip labels - they need to match

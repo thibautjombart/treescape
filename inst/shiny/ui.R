@@ -46,13 +46,20 @@ shinyUI(
                                                                            strong("accepted formats:"), br(),
                                                                            em("- multiphylo"), "saved from R (.RData/.rda)", br(),
                                                                            em("- nexus"), "file (.nex/.nexus)")
+                                                   ),
+                                                   checkboxInput("randSamp","Randomly sample from the trees?", value=TRUE),
+                                                   bsTooltip("randSamp", "For large sets of trees and/or trees with many tips the app may be slow, so beginning the analysis with a small random sample is recommended.", 
+                                                             placement = "right", trigger = "hover", options = NULL),
+                                                   conditionalPanel(
+                                                     condition="input.randSamp",
+                                                     sliderInput("sampleSize", "Size of random sample:", value=10, min=10, max=300, step=10)
                                                    )
                                   ),
 
                                   
     ## ANALYSIS
                                   img(src="img/line.png", width="100%"),
-                                  h2(HTML('<font color="#6C6CC4" size="6"> > Analysis </font>')),
+                                  h4(HTML('<font color="#6C6CC4" size="6"> > Analysis </font>')),
                                   
                                   ## choose metric
                                   selectInput("treemethod", "Choose a tree summary:",
@@ -65,10 +72,12 @@ shinyUI(
                                   
                                   ## lambda, axes
                                   uiOutput("lambda"),
+                                  bsTooltip("lambda","When lambda=0 trees are compared topologically; increasing lambda gives more focus to branch lengths"),
     
                                   conditionalPanel(
                                     condition="input.plotType==1",
                                       uiOutput("naxes")
+                                      
                                       ## Future: highlight median trees (if plotType==1)
                                       #checkboxInput("showMedians", label=strong("Highlight median tree(s)?"), value=FALSE)
                                   ),
@@ -76,7 +85,8 @@ shinyUI(
                                   
                                   ## find clusters?
                                   checkboxInput("findGroves", label=strong("Identify clusters?"), value=FALSE),
-                                  
+                                  bsTooltip("findGroves","Statistical tools for choosing an appropriate clustering method and number of clusters will be added to treescape soon.", placement="right"),
+    
                                   
                                   conditionalPanel(
                                     ## condition
@@ -92,14 +102,15 @@ shinyUI(
                                     
                                     ## number of clusters
                                     uiOutput("nclust")
-                                  ),
+                                    ),
                                   
                                   ## relevant if method = KC metric, allow tip emphasis
                                   conditionalPanel(
                                     condition="input.treemethod=='metric'",
                                     ## Emphasise tips
                                     checkboxInput("emphTips", label=strong("Emphasise tips?"), value=FALSE),
-                                      ## if tip emphasis is chosen, provide options:
+                                    bsTooltip("emphTips","Choose tips to emphasise or de-emphasise: the vector elements corresponding to these tips are multiplied by the weight chosen below.", placement="right"),  
+                                    ## if tip emphasis is chosen, provide options:
                                       conditionalPanel(
                                         condition="input.emphTips",
                                     
@@ -118,6 +129,7 @@ shinyUI(
                                   radioButtons("plotType", "View",
                                                choices=c("Full tree landscape"=1,"Distances from a reference tree"=2),
                                                selected=1),
+                                  bsTooltip("plotType", "Choose whether to view the relative distances between all trees, or a 1-dimensional plot of their distances from a fixed reference tree"),
                                   
                                   ## Dimensions (3D possible if 3 or more axes retained, and full tree landscape)
                                   conditionalPanel(condition="input.naxes>2",
@@ -137,7 +149,8 @@ shinyUI(
                                   
                                   ## select second axis to plot
                                   numericInput("yax", "Indicate the y axis", value=2, min=1, max=3),
-                                  
+                                  bsTooltip("yax", "If multiple MDS axes have been retained, any combination of axes can be viewed"),
+                              
                                   ## if in 3D, need a z axis:
                                   conditionalPanel(condition="input.plot3D==3",
                                                    numericInput("zax", "Indicate the z axis", value=3, min=1, max=3)
@@ -294,6 +307,7 @@ shinyUI(
                           radioButtons("treeChoice", "Tree selection",
                                        choices=c("Median tree"="med","General tree selection"="gen"),
                                        selected="med", width="100%"),
+                          bsTooltip("treeChoice", "A geometric median tree is plotted by default. If clusters have been identified, the median for each can be viewed. Alternatively, any individual tree can be plotted."),
                           
                           conditionalPanel(condition = "input.treeChoice=='med'",
                                          selectInput("selectedMedTree", "Median tree from:", 
@@ -402,6 +416,9 @@ shinyUI(
                                    selectInput("selectedDensiTree", "Choose collection of trees to view in densiTree plot", 
                                                choices=c("Choose one"="","All trees"="all"), width="100%"),
                                    #h2(HTML('<font color="#6C6CC4" size="2"> Note: this can be slow for large sets of trees </font>')),
+                                   
+                                   bsTooltip("selectedDensiTree", "View all trees together in a densiTree plot. If clusters have been identified, the set of trees from a single cluster can be plotted. Note this function can be slow if many trees are included.", placement="bottom"),
+                                   
                                    
                                    ## DENSITREE AESTHETICS
                                    img(src="img/line.png", width="100%"),
