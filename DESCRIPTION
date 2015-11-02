@@ -29,7 +29,9 @@ Suggests:
     RColorBrewer,
     ggplot2,
     rgl,
-    testthat
+    testthat,
+    shinyBS,
+    shinyRGL
 License: GPL (>=2)
 LazyData: true
 Collate:
