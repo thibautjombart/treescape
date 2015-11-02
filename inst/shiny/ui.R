@@ -1,6 +1,8 @@
 ## CHECKS ##
 if(!require("shiny")) stop("shiny is required")
 if(!require("RLumShiny")) stop("RLumShiny is required")
+if(!require("shinyBS")) stop("shinyBS is required")
+if(!require("shinyRGL")) stop("shinyRGL is required")
 
 ## DEFINE UI ##
 shinyUI(

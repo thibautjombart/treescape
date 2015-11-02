@@ -1,6 +1,3 @@
-## library(shiny)
-## library(treescape)
-
 ## DEFINE THE SERVER SIDE OF THE APPLICATION
 shinyServer(function(input, output, session) {
   ## LOAD PACKAGES
@@ -10,8 +7,6 @@ shinyServer(function(input, output, session) {
   if(!require("treescape")) stop("treescape is required")
   if(!require("adegenet")) stop("adegenet is required")
   if(!require("phangorn")) stop("phangorn is required")
-  if(!require("shinyRGL")) stop("shinyRGL is required")
-  if(!require("shinyBS")) stop("shinyBS is required")
   
   # suppress warning messages from creating temporary directories when 3d plotting
   suppressWarnings(warning("dir.create(dir)"))
