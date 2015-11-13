@@ -1,4 +1,3 @@
-
 #' Linear MRCA function
 #'
 #' Function to make the most recent common ancestor (MRCA) matrix of a tree, where entry (i,j) gives the MRCA of tips i and j.
@@ -424,3 +423,85 @@ multiDist <- function(trees, lambda=0,
   }
 }
 
+#' Metric function for comparing a reference \code{phylo} to \code{multiPhylo} input
+#'
+#' Comparison of a single reference tree to a list of trees using the Kendall Colijn metric. Output is given as a vector of distances from the reference tree.
+#'
+#' @author Michelle Kendall \email{michelle.louise.kendall@@gmail.com}
+#'
+#' @param refTree a tree of class \code{phylo}
+#' @param trees an object of the class \code{multiPhylo} containing the trees to be compared to the reference tree
+#' @param lambda a number in [0,1] which specifies the extent to which topology (default, with lambda=0)  or branch lengths (lambda=1) are emphasised. This argument is ignored if \code{return.lambda.function=TRUE}.
+#' @param return.lambda.function If true, a function that can be invoked with different lambda values is returned.
+#'  This function returns the vector of metric values for the given lambda.
+#' @param emphasise.tips an optional list of tips whose entries in the tree vectors should be emphasised. Defaults to \code{NULL}.
+#' @param emphasise.weight applicable only if a list is supplied to \code{emphasise.tips}, this value (default 2) is the number by which vector entries corresponding to those tips are emphasised.
+#'
+#' @return The vector of distances or a function that produces the vector of distances given a value for lambda.
+#'
+#'
+#' @import ape
+#' @importFrom stats as.dist
+#'
+#'
+#' @examples
+#'
+#' ## generate a single reference tree with 6 tips
+#' refTree <- rtree(6)
+#'
+#' ## generate 10 random trees, each with 6 tips
+#' trees <- rmtree(10,6)
+#'
+#' ## find the distances from each of the 10 random trees to the single reference tree
+#' refTreeDist(refTree,trees)
+#'
+#' @export
+refTreeDist <- function(refTree, trees, lambda=0, return.lambda.function=FALSE, 
+                        emphasise.tips=NULL, emphasise.weight=2) {
+  
+  if(!inherits(refTree, "phylo")) stop("refTree should be a phylo object")
+  if(!inherits(trees, "multiPhylo")) stop("trees should be a multiphylo object")
+  num_trees <- length(trees) 
+
+  # make name labels well defined
+  if(is.null(names(trees))) names(trees) <- 1:num_trees 
+  else if(length(unique(names(trees)))!=num_trees){
+    warning("duplicates detected in tree labels - using generic names")
+    names(trees) <- 1:num_trees
+  }
+  lab <- names(trees)
+  
+  # check all trees have same tip labels
+  for (i in 1:num_trees) {
+    if (!setequal(trees[[i]]$tip.label,refTree$tip.label)) {
+      stop(paste0("Tree ",lab[[i]]," has different tip labels from the reference tree."))
+    } 
+  }
+
+  # Working with numbers (no functions).
+  if(!return.lambda.function) {
+    # compute reference tree vector, which will be used repeatedly
+    refVec <- treeVec(refTree, lambda, F, emphasise.tips, emphasise.weight)
+    
+    # for each tree, compute its vector and store Euclidean distance from refVec
+    distances <- sapply(trees, function(x) {
+      tmpVec <- treeVec(x, lambda, F, emphasise.tips, emphasise.weight)
+      sqrt(sum((refVec-tmpVec)^2))
+      })
+  return(as.vector(distances))
+  }
+  
+  # Working with functions.
+  else {
+    # compute reference tree vector function 
+    refVec <- treeVec(refTree, lambda, T, emphasise.tips, emphasise.weight)
+    # Compute the list of metric functions for all trees.
+    treeVecs <- sapply(trees, function(x) treeVec(x, lambda, T, emphasise.tips, emphasise.weight))
+   
+    # Inner function that we'll return, computes the distance matrix given lambda.
+    compute_distance_vector_function <- function(l) {
+      sapply(1:num_trees, function(x) sqrt(sum((refVec(l)-treeVecs[[x]](l))^2)))
+    }
+    return(compute_distance_vector_function)
+  }
+}

@@ -28,6 +28,10 @@ test_that("multiDist calculated at lambda equals multiDist function evaluated at
   expect_equal(multiDist(trees,l),multiDist(trees,return.lambda.function=TRUE)(l))
   })
 
+test_that("refTreeDist calculated at lambda equals refTreeDist function evaluated at lambda", {
+  expect_equal(refTreeDist(tree_a,trees,l),refTreeDist(tree_a,trees,return.lambda.function=TRUE)(l))
+})
+
 ############################
 # test that functions match as they should, including when tips are emphasised
 ############################
@@ -41,6 +45,11 @@ test_that("treeDist equals corresponding entry of multiDist", {
   expect_equal(treeDist(trees[[1]],trees[[2]]), multiDist(trees)[[1]])
   expect_equal(treeDist(trees[[1]],trees[[2]],emphasise.tips = c("t1","t2")), multiDist(trees,emphasise.tips = c("t1","t2"))[[1]])
   })
+
+test_that("treeDist equals corresponding entry of refTreeDist", {
+  expect_equal(treeDist(tree_a,trees[[1]]), refTreeDist(tree_a,trees)[[1]])
+  expect_equal(treeDist(tree_a,trees[[1]],emphasise.tips = c("t1","t2")), refTreeDist(tree_a,trees,emphasise.tips = c("t1","t2"))[[1]])
+})
 
 test_that("multiDist equals the distance matrix from treescape", {
   treedistMatrix <- treescape(trees,nf=2)$D
