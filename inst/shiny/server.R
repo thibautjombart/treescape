@@ -623,7 +623,6 @@ getPlot3d <- reactive({
   }
   else{cols3d <- col}
 
-  #open3d()
   rgl::plot3d(res$pco$li[,xax],res$pco$li[,yax],res$pco$li[,zax], 
               type="s", size=getPointsize(),
               xlab="",ylab="",zlab="",

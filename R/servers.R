@@ -20,7 +20,6 @@
 #' @importFrom utils packageDescription
 #' @importFrom RLumShiny jscolorInput
 #' @importFrom shinyBS bsTooltip
-#' @importFrom shinyRGL webGLOutput
 #' 
 #' 
 #' @export

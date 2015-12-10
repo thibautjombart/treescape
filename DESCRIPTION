@@ -25,8 +25,7 @@ Imports:
     phangorn,
     Rcpp,
 	rglwidget,
-    shinyBS,
-    shinyRGL
+    shinyBS
 LinkingTo: Rcpp
 Suggests:
     RColorBrewer,
