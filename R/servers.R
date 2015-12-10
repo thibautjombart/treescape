@@ -9,6 +9,7 @@
 #' @import ape
 
 #' @import shiny
+#' @import rglwidget
 #' @importFrom ade4 dudi.pco
 #' @importFrom adephylo distTips
 #' @importFrom adegraphics s.class 

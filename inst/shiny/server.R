@@ -563,22 +563,23 @@ getPlotType <- reactive({
 output$treescapePlot <- renderUI({
   type <- getPlotType()
   if (type==1){
-     dim <- getPlotDim()
-      if(dim==2){
        plotOutput("scatterplot", height = "800px")
-       }
-     else{
-       validate(
-         need(packageVersion("rgl")<'0.95.1247',
-              paste0("You are running version ",packageVersion("rgl")," of the package rgl. The Shiny wrapper for rgl is not supported for versions >=0.95.1247. We recommend deleting the current version of rgl from your library then installing this patch: devtools::install_github('trestletech/rgl@js-class')")
-         ))
-         webGLOutput("plot3D", height = "800px")
-     }}
+     }
   else{
     i <- input$stretch
     height <- as.character(paste0(i,"px"))
                       plotOutput("DistPlot", height = height)  
     }
+})
+
+output$treescapePlot3D <- renderRglwidget({
+  validate(
+    need(packageVersion("rglwidget")>='0.1.1433',
+         paste0("You are running version ",packageVersion("rglwidget")," of the package rglwidget, which contains a bug for 3D plotting. Please update to the latest version by running: install.packages('rglwidget', repos='http://R-Forge.R-project.org')")
+    ))
+    plot <- getPlot3d()
+    plot
+    rglwidget()
 })
 
 
@@ -621,22 +622,23 @@ getPlot3d <- reactive({
     cols3d <- fac2col(clusts$groups,col.pal=pal)
   }
   else{cols3d <- col}
-  
+
+  #open3d()
   rgl::plot3d(res$pco$li[,xax],res$pco$li[,yax],res$pco$li[,zax], 
               type="s", size=getPointsize(),
               xlab="",ylab="",zlab="",
-              col=cols3d)
+              col=cols3d, add=FALSE)
 })
 
-output$plot3D <- renderWebGL({
-  withProgress(message = 'Loading plot',
-               value = 0, {
-                 for (i in 1:15) {
-                   incProgress(1/15)
-                 }
-                 plot <- getPlot3d()  # separated these out to enable easier save function
-               })
-}) 
+#output$plot3D <- renderWebGL({
+#  withProgress(message = 'Loading plot',
+#               value = 0, {
+#                 for (i in 1:15) {
+#                   incProgress(1/15)
+#                 }
+#                 plot <- getPlot3d()  # separated these out to enable easier save function
+#               })
+#}) 
   
 # get tree and aesthetics for plotting tree  
 getTreeChoice <- reactive({

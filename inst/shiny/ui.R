@@ -1,5 +1,7 @@
+options(rgl.useNULL=TRUE)
 ## CHECKS ##
 if(!require("shiny")) stop("shiny is required")
+if(!require("rglwidget")) stop("rglwidget is required")
 if(!require("RLumShiny")) stop("RLumShiny is required")
 if(!require("shinyBS")) stop("shinyBS is required")
 if(!require("shinyRGL")) stop("shinyRGL is required")
@@ -264,7 +266,14 @@ shinyUI(
                          # Removed:
                          #verbatimTextOutput("caption"),
                          
-                         uiOutput("treescapePlot"),
+                         conditionalPanel(
+                           condition="input.plot3D==2",
+                           uiOutput("treescapePlot")
+                         ),
+                         conditionalPanel(
+                           condition="input.plot3D==3",
+                         rglwidgetOutput("treescapePlot3D", width="800px")
+                         ),
                          
                          br(), br(),
                          
