@@ -181,7 +181,7 @@ shinyUI(
                                   ## type of graph (if clusters detected, and 2D)
                                   conditionalPanel(
                                     ## condition
-                                    condition="input.findGroves",
+                                    condition="input.findClusters",
                                     conditionalPanel(
                                       condition="input.plot3D==2",
                                     
