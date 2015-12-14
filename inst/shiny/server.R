@@ -660,10 +660,15 @@ getPlot3d <- reactive({
   
   # show clusters?
   clusts <- getClusters()
+  treeTypes <- getMetaData()
   if (!is.null(clusts)){
     pal <- getPalette()
     cols3d <- fac2col(clusts$groups,col.pal=pal)
   }
+  else if (!is.null(treeTypes)) {
+      pal <- getPalette()
+      cols3d <- fac2col(treeTypes,col.pal=pal)
+  } 
   else{cols3d <- col}
 
   rgl::plot3d(res$pco$li[,xax],res$pco$li[,yax],res$pco$li[,zax], 
