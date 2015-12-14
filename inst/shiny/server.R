@@ -345,7 +345,8 @@ getClustmethod <- reactive({
 
 getClusters <- reactive({
     ## stop if clusters not required
-    if(!input$findGroves) return(NULL)
+    if(!input$findClusters) return(NULL)
+    else if(input$clusterType=="meta") return(NULL)
   
     ## reset the densiTree plot to accommodate number of clusters available
     choices <- getClustChoices()
@@ -431,6 +432,47 @@ getClusters <- reactive({
     selectInput("whichTips", "Select one or more tips to emphasise:", 
                 choices=choices, selected=NULL, selectize=TRUE, multiple=TRUE)
   })
+  
+  ## GET METADATA ## for colouring trees by type
+  getMetaData <- reactive({
+    out <- NULL
+    
+    ## data is an input file
+    if(input$clusterType=="meta" && !is.null(input$metadatafile)){
+      ## need to rename input file
+      oldName <- input$metadatafile$datapath
+      extension <- adegenet::.readExt(input$metadatafile$name)
+      newName <- paste(input$metadatafile$datapath, extension, sep=".")
+      file.rename(oldName, newName)
+      
+      if(tolower(extension) %in% c("rdata","rda")){
+        out <- get(load(newName))
+        validate(
+          need(class(out)%in%c("numeric","character","list","factor"), paste0("The class of the input is ", class(out), ". Please upload a single object of class list, numeric, factor or character, whose length is the same as the number of trees."))
+        )
+        
+      }
+      if(tolower(extension) %in% c("csv")){
+        csvfile <- read.csv(file=newName, header=FALSE)
+        out <- csvfile[,1]
+        validate(
+          need(class(out)%in%c("numeric","character","list","factor"), paste0("The first column of the csv file has been extracted. However, the class of the input is ", class(out), ". Please alter the entries so that it can be read by R as an object of class list, numeric, factor or character, whose length is the same as the number of trees."))
+        )
+      }
+
+      if(class(out)=="list") {out <- unlist(out)}
+      
+      l <- getLengthData()
+      validate(
+        need(length(out)==l, paste0("The length of the metadata must be the same as the number of trees, which is ", l, ". However, the length of the input is ", length(out)))
+      )
+
+    }
+
+    ## return metadata
+    return(out)
+  }) # end getMetaData
+  
 
 ######################################################
 ### Little "get" functions to support getPlot
@@ -500,6 +542,7 @@ getPlot <- reactive({
 
     res <- getAnalysis()
     groves <- getClusters()
+    treeTypes <- getMetaData()
     
     ## get aesthetics
     pal <- getPalette()
@@ -514,15 +557,15 @@ getPlot <- reactive({
     labelsize <- getLabelsize()
     pointsize <- getPointsize()
       
-    ## plot without groups
+    ## plot without groups, or with groups by type
     if(is.null(groves)){
-      plotGroves(res$pco, type=scattertype, xax=xax, yax=yax,
+      plotGroves(res$pco, groups=treeTypes, type=scattertype, xax=xax, yax=yax,
                         scree.posi=screemds, lab.optim=optimlabels,
                         lab.show=showlabels, lab.cex=labelsize,
                         lab.col=labcol,
-                        point.cex=pointsize, bg=bgcol)
+                        point.cex=pointsize, bg=bgcol, col.pal=pal)
     } else {
-    ## plot with groups
+    ## plot with statistically identified groups
       plotGroves(groves, type=scattertype, xax=xax, yax=yax,
                         scree.posi=screemds, lab.optim=optimlabels,
                         lab.show=showlabels, lab.cex=labelsize,
@@ -716,7 +759,7 @@ output$tree <- renderPlot({
 # been requested, so we can't just use getNclust.
 
 getNclustForDensiTree <- reactive({
-  if(input$findGroves==FALSE){NULL}
+  if(input$clusterType=="meta"){NULL}
   else{input$nclust}
 }) 
 

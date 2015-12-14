@@ -87,25 +87,40 @@ shinyUI(
                                   
                                   
                                   ## find clusters?
-                                  checkboxInput("findGroves", label=strong("Identify clusters?"), value=FALSE),
-                                  bsTooltip("findGroves","Statistical tools for choosing an appropriate clustering method and number of clusters will be added to treescape soon.", placement="right"),
+                                  checkboxInput("findClusters", label=strong("Identify clusters?"), value=FALSE),
+                                  bsTooltip("findClusters","Statistical tools for choosing an appropriate clustering method and number of clusters will be added to treescape soon.", placement="right"),
     
+                                  conditionalPanel(condition ="input.findClusters", 
+                                                   radioButtons("clusterType", label="Method:", 
+                                                                choices=c("statistically"="stat","by metadata"="meta"), selected="stat"),
+                                                   conditionalPanel(
+                                                     condition="input.clusterType=='stat'",
+                                                   
+                                                   ## clustering method
+                                                      selectInput("clustmethod", "Clustering method:",
+                                                                  choices=c(
+                                                                    "Ward" = "ward.D2",
+                                                                    "Single" = "single",
+                                                                    "Complete" = "complete",
+                                                                    "UPGMA" = "average")),
+                                                   
+                                                   ## number of clusters
+                                                      uiOutput("nclust")
+                                                      ),
+                                                   conditionalPanel(
+                                                     condition="input.clusterType=='meta'",
+                                                     fileInput("metadatafile", p(HTML(' <font size="4"> Choose input file:</font>'), br(),
+                                                                            strong("accepted formats:"), br(),
+                                                                            em("- object of class factor/numeric/character/list"), "saved from R (.RData/.rda)", br(),
+                                                                            em("- csv file"), "(.csv) (first column will be used)")
+                                                    )
+                                                   )
+                                                                                 
+                                                   
+                                  ),
                                   
-                                  conditionalPanel(
-                                    ## condition
-                                    condition="input.findGroves",
-                                    
-                                    ## clustering method
-                                    selectInput("clustmethod", "Clustering method:",
-                                                choices=c(
-                                                  "Ward" = "ward.D2",
-                                                  "Single" = "single",
-                                                  "Complete" = "complete",
-                                                  "UPGMA" = "average")),
-                                    
-                                    ## number of clusters
-                                    uiOutput("nclust")
-                                    ),
+                                  
+                                 
                                   
                                   ## relevant if method = KC metric, allow tip emphasis
                                   conditionalPanel(
@@ -224,7 +239,7 @@ shinyUI(
                                   ## choose color palette (if clusters detected)
                                   conditionalPanel(
                                     ## condition
-                                    condition="input.findGroves",
+                                    condition="input.findClusters",
                                     
                                     selectInput("palette", "Palette for the clusters",
                                                 choices=c("funky", "spectral",
