@@ -65,8 +65,15 @@ Two types of input files can be used:
 
  <br>
  <b><font color="#6C6CC4">  Identify clusters? </font></b>
- Whether to find clusters using the <font face="Courier New"> findGroves </font> function.
+ Whether to identify clusters by different colours in the plot. Clusters may be found statistically using the <font face="Courier New"> findGroves </font> function, which attempts to group trees into clusters of nearby trees in the space.
  When this option is selected, you will also have the option to choose the clustering method and number of clusters.
+ Alternatively, trees may be coloured by metadata. For example, if the trees were inferred from different genes, or using different inference software, then this can be shown on the plot.
+ Upload a .RData or .csv file containing a list or vector corresponding to the trees.
+ For example, if the trees were inferred from three different genes and there are 100 replicates per gene, create a character vector corresponding (in the same order) to the trees, e.g.
+ <br>
+ <font face="Courier New"> treeTypes <- c(rep("Gene1",100),rep("Gene2",100),rep("Gene3",100)) </font>
+  <br>
+  save as an .RData file, and upload. The trees will be coloured according to gene, making it possible to analyse whether or not the genes contain different phylogenetic signals, according to the chosen inference method.
 
 <br> <br>
  <h4 id="tleaesthetics"> <font color="#6C6CC4"> Aesthetics </font></h4>
@@ -91,13 +98,8 @@ A number of graphical options are available.
  <b><font color="#6C6CC4">  Plot dimensions: </font></b>
  If three or more axes have been retained, the option to view the space in three dimensions will be available.
  It is possible to rotate the image by clicking on it and dragging the mouse, and to zoom in and out with the mouse scroll button.
- Note that 3D plotting depends on the <i> shinyRGL </i> package, which (currently) is <b> not supported </b> on the latest versions
- of the package <i> rgl </i>.
- If no image or a spurious message about enabling javascript appears, we recommend removing the current installation of <i> rgl </i>
- from your library and then installing the patch: 
- <font face="Courier New"> devtools::install_github('trestletech/rgl@js-class') </font>.
- For more details and to track progress on this issue, see 
- <a href="https://github.com/trestletech/shinyRGL" target="_blank">shinyRGL on GitHub</a>.
+ Note that 3D plotting depends on the <i> rglwidget </i> package. At the time of writing, the latest CRAN version (0.1.1431) contains a bug; if you are running this version then you will receive a warning recommending installing the latest development version: 
+ <font face="Courier New"> install.packages('rglwidget', repos='http://R-Forge.R-project.org') </font>.
 
  <br>
  <b><font color="#6C6CC4"> x/y/z axes: </font></b>
