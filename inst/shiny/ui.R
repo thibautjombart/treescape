@@ -2,6 +2,7 @@ options(rgl.useNULL=TRUE)
 ## CHECKS ##
 if(!require("shiny")) stop("shiny is required")
 if(!require("rglwidget")) stop("rglwidget is required")
+if(!require("rgl")) stop("rgl is required")
 if(!require("RLumShiny")) stop("RLumShiny is required")
 if(!require("shinyBS")) stop("shinyBS is required")
 
@@ -295,8 +296,16 @@ shinyUI(
                          img(src="img/line.png", width="400px"),
                          h2(HTML('<font color="#6C6CC4" size="6"> > Output </font>')),
                          ## save MDS plot
-                         downloadButton("downloadMDS", "Save treescape image"),
+                         conditionalPanel(
+                           condition="input.plot3D==2",
+                           downloadButton("downloadMDS", "Save treescape image as png file")
+                         ),
                          
+                         conditionalPanel(
+                           condition="input.plot3D==3",
+                           downloadButton("downloadMDS3Dhtml", "Save treescape 3D plot as interactive html")
+                         ),
+                           
                          ## save trees to nexus file
                          downloadButton('exporttrees', "Save trees to nexus file"),
                          

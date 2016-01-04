@@ -677,16 +677,7 @@ getPlot3d <- reactive({
               col=cols3d, add=FALSE)
 })
 
-#output$plot3D <- renderWebGL({
-#  withProgress(message = 'Loading plot',
-#               value = 0, {
-#                 for (i in 1:15) {
-#                   incProgress(1/15)
-#                 }
-#                 plot <- getPlot3d()  # separated these out to enable easier save function
-#               })
-#}) 
-  
+
 # get tree and aesthetics for plotting tree  
 getTreeChoice <- reactive({
   input$treeChoice
@@ -711,22 +702,6 @@ getTree <- reactive({
     }
   }
   
-  #trelab <- input$selectedTree
-  #if(trelab!=""){
-  #  ## numeric label
-  #  if(!is.na(as.numeric(trelab))){
-  #    validate(
-  #      need(as.numeric(trelab) %in% 1:length(x), paste0("Tree number must be in the range 1 to ",length(x)))
-  #    )	
-  #    tre <- x[[as.numeric(trelab)]]
-  #  } else {
-  #    ## text label
-  #    validate(
-  #      need(as.character(trelab) %in% names(x), "Tree name not recognised")
-  #    )	
-  #    tre <- x[[as.character(trelab)]]
-  #  }
-    
     # return tree
     if(!is.null(tre)){
       if(input$ladderize){
@@ -859,26 +834,33 @@ output$densiTree <- renderPlot({
       }
     })
   
-  ## EXPORT MDS PLOT AS PNG ##
+  ## EXPORT 2D MDS PLOT AS PNG ##
   output$downloadMDS <- downloadHandler(
-    filename = function() { paste0(getDataSet(),".png") },
+    filename = function() { paste0(getDataSet(),"scape2D.png") },
     content = function(file) {
-      dim <- getPlotDim()
-      if (dim==2){
-        myplot <- getPlot()
-        png(file=file, width = 10, height = 10, units = 'in', res = 500)
-        plot(myplot)
-        dev.off()
-      }
-    else{
-        validate(
-          need(dim==2,"Sorry, saving is not yet enabled for 3D plots")
-        )
-      # Note rgl.postscript may be the way forward. I think it will require a separate download button.
-        }
-    contentType = 'image/png'  }
+      myplot <- getPlot()
+      png(file=file, width = 10, height = 10, units = 'in', res = 500)
+      plot(myplot)
+      dev.off()
+    },
+    contentType = 'image/png'
   )
   
+  ## EXPORT 3D MDS PLOT AS html ##
+  output$downloadMDS3Dhtml <- downloadHandler(
+    filename = function() { paste0(getDataSet(),"scape3D.html") },
+    content = function(file) {
+      options(rgl.useNULL=FALSE)
+      myplot <- getPlot3d()
+      myplot
+      rglwidget()
+      rgl::writeWebGL(dir=getwd(), filename=file, snapshot=TRUE, width = 500, reuse=TRUE)
+    },
+    contentType = 'html'  
+  )
+  
+
+
   
   ## EXPORT TREE PLOT AS PNG ##
   output$downloadTree <- downloadHandler(

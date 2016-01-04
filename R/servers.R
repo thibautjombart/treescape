@@ -19,6 +19,7 @@
 #' @importFrom phangorn Descendants
 #' @importFrom utils packageDescription
 #' @importFrom RLumShiny jscolorInput
+#' @importFrom rgl writeWebGL
 #' @importFrom shinyBS bsTooltip
 #' 
 #' 
