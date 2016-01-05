@@ -45,7 +45,10 @@ shinyServer(function(input, output, session) {
   
   getDataSet <- reactive({
     dataType <- getDataType()
-    if(dataType=="expl"){
+    if(dataType=="exDengue"){
+      return("Dengue")
+    }
+    if(dataType=="exWoodmice"){
      return("woodmiceTrees")
       }
     else {
@@ -65,17 +68,15 @@ shinyServer(function(input, output, session) {
   getData <- reactive({
     out <- NULL
     dataType <- getDataType()
-    ## PUT THIS BACK IN IF WE INTRODUCE OTHER EXAMPLES
-    #dataSet <- getDataSet()
-    
+
     ## data is a distributed dataset
-    if(dataType=="expl"){
-      ## PUT THIS BACK IN IF WE INTRODUCE OTHER EXAMPLES
-      #if(dataSet=="woodmiceTrees") 
+    if(dataType=="exDengue"){
+      data("DengueTrees", package="treescape", envir=environment())
+      out <- get("DengueTrees")
+    }
+    if(dataType=="exWoodmice"){
       data("woodmiceTrees", package="treescape", envir=environment())
-      #out <- get(dataSet)
       out <- get("woodmiceTrees")
-      
     }
     
     ## data is an input file

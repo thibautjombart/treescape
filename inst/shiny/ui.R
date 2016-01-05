@@ -34,15 +34,9 @@ shinyUI(
                                   img(src="img/line.png", width="100%"),
                                   h2(HTML('<font color="#6C6CC4" size="6"> > Input </font>')),
                                   radioButtons("datatype", HTML('<font size="4"> Choose data source:</font>'),
-                                               list("Example: woodmice trees"="expl","Input file"="file")),
-                                  
-                                  ## choice of dataset if source is an example
-                                  ## PUT THIS BACK IN IF WE INTRODUCE MORE EXAMPLES
-                                  #conditionalPanel(condition = "input.datatype=='expl'",
-                                  #                 selectInput("dataset",
-                                  #                             HTML('<font size="4"> Select an example dataset:</font>'),
-                                  #                             choices=c("woodmiceTrees"))
-                                  #),
+                                               list("Example: Dengue fever"="exDengue", 
+                                                    "Example: Woodmice"="exWoodmice",
+                                                    "Input file"="file")),
                                   
                                   ## choice of dataset if source is a file
                                   conditionalPanel(condition = "input.datatype=='file'",
