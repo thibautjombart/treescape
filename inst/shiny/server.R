@@ -48,7 +48,10 @@ shinyServer(function(input, output, session) {
     if(dataType=="expl"){
      return("woodmiceTrees")
       }
-    else input$dataset
+    else {
+      # extract file name
+      strsplit(input$datafile$name, '[.]')[[1]][1]
+    }
   })
   
   getSampleSize <- reactive({
@@ -62,7 +65,8 @@ shinyServer(function(input, output, session) {
   getData <- reactive({
     out <- NULL
     dataType <- getDataType()
-    dataSet <- getDataSet()
+    ## PUT THIS BACK IN IF WE INTRODUCE OTHER EXAMPLES
+    #dataSet <- getDataSet()
     
     ## data is a distributed dataset
     if(dataType=="expl"){
