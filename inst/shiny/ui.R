@@ -48,7 +48,7 @@ shinyUI(
                                   conditionalPanel(condition = "input.datatype=='file'",
                                                    fileInput("datafile", p(HTML(' <font size="4"> Choose input file:</font>'), br(),
                                                                            strong("accepted formats:"), br(),
-                                                                           em("- multiphylo"), "saved from R (.RData/.rda)", br(),
+                                                                           em("- multiphylo"), "saved from R (.RData/.rda/.rds)", br(),
                                                                            em("- nexus"), "file (.nex/.nexus)")
                                                    ),
                                                    checkboxInput("randSamp","Randomly sample from the trees?", value=TRUE),

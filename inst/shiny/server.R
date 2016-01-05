@@ -85,6 +85,9 @@ shinyServer(function(input, output, session) {
       if(tolower(extension) %in% c("rdata","rda")){
         out <- get(load(newName))
       }
+      if(tolower(extension) %in% c("rds")){
+        out <- readRDS(file=newName)
+      }
       if(tolower(extension) %in% c("nex", "nexus")){
         if(!require(ape)) stop("ape is required to read in NEXUS (.nex, .nexus) files")
         out <- read.nexus(file=newName)
