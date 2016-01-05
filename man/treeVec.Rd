@@ -19,10 +19,10 @@ treeVec(tree, lambda = 0, return.lambda.function = FALSE,
 \item{emphasise.weight}{applicable only if a list is supplied to \code{emphasise.tips}, this value (default 2) is the number by which vector entries corresponding to those tips are emphasised.}
 }
 \value{
-The vector with the metric values or a function that produces the vector given a value of lambda.
+The vector of values according to the metric, or a function that produces the vector given a value of lambda.
 }
 \description{
-Function which takes an object of class phylo as input and outputs the vector for the Kendall Colijn metric.
+Function which takes an object of class phylo and outputs the vector for the Kendall Colijn metric.
 The elements of the vector are numeric if \code{return.lambda.function=FALSE} (default),
 and otherwise they are functions of lambda.
 }

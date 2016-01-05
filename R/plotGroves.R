@@ -6,7 +6,7 @@
 #' (derived by \code{\link{findGroves}}) using colors.
 #'
 #' This function relies on \code{\link[adegraphics]{s.class}}
-#' from the adegraphics package.
+#' from the \code{adegraphics} package.
 #'
 #' @author Thibaut Jombart \email{thibautjombart@@gmail.com}
 #'
@@ -36,10 +36,12 @@
 #' @param ... further arguments passed to \code{\link{s.class}}
 #'
 #' @return
-#' An adegraphics object (class: ADEgS)
+#' An \code{adegraphics} object (class: \code{ADEgS})
 #'
 #' @seealso
+#' \code{\link{findGroves}} to find any clusters in the tree landscape
 #' \code{\link[adegraphics]{s.class}}
+#' 
 #'
 #' @examples
 #'

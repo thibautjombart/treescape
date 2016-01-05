@@ -14,10 +14,12 @@ treescape(x, method = "treeVec", nf = NULL, return.tree.vectors = FALSE,
 Choose from: 
 \code{treeVec} (default) the Kendall Colijn metric vector. 
 The others are inherited from \code{distTips} in \code{adephylo}:
-\code{patristic}: for each pair of tips, the sum of branch lengths on the path between them
-\code{nNodes}: for each pair of tips, the number of nodes on the path between them
-\code{Abouheif}: performs Abouheif's test. See Pavoine et al. (2008) and \code{adephylo}.
-\code{sumDD}: sum of direct descendants of all nodes on the path, related to Abouheif's test. See \code{adephylo}.}
+\itemize{
+\item \code{patristic}: for each pair of tips, the sum of branch lengths on the path between them
+\item \code{nNodes}: for each pair of tips, the number of nodes on the path between them
+\item \code{Abouheif}: performs Abouheif's test. See Pavoine et al. (2008) and \code{adephylo}.
+\item \code{sumDD}: sum of direct descendants of all nodes on the path, related to Abouheif's test. See \code{adephylo}.
+}}
 
 \item{nf}{the number of principal components to retain}
 
@@ -50,12 +52,14 @@ geom_point(size=6, shape=1, colour="gray50") + # grey edges
 geom_point(size=6, alpha=0.2, colour="navy") + # transparent blue points
 xlab("") + ylab("") + theme_bw(base_family="") # remove axis labels and grey background
 }
+ 
 \dontrun{
 if(require(rgl)){
 plot3d(woodmicedf[,1], woodmicedf[,2], woodmicedf[,3], type="s", size=1.5,
 col="navy", alpha=0.5, xlab="", ylab="", zlab="")
 }
 }
+ 
 
 }
 \author{

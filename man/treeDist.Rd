@@ -12,7 +12,7 @@ treeDist(tree.a, tree.b, lambda = 0, return.lambda.function = FALSE,
 
 \item{tree.b}{an object of the class \code{phylo} (with the same tip labels as tree.a)}
 
-\item{lambda}{a number in [0,1] which specifies the extent to which topology (default, with lambda=0)  or branch lengths (lambda=1) are emphasised. This argument is ignored if \code{type="function"}.}
+\item{lambda}{a number in [0,1] which specifies the extent to which topology (default, with lambda=0)  or branch lengths (lambda=1) are emphasised. This argument is ignored if \code{return.lambda.function=TRUE}.}
 
 \item{return.lambda.function}{If true, a function that can be invoked with different lambda values is returned.
 This function returns the vector of metric values for the given lambda.}
@@ -22,7 +22,7 @@ This function returns the vector of metric values for the given lambda.}
 \item{emphasise.weight}{applicable only if a list is supplied to \code{emphasise.tips}, this value (default 2) is the number by which vector entries corresponding to those tips are emphasised.}
 }
 \value{
-The vector with the metric values or a function that produces the vector given a value of lambda.
+The distance between the two trees according to the metric for the given value of lambda, or a function that produces the distance given a value of lambda.
 }
 \description{
 Comparison of two trees using the Kendall Colijn metric

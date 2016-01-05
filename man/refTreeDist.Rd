@@ -8,7 +8,7 @@ refTreeDist(refTree, trees, lambda = 0, return.lambda.function = FALSE,
   emphasise.tips = NULL, emphasise.weight = 2)
 }
 \arguments{
-\item{refTree}{a tree of class \code{phylo}}
+\item{refTree}{a tree of class \code{phylo}, the "reference tree".}
 
 \item{trees}{an object of the class \code{multiPhylo} containing the trees to be compared to the reference tree}
 
@@ -22,7 +22,7 @@ This function returns the vector of metric values for the given lambda.}
 \item{emphasise.weight}{applicable only if a list is supplied to \code{emphasise.tips}, this value (default 2) is the number by which vector entries corresponding to those tips are emphasised.}
 }
 \value{
-The vector of distances or a function that produces the vector of distances given a value for lambda.
+The vector of distances, where entry i corresponds to the distance between the i'th tree and the reference tree, or a function that produces the vector of distances given a value for lambda.
 }
 \description{
 Comparison of a single reference tree to a list of trees using the Kendall Colijn metric. Output is given as a vector of distances from the reference tree.

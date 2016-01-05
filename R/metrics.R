@@ -60,7 +60,7 @@ linearMrca <- compiler::cmpfun(linearMrca) # compile
 
 #' Tree vector function
 #'
-#' Function which takes an object of class phylo as input and outputs the vector for the Kendall Colijn metric.
+#' Function which takes an object of class phylo and outputs the vector for the Kendall Colijn metric.
 #' The elements of the vector are numeric if \code{return.lambda.function=FALSE} (default),
 #' and otherwise they are functions of lambda.
 #'
@@ -73,7 +73,7 @@ linearMrca <- compiler::cmpfun(linearMrca) # compile
 #' @param emphasise.tips an optional list of tips whose entries in the tree vector should be emphasised. Defaults to \code{NULL}.
 #' @param emphasise.weight applicable only if a list is supplied to \code{emphasise.tips}, this value (default 2) is the number by which vector entries corresponding to those tips are emphasised.
 #'
-#' @return The vector with the metric values or a function that produces the vector given a value of lambda.
+#' @return The vector of values according to the metric, or a function that produces the vector given a value of lambda.
 #'
 #' @import ape
 #' @importFrom Rcpp evalCpp
@@ -255,13 +255,13 @@ treeVec <- function(tree, lambda=0, return.lambda.function=FALSE, emphasise.tips
 #'
 #' @param tree.a an object of the class \code{phylo}
 #' @param tree.b an object of the class \code{phylo} (with the same tip labels as tree.a)
-#' @param lambda a number in [0,1] which specifies the extent to which topology (default, with lambda=0)  or branch lengths (lambda=1) are emphasised. This argument is ignored if \code{type="function"}.
+#' @param lambda a number in [0,1] which specifies the extent to which topology (default, with lambda=0)  or branch lengths (lambda=1) are emphasised. This argument is ignored if \code{return.lambda.function=TRUE}.
 #' @param return.lambda.function If true, a function that can be invoked with different lambda values is returned.
 #'  This function returns the vector of metric values for the given lambda.
 #' @param emphasise.tips an optional list of tips whose entries in the tree vectors should be emphasised. Defaults to \code{NULL}.
 #' @param emphasise.weight applicable only if a list is supplied to \code{emphasise.tips}, this value (default 2) is the number by which vector entries corresponding to those tips are emphasised.
 #'
-#' @return The vector with the metric values or a function that produces the vector given a value of lambda.
+#' @return The distance between the two trees according to the metric for the given value of lambda, or a function that produces the distance given a value of lambda.
 #'
 #'
 #' @import ape
@@ -319,7 +319,7 @@ treeDist <- function(tree.a, tree.b, lambda=0, return.lambda.function=FALSE, emp
 #' @param emphasise.tips an optional list of tips whose entries in the tree vectors should be emphasised. Defaults to \code{NULL}.
 #' @param emphasise.weight applicable only if a list is supplied to \code{emphasise.tips}, this value (default 2) is the number by which vector entries corresponding to those tips are emphasised.
 #'
-#' @return The distance matrix or a function that produces the distance matrix given a value for lambda.
+#' @return The pairwise tree distance matrix or a function that produces the distance matrix given a value for lambda.
 #'
 #'
 #' @import ape
@@ -429,7 +429,7 @@ multiDist <- function(trees, lambda=0,
 #'
 #' @author Michelle Kendall \email{michelle.louise.kendall@@gmail.com}
 #'
-#' @param refTree a tree of class \code{phylo}
+#' @param refTree a tree of class \code{phylo}, the "reference tree".
 #' @param trees an object of the class \code{multiPhylo} containing the trees to be compared to the reference tree
 #' @param lambda a number in [0,1] which specifies the extent to which topology (default, with lambda=0)  or branch lengths (lambda=1) are emphasised. This argument is ignored if \code{return.lambda.function=TRUE}.
 #' @param return.lambda.function If true, a function that can be invoked with different lambda values is returned.
@@ -437,7 +437,7 @@ multiDist <- function(trees, lambda=0,
 #' @param emphasise.tips an optional list of tips whose entries in the tree vectors should be emphasised. Defaults to \code{NULL}.
 #' @param emphasise.weight applicable only if a list is supplied to \code{emphasise.tips}, this value (default 2) is the number by which vector entries corresponding to those tips are emphasised.
 #'
-#' @return The vector of distances or a function that produces the vector of distances given a value for lambda.
+#' @return The vector of distances, where entry i corresponds to the distance between the i'th tree and the reference tree, or a function that produces the vector of distances given a value for lambda.
 #'
 #'
 #' @import ape

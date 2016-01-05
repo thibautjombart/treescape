@@ -43,7 +43,7 @@ plotGroves(x, groups = NULL, xax = 1, yax = 2, type = c("chull",
 \item{...}{further arguments passed to \code{\link{s.class}}}
 }
 \value{
-An adegraphics object (class: ADEgS)
+An \code{adegraphics} object (class: \code{ADEgS})
 }
 \description{
 This function displays the scatterplot of the Multidimensional
@@ -52,7 +52,7 @@ Scaling (MDS) output by treescape, superimposing group information
 }
 \details{
 This function relies on \code{\link[adegraphics]{s.class}}
-from the adegraphics package.
+from the \code{adegraphics} package.
 }
 \examples{
 
@@ -92,6 +92,7 @@ plotGroves(res$treescape$pco, lab.show=TRUE, lab.cex=2)
 Thibaut Jombart \email{thibautjombart@gmail.com}
 }
 \seealso{
+\code{\link{findGroves}} to find any clusters in the tree landscape
 \code{\link[adegraphics]{s.class}}
 }
 

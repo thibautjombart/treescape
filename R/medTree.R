@@ -6,7 +6,8 @@
 #' @author Michelle Kendall \email{michelle.louise.kendall@@gmail.com}
 #' @author Thibaut Jombart \email{thibautjombart@@gmail.com}
 #'
-#' @param x An object of the class multiPhylo, containing the trees for which the median tree will be computed, or a matrix of tree vectors as given by \code{treescape$vectors}.
+#' @param x A list of trees of the class multiPhylo, for which the median tree will be computed, \cr
+#' OR a matrix of tree vectors as given by \code{treescape$vectors}.
 #' @param groups an optional factor defining groups of trees; if provided, one median tree will be found for each group.
 #' @param lambda a number in [0,1] which specifies the extent to which topology (default, with lambda=0)  or branch lengths (lambda=1) are emphasised. This argument is ignored if \code{return.lambda.function=TRUE} or if the vectors are already supplied as the object \code{x}.
 #' @param weights A vector of weights for the trees. Defaults to a vector of 1's so that all trees are equally weighted, but can be used to encode likelihood, posterior probabilities or other characteristics.
@@ -17,13 +18,15 @@
 #' @param save.memory A flag that saves a lot of memory but increases the execution time (not compatible with return.lambda.function=TRUE). Ignored if the tree vectors are already supplied as the object \code{x}.
 #'
 #' @return A list of five objects: 
-#' $centre is the "central vector", that is, the (weighted) mean of the tree vectors (which typically does not correspond to a tree itself); 
-#' $distances gives the distance of each tree from the central vector; 
-#' $mindist is the minimum of these distances; 
-#' $treenumbers gives the numbers (and, if supplied, names) of the "median tree(s)": the tree(s) which achieve this minimum distance to the centre; 
-#' $trees if trees were supplied then this returns the median trees as a multiPhylo object. 
+#' \itemize{
+#' \item $centre is the "central vector", that is, the (weighted) mean of the tree vectors (which typically does not correspond to a tree itself); 
+#' \item $distances gives the distance of each tree from the central vector; 
+#' \item $mindist is the minimum of these distances; 
+#' \item $treenumbers gives the numbers (and, if supplied, names) of the "median tree(s)", that is, the tree(s) which achieve this minimum distance to the centre; 
+#' \item $trees if trees were supplied then this returns the median trees as a multiPhylo object. 
+#' }
 #' If groups are provided, then one list is returned for each group.
-#' If \code{return.lambda.function=TRUE} a function that produces this list for a given value of lambda is returned. 
+#' If \code{return.lambda.function=TRUE} then a function is returned that produces this list for a given value of lambda. 
 #'
 #'
 #' @import ape
