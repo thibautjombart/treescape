@@ -68,14 +68,16 @@ shinyServer(function(input, output, session) {
   getData <- reactive({
     out <- NULL
     dataType <- getDataType()
-
+    
     ## data is a distributed dataset
     if(dataType=="exDengue"){
-      data("DengueTrees", package="treescape", envir=environment())
+      if (!exists("DengueTrees")) { 
+        data("DengueTrees", package="treescape", envir=environment()) }
       out <- get("DengueTrees")
     }
     if(dataType=="exWoodmice"){
-      data("woodmiceTrees", package="treescape", envir=environment())
+      if (!exists("woodmiceTrees")) {
+        data("woodmiceTrees", package="treescape", envir=environment()) }
       out <- get("woodmiceTrees")
     }
     
