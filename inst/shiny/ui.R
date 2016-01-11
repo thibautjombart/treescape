@@ -1,10 +1,10 @@
 options(rgl.useNULL=TRUE)
 ## CHECKS ##
-if(!require("shiny")) stop("shiny is required")
-if(!require("rglwidget")) stop("rglwidget is required")
-if(!require("rgl")) stop("rgl is required")
-if(!require("RLumShiny")) stop("RLumShiny is required")
-if(!require("shinyBS")) stop("shinyBS is required")
+if(!require("shiny")) stop("package shiny is required")
+if(!require("rglwidget")) stop("package rglwidget is required")
+if(!require("rgl")) stop("package rgl is required")
+if(!require("RLumShiny")) stop("package RLumShiny is required")
+if(!require("shinyBS")) stop("package shinyBS is required")
 
 ## DEFINE UI ##
 shinyUI(
@@ -62,10 +62,12 @@ shinyUI(
                                   ## choose metric
                                   selectInput("treemethod", "Choose a tree summary:",
                                               choices=c(
-                                                "Kendall Colijn Metric" = "metric",
-                                                "Patristic distances" = "patristic",
-                                                "Number of nodes" = "nNodes",
-                                                "Abouheif's metric" = "Abouheif",
+                                                "Kendall Colijn" = "metric",
+                                                "Billera, Holmes, Vogtmann" = "BHV",
+                                                "Robinson Foulds (unrooted)" = "RF",
+                                                "Tip-tip path distance (unrooted)" = "nNodes",
+                                                "Tip-tip branch-length distance (unrooted)" = "patristic",
+                                                "Abouheif test" = "Abouheif",
                                                 "Sum of direct descendents" = "sumDD")),
                                   
                                   ## lambda, axes
@@ -80,6 +82,10 @@ shinyUI(
                                       #checkboxInput("showMedians", label=strong("Highlight median tree(s)?"), value=FALSE)
                                   ),
                                   
+                                  ## show Shepard plot?
+                                  checkboxInput("quality", label=strong("Assess quality of projection (Shepard plot)?"), value=FALSE),
+                                  bsTooltip("quality","A Shepard plot gives an indication of the quality of the MDS projection. It will be displayed below the main plot.", placement="right"),
+    
                                   
                                   ## find clusters?
                                   checkboxInput("findClusters", label=strong("Identify clusters?"), value=FALSE),
@@ -139,10 +145,13 @@ shinyUI(
                                   h2(HTML('<font color="#6C6CC4" size="6"> > Aesthetics </font>')),
                                   
                                   ## tree landscape or compare to single reference tree
-                                  radioButtons("plotType", "View",
-                                               choices=c("Full tree landscape"=1,"Distances from a reference tree"=2),
-                                               selected=1),
-                                  bsTooltip("plotType", "Choose whether to view the relative distances between all trees, or a 1-dimensional plot of their distances from a fixed reference tree"),
+                                  conditionalPanel(
+                                    condition="input.plot3D==2",
+                                    radioButtons("plotType", "View",
+                                                 choices=c("Full tree landscape"=1,"Distances from a reference tree"=2),
+                                                 selected=1),
+                                    bsTooltip("plotType", "Choose whether to view the relative distances between all trees, or a 1-dimensional plot of their distances from a fixed reference tree")
+                                    ),
                                   
                                   ## Dimensions (3D possible if 3 or more axes retained, and full tree landscape)
                                   conditionalPanel(condition="input.naxes>2",
@@ -284,6 +293,12 @@ shinyUI(
                          rglwidgetOutput("treescapePlot3D", width="800px")
                          ),
                          
+                         
+                         conditionalPanel(
+                           condition="input.quality",
+                           uiOutput("shep")
+                         ),
+                         
                          br(), br(),
                          
                          ## OUTPUT (save)
@@ -299,7 +314,12 @@ shinyUI(
                            condition="input.plot3D==3",
                            downloadButton("downloadMDS3Dhtml", "Save treescape 3D plot as interactive html")
                          ),
-                           
+                        
+                         conditionalPanel(
+                           condition="input.quality",
+                           downloadButton("downloadShep", "Save Shepard plot as png file")
+                         ),
+                         
                          ## save trees to nexus file
                          downloadButton('exporttrees', "Save trees to nexus file"),
                          

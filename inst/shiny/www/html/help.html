@@ -42,17 +42,21 @@ Two types of input files can be used:
 <br>
  <h4 id="tleanalysis"> <font color="#6C6CC4"> Analysis </font></h4>
 
- <b><font color="#6C6CC4">  Metric: </font></b>
- the metric to be used to measure distances between tips of the trees. Choose from:
+ <b><font color="#6C6CC4">  Tree summary / metric: </font></b>
+ the method to be used to measure distances between tips of the trees. Choose from:
 <ul>
-  <li> <i>Kendall Colijn metric</i>: the tree metric developed by Kendall & Colijn; used by default</li>
-  <li> <i>patristic</i>: the sum of branch lengths on the shortest path between pairs of tips 
+  <li> <i>Kendall Colijn</i>: the tree metric developed by Kendall & Colijn; used by default</li>
+  <li> <i>Billera, Holmes, Vogtmann</i>: the Billera, Holmes & Vogtmann tree metric (also known as the 'geodesic distance')</li>
+  <li> <i>Robinson Foulds (unrooted)</i>: the Robinson Foulds tree metric. Note that this implementation of the metric (from the package <i>phangorn</i>) 
+  treats the trees as unrooted and uses the unweighted edge-count distance (Robinson Foulds 1981).</li>
+  <li> <i>Tip-tip path distance (unrooted)</i>: metric by Steel and Penny which counts the number of internal nodes on the shortest path between each pair of tips.
+Along with its weighted version (below), this is also known as the tip distance, nodal distance, patristic distance and dissimilarity measure. Trees are treated as unrooted.  
+    (see <font face="Courier New">?nNodes</font> in the package <i>adephylo</i>)</li>
+  <li> <i>Tip-tip branch-length distance (unrooted)</i>: similar to the tip-tip path distance, but using the branch lengths instead of counting the edges. 
     (see <font face="Courier New">?distTips</font> in the package <i>adephylo</i>)</li>
-  <li> <i>Number of nodes</i>: the total number of internal nodes on the shortest path between pairs of tips 
+  <li> <i>Abouheif test</i>: the Abouheif test as presented in Pavoine et al. (2008)
     (see <font face="Courier New">?distTips</font> in the package <i>adephylo</i>)</li>
-  <li> <i>Abouheif</i>: the Abouheif metric
-    (see <font face="Courier New">?distTips</font> in the package <i>adephylo</i>)</li>
-  <li> <i>Sum of direct descendents</i>: another metric related to the Abouheif metric
+  <li> <i>Sum of direct descendents</i>: another test related to the Abouheif test
     (see <font face="Courier New">?distTips</font> in the package <i>adephylo</i>)</li>
 </ul>
 
@@ -62,6 +66,13 @@ Two types of input files can be used:
  <br>
  <b><font color="#6C6CC4">  Number of MDS axes retained : </font></b>
  The number of principal components to retain in the Metric Multidimensional Scaling (MDS). 
+ 
+ <br>
+ <b><font color="#6C6CC4">  Assess quality of projection (Shepard plot)? </font></b>
+ It is important to be aware of how well or otherwise the Multidimensional Scaling (MDS) plot represents the tree space. 
+ Euclidean metrics lend themselves to MDS plotting, whereas other metrics and summaries may prove difficult to accurately project into a small number of dimensions. 
+ A Shepard plot is a scatter plot of the actual distances in tree space (x-axis) versus the projected distances in the plot (y-axis).
+ The stronger the correlation, the better the MDS plot represents the true distances. 
 
  <br>
  <b><font color="#6C6CC4">  Identify clusters? </font></b>
@@ -112,8 +123,9 @@ Beneath the scatterplot are output options: the scatterplot, trees and analysis 
 Currently available options are:
 <ul>
   <li> save the 2D scatterplot as a png file or the 3D scatterplot as an interactive html file. Unfortunately a formal method to save a snapshot of the 3D plot is not yet supported, but you can right-click (Mac: long-click) on the image and select '<i>Save image as ...</i>'. </li>
+  <li> (if plotted) save the Shepard plot as a png file </li>
   <li> save trees to a Nexus file (.nex) </li>
-  <li> save results as .csv file (spreadsheet-like text file; compatible with most systems);
+  <li> save results as csv file (spreadsheet-like text file; compatible with most systems);
   results are output as a table where each row is a tree label, and columns contain optional
   clustering results as well as principal components (PC) of the Metric Multidimensional Scaling
   (MDS) of the tree space </li>

@@ -24,6 +24,7 @@
 #' @importFrom RLumShiny jscolorInput
 #' @importFrom rgl writeWebGL
 #' @importFrom shinyBS bsTooltip
+#' @importFrom distory dist.multiPhylo
 #' 
 #' 
 #' @export

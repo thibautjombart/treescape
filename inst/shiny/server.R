@@ -1,12 +1,13 @@
 ## DEFINE THE SERVER SIDE OF THE APPLICATION
 shinyServer(function(input, output, session) {
   ## LOAD PACKAGES
-  if(!require("ape")) stop("ape is required")
-  if(!require("ade4")) stop("ade4 is required")
-  if(!require("adegraphics")) stop("ade4 is required")
-  if(!require("treescape")) stop("treescape is required")
-  if(!require("adegenet")) stop("adegenet is required")
-  if(!require("phangorn")) stop("phangorn is required")
+  if(!require("ape")) stop("package ape is required")
+  if(!require("ade4")) stop("package ade4 is required")
+  if(!require("adegraphics")) stop("package ade4 is required")
+  if(!require("treescape")) stop("package treescape is required")
+  if(!require("adegenet")) stop("package adegenet is required")
+  if(!require("phangorn")) stop("package phangorn is required")
+  if(!require("distory")) stop("package distory is required")
   
   # suppress warning messages from creating temporary directories when 3d plotting
   suppressWarnings(warning("dir.create(dir)"))
@@ -320,12 +321,26 @@ shinyServer(function(input, output, session) {
       if(TM %in% c("patristic","nNodes","Abouheif","sumDD")){
         ## run treescape
         res <- treescape(x, method=TM, nf=naxes)
-      } else if(TM=="metric"){
+      } 
+      else if(TM=="metric"){
         ## don't actually need to call treescape here, to save on recomputation for varying lambda
         D <- getKCmatrix()
         pco <- getPCO()
         res <- list(D=D, pco=pco) 
       } 
+      else if(TM=="RF"){
+        # suppress unrooted warning
+        D <- suppressWarnings(RF.dist(x))
+        # suppress non-Euclidean distance warning
+        pco <- suppressWarnings(dudi.pco(D, scannf=FALSE, nf=naxes))
+        res <- list(D=D, pco=pco) 
+      }
+      else if(TM=="BHV"){
+        D <- dist.multiPhylo(x)
+        # suppress non-Euclidean distance warning
+        pco <- suppressWarnings(dudi.pco(D, scannf=FALSE, nf=naxes))
+        res <- list(D=D, pco=pco) 
+      }
     }
     
     ## return results
@@ -383,14 +398,9 @@ getClusters <- reactive({
       if(TM %in% c("patristic","nNodes","Abouheif","sumDD")){
         ## run findGroves
         res <- findGroves(x, method=TM, nf=naxes, nclust=nclust, clustering=clustmethod)
-      } else if(TM=="metric"){
+      } else if(TM %in% c("metric","BHV","RF")){
         res <- findGroves(getAnalysis(), nclust=nclust, clustering=clustmethod)
-      } else {
-        treeMethod <- adephylo::distTips
-        ## run findGroves
-        res <- findGroves(x, method=treeMethod, nf=naxes,
-                          nclust=nclust, clustering=clustmethod)
-      }
+      } 
     }
     
     ## return results
@@ -621,7 +631,7 @@ output$treescapePlot <- renderUI({
   else{
     i <- input$stretch
     height <- as.character(paste0(i,"px"))
-                      plotOutput("DistPlot", height = height)  
+    plotOutput("DistPlot", height = height)  
     }
 })
 
@@ -685,6 +695,33 @@ getPlot3d <- reactive({
               type="s", size=getPointsize(),
               xlab="",ylab="",zlab="",
               col=cols3d, add=FALSE)
+})
+
+
+## make Shepard plot
+getShep <- reactive({
+  res <- getAnalysis()
+  shep <- Shepard(res$D,as.matrix(res$pco$li))
+})
+
+output$shepPlot <- renderPlot({
+  shep <- getShep()
+  labcol <- getLabcol()
+  if (!is.null(shep)){
+    withProgress(message = 'Loading Shepard plot',
+                 value = 0, {
+                   for (i in 1:15) {
+                     incProgress(1/15)
+                   }
+                   
+                   plot(shep, pch=19, cex=0.5, col=labcol, xlab="Distance in tree space", ylab="Distance on MDS plot")
+                   
+                 })
+  }
+}, res=120)
+
+output$shep <- renderUI({
+  plotOutput("shepPlot", width="800px", height="800px")
 })
 
 
@@ -869,6 +906,18 @@ output$densiTree <- renderPlot({
     contentType = 'html'  
   )
   
+  ## EXPORT SHEPARD PLOT AS PNG ##
+  output$downloadShep <- downloadHandler(
+    filename = function() { paste0(getDataSet(),"Shepard.png") },
+    content = function(file) {
+      shep <- getShep()
+      labcol <- getLabcol()
+      png(file=file, width = 10, height = 10, units = 'in', res = 500)
+      plot(shep, pch=19, cex=0.5, col=labcol, xlab="Distance in tree space", ylab="Distance on MDS plot")
+      dev.off()
+    },
+    contentType = 'image/png'
+  )
 
 
   
