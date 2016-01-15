@@ -18,6 +18,7 @@
 #' @importFrom adegraphics s.class 
 #' @importFrom adegraphics s.label 
 #' @importFrom adegraphics s1d.barchart
+#' @importFrom MASS Shepard
 #' @importFrom phangorn Children
 #' @importFrom phangorn Descendants
 #' @importFrom utils packageDescription

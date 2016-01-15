@@ -8,6 +8,7 @@ shinyServer(function(input, output, session) {
   if(!require("adegenet")) stop("package adegenet is required")
   if(!require("phangorn")) stop("package phangorn is required")
   if(!require("distory")) stop("package distory is required")
+  if(!require("MASS")) stop("package MASS is required")
   
   # suppress warning messages from creating temporary directories when 3d plotting
   suppressWarnings(warning("dir.create(dir)"))
@@ -65,10 +66,12 @@ shinyServer(function(input, output, session) {
   getRandSamp <- reactive({
     input$randSamp
   })
+  
   ## GET DATA ##
   getData <- reactive({
     out <- NULL
     dataType <- getDataType()
+    samp <- NULL
     
     ## data is a distributed dataset
     if(dataType=="exDengue"){
@@ -114,7 +117,8 @@ shinyServer(function(input, output, session) {
       sampleSize <- getSampleSize()
       if (l>sampleSize) {
         updateSliderInput(session, "sampleSize", "Size of random sample:", value=sampleSize, min=10, max=l, step=10)
-        out <- out[sample(1:l,sampleSize)]
+        samp <- sample(1:l,sampleSize)
+        out <- out[samp]
       }
       else{ # could only happen initially if <=10 trees supplied
         updateSliderInput(session, "sampleSize", "Size of random sample:", value=l, min=3, max=l, step=1)
@@ -147,12 +151,16 @@ shinyServer(function(input, output, session) {
     }
     
     ## return data
-    return(out)
+    # need to pass on the sample so that metaData can be sampled too
+    if(is.null(samp)) samp <- 1:length(out)
+    
+    return(list(out=out,samp=samp))
   }) # end getData
   
   ## GET number of trees
   getLengthData <- reactive({
-    x <- getData()
+    data <- getData()
+    x <- data$out
     validate(
       need(!is.null(x), "Loading data set")
     )
@@ -161,7 +169,8 @@ shinyServer(function(input, output, session) {
   
   ## GET tree names
   getTreeNames <- reactive({
-    x <- getData()
+    data <- getData()
+    x <- data$out
     validate(
       need(!is.null(x), "Loading data set")
     )
@@ -170,7 +179,8 @@ shinyServer(function(input, output, session) {
   
   ## GET tip labels
   getTipLabels <- reactive({
-    x <- getData()
+    data <- getData()
+    x <- data$out
     validate(
       need(!is.null(x), "Loading data set")
     )
@@ -239,7 +249,8 @@ shinyServer(function(input, output, session) {
 
   # GET the tree vectors as functions of lambda
   getKCtreeVecs <- reactive({
-    x <- getData()
+    data <- getData()
+    x <- data$out
     validate(
       need(!is.null(x), "Loading data set")
     )
@@ -282,7 +293,8 @@ shinyServer(function(input, output, session) {
   })
   
   getMedTree <- reactive({
-    x <- getData()
+    data <- getData()
+    x <- data$out
     whichClust <- input$selectedMedTree
     medList <- getMedTreesList()
     if(whichClust=="all"){
@@ -308,7 +320,8 @@ shinyServer(function(input, output, session) {
 
   ## GET ANALYSIS ##
   getAnalysis <- reactive({
-    x <- getData()
+    data <- getData()
+    x <- data$out
     validate(
       need(!is.null(x), "Loading data set")
     )
@@ -383,7 +396,8 @@ getClusters <- reactive({
                       choices=choices, selected="all")
   
     ## get dataset
-    x <- getData()
+    data <- getData()
+    x <- data$out
     validate(
       need(!is.null(x), "Loading data set")
     )
@@ -434,8 +448,8 @@ getClusters <- reactive({
   
   ## SELECTION OF NUMBER OF CLUSTERS
   output$nclust <- renderUI({
-    if(!is.null(x <- getData())) {
-      nmax <- length(x)
+    if(!is.null(data <- getData())) {
+      nmax <- length(data$out)
     } else {
       nmax <- 100
     }
@@ -456,7 +470,8 @@ getClusters <- reactive({
   ## GET METADATA ## for colouring trees by type
   getMetaData <- reactive({
     out <- NULL
-    
+    data <- getData()
+    samp <- data$samp
     ## data is an input file
     if(input$clusterType=="meta" && !is.null(input$metadatafile)){
       ## need to rename input file
@@ -483,6 +498,7 @@ getClusters <- reactive({
       if(class(out)=="list") {out <- unlist(out)}
       
       l <- getLengthData()
+      out <- out[samp]
       validate(
         need(length(out)==l, paste0("The length of the metadata must be the same as the number of trees, which is ", l, ". However, the length of the input is ", length(out)))
       )
@@ -732,7 +748,8 @@ getTreeChoice <- reactive({
 
 
 getTree <- reactive({
-  x <- getData()
+  data <- getData()
+  x <- data$out
   validate(
     need(!is.null(x), "Loading data set")
   )
@@ -809,13 +826,15 @@ getDensiTree <- reactive({
     NULL
   }
   else if(clusterNo=="all"){
-    x <- getData()
+    data <- getData()
+    x <- data$out
     medList <- getMedTreesList()
     med <- x[[medList[[1]]]]
     return(list(trees=x,con=med))
   }
   else{
-    x <- getData()
+    data <- getData()
+    x <- data$out
     clusts <- getClusters()
     clustTrees <- x[which(clusts$groups==as.numeric(clusterNo))]
     medList <- getMedTreesList()
@@ -845,7 +864,8 @@ output$densiTree <- renderPlot({
     filename = function() { paste(getDataSet(), '.nex', sep='') },
     content = function(file) {
       if(!require(ape)) stop("ape is required to save trees into nexus file")
-      x <- getData()
+      data <- getData()
+      x <- data$out
       if(!is.null(x) && inherits(x, "multiPhylo")) ape::write.nexus(x, file=file)
     })
   
@@ -853,7 +873,8 @@ output$densiTree <- renderPlot({
   output$exportrestocsv <- downloadHandler(
     filename = function() { paste(getDataSet(), "-analysis", '.csv', sep='') },
     content = function(file) {
-      x <- getData()
+      data <- getData()
+      x <- data$out
       res <- getClusters()
       if(!is.null(res)){
         tab <- cbind.data.frame(res$groups, res$treescape$pco$li)
@@ -873,7 +894,8 @@ output$densiTree <- renderPlot({
   output$exportrestordata <- downloadHandler(
     filename = function() { paste(getDataSet(), "-analysis", '.RData', sep='') },
     content = function(file) {
-      trees <- getData()
+      data <- getData()
+      trees <- data$out
       analysis <- getClusters()
       if(is.null(analysis)) analysis <- getAnalysis()
       if(!is.null(analysis)) {
