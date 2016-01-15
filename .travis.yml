@@ -6,6 +6,9 @@ sudo: required
 
 env:
   - WARNINGS_ARE_ERRORS=false
+  
+r_binary_packages:
+  - phangorn
 
 notifications:
   email:
