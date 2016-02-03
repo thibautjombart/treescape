@@ -5,3 +5,4 @@ README.Rmd
 ^\.Rproj\.user$
 inst/shiny/.RData
 inst/shiny/.Rhistory
+figures/
