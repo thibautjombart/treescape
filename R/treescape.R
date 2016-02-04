@@ -6,8 +6,10 @@
 #' @param x an object of the class multiPhylo
 #' @param method the method for summarising the tree as a vector. 
 #' Choose from: 
-#' \code{treeVec} (default) the Kendall Colijn metric vector. 
-#' The others are inherited from \code{distTips} in \code{adephylo}:
+#' \code{treeVec} (default) the Kendall Colijn metric vector
+#' \code{RF} the Robinson Foulds metric using \code{RF.dist} from package \code{phangorn} (Note: this considers the trees as unrooted and issues a corresponding warning)
+#' \code{BHV} the Billera, Holmes Vogtmann metric using \code{dist.multiPhylo} from package \code{distory}
+#' others inherited from \code{distTips} in \code{adephylo}:
 #' \itemize{
 #' \item \code{patristic}: for each pair of tips, the sum of branch lengths on the path between them
 #' \item \code{nNodes}: for each pair of tips, the number of nodes on the path between them
@@ -25,6 +27,8 @@
 #' @importFrom ade4 dudi.pco
 #' @importFrom adephylo distTips
 #' @importFrom stats dist
+#' @importFrom phangorn RF.dist
+#' @importFrom distory dist.multiPhylo
 #'
 #' @examples
 #'
@@ -91,15 +95,24 @@ treescape <- function(x, method="treeVec", nf=NULL, return.tree.vectors=FALSE, .
     ## get data.frame of all summary vectors ##
     if (method=="treeVec") {
       df <- t(data.frame(lapply(x, function(e) as.vector(treeVec(e, ...)))))
+      ## get pairwise Euclidean distances ##
+      D <- dist(df)
     }
     else if(method %in% c("patristic","nNodes","Abouheif","sumDD")){
       df <- t(data.frame(lapply(x, function(e) as.vector(adephylo::distTips(e,method=method,...)))))
+      ## get pairwise Euclidean distances ##
+      D <- dist(df)
+    }
+    else if(method=="RF"){
+      D <- RF.dist(x)
+      # MAKE EUCLIDEAN!
+    }
+    else if(method=="BHV"){
+      D <- dist.multiPhylo(x)
+      # MAKE EUCLIDEAN!
     }
       
-    
-    
-    ## get pairwise Euclidean distances ##
-    D <- dist(df)
+
     attr(D,"Labels") <- lab # restore labels
 
     ## perform PCoA/MDS ##
