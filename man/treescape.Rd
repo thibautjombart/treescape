@@ -10,8 +10,8 @@ treescape(x, method = "treeVec", nf = NULL, return.tree.vectors = FALSE,
 \arguments{
 \item{x}{an object of the class multiPhylo}
 
-\item{method}{the method for summarising the tree as a vector. 
-Choose from: 
+\item{method}{the method for summarising the tree as a vector.
+Choose from:
 \code{treeVec} (default) the Kendall Colijn metric vector
 \code{RF} the Robinson Foulds metric using \code{RF.dist} from package \code{phangorn} (Note: this considers the trees as unrooted and issues a corresponding warning)
 \code{BHV} the Billera, Holmes Vogtmann metric using \code{dist.multiPhylo} from package \code{distory}
@@ -54,14 +54,14 @@ geom_point(size=6, shape=1, colour="gray50") + # grey edges
 geom_point(size=6, alpha=0.2, colour="navy") + # transparent blue points
 xlab("") + ylab("") + theme_bw(base_family="") # remove axis labels and grey background
 }
- 
+
 \dontrun{
 if(require(rgl)){
 plot3d(woodmicedf[,1], woodmicedf[,2], woodmicedf[,3], type="s", size=1.5,
 col="navy", alpha=0.5, xlab="", ylab="", zlab="")
 }
 }
- 
+
 
 }
 \author{
