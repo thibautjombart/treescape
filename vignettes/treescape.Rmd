@@ -166,7 +166,7 @@ One simple approach is:
 4. cut the dendrogram to obtain clusters
  
 In *treescape*, the function `findGroves` implements this approach, offering various clustering options (see `?findGroves`). Here we supply the function with our `treescape` output `wm.res` since we have already calculated it, but it is also possible to skip the steps above and directly supply `findGroves` with a multiPhylo list of trees.
-```{r findgroves, cache=TRUE}
+```{r findgroves, cache=FALSE}
 wm.groves <- findGroves(wm.res, nclust=6)
 names(wm.groves)
 ```
