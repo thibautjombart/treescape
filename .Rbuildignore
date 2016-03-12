@@ -6,3 +6,4 @@ README.Rmd
 inst/shiny/.RData
 inst/shiny/.Rhistory
 figures/
+^.tar.gz
