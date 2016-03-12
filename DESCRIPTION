@@ -1,10 +1,10 @@
 Package: treescape
 Title: Statistical Exploration of Landscapes of Phylogenetic Trees
-Version: 1.13.18
+Version: 1.8.16
 Authors@R: c(TJ=person("Thibaut", "Jombart", email="thibaut.jombart@gmail.com", role = c("aut")),
-     MK=person("Michelle", "Kendall", email="m.kendall@imperial.ac.uk", role = c("aut", "cre")),
-	   JAG=person("Jacob", "Almagro-Garcia", role = c("aut")),	
-	   CC=person("Caroline", "Colijn", role = c("aut")))
+ 	     MK=person("Michelle", "Kendall", email="m.kendall@imperial.ac.uk", role = c("aut", "cre")),
+	     JAG=person("Jacob", "Almagro-Garcia", role = c("aut")),
+	     CC=person("Caroline", "Colijn", role = c("aut")))
 Maintainer: Michelle Kendall <m.kendall@imperial.ac.uk>
 Description: Tools for the exploration of distributions of phylogenetic trees.
     This package includes a shiny interface which can be started from R using
@@ -24,7 +24,7 @@ Imports:
     phangorn,
     Rcpp,
     rgl,
-	  rglwidget,
+    rglwidget,
     RLumShiny,
     shiny,
     shinyBS,
