@@ -12,7 +12,7 @@ vignette: >
 
 ```{r setup, echo=FALSE}
 # set global chunk options: images will be 7x5 inches
-knitr::opts_chunk$set(dpi=200, out.width="600px", fig.path="figs/")
+knitr::opts_chunk$set(fig.width=7, fig.height=7, fig.path="figs/")
 options(digits = 4)
 ```
 
@@ -331,9 +331,9 @@ Authors / Contributors
 Authors:
 * [Thibaut Jombart](https://sites.google.com/site/thibautjombart/)
 * [Michelle Kendall](http://www.imperial.ac.uk/people/m.kendall)
-* [Jacob Almagro-Garcia](http://www.well.ox.ac.uk/jacob-almagro-garcia)
 
 Contributors:
+* [Jacob Almagro-Garcia](http://www.well.ox.ac.uk/jacob-almagro-garcia)
 * [Caroline Colijn](http://www.imperial.ac.uk/people/c.colijn)
 
 Maintainer of the CRAN version:
