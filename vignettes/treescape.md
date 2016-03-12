@@ -1,7 +1,7 @@
 ---
 title: "Exploration of landscapes of phylogenetic trees"
 author: "Thibaut Jombart, Michelle Kendall"
-date: "2015-10-28"
+date: "2016-03-12"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
@@ -38,6 +38,14 @@ Then, to load the package, use:
 library("treescape")
 ```
 
+```
+## Loading required package: ape
+```
+
+```
+## Loading required package: ade4
+```
+
 
 Content overview
 -------------
@@ -67,7 +75,52 @@ We first load *treescape*, and the packages required for graphics:
 library("treescape")
 library("ade4")
 library("adegenet")
+```
+
+```
+## 
+##    /// adegenet 2.0.1 is loaded ////////////
+## 
+##    > overview: '?adegenet'
+##    > tutorials/doc/questions: 'adegenetWeb()' 
+##    > bug reports/feature requests: adegenetIssues()
+```
+
+```
+## 
+## Attaching package: 'adegenet'
+```
+
+```
+## The following object is masked from 'package:treescape':
+## 
+##     .render.server.info
+```
+
+```r
 library("adegraphics")
+```
+
+```
+## 
+## Attaching package: 'adegraphics'
+```
+
+```
+## The following objects are masked from 'package:ade4':
+## 
+##     kplotsepan.coa, s.arrow, s.class, s.corcircle, s.distri,
+##     s.image, s.label, s.logo, s.match, s.traject, s.value,
+##     table.value, triangle.class
+```
+
+```
+## The following object is masked from 'package:ape':
+## 
+##     zoom
+```
+
+```r
 library("ggplot2")
 ```
 
@@ -141,7 +194,7 @@ Pairwise distances can be visualised using *adegraphics*:
 table.image(res$D, nclass=30)
 ```
 
-<img src="figs/distances-1.png" title="plot of chunk distances" alt="plot of chunk distances" width="400px" />
+![plot of chunk distances](figs/distances-1.png)
 
 ```r
 ## table.value with some customization
@@ -149,7 +202,7 @@ table.value(res$D, nclass=5, method="color",
             symbol="circle", col=redpal(5))
 ```
 
-<img src="figs/distances-2.png" title="plot of chunk distances" alt="plot of chunk distances" width="400px" />
+![plot of chunk distances](figs/distances-2.png)
 
 The best representation of these distances in a 2-dimensional space is given by the first 2 PCs of the MDS.
 These can be visualised using *adegraphics*'s function `scatter`:
@@ -158,7 +211,7 @@ These can be visualised using *adegraphics*'s function `scatter`:
 scatter(res$pco)
 ```
 
-<img src="figs/treescapescatter-1.png" title="plot of chunk treescapescatter" alt="plot of chunk treescapescatter" width="400px" />
+![plot of chunk treescapescatter](figs/treescapescatter-1.png)
 
 Alternatively, the function `plotGroves` can be used:
 
@@ -167,7 +220,7 @@ Alternatively, the function `plotGroves` can be used:
 plotGroves(res$pco, lab.show=TRUE, lab.cex=1.5)
 ```
 
-<img src="figs/plotgroves-1.png" title="plot of chunk plotgroves" alt="plot of chunk plotgroves" width="400px" />
+![plot of chunk plotgroves](figs/plotgroves-1.png)
 
 The functionality of `treecsape` can be further illustrated using *ape*'s dataset *woodmouse*, from which we built the 201 trees supplied in `woodmiceTrees` using the neighbour-joining and bootstrapping example from the *ape* documentation. 
 
@@ -221,28 +274,28 @@ head(wm.res$pco$li)
 plotGroves(wm.res$pco, lab.show=TRUE, lab.optim=FALSE)
 ```
 
-<img src="figs/woodmicePlots-1.png" title="plot of chunk woodmicePlots" alt="plot of chunk woodmicePlots" width="400px" />
+![plot of chunk woodmicePlots](figs/woodmicePlots-1.png)
 
 ```r
 ## visualising density of points
 s.kde2d(wm.res$pco$li)
 ```
 
-<img src="figs/woodmicePlots-2.png" title="plot of chunk woodmicePlots" alt="plot of chunk woodmicePlots" width="400px" />
+![plot of chunk woodmicePlots](figs/woodmicePlots-2.png)
 
 ```r
 ## alternative visualisation
 s.density(wm.res$pco$li, col=redpal(100), bandwidth=3)
 ```
 
-<img src="figs/woodmicePlots-3.png" title="plot of chunk woodmicePlots" alt="plot of chunk woodmicePlots" width="400px" />
+![plot of chunk woodmicePlots](figs/woodmicePlots-3.png)
 
 ```r
 ## same, other palette
 s.density(wm.res$pco$li, col=rev(transp(spectral(100),.5)), bandwidth=3)
 ```
 
-<img src="figs/woodmicePlots-4.png" title="plot of chunk woodmicePlots" alt="plot of chunk woodmicePlots" width="400px" />
+![plot of chunk woodmicePlots](figs/woodmicePlots-4.png)
 
 ```r
 ## alternative using ggplot2
@@ -253,7 +306,7 @@ geom_point(size=6, alpha=0.2, colour="navy") + # transparent blue points
 xlab("") + ylab("") + theme_bw(base_family="") # remove axis labels and grey background
 ```
 
-<img src="figs/woodmicePlots-5.png" title="plot of chunk woodmicePlots" alt="plot of chunk woodmicePlots" width="400px" />
+![plot of chunk woodmicePlots](figs/woodmicePlots-5.png)
 
 Note that alternatively, the function `multiDist` simply performs the pairwise comparison of trees and outputs a distance matrix. 
 This function may be preferable for large datasets, and when principal co-ordinate analysis is not required. 
@@ -294,21 +347,21 @@ The results can be plotted directly using `plotGroves` (see `?plotGroves` for op
 plotGroves(wm.groves)
 ```
 
-<img src="figs/plotgroves2-1.png" title="plot of chunk plotgroves2" alt="plot of chunk plotgroves2" width="400px" />
+![plot of chunk plotgroves2](figs/plotgroves2-1.png)
 
 ```r
 ## alternative with inertia ellipses
 plotGroves(wm.groves, type="ellipse")
 ```
 
-<img src="figs/plotgroves2-2.png" title="plot of chunk plotgroves2" alt="plot of chunk plotgroves2" width="400px" />
+![plot of chunk plotgroves2](figs/plotgroves2-2.png)
 
 ```r
 ## plot axes 2-3
 plotGroves(wm.groves, xax=2, yax=3)
 ```
 
-<img src="figs/plotgroves2-3.png" title="plot of chunk plotgroves2" alt="plot of chunk plotgroves2" width="400px" />
+![plot of chunk plotgroves2](figs/plotgroves2-3.png)
 
 
 ```r
@@ -316,7 +369,7 @@ plotGroves(wm.groves, xax=2, yax=3)
 plotGroves(wm.groves, bg="black", col.pal=lightseasun, lab.show=TRUE, lab.col="white", lab.cex=1.5)
 ```
 
-<img src="figs/plotgroves3-1.png" title="plot of chunk plotgroves3" alt="plot of chunk plotgroves3" width="400px" />
+![plot of chunk plotgroves3](figs/plotgroves3-1.png)
 
 
 
@@ -353,7 +406,7 @@ tre <- medTree(woodmiceTrees)$trees[[1]]
 plot(tre,type="cladogram",edge.width=3, cex=0.8)
 ```
 
-<img src="figs/woodmiceMedian-1.png" title="plot of chunk woodmiceMedian" alt="plot of chunk woodmiceMedian" width="400px" />
+![plot of chunk woodmiceMedian](figs/woodmiceMedian-1.png)
 
 However, a more complete and accurate summary of the data can be given by finding a summary tree from each cluster.
 This is achieved using the `groups` argument of `medTree`:
@@ -401,7 +454,7 @@ wm3.res <- treescape(woodmiceTrees,nf=2,emphasise.tips=c("No1007S","No1208S","No
 plotGroves(wm3.res$pco, lab.show=TRUE, lab.optim=FALSE)
 ```
 
-<img src="figs/woodmice-tip-emphasis-1.png" title="plot of chunk woodmice-tip-emphasis" alt="plot of chunk woodmice-tip-emphasis" width="400px" />
+![plot of chunk woodmice-tip-emphasis](figs/woodmice-tip-emphasis-1.png)
 
 It can be seen from the scale of the plot and the density of clustering that the trees are now separated into more distinct clusters.
 
@@ -410,7 +463,7 @@ wm3.groves <- findGroves(woodmiceTrees,nf=3,nclust=6,emphasise.tips=c("No1007S",
 plotGroves(wm3.groves, type="ellipse")
 ```
 
-<img src="figs/findgroves-with-emphasis-1.png" title="plot of chunk findgroves-with-emphasis" alt="plot of chunk findgroves-with-emphasis" width="400px" />
+![plot of chunk findgroves-with-emphasis](figs/findgroves-with-emphasis-1.png)
 
 Conversely, where the structure of a particular clade is not of interest (for example, lineages within an outgroup which was only included for rooting purposes), those tips can be given a weight less than 1 so as to give them less emphasis in the comparison. We note that although it is possible to give tips a weighting of 0, we advise caution with this as the underlying function will no longer be guaranteed to be a metric. That is, a distance of 0 between two trees will no longer necessarily imply that the trees are identical. In most cases it would be wiser to assign a very small weighting to tips which are not of interest.
 
@@ -438,7 +491,7 @@ treeVec(tree)
 ```
 
 ```
-##  [1] 0 3 1 2 4 0 0 0 0 1 2 3 1 1 2 1 1 1 1 1 1
+##  [1] 0 1 0 0 0 0 1 1 2 0 0 0 2 1 1 1 1 1 1 1 1
 ```
 
 ```r
@@ -447,9 +500,9 @@ treeVec(tree,0.5)
 ```
 
 ```
-##  [1] 0.0000 2.1653 0.6671 1.4171 2.8537 0.0000 0.0000 0.0000 0.0000 0.6671
-## [11] 1.4171 2.1653 0.6671 0.6671 1.4171 0.5646 0.7231 0.6609 0.5466 0.6653
-## [21] 0.5655
+##  [1] 0.0000 0.7726 0.0000 0.0000 0.0000 0.0000 0.9515 0.9515 1.9060 0.0000
+## [11] 0.0000 0.0000 1.7639 0.9515 0.9515 0.7864 0.9790 0.7679 0.7165 0.7359
+## [21] 0.7192
 ```
 
 ```r
@@ -460,9 +513,9 @@ vecAsFunction(0.5)
 ```
 
 ```
-##  [1] 0.0000 2.1653 0.6671 1.4171 2.8537 0.0000 0.0000 0.0000 0.0000 0.6671
-## [11] 1.4171 2.1653 0.6671 0.6671 1.4171 0.5646 0.7231 0.6609 0.5466 0.6653
-## [21] 0.5655
+##  [1] 0.0000 0.7726 0.0000 0.0000 0.0000 0.0000 0.9515 0.9515 1.9060 0.0000
+## [11] 0.0000 0.0000 1.7639 0.9515 0.9515 0.7864 0.9790 0.7679 0.7165 0.7359
+## [21] 0.7192
 ```
 
 The metric -- the distance between two trees -- is the Euclidean distance between these vectors:
@@ -482,7 +535,7 @@ treeDist(tree_a,tree_b)
 ```
 
 ```
-## [1] 5.657
+## [1] 5.831
 ```
 
 ```r
@@ -491,7 +544,7 @@ treeDist(tree_a,tree_b,1)
 ```
 
 ```
-## [1] 3.544
+## [1] 3.101
 ```
 
 
@@ -510,9 +563,9 @@ Authors / Contributors
 Authors:
 * [Thibaut Jombart](https://sites.google.com/site/thibautjombart/)
 * [Michelle Kendall](http://www.imperial.ac.uk/people/m.kendall)
-* [Jacob Almagro-Garcia](http://www.well.ox.ac.uk/jacob-almagro-garcia)
 
 Contributors:
+* [Jacob Almagro-Garcia](http://www.well.ox.ac.uk/jacob-almagro-garcia)
 * [Caroline Colijn](http://www.imperial.ac.uk/people/c.colijn)
 
 Maintainer of the CRAN version:
