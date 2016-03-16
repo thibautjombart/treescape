@@ -26,6 +26,7 @@ Imports:
     rgl,
     rglwidget,
     RLumShiny,
+    scatterD3,
     shiny,
     shinyBS,
     utils

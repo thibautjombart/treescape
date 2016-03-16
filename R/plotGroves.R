@@ -160,3 +160,92 @@ plotGroves <- function(x, groups=NULL, xax=1, yax=2,
     ## RETURN ##
     return(out)
 } # end plotGroves
+
+
+
+
+
+
+######################
+### ScatterD3 version
+######################
+
+#'
+#' Scatterplot of groups of trees using \code{scatterD3}
+#'
+#' This function displays the scatterplot of the Multidimensional
+#' Scaling (MDS) output by treescape, superimposing group information
+#' (derived by \code{\link{findGroves}}) using colors.
+#' \code{scatterD3} enables interactive plotting based on d3.js, including zooming, panning and fading effects in the legend.
+#'
+#' @author Thibaut Jombart \email{thibautjombart@@gmail.com}
+#'
+#' @import scatterD3
+#' @importFrom adegenet funky
+#' @importFrom adegenet bluepal
+#' @importFrom adegenet transp
+#'
+#' @param x a list returned by \code{\link{findGroves}} or a MDS with class \code{dudi}
+#' @param groups a factor defining groups of trees. If x is a list returned by \code{\link{findGroves}} these will be detected automatically.
+#' @param xax a number indicating which principal component to be used as 'x' axis
+#' @param yax a number indicating which principal component to be used as 'y' axis
+#' @param treeNames if a list of tree names or labels are given, these will be plotted alongside the points. Their size can be altered using \code{labels_size} - see \code{?scatterD3} for more information.
+#' @param xlab the label for the 'x' axis. Defaults to use the value of 'xax'
+#' @param ylab the label for the 'y' axis. Defaults to use the value of 'yax'
+#' @param symbol_var a factor by which to vary the symbols in the plot
+#' @param ... further arguments passed to \code{\link{scatterD3}}
+#'
+#' @return
+#' A \code{scatterD3} plot
+#' 
+#' 
+#' @seealso
+#' \code{\link{findGroves}} to find any clusters in the tree landscape
+#' 
+#'
+#' @examples
+#'
+#' \dontrun{
+#' if(require("adegenet") && require("scatterD3")){
+#' ## load data
+#' data(woodmiceTrees)
+#'
+#' ## run findGroves: treescape+clustering
+#' res <- findGroves(woodmiceTrees, nf=5, nclust=6)
+#'
+#' ## basic plot
+#' plotGrovesD3(res)
+#'
+#' ## adding tree labels
+#' plotGrovesD3(res, treeNames=1:201)
+#'
+#' ## customizing: vary the colour and the symbol by group
+#' plotGrovesD3(res, symbol_var=res$groups)
+#'
+#' ## example with no group information
+#' plotGrovesD3(res$treescape$pco)
+#' }
+#' }
+#'
+#' @export
+plotGrovesD3 <- function(x, groups=NULL, xax=1, yax=2, treeNames=NULL, symbol_var=NULL,
+                         xlab=paste0("Axis ",xax), ylab=paste0("Axis ",yax), ...){
+  ## HANDLE ARGUMENTS ##
+  ## checks
+
+  ## x is a list returned by findGroves
+  if(is.list(x) && !is.data.frame(x) && !inherits(x,"dudi")){
+    if(is.null(x$treescape)) stop("if x is a list, it should contain a slot $treescape")
+    groups <- x$groups
+    x <- x$treescape$pco$li
+  }
+  
+  ## x is a dudi object
+  if(inherits(x,"dudi")){
+    eig <- x$eig
+    x <- x$li
+  }
+
+  scatterD3(x[,xax],x[,yax], lab=treeNames, col_var=groups, symbol_var=symbol_var,
+            xlab=xlab, ylab=ylab, ...)
+} # end plotGrovesD3
