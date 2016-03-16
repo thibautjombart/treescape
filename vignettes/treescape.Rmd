@@ -46,17 +46,20 @@ The main functions implemented in *treescape* are:
 * __`treescape`__: explore landscapes of phylogenetic trees
 * __`treescapeServer`__: open up an application in a web browser for an interactive exploration of the diversity in a set of trees
 * __`findGroves`__: identify clusters of similar trees
-* __`plotGroves`__: scatterplot of groups of trees
+* __`plotGroves`__: scatterplot of groups of trees, and __`plotGrovesD3`__ which enables interactive plotting based on d3.js
 * __`medTree`__: find geometric median tree(s) to summarise a group of trees
 
 Other functions are central to the computations of distances between trees:
 * __`treeVec`__: characterise a tree by a vector
 * __`treeDist`__: find the distance between two tree vectors
 * __`multiDist`__: find the pairwise distances of a list of trees
+* __`refTreeDist`__: find the distances of a list of trees from a reference tree
 
 
 Distributed datasets include:
 * __`woodmiceTrees`__: illustrative set of 201 trees built using the neighbour-joining and bootstrapping example from the *woodmice* dataset in the *ape* documentation.
+* __`DengueTrees`__: 500 trees sampled from a BEAST posterior set of trees from Drummond, A. J., and Rambaut, A. (2007) BEAST: Bayesian evolutionary analysis by sampling trees.
+
 
 
 Exploring trees with *treescape*
@@ -145,6 +148,7 @@ geom_point(size=6, alpha=0.2, colour="navy") + # transparent blue points
 xlab("") + ylab("") + theme_bw(base_family="") # remove axis labels and grey background
 ```
 
+
 Note that alternatively, the function `multiDist` simply performs the pairwise comparison of trees and outputs a distance matrix. 
 This function may be preferable for large datasets, and when principal co-ordinate analysis is not required. 
 It includes an option to save memory at the expense of computation time.
@@ -189,7 +193,6 @@ plotGroves(wm.groves, xax=2, yax=3)
 plotGroves(wm.groves, bg="black", col.pal=lightseasun, lab.show=TRUE, lab.col="white", lab.cex=1.5)
 
 ```
-
 
 
 `treescapeServer`: a web application for *treescape*

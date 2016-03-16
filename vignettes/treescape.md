@@ -1,7 +1,7 @@
 ---
 title: "Exploration of landscapes of phylogenetic trees"
 author: "Thibaut Jombart, Michelle Kendall"
-date: "2016-03-12"
+date: "2016-03-16"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
@@ -38,14 +38,6 @@ Then, to load the package, use:
 library("treescape")
 ```
 
-```
-## Loading required package: ape
-```
-
-```
-## Loading required package: ade4
-```
-
 
 Content overview
 -------------
@@ -53,17 +45,20 @@ The main functions implemented in *treescape* are:
 * __`treescape`__: explore landscapes of phylogenetic trees
 * __`treescapeServer`__: open up an application in a web browser for an interactive exploration of the diversity in a set of trees
 * __`findGroves`__: identify clusters of similar trees
-* __`plotGroves`__: scatterplot of groups of trees
+* __`plotGroves`__: scatterplot of groups of trees, and __`plotGrovesD3`__ which enables interactive plotting based on d3.js
 * __`medTree`__: find geometric median tree(s) to summarise a group of trees
 
 Other functions are central to the computations of distances between trees:
 * __`treeVec`__: characterise a tree by a vector
 * __`treeDist`__: find the distance between two tree vectors
 * __`multiDist`__: find the pairwise distances of a list of trees
+* __`refTreeDist`__: find the distances of a list of trees from a reference tree
 
 
 Distributed datasets include:
 * __`woodmiceTrees`__: illustrative set of 201 trees built using the neighbour-joining and bootstrapping example from the *woodmice* dataset in the *ape* documentation.
+* __`DengueTrees`__: 500 trees sampled from a BEAST posterior set of trees from Drummond, A. J., and Rambaut, A. (2007) BEAST: Bayesian evolutionary analysis by sampling trees.
+
 
 
 Exploring trees with *treescape*
@@ -75,52 +70,7 @@ We first load *treescape*, and the packages required for graphics:
 library("treescape")
 library("ade4")
 library("adegenet")
-```
-
-```
-## 
-##    /// adegenet 2.0.1 is loaded ////////////
-## 
-##    > overview: '?adegenet'
-##    > tutorials/doc/questions: 'adegenetWeb()' 
-##    > bug reports/feature requests: adegenetIssues()
-```
-
-```
-## 
-## Attaching package: 'adegenet'
-```
-
-```
-## The following object is masked from 'package:treescape':
-## 
-##     .render.server.info
-```
-
-```r
 library("adegraphics")
-```
-
-```
-## 
-## Attaching package: 'adegraphics'
-```
-
-```
-## The following objects are masked from 'package:ade4':
-## 
-##     kplotsepan.coa, s.arrow, s.class, s.corcircle, s.distri,
-##     s.image, s.label, s.logo, s.match, s.traject, s.value,
-##     table.value, triangle.class
-```
-
-```
-## The following object is masked from 'package:ape':
-## 
-##     zoom
-```
-
-```r
 library("ggplot2")
 ```
 
@@ -308,6 +258,7 @@ xlab("") + ylab("") + theme_bw(base_family="") # remove axis labels and grey bac
 
 ![plot of chunk woodmicePlots](figs/woodmicePlots-5.png)
 
+
 Note that alternatively, the function `multiDist` simply performs the pairwise comparison of trees and outputs a distance matrix. 
 This function may be preferable for large datasets, and when principal co-ordinate analysis is not required. 
 It includes an option to save memory at the expense of computation time.
@@ -370,7 +321,6 @@ plotGroves(wm.groves, bg="black", col.pal=lightseasun, lab.show=TRUE, lab.col="w
 ```
 
 ![plot of chunk plotgroves3](figs/plotgroves3-1.png)
-
 
 
 `treescapeServer`: a web application for *treescape*
@@ -491,7 +441,7 @@ treeVec(tree)
 ```
 
 ```
-##  [1] 0 1 0 0 0 0 1 1 2 0 0 0 2 1 1 1 1 1 1 1 1
+##  [1] 1 0 2 0 3 0 1 0 1 0 1 0 0 2 0 1 1 1 1 1 1
 ```
 
 ```r
@@ -500,9 +450,9 @@ treeVec(tree,0.5)
 ```
 
 ```
-##  [1] 0.0000 0.7726 0.0000 0.0000 0.0000 0.0000 0.9515 0.9515 1.9060 0.0000
-## [11] 0.0000 0.0000 1.7639 0.9515 0.9515 0.7864 0.9790 0.7679 0.7165 0.7359
-## [21] 0.7192
+##  [1] 0.7296 0.0000 1.6272 0.0000 2.3518 0.0000 0.7296 0.0000 0.7296 0.0000
+## [11] 0.5971 0.0000 0.0000 1.6272 0.0000 0.8511 0.8400 0.5533 0.5377 0.8740
+## [21] 0.6391
 ```
 
 ```r
@@ -513,9 +463,9 @@ vecAsFunction(0.5)
 ```
 
 ```
-##  [1] 0.0000 0.7726 0.0000 0.0000 0.0000 0.0000 0.9515 0.9515 1.9060 0.0000
-## [11] 0.0000 0.0000 1.7639 0.9515 0.9515 0.7864 0.9790 0.7679 0.7165 0.7359
-## [21] 0.7192
+##  [1] 0.7296 0.0000 1.6272 0.0000 2.3518 0.0000 0.7296 0.0000 0.7296 0.0000
+## [11] 0.5971 0.0000 0.0000 1.6272 0.0000 0.8511 0.8400 0.5533 0.5377 0.8740
+## [21] 0.6391
 ```
 
 The metric -- the distance between two trees -- is the Euclidean distance between these vectors:
@@ -535,7 +485,7 @@ treeDist(tree_a,tree_b)
 ```
 
 ```
-## [1] 5.831
+## [1] 5.099
 ```
 
 ```r
@@ -544,7 +494,7 @@ treeDist(tree_a,tree_b,1)
 ```
 
 ```
-## [1] 3.101
+## [1] 3.057
 ```
 
 
