@@ -146,9 +146,6 @@ woodmiceplot + geom_density2d(colour="gray80") + # contour lines
 geom_point(size=6, shape=1, colour="gray50") + # grey edges
 geom_point(size=6, alpha=0.2, colour="navy") + # transparent blue points
 xlab("") + ylab("") + theme_bw(base_family="") # remove axis labels and grey background
-
-## alternative using plotGrovesD3
-plotGrovesD3(wm.res$pco)
 ```
 
 
