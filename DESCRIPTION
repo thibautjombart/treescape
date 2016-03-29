@@ -20,6 +20,7 @@ Imports:
     combinat,
     compiler,
     distory,
+    htmlwidgets,
     MASS,
     phangorn,
     Rcpp,
