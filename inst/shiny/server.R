@@ -571,7 +571,8 @@ shinyServer(function(input, output, session) {
     
     # labels and tree names
     treeNames <- getTreeNames()
-    tooltips <- paste("Tree", treeNames)
+    if (is.null(groups)) { tooltips <- paste0("Tree ", treeNames) }
+    else { tooltips <- paste0("Tree ",treeNames,", cluster ",groups) }
     
     treeLabels <- NULL
     labelSize <- NULL
@@ -583,19 +584,18 @@ shinyServer(function(input, output, session) {
     }
     
     
-    pointsize <- getPointsize()
+    pointSize <- getPointsize()
+    pointOpacity <- input$pointopacity
     
     plotGrovesD3(res$pco, xax=xax, yax=yax,
                  treeNames=treeLabels, labels_size=labelSize,
-                 point_size = pointsize*40,
+                 point_size = pointSize*40, point_opacity = pointOpacity,
                  groups=groups, colors=cols, col_lab="Cluster",
                  xlab=paste0("Axis ",xax), ylab=paste0("Axis ",yax),
                  tooltip_text = tooltips,
                  transitions=transitions, legend_width=50
     )
     # later could add:
-    # point opacity
-    # ellipses
     # other categories of variation e.g. metadata using symbols
   })
   

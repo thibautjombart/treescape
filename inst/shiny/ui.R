@@ -197,11 +197,16 @@ shinyUI(
                                            ),
                                            
                                            ## symbol size
-                                           sliderInput("pointsize", "Size of the points", value=1, min=0, max=10, step=0.2),
+                                           sliderInput("pointsize", "Size of the points", value=2, min=0, max=10, step=0.2),
+                                           
+                                           
                                            
                                            ## more 2D aesthetics
                                            conditionalPanel(
                                              condition="input.plot3D==2",
+                                             ## symbol size
+                                             sliderInput("pointopacity", "Opacity of the points", value=0.6, min=0, max=1, step=0.05),
+                                             
                                              ## display labels
                                              checkboxInput("showlabels", label="Display tree labels?", value=FALSE),
                                                 
