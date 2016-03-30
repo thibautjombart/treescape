@@ -323,6 +323,7 @@ treeDist <- function(tree.a, tree.b, lambda=0, return.lambda.function=FALSE, emp
 #'
 #'
 #' @import ape
+#' @importFrom fields rdist
 #' @importFrom stats as.dist
 #'
 #'
@@ -374,22 +375,17 @@ multiDist <- function(trees, lambda=0,
   # Working with numbers (no functions).
   if(!return.lambda.function) {
 
-    distances <- matrix(0.0, num_trees, num_trees)
-
     # Here we speed up the computation by storing all vectors (a lot of memory for big trees).
     if(!save.memory) {
-
       # Compute the metric vector for all trees.
       tree_metrics <- t(sapply(trees, function(tree) {treeVec(tree, lambda, F, emphasise.tips, emphasise.weight)}))
-      sapply(1:(num_trees-1), function(i) {
-        sapply((i+1):num_trees, function(j) {
-          distances[i,j] <<- distances[j,i] <<- sqrt(sum((tree_metrics[i,] - tree_metrics[j,])^2))
-        })
-      })
+      distances <- rdist(tree_metrics)
     }
 
     # To save memory we recompute the vectors for each tree comparison (way slower but we don't eat a ton of memory).
     else {
+      distances <- matrix(0.0, num_trees, num_trees)
+      
       sapply(1:(num_trees-1), function(i) {
         sapply((i+1):num_trees, function(j) {
           distances[i,j] <<- distances[j,i] <<- treeDist(trees[[i]], trees[[j]], lambda, F, emphasise.tips, emphasise.weight)

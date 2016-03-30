@@ -11,23 +11,25 @@
 #'
 #' @import ape
 
+#' @import scatterD3
 #' @import shiny
 #' @import rglwidget
-#' @import scatterD3
 #' @importFrom ade4 dudi.pco
-#' @importFrom adephylo distTips
+#' @importFrom adegraphics s1d.barchart 
 #' @importFrom adegraphics s.class 
-#' @importFrom adegraphics s.label 
-#' @importFrom adegraphics s1d.barchart
+#' @importFrom adegraphics s.label
+#' @importFrom adephylo distTips
+#' @importFrom distory dist.multiPhylo
+#' @importFrom fields rdist
 #' @importFrom htmlwidgets saveWidget
 #' @importFrom MASS Shepard
 #' @importFrom phangorn Children
 #' @importFrom phangorn Descendants
-#' @importFrom utils packageDescription
-#' @importFrom RLumShiny jscolorInput
 #' @importFrom rgl writeWebGL
+#' @importFrom RLumShiny jscolorInput
 #' @importFrom shinyBS bsTooltip
-#' @importFrom distory dist.multiPhylo
+#' @importFrom utils packageDescription
+#' 
 #' 
 #' 
 #' @export

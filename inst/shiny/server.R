@@ -1,16 +1,17 @@
 ## DEFINE THE SERVER SIDE OF THE APPLICATION
 shinyServer(function(input, output, session) {
   ## LOAD PACKAGES
-  if(!require("ape")) stop("package ape is required")
   if(!require("ade4")) stop("package ade4 is required")
-  if(!require("adegraphics")) stop("package ade4 is required")
-  if(!require("htmlwidgets")) stop("package htmlwidgets is required")
-  if(!require("treescape")) stop("package treescape is required")
   if(!require("adegenet")) stop("package adegenet is required")
-  if(!require("phangorn")) stop("package phangorn is required")
+  if(!require("adegraphics")) stop("package ade4 is required")
+  if(!require("ape")) stop("package ape is required")
   if(!require("distory")) stop("package distory is required")
+  if(!require("fields")) stop("package fields is required")
+  if(!require("htmlwidgets")) stop("package htmlwidgets is required")
   if(!require("MASS")) stop("package MASS is required")
-  
+  if(!require("phangorn")) stop("package phangorn is required")
+  if(!require("treescape")) stop("package treescape is required")
+ 
   # suppress warning messages from creating temporary directories when 3d plotting
   suppressWarnings(warning("dir.create(dir)"))
   
@@ -249,8 +250,7 @@ shinyServer(function(input, output, session) {
   ## GET KC matrix, evaluated at lambda
   getKCmatrix <- reactive({
     vls <- getKCtreeVecsAtLambda()
-    numtrees <- getLengthData()
-    as.dist(sapply(1:numtrees, function(a) sapply(1:numtrees, function(b) if(a<b) {sqrt(sum((vls[a,]-vls[b,])^2))} else{0})))
+    as.dist(rdist(vls))
   }) # end getKCmatrix
   
   ## GET medTrees for all clusters
