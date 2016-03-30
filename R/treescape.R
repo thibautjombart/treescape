@@ -26,9 +26,10 @@
 #' @import ape
 #' @importFrom ade4 dudi.pco cailliez
 #' @importFrom adephylo distTips
-#' @importFrom stats dist
-#' @importFrom phangorn RF.dist
 #' @importFrom distory dist.multiPhylo
+#' @importFrom fields rdist
+#' @importFrom phangorn RF.dist
+
 #'
 #' @examples
 #'
@@ -96,12 +97,12 @@ treescape <- function(x, method="treeVec", nf=NULL, return.tree.vectors=FALSE, .
     if (method=="treeVec") {
       df <- t(data.frame(lapply(x, function(e) as.vector(treeVec(e, ...)))))
       ## get pairwise Euclidean distances ##
-      D <- dist(df)
+      D <- as.dist(rdist(df))
     }
     else if(method %in% c("patristic","nNodes","Abouheif","sumDD")){
       df <- t(data.frame(lapply(x, function(e) as.vector(adephylo::distTips(e,method=method,...)))))
       ## get pairwise Euclidean distances ##
-      D <- dist(df)
+      D <- as.dist(rdist(df))
     }
     else if(method=="RF"){
       D <- RF.dist(x)
