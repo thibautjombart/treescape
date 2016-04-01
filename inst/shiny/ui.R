@@ -88,8 +88,11 @@ shinyUI(
                                            bsTooltip("quality","A Shepard plot gives an indication of the quality of the MDS projection. It will be displayed below the main plot.", placement="right"),
                                            
                                            ## show screeplot?
-                                           checkboxInput("scree", label=strong("Show screeplot?"), value=FALSE),
-                                           bsTooltip("scree","Display screeplot of the eigenvalues associated with each componenet? It will be displayed below the main plot.", placement="right"),
+                                           conditionalPanel(
+                                             condition="input.graphics==1",
+                                             checkboxInput("scree", label=strong("Show screeplot?"), value=FALSE),
+                                             bsTooltip("scree","Display screeplot of the eigenvalues associated with each componenet? It will be displayed below the main plot.", placement="right")
+                                           ),
                                            
                                            ## find clusters?
                                            checkboxInput("findClusters", label=strong("Identify clusters?"), value=FALSE),
@@ -168,6 +171,14 @@ shinyUI(
                                                             )
                                            ),
                                            
+                                           conditionalPanel(
+                                             condition="(input.plot3D==2)&&(input.plotType==1)",
+                                             radioButtons("graphics", "Display using",
+                                                          choices=c("plotGrovesD3"=1,"plotGroves"=2),
+                                                          selected=1),
+                                             bsTooltip("graphics", "Choose whether to view the tree landscape using plotGrovesD3 which uses scatterD3 (interactive html) or plotGroves which uses adegraphics")
+                                           ),
+                                           
                                            # if plotType=1, pick the axes to view:
                                            conditionalPanel(    
                                              condition="input.plotType==1",
@@ -184,38 +195,66 @@ shinyUI(
                                              )
                                            ),
                                            
-                                           ## aesthetics for treel landscape view
+                                           ## aesthetics for tree landscape view
                                            conditionalPanel(
                                              condition="input.plotType==1",
+                                              conditionalPanel(
+                                                condition="(input.plot3D==2)&&(input.graphics==1)",
+                                             
+                                                   ## Animate transitions?
+                                                  checkboxInput("transitions", label="Animate transitions?", value=TRUE)
+                                              ),
+                                           
+                                              conditionalPanel(
+                                                condition="(input.plot3D==2)&&(input.graphics==2)",
+                                             
+                                                 ## convex hulls or ellipses when clusters identified
+                                                    conditionalPanel(
+                                                      condition="input.findClusters",
+                                                      radioButtons("scattertype", "Type of scatterplot",
+                                                                   choices=c("chull","ellipse"),
+                                                                   selected="chull")
+                                                    ),
+                                                
+                                                selectInput("screemds", "Position of the MDS screeplot:",
+                                                         choices=c("None" = "none",
+                                                                   "Bottom right" = "bottomright",
+                                                                   "Bottom left" = "bottomleft",
+                                                                   "Top right" = "topright",
+                                                                   "Top left" = "topleft"),
+                                                         selected="bottomleft")
+                                              ),
+                                          
+                                             ## symbol size
+                                             sliderInput("pointsize", "Size of the points", value=2, min=0, max=10, step=0.2),
+                                             
+                                             conditionalPanel(
+                                               condition="(input.plot3D==2)&&(input.graphics==1)",
+                                               ## symbol size
+                                               sliderInput("pointopacity", "Opacity of the points", value=0.6, min=0, max=1, step=0.05)
+                                             ),
+                                             
                                              conditionalPanel(
                                                condition="input.plot3D==2",
-                                               
-                                               ## Animate transitions?
-                                               checkboxInput("transitions", label="Animate transitions?", value=TRUE)
-                                               
-                                             )
-                                           ),
-                                           
-                                           ## symbol size
-                                           sliderInput("pointsize", "Size of the points", value=2, min=0, max=10, step=0.2),
-                                           
-                                           
-                                           
-                                           ## more 2D aesthetics
-                                           conditionalPanel(
-                                             condition="input.plot3D==2",
-                                             ## symbol size
-                                             sliderInput("pointopacity", "Opacity of the points", value=0.6, min=0, max=1, step=0.05),
+                                                  ## display labels
+                                                  checkboxInput("showlabels", label="Display tree labels?", value=FALSE),
                                              
-                                             ## display labels
-                                             checkboxInput("showlabels", label="Display tree labels?", value=FALSE),
-                                                
-                                                conditionalPanel(
-                                                  condition="input.showlabels",
-                                                  ## label size
-                                                  sliderInput("labelsize", "Size of the labels", value=10, min=0, max=50, step=5)
+                                                  conditionalPanel(
+                                                      condition="input.showlabels",
+                                                      ## label size
+                                                      sliderInput("labelsize", "Size of the labels", value=1, min=0, max=10, step=1),
+                                               
+                                                      conditionalPanel(
+                                                          condition="input.graphics==2",
+                                                          checkboxInput("optimlabels", label="Optimize label position?", value=FALSE)
+                                                      )  
                                                   )
-                                              ),
+                                             )
+                                             
+                                          ),
+                                           
+                              
+                                              
                                            
                                           # if plotType=2, option to stretch
                                            conditionalPanel(
@@ -277,12 +316,8 @@ shinyUI(
                                   ),
                                   
                                   conditionalPanel(
-                                    condition="input.plot3D==2",
-                                    conditionalPanel(
-                                      condition="input.plotType==1",
+                                    condition="(input.plotType==1)&&(input.plot3D==2)&&(input.graphics==1)",
                                       tags$p(actionButton("scatterD3-reset-zoom", HTML("<span class='glyphicon glyphicon-search' aria-hidden='true'></span> Reset Zoom")))
-                                      
-                                    )
                                   ),
                                   
                                   conditionalPanel(
@@ -291,7 +326,7 @@ shinyUI(
                                   ),
                                   
                                   conditionalPanel(
-                                    condition="input.scree",
+                                    condition="(input.scree)&&(input.graphics==1)",
                                     uiOutput("scree")
                                   ),
                                   
@@ -300,13 +335,19 @@ shinyUI(
                                   ## OUTPUT (save)
                                   img(src="img/line.png", width="400px"),
                                   h2(HTML('<font color="#6C6CC4" size="6"> > Output </font>')),
+                                  
                                   ## save MDS plot
                                   conditionalPanel(
-                                    condition="input.plot3D==2",
-                                    tags$p(tags$a(id = "scatterD3-svg-export", href = "#",
-                                           class = "btn btn-default", HTML("<span class='glyphicon glyphicon-save' aria-hidden='true'></span> Download SVG of treescape plot"))),
-                                    downloadButton("downloadMDS2Dhtml", "Save treescape plot as interactive html")
+                                    condition="(input.plotType==1)&&(input.plot3D==2)&&(input.graphics==1)",
+                                        tags$p(tags$a(id = "scatterD3-svg-export", href = "#",
+                                              class = "btn btn-default", HTML("<span class='glyphicon glyphicon-save' aria-hidden='true'></span> Save treescape plot as svg"))),
+                                        downloadButton("downloadMDS2Dhtml", "Save treescape plot as interactive html")
                                     ),
+                                  
+                                  conditionalPanel(
+                                    condition="(input.plotType==1)&&(input.plot3D==2)&&(input.graphics==2)",
+                                    downloadButton("downloadMDS", "Save treescape image as png file")
+                                  ),
                                   
                                   conditionalPanel(
                                     condition="input.plot3D==3",

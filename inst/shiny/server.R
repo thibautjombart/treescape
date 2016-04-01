@@ -501,10 +501,6 @@ shinyServer(function(input, output, session) {
     ifelse(!is.null(input$bgcol), input$bgcol, "white")
   })
   
-  getScattertype <- reactive({
-    input$scattertype
-  })
-  
   getXax <- reactive({
     input$xax
   })  
@@ -529,6 +525,10 @@ shinyServer(function(input, output, session) {
     input$pointsize
   })
   
+  getPlotFunction <- reactive({
+    input$graphics
+  })
+  
   ##############  
   ## GET plot
   ##############
@@ -548,6 +548,8 @@ shinyServer(function(input, output, session) {
     labcol <- getLabcol()
     groves <- getClusters()
     treeTypes <- getMetaData()
+    showlabels <- getShowlabels()
+    pointSize <- getPointsize()
     
     if(!is.null(treeTypes)) {
       groups <- treeTypes
@@ -567,36 +569,63 @@ shinyServer(function(input, output, session) {
     ## get aesthetics
     xax <- getXax()
     yax <- getYax()
-    transitions <- input$transitions
     
-    # labels and tree names
-    treeNames <- getTreeNames()
-    if (is.null(groups)) { tooltips <- paste0("Tree ", treeNames) }
-    else { tooltips <- paste0("Tree ",treeNames,", cluster ",groups) }
+    plotFunction <- getPlotFunction()
     
-    treeLabels <- NULL
-    labelSize <- NULL
+    if (plotFunction==1) {
+      transitions <- input$transitions
+      
+      # labels and tree names
+      treeNames <- getTreeNames()
+      if (is.null(groups)) { tooltips <- paste0("Tree ", treeNames) }
+      else { tooltips <- paste0("Tree ",treeNames,", cluster ",groups) }
+      
+      treeLabels <- NULL
+      labelsize <- NULL
+      
+      if(showlabels==TRUE) {
+        treeLabels <- getTreeNames()
+        labelsize <- getLabelsize()
+      }
+      
+      pointOpacity <- input$pointopacity
     
-    showlabels <- getShowlabels()
-    if(showlabels==TRUE) {
-      treeLabels <- getTreeNames()
-      labelSize <- input$labelsize
-    }
-    
-    
-    pointSize <- getPointsize()
-    pointOpacity <- input$pointopacity
-    
-    plotGrovesD3(res$pco, xax=xax, yax=yax,
-                 treeNames=treeLabels, labels_size=labelSize,
+      plot <- plotGrovesD3(res$pco, xax=xax, yax=yax,
+                 treeNames=treeLabels, labels_size=labelsize*5,
                  point_size = pointSize*40, point_opacity = pointOpacity,
                  groups=groups, colors=cols, col_lab="Cluster",
                  xlab=paste0("Axis ",xax), ylab=paste0("Axis ",yax),
                  tooltip_text = tooltips,
                  transitions=transitions, legend_width=50
-    )
-    # later could add:
-    # other categories of variation e.g. metadata using symbols
+      ) 
+      # later could add:
+      # other categories of variation e.g. metadata using symbols
+    }
+    
+    else { # i.e. plotFunction==2
+      bgcol <- getBgcol()
+      scattertype <- input$scattertype
+      screemds <- input$screemds
+      optimlabels <- input$optimlabels
+      labelsize <- getLabelsize()
+      
+      if(is.null(groves)){
+        plot <- plotGroves(res$pco, groups=treeTypes, type=scattertype, xax=xax, yax=yax,
+                   scree.posi=screemds, lab.optim=optimlabels,
+                   lab.show=showlabels, lab.cex=labelsize,
+                   lab.col=labcol,
+                   point.cex=pointSize, bg=bgcol, col.pal=pal)
+      } 
+      else {
+        ## plot with statistically identified groups
+        plot <- plotGroves(groves, type=scattertype, xax=xax, yax=yax,
+                   scree.posi=screemds, lab.optim=optimlabels,
+                   lab.show=showlabels, lab.cex=labelsize,
+                   lab.col=labcol,
+                   point.cex=pointSize, bg=bgcol, col.pal=pal)
+      }
+    }
+  return(plot)  
   })
   
   getDistPlot <- reactive({
@@ -630,10 +659,16 @@ shinyServer(function(input, output, session) {
   ## TREESCAPE IMAGE ##
   output$treescapePlot <- renderUI({
     type <- getPlotType()
-    if (type==1){
-      scatterD3Output("scatterplot")
+    if (type==1){ # i.e. full tree landscape
+      plotFunction <- getPlotFunction()
+      if (plotFunction==1) { # i.e. scatterD3
+        scatterD3Output("scatterplotD3")
+      }
+      else { # i.e. adegraphics
+        plotOutput("scatterplot", height = "800px") 
+      }
     }
-    else{
+    else{ # i.e. distance from reference tree plot
       i <- input$stretch
       height <- as.character(paste0(i,"px"))
       plotOutput("DistPlot", height = height)  
@@ -651,7 +686,9 @@ shinyServer(function(input, output, session) {
   })
   
   
-  output$scatterplot <- renderScatterD3({
+  output$scatterplotD3 <- renderScatterD3({
+    plotFunction <- getPlotFunction() # need to do this or you get an error when switching between plotGroves and plotGrovesD3
+    if (plotFunction==1) { 
     withProgress(message = 'Loading plot',
                  value = 0, {
                    for (i in 1:15) {
@@ -660,20 +697,32 @@ shinyServer(function(input, output, session) {
                    myplot <- getPlot()
                    myplot
                  })
+    }
   })
   
+  output$scatterplot <- renderPlot({
+    plotFunction <- getPlotFunction() # need to do this or you get an error when switching between plotGroves and plotGrovesD3
+    if (plotFunction==2) {
+    withProgress(message = 'Loading plot',
+                 value = 0, {
+                   for (i in 1:15) {
+                     incProgress(1/15)
+                   }
+                   myplot <- getPlot()
+                   myplot
+                 })
+    }
+  }, res=120)
+  
   output$DistPlot <- renderPlot({
-    myplot <- getDistPlot()
-    if (!is.null(myplot)){
       withProgress(message = 'Loading plot',
                    value = 0, {
                      for (i in 1:15) {
                        incProgress(1/15)
                      }
-                     
+                     myplot <- getDistPlot()
                      plot(myplot)
                    })
-    }
   }, res=120)
   
   getPlot3d <- reactive({
@@ -719,19 +768,16 @@ shinyServer(function(input, output, session) {
   })
   
   output$shepPlot <- renderPlot({
-    shep <- getShep()
-    labcol <- getLabcol()
-    if (!is.null(shep)){
       withProgress(message = 'Loading Shepard plot',
                    value = 0, {
                      for (i in 1:15) {
                        incProgress(1/15)
                      }
-                     
+                     shep <- getShep()
+                     labcol <- getLabcol()
                      plot(shep, pch=19, cex=0.5, col=labcol, xlab="Distance in tree space", ylab="MDS distance")
                      
                    })
-    }
   }, res=120)
   
   output$shep <- renderUI({
@@ -855,13 +901,13 @@ shinyServer(function(input, output, session) {
   output$densiTree <- renderPlot({
     if(is.null(rvs$showDensiTree)) {NULL}
     else{
-      clustTrees <- getDensiTree()
       withProgress(message = 'Loading densiTree plot',
                    detail = 'Note: the final stage of this process may take a while for large sets of trees',
                    value = 0, {
                      for (i in 1:30) {
                        incProgress(1/30)
                      }
+                     clustTrees <- getDensiTree()
                      densiTree(clustTrees$trees, col=4, consensus=clustTrees$con, alpha=input$alpha, scaleX=input$scaleX)
                    })
     }
@@ -913,7 +959,22 @@ shinyServer(function(input, output, session) {
     })
   
 
-  ## EXPORT 2D MDS PLOT AS html ##
+  ## EXPORT 2D plotGroves MDS PLOT AS png ##
+  output$downloadMDS <- downloadHandler(
+    filename = function() { 
+      paste0(getDataSet(),"scape2D.png") 
+    },
+    content = function(file) {
+      myplot <- getPlot()
+      png(file=file, width = 10, height = 10, units = 'in', res = 500)
+      plot(myplot)
+      dev.off()
+      
+      contentType = 'image/png'  
+    }
+  )
+  
+  ## EXPORT 2D plotGrovesD3 PLOT AS html ##
   output$downloadMDS2Dhtml <- downloadHandler(
     filename = function() { 
       paste0(getDataSet(),"scape2D.html") 
@@ -924,7 +985,7 @@ shinyServer(function(input, output, session) {
         file=file, 
         selfcontained = TRUE)
     },
-  contentType = 'html'  
+    contentType = 'html'  
   )
   
 
