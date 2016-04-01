@@ -814,11 +814,11 @@ shinyServer(function(input, output, session) {
     }
     else{
       g <- input$selectedGenTree
-      if(is.null(g)){tre <- NULL}  
-      else{
-        treeNum <- as.numeric(g)
-        tre <- x[[treeNum]]
-      }
+      validate(
+        need(g!="", "Select tree to view")
+      )
+      treeNum <- as.numeric(g)
+      tre <- x[[treeNum]]
     }
     
     # return tree
