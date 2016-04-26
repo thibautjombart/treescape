@@ -48,6 +48,7 @@ Collate:
     treescape.R
     findGroves.R
     plotGroves.R
+    plotTreeDiff.R
     servers.R
     data.R
 RoxygenNote: 5.0.1

@@ -53,7 +53,7 @@
 #' ## find median trees
 #' res.with.grp <- medTree(woodmiceTrees, groves$groups)
 #'
-#' ## there isone output per cluster
+#' ## there is one output per cluster
 #' names(res.with.grp)
 #'
 #' ## get the first median of each
@@ -63,6 +63,8 @@
 #' par(mfrow=c(2,3))
 #' for(i in 1:length(med.trees)) plot(med.trees[[i]], main=paste("cluster",i))
 #'
+#' ## highlight the differences between a pair of median trees
+#' plotTreeDiff(med.trees[[1]],med.trees[[5]])
 #'
 #' @export
 medTree <- function(x, groups=NULL, lambda=0, weights=NULL, emphasise.tips=NULL, emphasise.weight=2,

@@ -396,18 +396,59 @@ shinyUI(
                           img(src="img/line.png", width="100%"),
                           h2(HTML('<font color="#6C6CC4" size="6"> > Input </font>')),
                           
-                          radioButtons("treeChoice", "Tree selection",
+                          h2(HTML('<font color="#6C6CC4" size="4"> >> Tree view </font>')),
+                          
+                          radioButtons("treePlotType", "View",
+                                       choices=c("Single tree"=1,"Two tree comparison"=2),
+                                       selected=1, width="100%"),
+                          bsTooltip("treePlotType", "Choose whether to view a single tree or two trees side by side with their differences highlighted."),
+                          
+                          h2(HTML('<font color="#6C6CC4" size="4"> >> Tree selection </font>')),
+                          
+                          conditionalPanel(condition = "input.treePlotType==1",
+                              radioButtons("treeChoice", "Selection",
                                        choices=c("Median tree"="med","General tree selection"="gen"),
                                        selected="med", width="100%"),
-                          bsTooltip("treeChoice", "A geometric median tree is plotted by default. If clusters have been identified, the median for each can be viewed. Alternatively, any individual tree can be plotted."),
+                              bsTooltip("treeChoice", "A geometric median tree is plotted by default. If clusters have been identified, the median for each can be viewed. Alternatively, any individual tree can be plotted."),
                           
-                          conditionalPanel(condition = "input.treeChoice=='med'",
-                                           selectInput("selectedMedTree", "Median tree from:", 
-                                                       choices=c("All trees"="all"))
+                              conditionalPanel(condition = "input.treeChoice=='med'",
+                                        selectInput("selectedMedTree", "Median tree from:", 
+                                        choices=c("All trees"="all"))
+                                        ),
+                          
+                              conditionalPanel(condition = "input.treeChoice=='gen'",
+                                        uiOutput("selectedGenTree")
+                                        )
                           ),
                           
-                          conditionalPanel(condition = "input.treeChoice=='gen'",
-                                           uiOutput("selectedGenTree")
+                          conditionalPanel(condition = "input.treePlotType==2",
+                                           radioButtons("treeChoice1", "Select first tree",
+                                                        choices=c("Median tree"="med","General tree selection"="gen"),
+                                                        selected="med", width="100%"),
+                                           bsTooltip("treeChoice1", "Plot a geometric median tree or any individual tree"),
+                                           
+                                           conditionalPanel(condition = "input.treeChoice1=='med'",
+                                                            selectInput("selectedMedTree1", "Median tree from:", 
+                                                                        choices=c("All trees"="all"))
+                                           ),
+                                           
+                                           conditionalPanel(condition = "input.treeChoice1=='gen'",
+                                                            uiOutput("selectedGenTree1")
+                                           ),
+                                           
+                                           radioButtons("treeChoice2", "Select second tree",
+                                                        choices=c("Median tree"="med","General tree selection"="gen"),
+                                                        selected="med", width="100%"),
+                                           bsTooltip("treeChoice2", "Plot a geometric median tree or any individual tree"),
+                                           
+                                           conditionalPanel(condition = "input.treeChoice2=='med'",
+                                                            selectInput("selectedMedTree2", "Median tree from:", 
+                                                                        choices=c("All trees"="all"))
+                                           ),
+                                           
+                                           conditionalPanel(condition = "input.treeChoice2=='gen'",
+                                                            uiOutput("selectedGenTree2")
+                                           )
                           ),
                           
                           
@@ -421,7 +462,7 @@ shinyUI(
                                            checkboxInput("edgelengths", label="Use original branch lengths?", value=TRUE),
                                            
                                            ## ladderize
-                                           checkboxInput("ladderize", label="Ladderize the tree?", value=TRUE),
+                                           checkboxInput("ladderize", label="Ladderize the tree(s)?", value=TRUE),
                                            
                                            ## type of tree
                                            radioButtons("treetype", "Type of tree",
@@ -439,10 +480,27 @@ shinyUI(
                                            conditionalPanel(condition="input.showtiplabels",
                                                             ## tip label font
                                                             selectInput("tiplabelfont", "Tip label font", 
-                                                                        choices=c("Plain"="1","Bold"="2","Italic"="3","Bold italic"="4")),
+                                                                        choices=c("Plain"=1,"Bold"=2,"Italic"=3,"Bold italic"=4), selected=1),
                                                             
                                                             ## tip label size
-                                                            sliderInput("tiplabelsize", "Size of the tip labels", value=1, min=0, max=5, step=0.1)
+                                                            sliderInput("tiplabelsize", "Size of the tip labels", value=1, min=0, max=5, step=0.1),
+                                                            
+                                                            conditionalPanel(condition="input.treePlotType==1",
+                                                                ## tip label colour
+                                                                jscolorInput("tiplabelcolour", "Tip label colour", value="#000000", close=TRUE)
+                                                            ),
+                                                            
+                                                            conditionalPanel(condition="input.treePlotType==2",
+                                                                             ## basic tip label colour
+                                                                             jscolorInput("basetiplabelcolour", "Label colour for tips with same ancestry", value="#BEBEBE", close=TRUE),
+                                                                             
+                                                                             ## basic tip label colour
+                                                                             jscolorInput("minortiplabelcolour", "Label colour for tips with smaller ancestral differences", value="#FFDAB9", close=TRUE),
+                                                                             
+                                                                             ## basic tip label colour
+                                                                             jscolorInput("majortiplabelcolour", "Label colour for tips with greater ancestral differences", value="#EE0000", close=TRUE)
+                                                                             )
+                                                            
                                                             
                                            ),
                                            
@@ -464,8 +522,8 @@ shinyUI(
                                   h2(HTML('<font color="#6C6CC4" size="6"> Tree viewer </font>')),
                                   br(),br(),
                                   
-                                  ## conditional panel: plot tree if needed
-                                  conditionalPanel(condition = "input.selectedTree!=''",
+                                  ## conditional panel: plot single tree if needed
+                                  conditionalPanel(condition = "(input.treePlotType==1)&&(input.selectedTree!='')",
                                                    plotOutput("tree", height = "800px"),
                                                    
                                                    br(), br(),
@@ -474,9 +532,32 @@ shinyUI(
                                                    img(src="img/line.png", width="400px"),
                                                    h2(HTML('<font color="#6C6CC4" size="6"> > Output </font>')),
                                                    downloadButton("downloadTree", "Save tree image"),
+                              
+                                                   br(), br()
+                                  ), # end single tree conditional panel 
+                                  
+                                  ## conditional panel: plot tree if needed
+                                  conditionalPanel(condition = "(input.treePlotType==2)&&(input.selectedTree1!='')&&(input.selectedTree2!='')",
+                                                   plotOutput("treeDiff", height = "800px"),
                                                    
-                                                   br(), br(), br(), br(), br(), br()
-                                  ) # end single tree conditional panel  
+                                                   br(), br(),
+                                                   
+                                                   ## OUTPUT (save)
+                                                   img(src="img/line.png", width="400px"),
+                                                   h2(HTML('<font color="#6C6CC4" size="6"> > Output </font>')),
+                                                   downloadButton("downloadTreeDiff", "Save tree comparison image"),
+                                                   
+                                                   br(), br()
+                                  ), # end single tree conditional panel
+                                  
+                                  ## Repeat of treescape plot, for reference
+                                  img(src="img/line.png", width="400px"),
+                                  h2(HTML('<font color="#6C6CC4" size="6"> > Copy of scatter plot </font>')),
+                                  
+                                  br(), br(), 
+                                  
+                                  uiOutput("treescapePlotTreeTab")
+                                  
                         ) # end mainPanel
                       ) # end page with sidebar
              ), # end tabPanel "Tree Viewer"

@@ -2,3 +2,5 @@
 inst/shiny/.RData
 inst/shiny/.Rhistory
 misc/*
+*.Rproj
+*.Rproj.user

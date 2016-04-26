@@ -280,6 +280,33 @@ shinyServer(function(input, output, session) {
     }
   })
   
+  getMedTree1 <- reactive({
+    data <- getData()
+    x <- data$out
+    whichClust <- input$selectedMedTree1
+    medList <- getMedTreesList()
+    if(whichClust=="all"){
+      x[[medList[[1]]]]
+    }
+    else{
+      x[[medList[[as.numeric(whichClust)]]]]
+    }
+  })
+  
+  getMedTree2 <- reactive({
+    data <- getData()
+    x <- data$out
+    whichClust <- input$selectedMedTree2
+    medList <- getMedTreesList()
+    if(whichClust=="all"){
+      x[[medList[[1]]]]
+    }
+    else{
+      x[[medList[[as.numeric(whichClust)]]]]
+    }
+  })
+  
+  
   ## GET PCO analysis ##
   getPCO <- reactive({
     D <- getKCmatrix()
@@ -368,6 +395,10 @@ shinyServer(function(input, output, session) {
     
     ## reset the median tree choices to accommodate number of clusters available
     updateSelectInput(session, "selectedMedTree", "Median tree from:", 
+                      choices=choices, selected="all")
+    updateSelectInput(session, "selectedMedTree1", "Median tree from:", 
+                      choices=choices, selected="all")
+    updateSelectInput(session, "selectedMedTree2", "Median tree from:", 
                       choices=choices, selected="all")
     
     ## get dataset
@@ -675,6 +706,26 @@ shinyServer(function(input, output, session) {
     }
   })
   
+  # repeat treescapePlot for tree viewer tab
+  output$scatterplotD3TreeTab <- renderScatterD3({
+    plotFunction <- getPlotFunction() # need to do this or you get an error when switching between plotGroves and plotGrovesD3
+    if (plotFunction==1) { 
+      withProgress(message = 'Loading plot',
+                   value = 0, {
+                     for (i in 1:15) {
+                       incProgress(1/15)
+                     }
+                     myplot <- getPlot()
+                     myplot
+                   })
+    }
+  })
+  
+  output$treescapePlotTreeTab <- renderUI({
+    scatterD3Output("scatterplotD3TreeTab")
+  })
+  
+  # 3d output
   output$treescapePlot3D <- renderRglwidget({
     validate(
       need(packageVersion("rglwidget")>='0.1.1433',
@@ -801,6 +852,13 @@ shinyServer(function(input, output, session) {
     input$treeChoice
   })
   
+  getTreeChoice1 <- reactive({
+    input$treeChoice1
+  })
+  
+  getTreeChoice2 <- reactive({
+    input$treeChoice2
+  })
   
   getTree <- reactive({
     data <- getData()
@@ -833,6 +891,69 @@ shinyServer(function(input, output, session) {
     }
   })  
   
+  getTree1 <- reactive({
+    data <- getData()
+    x <- data$out
+    validate(
+      need(!is.null(x), "Loading data set")
+    )
+    treechoice <- getTreeChoice1()
+    if(treechoice=="med"){
+      tre <- getMedTree1()
+    }
+    else{
+      g <- input$selectedGenTree1
+      validate(
+        need(g!="", "Select first tree to compare")
+      )
+      treeNum <- as.numeric(g)
+      tre <- x[[treeNum]]
+    }
+    
+    # return tree
+    if(!is.null(tre)){
+      if(input$ladderize){
+        tre <- ladderize(tre)
+      }
+      return(tre)   
+    }
+    else{
+      NULL
+    }
+  })  
+  
+  getTree2 <- reactive({
+    data <- getData()
+    x <- data$out
+    validate(
+      need(!is.null(x), "Loading data set")
+    )
+    treechoice <- getTreeChoice2()
+    if(treechoice=="med"){
+      tre <- getMedTree2()
+    }
+    else{
+      g <- input$selectedGenTree2
+      validate(
+        need(g!="", "Select second tree to compare")
+      )
+      treeNum <- as.numeric(g)
+      tre <- x[[treeNum]]
+    }
+    
+    # return tree
+    if(!is.null(tre)){
+      if(input$ladderize){
+        tre <- ladderize(tre)
+      }
+      
+    return(tre)   
+    }
+    else{
+      NULL
+    }
+  }) 
+  
   ## PHYLOGENY ##
   output$tree <- renderPlot({
     tre <- getTree()
@@ -842,12 +963,36 @@ shinyServer(function(input, output, session) {
       par(mar=rep(2,4), xpd=TRUE)
       plot(tre, type=input$treetype,
            use.edge.length=as.logical(input$edgelengths),
-           show.tip.lab=input$showtiplabels, 
+           show.tip.lab=input$showtiplabels,
+           tip.color=input$tiplabelcolour,
            font=as.numeric(input$tiplabelfont), 
            cex=input$tiplabelsize,
            direction=input$treedirection,
            edge.width=input$edgewidth,
            edge.color=input$edgecolor
+      )
+    }
+  })
+  
+  output$treeDiff <- renderPlot({
+    tr1 <- getTree1()
+    tr2 <- getTree2()
+    if(!is.null(tr1)&&!is.null(tr2)){
+      
+      ## plot tree comparison ##
+      #par(mar=rep(2,4), xpd=TRUE)
+      plotTreeDiff(tr1,tr2, 
+                   baseCol=input$basetiplabelcolour,
+                   col1=input$minortiplabelcolour,
+                   col2=input$majortiplabelcolour,
+                   type=input$treetype,
+                   use.edge.length=as.logical(input$edgelengths),
+                   show.tip.lab=input$showtiplabels, 
+                   font=as.numeric(input$tiplabelfont), 
+                   cex=input$tiplabelsize,
+                   direction=input$treedirection,
+                   edge.width=input$edgewidth,
+                   edge.color=input$edgecolor
       )
     }
   })
@@ -1036,7 +1181,22 @@ shinyServer(function(input, output, session) {
       tre <- getTree()
       png(file=file)
       plot(tre, type=input$treetype,
-           show.tip.lab=input$showtiplabels, font=1, cex=input$tiplabelsize,
+           show.tip.lab=input$showtiplabels, font=as.numeric(input$tiplabelfont), cex=input$tiplabelsize,
+           direction=input$treedirection,
+           edge.width=input$edgewidth)
+      dev.off()
+      contentType = 'image/png'
+    }
+  )
+  
+  output$downloadTreeDiff <- downloadHandler(
+    filename = function() { paste0(getDataSet(),"TreeDiff.png") },
+    content = function(file) {
+      tr1 <- getTree1()
+      tr2 <- getTree2()
+      png(file=file)
+      plotTreeDiff(tr1, tr2, type=input$treetype,
+           show.tip.lab=input$showtiplabels, font=as.numeric(input$tiplabelfont), cex=input$tiplabelsize,
            direction=input$treedirection,
            edge.width=input$edgewidth)
       dev.off()
@@ -1062,6 +1222,24 @@ shinyServer(function(input, output, session) {
     choices <- c("",1:numTrees)
     names(choices) <- c("Choose one",treeNames)
     selectInput("selectedGenTree", "Choose individual tree", 
+                choices=choices, selected="")
+  })
+  
+  output$selectedGenTree1 <- renderUI({
+    numTrees <- getLengthData()
+    treeNames <- getTreeNames()
+    choices <- c("",1:numTrees)
+    names(choices) <- c("Choose one",treeNames)
+    selectInput("selectedGenTree1", "Choose individual tree", 
+                choices=choices, selected="")
+  })
+  
+  output$selectedGenTree2 <- renderUI({
+    numTrees <- getLengthData()
+    treeNames <- getTreeNames()
+    choices <- c("",1:numTrees)
+    names(choices) <- c("Choose one",treeNames)
+    selectInput("selectedGenTree2", "Choose individual tree", 
                 choices=choices, selected="")
   })
   
