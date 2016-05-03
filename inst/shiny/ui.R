@@ -419,7 +419,7 @@ shinyUI(
                               conditionalPanel(condition = "input.treeChoice=='gen'",
                                         uiOutput("selectedGenTree")
                                         )
-                          ),
+                          ), # end single tree choice
                           
                           conditionalPanel(condition = "input.treePlotType==2",
                                            radioButtons("treeChoice1", "Select first tree",
@@ -448,8 +448,11 @@ shinyUI(
                                            
                                            conditionalPanel(condition = "input.treeChoice2=='gen'",
                                                             uiOutput("selectedGenTree2")
-                                           )
-                          ),
+                                           ),
+                                           
+                                           checkboxInput("showTipDiffTable", label="Display table of tip differences?", value=FALSE)
+                                           
+                          ), # end tree comparison choices
                           
                           
                           ## TREE AESTHETICS
@@ -536,9 +539,14 @@ shinyUI(
                                                    br(), br()
                                   ), # end single tree conditional panel 
                                   
-                                  ## conditional panel: plot tree if needed
+                                  ## conditional panel: plot tree comparison if needed
                                   conditionalPanel(condition = "(input.treePlotType==2)&&(input.selectedTree1!='')&&(input.selectedTree2!='')",
                                                    plotOutput("treeDiff", height = "800px"),
+                                                   
+                                                   # conditional panel: show tip differences table:
+                                                   conditionalPanel(condition = "input.showTipDiffTable",
+                                                                    tableOutput("tipDiffTable")
+                                                                    ),
                                                    
                                                    br(), br(),
                                                    
@@ -547,8 +555,14 @@ shinyUI(
                                                    h2(HTML('<font color="#6C6CC4" size="6"> > Output </font>')),
                                                    downloadButton("downloadTreeDiff", "Save tree comparison image"),
                                                    
+                                                   # conditional panel: show tip differences table:
+                                                   conditionalPanel(condition = "input.showTipDiffTable",
+                                                                    downloadButton("downloadTipDiffTable", "Save tip differences table")
+                                                   ),
+                                                   
+                                                   
                                                    br(), br()
-                                  ), # end single tree conditional panel
+                                  ), # end tree comparison conditional panel
                                   
                                   ## Repeat of treescape plot, for reference
                                   img(src="img/line.png", width="400px"),

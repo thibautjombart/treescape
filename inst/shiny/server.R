@@ -954,6 +954,25 @@ shinyServer(function(input, output, session) {
     }
   }) 
   
+  getTipDiff <- reactive({
+    tr1 <- getTree1()
+    tr2 <- getTree2()
+    tipDiff(tr1,tr2)
+  })
+  
+  getTipDiffTable <- reactive({
+    tipDiff <- getTipDiff()
+    # data frame of the tips with differences:
+    if (!is.null(tipDiff)) {
+      out <- tipDiff[which(tipDiff[,2]!=0),]
+      rownames(out) <- NULL
+      colnames(out) <- c("Tips with ancestral differences","No. of differences")
+      return(out)
+    }
+    else {NULL}
+  })
+  
+  
   ## PHYLOGENY ##
   output$tree <- renderPlot({
     tre <- getTree()
@@ -973,15 +992,17 @@ shinyServer(function(input, output, session) {
       )
     }
   })
-  
+
   output$treeDiff <- renderPlot({
     tr1 <- getTree1()
     tr2 <- getTree2()
+    tipDiff <- getTipDiff()
     if(!is.null(tr1)&&!is.null(tr2)){
       
       ## plot tree comparison ##
       #par(mar=rep(2,4), xpd=TRUE)
       plotTreeDiff(tr1,tr2, 
+                   tipDiff = tipDiff,
                    baseCol=input$basetiplabelcolour,
                    col1=input$minortiplabelcolour,
                    col2=input$majortiplabelcolour,
@@ -995,6 +1016,10 @@ shinyServer(function(input, output, session) {
                    edge.color=input$edgecolor
       )
     }
+  })
+  
+  output$tipDiffTable <- renderTable({
+    table <- getTipDiffTable()
   })
   
   ## DENSITREE
@@ -1189,6 +1214,7 @@ shinyServer(function(input, output, session) {
     }
   )
   
+  ## EXPORT TREE COMPARISON PLOT AS PNG ##
   output$downloadTreeDiff <- downloadHandler(
     filename = function() { paste0(getDataSet(),"TreeDiff.png") },
     content = function(file) {
@@ -1201,6 +1227,15 @@ shinyServer(function(input, output, session) {
            edge.width=input$edgewidth)
       dev.off()
       contentType = 'image/png'
+    }
+  )
+  
+  ## EXPORT TIP DIFF TABLE ##
+  output$downloadTipDiffTable <- downloadHandler(
+    filename = function() { paste0(getDataSet(),"TipDiffTable.csv")},
+    content = function(file) {
+      table <- getTipDiffTable()
+      write.csv(table, file)
     }
   )
   

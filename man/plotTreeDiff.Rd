@@ -4,17 +4,19 @@
 \alias{plotTreeDiff}
 \title{Plot tree differences}
 \usage{
-plotTreeDiff(tr1, tr2, vec1 = NULL, vec2 = NULL, baseCol = "grey",
-  col1 = "peachpuff", col2 = "red2", ...)
+plotTreeDiff(tr1, tr2, tipDiff = NULL, vec1 = NULL, vec2 = NULL,
+  baseCol = "grey", col1 = "peachpuff", col2 = "red2", ...)
 }
 \arguments{
-\item{tr1}{an object of the class \code{phylo}: the first tree to plot}
+\item{tr1}{an object of the class \code{phylo}: the first tree to plot.}
 
-\item{tr2}{an object of the class \code{phylo}: the second tree to plot}
+\item{tr2}{an object of the class \code{phylo}: the second tree to plot.}
 
-\item{vec1}{an optional input, the result of \code{treeVec(tr1, lambda=0)}, to speed up the computation}
+\item{tipDiff}{an optional input, the result of \code{\link{tipDiff}}. Supplying this will save time if calling \code{plotTreeDiff} repeatedly, for example with different aesthetics.}
 
-\item{vec2}{an optional input, the result of \code{treeVec(tr2, lambda=0)}, to speed up the computation}
+\item{vec1}{an optional input, the result of \code{treeVec(tr1, lambda=0)}. This argument is ignored if \code{tipDiff} is supplied; otherwise supplying this will save time if calling \code{plotTreeDiff} repeatedly, for example with different aesthetics.}
+
+\item{vec2}{an optional input, the result of \code{treeVec(tr2, lambda=0)}. This argument is ignored if \code{tipDiff} is supplied; otherwise supplying this will save time if calling \code{plotTreeDiff} repeatedly, for example with different aesthetics.}
 
 \item{baseCol}{the colour used for tips with identical ancestry in the two trees. Defaults to "grey".}
 
@@ -34,6 +36,7 @@ A plot of the two trees side by side. Tips are coloured in the following way:
 \description{
 Highlight the topologicial differences between two trees, plotted side by side. 
 This function is useful for comparing representative "median" trees - see \code{\link{medTree}}.
+It relies on the function \code{\link{tipDiff}}.
 }
 \examples{
 ## simple example on trees with five tips:
@@ -43,9 +46,11 @@ plotTreeDiff(tr1,tr2)
 
 ## example on larger woodmice trees
 data(woodmiceTrees)
-plotTreeDiff(woodmiceTrees[[1]],woodmiceTrees[[2]])
+# find the tip differences in advance, to avoid recalculating with each plot
+wmTipDiff <- tipDiff(woodmiceTrees[[1]],woodmiceTrees[[2]])
+plotTreeDiff(woodmiceTrees[[1]],woodmiceTrees[[2]], tipDiff=wmTipDiff)
 ## change aesthetics:
-plotTreeDiff(woodmiceTrees[[1]],woodmiceTrees[[2]], 
+plotTreeDiff(woodmiceTrees[[1]],woodmiceTrees[[2]], tipDiff=wmTipDiff,
    baseCol="grey2", col1="cyan", col2="navy", 
    edge.width=2, type="radial", cex=0.5, font=2)
 
@@ -54,6 +59,6 @@ plotTreeDiff(woodmiceTrees[[1]],woodmiceTrees[[2]],
 Michelle Kendall \email{michelle.louise.kendall@gmail.com}
 }
 \seealso{
-\code{\link{medTree}}
+\code{\link{medTree}}, \code{\link{tipDiff}}
 }
 
