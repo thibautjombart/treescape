@@ -68,7 +68,7 @@ plotGrovesD3(wm.groves)
 # alternative with improved legend and tooltip text, giving the tree numbers:
 plotGrovesD3(wm.groves, tooltip_text=paste0("Tree ",1:201), legend_width=50, col_lab="Cluster")
 
-# plot axes 2 and 3. This helps to show why, for example, the red and orange clusters have been identified as separate, despite them appearing to overlap when viewing axes 1 and 2.
+# plot axes 2 and 3. This helps to show why, for example, clusters 2 and 4 have been identified as separate, despite them appearing to overlap when viewing axes 1 and 2.
 plotGrovesD3(wm.groves, xax=2, yax=3, tooltip_text=paste0("Tree ",1:201), legend_width=50, col_lab="Cluster")
 
 ## ----plotgroves_3D, rgl=TRUE, webgl=TRUE---------------------------------

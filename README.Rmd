@@ -5,7 +5,7 @@
 title: "Exploration of landscapes of phylogenetic trees"
 author: "Thibaut Jombart, Michelle Kendall"
 date: "`r Sys.Date()`"
-output: rmarkdown::github_document
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteIndexEntry{treescape: exploration of landscapes of phylogenetic trees}
