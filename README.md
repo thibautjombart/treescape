@@ -1,18 +1,6 @@
 [![Travis-CI Build Status](https://travis-ci.org/thibautjombart/treescape.png?branch=master)](https://travis-ci.org/thibautjombart/treescape)
 
 
----
-title: "Exploration of landscapes of phylogenetic trees"
-author: "Thibaut Jombart, Michelle Kendall"
-date: "2016-05-20"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteIndexEntry{treescape: exploration of landscapes of phylogenetic trees}
-  \usepackage[utf8]{inputenc}
----
-
-
 
 
 *treescape*: exploration of landscapes of phylogenetic trees
@@ -39,17 +27,6 @@ Then, to load the package, use:
 
 ```r
 library("treescape")
-```
-
-```
-## 
-## Attaching package: 'treescape'
-```
-
-```
-## The following object is masked from 'package:adegenet':
-## 
-##     .render.server.info
 ```
 
 
@@ -85,7 +62,6 @@ We first load *treescape*, and the packages required for graphics:
 
 ```r
 library("treescape")
-library("ade4")
 library("adegenet")
 library("adegraphics")
 library("ggplot2")
@@ -161,7 +137,7 @@ Pairwise tree distances can be visualised using *adegraphics*:
 table.image(res$D, nclass=30)
 ```
 
-![plot of chunk distances](vignettes/figs/distances-1.png)
+![plot of chunk distances_readme](vignettes/figs/distances_readme-1.png)
 
 ```r
 # table.value with some customization
@@ -169,7 +145,7 @@ table.value(res$D, nclass=5, method="color",
             symbol="circle", col=redpal(5))
 ```
 
-![plot of chunk distances](vignettes/figs/distances-2.png)
+![plot of chunk distances_readme](vignettes/figs/distances_readme-2.png)
 
 The best representation of these distances in a 2-dimensional space is given by the first 2 PCs of the MDS.
 These can be visualised using any scatter plotting tool; here we use the *treescape* function `plotGroves`, based on the *adegraphics* function `scatter`:
@@ -179,7 +155,7 @@ These can be visualised using any scatter plotting tool; here we use the *treesc
 plotGroves(res$pco, lab.show=TRUE, lab.cex=1.5)
 ```
 
-![plot of chunk plotgroves](vignettes/figs/plotgroves-1.png)
+![plot of chunk plotgroves_readme](vignettes/figs/plotgroves_readme-1.png)
 
 The functionality of `treescape` can be further illustrated using *ape*'s dataset *woodmouse*, from which we built the 201 trees supplied in `woodmiceTrees` using the neighbour-joining and bootstrapping example from the *ape* documentation. 
 
@@ -206,14 +182,14 @@ head(wm.res$pco$li)
 plotGroves(wm.res$pco)
 ```
 
-![plot of chunk woodmicePlots](vignettes/figs/woodmicePlots-1.png)
+![plot of chunk woodmicePlots_readme](vignettes/figs/woodmicePlots_readme-1.png)
 
 ```r
 # visualising density of points
 s.kde2d(wm.res$pco$li)
 ```
 
-![plot of chunk woodmicePlots](vignettes/figs/woodmicePlots-2.png)
+![plot of chunk woodmicePlots_readme](vignettes/figs/woodmicePlots_readme-2.png)
 
 ```r
 # alternative using ggplot2
@@ -224,7 +200,7 @@ geom_point(size=6, alpha=0.2, colour="navy") + # transparent blue points
 xlab("") + ylab("") + theme_bw(base_family="") # remove axis labels and grey background
 ```
 
-![plot of chunk woodmicePlots](vignettes/figs/woodmicePlots-3.png)
+![plot of chunk woodmicePlots_readme](vignettes/figs/woodmicePlots_readme-3.png)
 
 Interactive plots are also available using `plotGrovesD3` and *rgl*'s `plot3d`.
 
@@ -267,21 +243,21 @@ The results can be plotted directly using `plotGroves` (see `?plotGroves` for op
 plotGroves(wm.groves)
 ```
 
-![plot of chunk plotgroves2](vignettes/figs/plotgroves2-1.png)
+![plot of chunk plotgroves2_readme](vignettes/figs/plotgroves2_readme-1.png)
 
 ```r
 # alternative with inertia ellipses
 plotGroves(wm.groves, type="ellipse")
 ```
 
-![plot of chunk plotgroves2](vignettes/figs/plotgroves2-2.png)
+![plot of chunk plotgroves2_readme](vignettes/figs/plotgroves2_readme-2.png)
 
 ```r
 # plot axes 2 and 3. This helps to show why, for example, clusters 2 and 4 have been identified as separate, despite them appearing to overlap when viewing axes 1 and 2.
 plotGroves(wm.groves, xax=2, yax=3)
 ```
 
-![plot of chunk plotgroves2](vignettes/figs/plotgroves2-3.png)
+![plot of chunk plotgroves2_readme](vignettes/figs/plotgroves2_readme-3.png)
 
 
 `treescapeServer`: a web application for *treescape*
@@ -317,7 +293,7 @@ tre <- medTree(woodmiceTrees)$trees[[1]]
 plot(tre,type="cladogram",edge.width=3, cex=0.8)
 ```
 
-![plot of chunk woodmiceMedian](vignettes/figs/woodmiceMedian-1.png)
+![plot of chunk woodmiceMedian_readme](vignettes/figs/woodmiceMedian_readme-1.png)
 
 However, a more complete and accurate summary of the data can be given by finding a summary tree from each cluster.
 This is achieved using the `groups` argument of `medTree`:
@@ -343,7 +319,7 @@ par(mfrow=c(2,3))
 for(i in 1:length(med.trees)) plot(med.trees[[i]], main=paste("cluster",i),cex=1.5)
 ```
 
-<img src="vignettes/figs/woodmiceCluster1-1.png" title="plot of chunk woodmiceCluster1" alt="plot of chunk woodmiceCluster1" width="600px" />
+<img src="vignettes/figs/woodmiceCluster1_readme-1.png" title="plot of chunk woodmiceCluster1_readme" alt="plot of chunk woodmiceCluster1_readme" width="600px" />
 
 These trees exhibit a number of topological differences, e.g. in the placement of the **(1007S,1208S,0909S)** clade. 
 To examine the differences between the trees in a pairwise manner, we can use the function `plotTreeDiff`, for example:
@@ -354,14 +330,14 @@ To examine the differences between the trees in a pairwise manner, we can use th
 plotTreeDiff(med.trees[[1]],med.trees[[2]], use.edge.length=FALSE)
 ```
 
-![plot of chunk woodmice_plotTreeDiff](vignettes/figs/woodmice_plotTreeDiff-1.png)
+![plot of chunk woodmice_plotTreeDiff_readme](vignettes/figs/woodmice_plotTreeDiff_readme-1.png)
 
 ```r
 # Compare median trees from clusters 1 and 4, and change aesthetics:
 plotTreeDiff(med.trees[[1]],med.trees[[4]], type="cladogram", use.edge.length=FALSE, edge.width=2, col1="cyan", col2="navy")
 ```
 
-![plot of chunk woodmice_plotTreeDiff](vignettes/figs/woodmice_plotTreeDiff-2.png)
+![plot of chunk woodmice_plotTreeDiff_readme](vignettes/figs/woodmice_plotTreeDiff_readme-2.png)
 
 Performing this analysis enables the detection of distinct representative trees supported by data.
 
@@ -382,7 +358,7 @@ wm3.res <- treescape(woodmiceTrees,nf=2,emphasise.tips=c("No1007S","No1208S","No
 plotGroves(wm3.res$pco)
 ```
 
-![plot of chunk woodmice-tip-emphasis](vignettes/figs/woodmice-tip-emphasis-1.png)
+![plot of chunk woodmice-tip-emphasis_readme](vignettes/figs/woodmice-tip-emphasis_readme-1.png)
 
 It can be seen from the scale of the plot and the density of clustering that the trees are now separated into more distinct clusters.
 
@@ -391,7 +367,7 @@ wm3.groves <- findGroves(woodmiceTrees,nf=3,nclust=6,emphasise.tips=c("No1007S",
 plotGroves(wm3.groves, type="ellipse")
 ```
 
-![plot of chunk findgroves-with-emphasis](vignettes/figs/findgroves-with-emphasis-1.png)
+![plot of chunk findgroves-with-emphasis_readme](vignettes/figs/findgroves-with-emphasis_readme-1.png)
 
 Conversely, where the structure of a particular clade is not of interest (for example, lineages within an outgroup which was only included for rooting purposes), those tips can be given a weight less than 1 so as to give them less emphasis in the comparison. We note that although it is possible to give tips a weighting of 0, we advise caution with this as the underlying function will no longer be guaranteed to be a metric. That is, a distance of 0 between two trees will no longer necessarily imply that the trees are identical. In most cases it would be wiser to assign a very small weighting to tips which are not of interest.
 

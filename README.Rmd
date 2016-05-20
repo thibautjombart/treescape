@@ -1,18 +1,6 @@
 [![Travis-CI Build Status](https://travis-ci.org/thibautjombart/treescape.png?branch=master)](https://travis-ci.org/thibautjombart/treescape)
 
 
----
-title: "Exploration of landscapes of phylogenetic trees"
-author: "Thibaut Jombart, Michelle Kendall"
-date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteIndexEntry{treescape: exploration of landscapes of phylogenetic trees}
-  \usepackage[utf8]{inputenc}
----
-
-
 ```{r setup, echo=FALSE}
 # set global chunk options: images will be 7x5 inches
 knitr::opts_chunk$set(fig.width=7, fig.height=7, fig.path="vignettes/figs/", cache=FALSE)
@@ -74,7 +62,6 @@ Exploring trees with *treescape*
 We first load *treescape*, and the packages required for graphics:
 ```{r load_packages, message=FALSE, warning=FALSE}
 library("treescape")
-library("ade4")
 library("adegenet")
 library("adegraphics")
 library("ggplot2")
@@ -101,7 +88,7 @@ res
 ```
 
 Pairwise tree distances can be visualised using *adegraphics*:
-```{r distances}
+```{r distances_readme}
 # table.image
 table.image(res$D, nclass=30)
 
@@ -114,12 +101,12 @@ table.value(res$D, nclass=5, method="color",
 The best representation of these distances in a 2-dimensional space is given by the first 2 PCs of the MDS.
 These can be visualised using any scatter plotting tool; here we use the *treescape* function `plotGroves`, based on the *adegraphics* function `scatter`:
 
-```{r plotgroves}
+```{r plotgroves_readme}
 plotGroves(res$pco, lab.show=TRUE, lab.cex=1.5)
 ```
 
 The functionality of `treescape` can be further illustrated using *ape*'s dataset *woodmouse*, from which we built the 201 trees supplied in `woodmiceTrees` using the neighbour-joining and bootstrapping example from the *ape* documentation. 
-```{r woodmicePlots}
+```{r woodmicePlots_readme}
 data(woodmiceTrees)
 wm.res <- treescape(woodmiceTrees,nf=3)
 
@@ -170,7 +157,7 @@ names(wm.groves)
 Note that when the number of clusters (`nclust`) is not provided, the function will display a dendrogram and ask for a cut-off height. 
 
 The results can be plotted directly using `plotGroves` (see `?plotGroves` for options):
-```{r plotgroves2}
+```{r plotgroves2_readme}
 # basic plot
 plotGroves(wm.groves)
 
@@ -206,7 +193,7 @@ In `treescape`, this is achieved by finding the *median tree* for a set of trees
 That is, we find the tree which is closest to the centre of the set of trees in the tree landscape defined in `treescape`.
 This procedure is implemented by the function `medTree`:
 
-```{r woodmiceMedian}
+```{r woodmiceMedian_readme}
 # get first median tree
 tre <- medTree(woodmiceTrees)$trees[[1]]
 
@@ -216,7 +203,7 @@ plot(tre,type="cladogram",edge.width=3, cex=0.8)
 
 However, a more complete and accurate summary of the data can be given by finding a summary tree from each cluster.
 This is achieved using the `groups` argument of `medTree`:
-```{r woodmiceCluster1, out.width="600px"}
+```{r woodmiceCluster1_readme, out.width="600px"}
 # find median trees for the 6 clusters identified earlier:
 res <- medTree(woodmiceTrees, wm.groves$groups)
 
@@ -235,7 +222,7 @@ for(i in 1:length(med.trees)) plot(med.trees[[i]], main=paste("cluster",i),cex=1
 These trees exhibit a number of topological differences, e.g. in the placement of the **(1007S,1208S,0909S)** clade. 
 To examine the differences between the trees in a pairwise manner, we can use the function `plotTreeDiff`, for example:
 
-```{r woodmice_plotTreeDiff}
+```{r woodmice_plotTreeDiff_readme}
 # Compare median trees from clusters 1 and 2:
 plotTreeDiff(med.trees[[1]],med.trees[[2]], use.edge.length=FALSE)
 # Compare median trees from clusters 1 and 4, and change aesthetics:
@@ -253,7 +240,7 @@ Emphasising the placement of certain tips or clades
 In some analyses it may be informative to emphasise the placement of particular tips or clades within a set of trees. This can be particularly useful in large trees where the study is focused on a smaller clade. Priority can be given to a list of tips using the argument `emphasise.tips`, whose corresponding values in the vector comparison will be given a weight of `emphasise.weight` times the others (the default is 2, i.e. twice the weight).
 
 For example, if we wanted to emphasise where the woodmice trees agree and disagree on the placement of the **(1007S,1208S,0909S)** clade, we can simply emphasise that clade as follows: 
-```{r woodmice-tip-emphasis}
+```{r woodmice-tip-emphasis_readme}
 wm3.res <- treescape(woodmiceTrees,nf=2,emphasise.tips=c("No1007S","No1208S","No0909S"),emphasise.weight=3)
 
 # plot results
@@ -261,7 +248,7 @@ plotGroves(wm3.res$pco)
 ```
 
 It can be seen from the scale of the plot and the density of clustering that the trees are now separated into more distinct clusters.
-```{r findgroves-with-emphasis}
+```{r findgroves-with-emphasis_readme}
 wm3.groves <- findGroves(woodmiceTrees,nf=3,nclust=6,emphasise.tips=c("No1007S","No1208S","No0909S"),emphasise.weight=3)
 plotGroves(wm3.groves, type="ellipse")
 ```
