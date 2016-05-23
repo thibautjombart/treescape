@@ -214,11 +214,15 @@ It is then straightforward to analyse the tree space by varying $\lambda$, looki
 Individual trees can be easily viewed, including median trees per cluster (see below). Pairs of trees can be viewed together with their tip-differences highlighted using the function `plotTreeDiff`, and collections of trees can be seen together using `densiTree` from the package *phangorn*.
 It is fully documented in the *help* tab.
 
-<img src="figs/treescape3d.png" style="width:650px"/>
 
-<img src="figs/treescapeTree.png" style="width:650px"/>
+```{r shiny_figures, echo=FALSE, out.width="650px", fig.retina = NULL}
+knitr::include_graphics("figs/treescape3d.png")
 
-<img src="figs/treescapeDensiTree.png" style="width:650px"/>
+knitr::include_graphics("figs/treescapeTree.png")
+
+knitr::include_graphics("figs/treescapeDensiTree.png")
+```
+
 
 
 

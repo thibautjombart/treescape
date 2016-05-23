@@ -55,7 +55,7 @@ NULL
 #' BEAST analysis of Dengue fever
 #'
 #' These trees were created using one of the \code{xml} files provided with the original BEAST paper by Drummond and Rambaut (2007).
-#' They provide an example of 17 dengue virus serotype 4 sequences from Lanciotti et al. (1997) (available at \code{\link{data(DengueSeqs)}}) and \code{xml} files with varying priors for model and clock rate.
+#' They provide an example of 17 dengue virus serotype 4 sequences from Lanciotti et al. (1997) (available as \code{\link{DengueSeqs}}) and \code{xml} files with varying priors for model and clock rate.
 #' Here we include a random sample of 500 of the trees (from the second half of the posterior) produced using BEAST v1.8 with the standard GTR + Gamma + I substitution model with uncorrelated lognormal-distributed relaxed molecular clock (file 4).
 #'
 #' @name DengueTrees
@@ -75,7 +75,7 @@ NULL
 
 #' Dengue fever BEAST MCC tree
 #'
-#' The maximum clade credibility (MCC) tree from \code{\link{data(DengueTrees)}}
+#' The maximum clade credibility (MCC) tree from \code{\link{DengueTrees}}
 #'
 #' @name DengueBEASTMCC
 #' @docType data

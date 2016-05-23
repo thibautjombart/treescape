@@ -9,7 +9,7 @@
 http://bmcevolbiol.biomedcentral.com/articles/10.1186/1471-2148-7-214
 }
 \description{
-The maximum clade credibility (MCC) tree from \code{\link{data(DengueTrees)}}
+The maximum clade credibility (MCC) tree from \code{\link{DengueTrees}}
 }
 \author{
 Michelle Kendall \email{michelle.louise.kendall@gmail.com}

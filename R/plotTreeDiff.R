@@ -83,6 +83,8 @@ tipDiff <- function(tr1,tr2,vec1=NULL,vec2=NULL) {
 #' @author Michelle Kendall \email{michelle.louise.kendall@@gmail.com}
 #'
 #' @import ape
+#' @importFrom grDevices colorRampPalette
+#' @importFrom graphics layout
 #'
 #' @param tr1 an object of the class \code{phylo}: the first tree to plot.
 #' @param tr2 an object of the class \code{phylo}: the second tree to plot.

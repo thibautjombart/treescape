@@ -80,6 +80,13 @@ plot3d(wm.groves$treescape$pco$li[,1],
        col=colours, type="s", size=1.5,
        xlab="", ylab="", zlab="")
 
+## ----shiny_figures, echo=FALSE, out.width="650px", fig.retina = NULL-----
+knitr::include_graphics("figs/treescape3d.png")
+
+knitr::include_graphics("figs/treescapeTree.png")
+
+knitr::include_graphics("figs/treescapeDensiTree.png")
+
 ## ----woodmiceMedian------------------------------------------------------
 # get first median tree
 tre <- medTree(woodmiceTrees)$trees[[1]]
