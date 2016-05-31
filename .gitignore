@@ -4,3 +4,4 @@ inst/shiny/.Rhistory
 misc/*
 *.Rproj
 *.Rproj.user
+*.Rhistory

@@ -333,9 +333,9 @@ shinyServer(function(input, output, session) {
     
     ## select method used to summarise tree
     if(!is.null(TM)){
-      if(TM %in% c("patristic","nNodes","Abouheif","sumDD")){
-        ## run treescape
-        res <- treescape(x, method=TM, nf=naxes)
+      if(TM %in% c("BHV","KF","RF","patristic","nNodes","Abouheif","sumDD")){
+        ## run treescape (suppress warnings about rootedness etc.)
+        res <- suppressWarnings(treescape(x, method=TM, nf=naxes))
       } 
       else if(TM=="metric"){
         ## don't actually need to call treescape here, to save on recomputation for varying lambda
@@ -343,19 +343,6 @@ shinyServer(function(input, output, session) {
         pco <- getPCO()
         res <- list(D=D, pco=pco) 
       } 
-      else if(TM=="RF"){
-        # suppress unrooted warning
-        D <- suppressWarnings(RF.dist(x))
-        # suppress non-Euclidean distance warning
-        pco <- suppressWarnings(dudi.pco(D, scannf=FALSE, nf=naxes))
-        res <- list(D=D, pco=pco) 
-      }
-      else if(TM=="BHV"){
-        D <- dist.multiPhylo(x)
-        # suppress non-Euclidean distance warning
-        pco <- suppressWarnings(dudi.pco(D, scannf=FALSE, nf=naxes))
-        res <- list(D=D, pco=pco) 
-      }
     }
     
     ## return results
@@ -415,10 +402,10 @@ shinyServer(function(input, output, session) {
     
     ## select method used to summarise tree
     if(!is.null(TM)){
-      if(TM %in% c("patristic","nNodes","Abouheif","sumDD")){
+      if(TM %in% c("BHV","RF","KF","patristic","nNodes","Abouheif","sumDD")){
         ## run findGroves
         res <- findGroves(x, method=TM, nf=naxes, nclust=nclust, clustering=clustmethod)
-      } else if(TM %in% c("metric","BHV","RF")){
+      } else if(TM=="metric"){
         res <- findGroves(getAnalysis(), nclust=nclust, clustering=clustmethod)
       } 
     }

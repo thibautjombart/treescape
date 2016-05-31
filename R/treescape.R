@@ -7,12 +7,13 @@
 #' @param method the method for summarising the tree as a vector.
 #' Choose from:
 #' \code{treeVec} (default) the Kendall Colijn metric vector
-#' \code{RF} the Robinson Foulds metric using \code{RF.dist} from package \code{phangorn} (Note: this considers the trees as unrooted and issues a corresponding warning)
 #' \code{BHV} the Billera, Holmes Vogtmann metric using \code{dist.multiPhylo} from package \code{distory}
+#' \code{KF} the Kuhner Felsenstein metric (branch score distance) using \code{KF.dist} from package \code{phangorn} (Note: this considers the trees as unrooted)
+#' \code{RF} the Robinson Foulds metric using \code{RF.dist} from package \code{phangorn} (Note: this considers the trees as unrooted and issues a corresponding warning)
+#' \code{nNodes} the Steel & Penny tip-tip path difference metric, (topological, ignoring branch lengths), using \code{path.dist} from package \code{phangorn} (Note: this considers the trees as unrooted)
+#' \code{patristic} the Steel & Penny tip-tip path difference metric, using branch lengths, calling \code{path.dist} from package \code{phangorn} (Note: this considers the trees as unrooted)
 #' others inherited from \code{distTips} in \code{adephylo}:
 #' \itemize{
-#' \item \code{patristic}: for each pair of tips, the sum of branch lengths on the path between them
-#' \item \code{nNodes}: for each pair of tips, the number of nodes on the path between them
 #' \item \code{Abouheif}: performs Abouheif's test. See Pavoine et al. (2008) and \code{adephylo}.
 #' \item \code{sumDD}: sum of direct descendants of all nodes on the path, related to Abouheif's test. See \code{adephylo}.
 #' }
@@ -28,8 +29,9 @@
 #' @importFrom adephylo distTips
 #' @importFrom distory dist.multiPhylo
 #' @importFrom fields rdist
+#' @importFrom phangorn KF.dist
+#' @importFrom phangorn path.dist
 #' @importFrom phangorn RF.dist
-
 #'
 #' @examples
 #'
@@ -99,15 +101,24 @@ treescape <- function(x, method="treeVec", nf=NULL, return.tree.vectors=FALSE, .
       ## get pairwise Euclidean distances ##
       D <- as.dist(rdist(df))
     }
-    else if(method %in% c("patristic","nNodes","Abouheif","sumDD")){
+    else if(method %in% c("Abouheif","sumDD")){
       df <- t(data.frame(lapply(x, function(e) as.vector(adephylo::distTips(e,method=method,...)))))
       ## get pairwise Euclidean distances ##
       D <- as.dist(rdist(df))
+    }
+    else if(method=="patristic"){
+      D <- path.dist(x, use.weight=TRUE)
+    }
+    else if(method=="nNodes"){
+      D <- path.dist(x, use.weight=FALSE)
     }
     else if(method=="RF"){
       D <- RF.dist(x)
       ## make the distance Euclidean
       D <- ade4::cailliez(D, print=FALSE)
+    }
+    else if(method=="KF"){
+      D <- KF.dist(x)
     }
     else if(method=="BHV"){
       D <- dist.multiPhylo(x)
