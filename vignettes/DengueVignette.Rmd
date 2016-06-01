@@ -74,7 +74,7 @@ Dnjboots <- boot.phylo(DnjRooted, DengueSeqs, B=100,
 Dnjboots
 ```
 
-Create a maximum-likelihood (ML) tree
+We create a maximum-likelihood (ML) tree and root it as before:
 ```{r make_ML, results="hide", message=FALSE}
 Dfit.ini <- pml(DnjRooted, as.phyDat(DengueSeqs), k=4)
 Dfit <- optim.pml(Dfit.ini, optNni=TRUE, optBf=TRUE,
