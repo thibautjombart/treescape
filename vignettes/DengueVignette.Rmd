@@ -58,12 +58,13 @@ Create a neighbour-joining (NJ) tree using the Tamura and Nei (1993) model (see 
 makeTree <- function(x){
   tree <- nj(dist.dna(x, model = "TN93"))
   tree <- root(tree, resolve.root=TRUE, outgroup="D4Thai63")
+  tree
 }
 DnjRooted <- makeTree(DengueSeqs)
 plot(DnjRooted)
 ```
 
-We note that bootstrapping gives 100% support:
+We use `boot.phylo` to bootstrap the tree:
 ```{r make_NJ_boots, results="hide"}
 Dnjboots <- boot.phylo(DnjRooted, DengueSeqs, B=100, 
 	    	       makeTree, trees=TRUE)
