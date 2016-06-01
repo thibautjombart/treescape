@@ -55,15 +55,18 @@ Creating neighbour-joining and maximum likelihood trees:
 
 Create a neighbour-joining (NJ) tree using the Tamura and Nei (1993) model (see `?dist.dna` for more information) and root it on the outgroup `"D4Thai63"`:
 ```{r make_NJ}
-Dnj <- nj(dist.dna(DengueSeqs, model = "TN93"))
-DnjRooted <- root(Dnj, resolve.root=TRUE, outgroup="D4Thai63")
+makeTree <- function(x){
+  tree <- nj(dist.dna(x, model = "TN93"))
+  tree <- root(tree, resolve.root=TRUE, outgroup="D4Thai63")
+}
+DnjRooted <- makeTree(DengueSeqs)
 plot(DnjRooted)
 ```
 
 We note that bootstrapping gives 100% support:
 ```{r make_NJ_boots, results="hide"}
-Dnjboots <- boot.phylo(Dnj, as.matrix(DengueSeqs, model = "TN93"), B=100, function(e)
-                       nj(dist.dna(DengueSeqs, model = "TN93")), trees=TRUE)
+Dnjboots <- boot.phylo(DnjRooted, DengueSeqs, B=100, 
+	    	       makeTree, trees=TRUE)
 ```
 
 ```{r see_NJ_boots}
