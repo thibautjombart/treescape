@@ -31,6 +31,14 @@ Then, to load the package, use:
 library("treescape")
 ```
 
+```
+## Loading required package: ape
+```
+
+```
+## Loading required package: ade4
+```
+
 
 Content overview
 -------------
@@ -139,12 +147,24 @@ Pairwise tree distances can be visualised using *adegraphics*:
 table.image(res$D, nclass=30)
 ```
 
+```
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+```
+
 ![plot of chunk distances_readme](vignettes/figs/distances_readme-1.png)
 
 ```r
 # table.value with some customization
 table.value(res$D, nclass=5, method="color", 
             symbol="circle", col=redpal(5))
+```
+
+```
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
 ```
 
 ![plot of chunk distances_readme](vignettes/figs/distances_readme-2.png)
@@ -155,6 +175,71 @@ These can be visualised using any scatter plotting tool; here we use the *treesc
 
 ```r
 plotGroves(res$pco, lab.show=TRUE, lab.cex=1.5)
+```
+
+```
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+```
+
+```
+## Warning in rep(object@adeg.par$porigin$origin, le = 2): partial argument
+## match of 'le' to 'length.out'
+
+## Warning in rep(object@adeg.par$porigin$origin, le = 2): partial argument
+## match of 'le' to 'length.out'
+```
+
+```
+## Warning in rep(origin, le = 2): partial argument match of 'le' to
+## 'length.out'
+```
+
+```
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+```
+
+```
+## Warning in seq.default(len = (i - 1)): partial argument match of 'len' to
+## 'length.out'
+
+## Warning in seq.default(len = (i - 1)): partial argument match of 'len' to
+## 'length.out'
+
+## Warning in seq.default(len = (i - 1)): partial argument match of 'len' to
+## 'length.out'
+
+## Warning in seq.default(len = (i - 1)): partial argument match of 'len' to
+## 'length.out'
+
+## Warning in seq.default(len = (i - 1)): partial argument match of 'len' to
+## 'length.out'
+
+## Warning in seq.default(len = (i - 1)): partial argument match of 'len' to
+## 'length.out'
+
+## Warning in seq.default(len = (i - 1)): partial argument match of 'len' to
+## 'length.out'
+
+## Warning in seq.default(len = (i - 1)): partial argument match of 'len' to
+## 'length.out'
+
+## Warning in seq.default(len = (i - 1)): partial argument match of 'len' to
+## 'length.out'
+
+## Warning in seq.default(len = (i - 1)): partial argument match of 'len' to
+## 'length.out'
 ```
 
 ![plot of chunk plotgroves_readme](vignettes/figs/plotgroves_readme-1.png)
@@ -184,11 +269,49 @@ head(wm.res$pco$li)
 plotGroves(wm.res$pco)
 ```
 
+```
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+```
+
+```
+## Warning in rep(object@adeg.par$porigin$origin, le = 2): partial argument
+## match of 'le' to 'length.out'
+
+## Warning in rep(object@adeg.par$porigin$origin, le = 2): partial argument
+## match of 'le' to 'length.out'
+```
+
+```
+## Warning in rep(origin, le = 2): partial argument match of 'le' to
+## 'length.out'
+```
+
+```
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+```
+
 ![plot of chunk woodmicePlots_readme](vignettes/figs/woodmicePlots_readme-1.png)
 
 ```r
 # visualising density of points
 s.kde2d(wm.res$pco$li)
+```
+
+```
+## Warning in seq.default(zlim[1], zlim[2], le = 8): partial argument match of
+## 'le' to 'length.out'
 ```
 
 ![plot of chunk woodmicePlots_readme](vignettes/figs/woodmicePlots_readme-2.png)
@@ -200,6 +323,34 @@ woodmiceplot + geom_density2d(colour="gray80") + # contour lines
 geom_point(size=6, shape=1, colour="gray50") + # grey edges
 geom_point(size=6, alpha=0.2, colour="navy") + # transparent blue points
 xlab("") + ylab("") + theme_bw(base_family="") # remove axis labels and grey background
+```
+
+```
+## Warning in seq.default(pos[i, 1], length = pos[i, 2]): partial argument
+## match of 'length' to 'length.out'
+```
+
+```
+## Warning in seq.default(pos[i, 1], length = pos[i, 2]): partial argument
+## match of 'length' to 'length.out'
+
+## Warning in seq.default(pos[i, 1], length = pos[i, 2]): partial argument
+## match of 'length' to 'length.out'
+
+## Warning in seq.default(pos[i, 1], length = pos[i, 2]): partial argument
+## match of 'length' to 'length.out'
+
+## Warning in seq.default(pos[i, 1], length = pos[i, 2]): partial argument
+## match of 'length' to 'length.out'
+
+## Warning in seq.default(pos[i, 1], length = pos[i, 2]): partial argument
+## match of 'length' to 'length.out'
+
+## Warning in seq.default(pos[i, 1], length = pos[i, 2]): partial argument
+## match of 'length' to 'length.out'
+
+## Warning in seq.default(pos[i, 1], length = pos[i, 2]): partial argument
+## match of 'length' to 'length.out'
 ```
 
 ![plot of chunk woodmicePlots_readme](vignettes/figs/woodmicePlots_readme-3.png)
@@ -245,6 +396,39 @@ The results can be plotted directly using `plotGroves` (see `?plotGroves` for op
 plotGroves(wm.groves)
 ```
 
+```
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+```
+
+```
+## Warning in rep(object@adeg.par$porigin$origin, le = 2): partial argument
+## match of 'le' to 'length.out'
+
+## Warning in rep(object@adeg.par$porigin$origin, le = 2): partial argument
+## match of 'le' to 'length.out'
+```
+
+```
+## Warning in rep(origin, le = 2): partial argument match of 'le' to
+## 'length.out'
+```
+
+```
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+```
+
 ![plot of chunk plotgroves2_readme](vignettes/figs/plotgroves2_readme-1.png)
 
 ```r
@@ -252,11 +436,96 @@ plotGroves(wm.groves)
 plotGroves(wm.groves, type="ellipse")
 ```
 
+```
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+```
+
+```
+## Warning in rep(object@adeg.par$porigin$origin, le = 2): partial argument
+## match of 'le' to 'length.out'
+
+## Warning in rep(object@adeg.par$porigin$origin, le = 2): partial argument
+## match of 'le' to 'length.out'
+```
+
+```
+## Warning in rep(origin, le = 2): partial argument match of 'le' to
+## 'length.out'
+```
+
+```
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+```
+
+```
+## Warning in rep(x, le = length(ellip)): partial argument match of 'le' to
+## 'length.out'
+
+## Warning in rep(x, le = length(ellip)): partial argument match of 'le' to
+## 'length.out'
+
+## Warning in rep(x, le = length(ellip)): partial argument match of 'le' to
+## 'length.out'
+
+## Warning in rep(x, le = length(ellip)): partial argument match of 'le' to
+## 'length.out'
+
+## Warning in rep(x, le = length(ellip)): partial argument match of 'le' to
+## 'length.out'
+```
+
 ![plot of chunk plotgroves2_readme](vignettes/figs/plotgroves2_readme-2.png)
 
 ```r
 # plot axes 2 and 3. This helps to show why, for example, clusters 2 and 4 have been identified as separate, despite them appearing to overlap when viewing axes 1 and 2.
 plotGroves(wm.groves, xax=2, yax=3)
+```
+
+```
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+```
+
+```
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+```
+
+```
+## Warning in rep(object@adeg.par$porigin$origin, le = 2): partial argument
+## match of 'le' to 'length.out'
+
+## Warning in rep(object@adeg.par$porigin$origin, le = 2): partial argument
+## match of 'le' to 'length.out'
+```
+
+```
+## Warning in rep(origin, le = 2): partial argument match of 'le' to
+## 'length.out'
+```
+
+```
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
 ```
 
 ![plot of chunk plotgroves2_readme](vignettes/figs/plotgroves2_readme-3.png)
@@ -269,7 +538,7 @@ It can be started by simply typing `treescapeServer()`.
 The interface allows you to import trees and run `treescape` to view and explore the tree space in 2 or 3 dimensions.
 It is then straightforward to analyse the tree space by varying lambda, looking for clusters using `findGroves` and saving results in various formats.
 Individual trees can be easily viewed including median trees per cluster, and collections of trees can be seen together using `densiTree` from the package `phangorn`.
-It is fully documented in the *help* tab.
+**It is fully documented in the *help* tab.**
 
 <img src="vignettes/figs/treescape3d.png" style="width:650px"/>
 
@@ -332,11 +601,21 @@ To examine the differences between the trees in a pairwise manner, we can use th
 plotTreeDiff(med.trees[[1]],med.trees[[2]], use.edge.length=FALSE)
 ```
 
+```
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+```
+
 ![plot of chunk woodmice_plotTreeDiff_readme](vignettes/figs/woodmice_plotTreeDiff_readme-1.png)
 
 ```r
 # Compare median trees from clusters 1 and 4, and change aesthetics:
 plotTreeDiff(med.trees[[1]],med.trees[[4]], type="cladogram", use.edge.length=FALSE, edge.width=2, col1="cyan", col2="navy")
+```
+
+```
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
 ```
 
 ![plot of chunk woodmice_plotTreeDiff_readme](vignettes/figs/woodmice_plotTreeDiff_readme-2.png)
@@ -355,9 +634,651 @@ For example, if we wanted to emphasise where the woodmice trees agree and disagr
 
 ```r
 wm3.res <- treescape(woodmiceTrees,nf=2,emphasise.tips=c("No1007S","No1208S","No0909S"),emphasise.weight=3)
+```
 
+```
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+```
+
+```r
 # plot results
 plotGroves(wm3.res$pco)
+```
+
+```
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+```
+
+```
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+```
+
+```
+## Warning in rep(object@adeg.par$porigin$origin, le = 2): partial argument
+## match of 'le' to 'length.out'
+
+## Warning in rep(object@adeg.par$porigin$origin, le = 2): partial argument
+## match of 'le' to 'length.out'
+```
+
+```
+## Warning in rep(origin, le = 2): partial argument match of 'le' to
+## 'length.out'
+```
+
+```
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
 ```
 
 ![plot of chunk woodmice-tip-emphasis_readme](vignettes/figs/woodmice-tip-emphasis_readme-1.png)
@@ -366,7 +1287,667 @@ It can be seen from the scale of the plot and the density of clustering that the
 
 ```r
 wm3.groves <- findGroves(woodmiceTrees,nf=3,nclust=6,emphasise.tips=c("No1007S","No1208S","No0909S"),emphasise.weight=3)
+```
+
+```
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+
+## Warning in seq.default(length = n): partial argument match of 'length' to
+## 'length.out'
+```
+
+```r
 plotGroves(wm3.groves, type="ellipse")
+```
+
+```
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+```
+
+```
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+```
+
+```
+## Warning in rep(object@adeg.par$porigin$origin, le = 2): partial argument
+## match of 'le' to 'length.out'
+
+## Warning in rep(object@adeg.par$porigin$origin, le = 2): partial argument
+## match of 'le' to 'length.out'
+```
+
+```
+## Warning in rep(origin, le = 2): partial argument match of 'le' to
+## 'length.out'
+```
+
+```
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+
+## Warning in switchi$assign: partial match of 'assign' to 'assigni'
+```
+
+```
+## Warning in rep(x, le = length(ellip)): partial argument match of 'le' to
+## 'length.out'
+
+## Warning in rep(x, le = length(ellip)): partial argument match of 'le' to
+## 'length.out'
+
+## Warning in rep(x, le = length(ellip)): partial argument match of 'le' to
+## 'length.out'
+
+## Warning in rep(x, le = length(ellip)): partial argument match of 'le' to
+## 'length.out'
+
+## Warning in rep(x, le = length(ellip)): partial argument match of 'le' to
+## 'length.out'
 ```
 
 ![plot of chunk findgroves-with-emphasis_readme](vignettes/figs/findgroves-with-emphasis_readme-1.png)
@@ -397,7 +1978,7 @@ treeVec(tree)
 ```
 
 ```
-##  [1] 0 0 2 2 1 1 0 0 0 0 0 0 3 1 1 1 1 1 1 1 1
+##  [1] 2 3 2 0 1 2 3 0 1 2 0 1 0 1 0 1 1 1 1 1 1
 ```
 
 ```r
@@ -406,9 +1987,9 @@ treeVec(tree,0.5)
 ```
 
 ```
-##  [1] 0.0000 0.0000 1.2882 1.2882 0.5961 0.7394 0.0000 0.0000 0.0000 0.0000
-## [11] 0.0000 0.0000 2.0524 0.5961 0.5961 0.6537 0.9528 0.5093 0.9768 0.8641
-## [21] 0.7480
+##  [1] 1.2482 1.7574 1.2482 0.0000 0.5367 1.2482 2.2422 0.0000 0.5367 1.2482
+## [11] 0.0000 0.5367 0.0000 0.5367 0.0000 0.5961 0.7394 0.6922 0.9528 0.6537
+## [21] 0.9249
 ```
 
 ```r
@@ -419,9 +2000,9 @@ vecAsFunction(0.5)
 ```
 
 ```
-##  [1] 0.0000 0.0000 1.2882 1.2882 0.5961 0.7394 0.0000 0.0000 0.0000 0.0000
-## [11] 0.0000 0.0000 2.0524 0.5961 0.5961 0.6537 0.9528 0.5093 0.9768 0.8641
-## [21] 0.7480
+##  [1] 1.2482 1.7574 1.2482 0.0000 0.5367 1.2482 2.2422 0.0000 0.5367 1.2482
+## [11] 0.0000 0.5367 0.0000 0.5367 0.0000 0.5961 0.7394 0.6922 0.9528 0.6537
+## [21] 0.9249
 ```
 
 The metric -- the distance between two trees -- is the Euclidean distance between these vectors:
@@ -441,7 +2022,7 @@ treeDist(tree_a,tree_b)
 ```
 
 ```
-## [1] 6
+## [1] 4.243
 ```
 
 ```r
@@ -450,7 +2031,7 @@ treeDist(tree_a,tree_b,1)
 ```
 
 ```
-## [1] 3.008
+## [1] 2.864
 ```
 
 

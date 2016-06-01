@@ -178,7 +178,7 @@ It can be started by simply typing `treescapeServer()`.
 The interface allows you to import trees and run `treescape` to view and explore the tree space in 2 or 3 dimensions.
 It is then straightforward to analyse the tree space by varying lambda, looking for clusters using `findGroves` and saving results in various formats.
 Individual trees can be easily viewed including median trees per cluster, and collections of trees can be seen together using `densiTree` from the package `phangorn`.
-It is fully documented in the *help* tab.
+**It is fully documented in the *help* tab.**
 
 <img src="vignettes/figs/treescape3d.png" style="width:650px"/>
 
