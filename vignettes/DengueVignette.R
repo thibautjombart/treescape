@@ -20,13 +20,19 @@ BEASTtrees <- DengueTrees[sample(1:length(DengueTrees),200)]
 data(DengueSeqs)
 
 ## ----make_NJ-------------------------------------------------------------
-Dnj <- nj(dist.dna(DengueSeqs, model = "TN93"))
-DnjRooted <- root(Dnj, resolve.root=TRUE, outgroup="D4Thai63")
+makeTree <- function(x){
+  tree <- nj(dist.dna(x, model = "TN93"))
+  tree <- root(tree, resolve.root=TRUE, outgroup="D4Thai63")
+  tree
+}
+DnjRooted <- makeTree(DengueSeqs)
 plot(DnjRooted)
 
 ## ----make_NJ_boots, results="hide"---------------------------------------
-Dnjboots <- boot.phylo(Dnj, as.matrix(DengueSeqs, model = "TN93"), B=100, function(e)
-                       nj(dist.dna(DengueSeqs, model = "TN93")), trees=TRUE)
+Dnjboots <- boot.phylo(DnjRooted, DengueSeqs, B=100, 
+	    	       makeTree, trees=TRUE)
+# root:
+Dnjbootsrooted <- lapply(Dnjboots$trees, function(x) root(x, resolve.root=TRUE, outgroup="D4Thai63"))
 
 ## ----see_NJ_boots--------------------------------------------------------
 Dnjboots
@@ -49,15 +55,16 @@ DMLbootsrooted <- lapply(DMLboots, function(x) root(x, resolve.root=TRUE, outgro
 
 ## ----run_treescape-------------------------------------------------------
 # collect the trees into a single object of class multiPhylo:
-DengueTrees <- c(BEASTtrees,DMLbootsrooted,list(DfitTreeRooted),list(DnjRooted))
+DengueTrees <- c(BEASTtrees,Dnjbootsrooted,DMLbootsrooted,list(DnjRooted),list(DfitTreeRooted))
 class(DengueTrees) <- "multiPhylo"
 # add tree names:
 names(DengueTrees)[1:200] <- paste0("BEAST",1:200)
-names(DengueTrees)[201:300] <- paste0("ML_boot",1:100)
-names(DengueTrees)[[301]] <- "ML"
-names(DengueTrees)[[302]] <- "NJ"
+names(DengueTrees)[201:300] <- paste0("NJ_boots",1:100)
+names(DengueTrees)[301:400] <- paste0("ML_boots",1:100)
+names(DengueTrees)[[401]] <- "NJ"
+names(DengueTrees)[[402]] <- "ML"
 # create vector corresponding to tree inference method:
-Dtype <- c(rep("BEAST",200),rep("MLboots",100),"ML","NJ")
+Dtype <- c(rep("BEAST",200),rep("NJboots",100),rep("MLboots",100),"NJ","ML")
 
 # use treescape to find and project the distances:
 Dscape <- treescape(DengueTrees, nf=5)
@@ -66,16 +73,49 @@ Dscape <- treescape(DengueTrees, nf=5)
 plotGrovesD3(Dscape$pco, groups=Dtype)
 
 ## ----make_better_plot----------------------------------------------------
-Dcols <- c("#abd9e9","#fdae61","#d7191c","#2c7bb6")
-plotGrovesD3(Dscape$pco, groups=Dtype, colors=Dcols, point_size=200, point_opacity=c(rep(0.5,300),1,1), col_lab="Tree type", legend_width=80)
+Dcols <- c("#1b9e77","#d95f02","#7570b3")#,"#d95f02","#7570b3")
+Dmethod <- c(rep("BEAST",200),rep("NJ",100),rep("ML",100),"NJ","ML")
+Dbootstraps <- c(rep("replicates",400),"NJ","ML")
+Dhighlight <- c(rep(1,400),2,2)
+plotGrovesD3(Dscape$pco, 
+             groups=Dmethod, 
+             colors=Dcols,
+             col_lab="Tree type",
+             size_var=Dhighlight,
+             size_range = c(100,500),
+             size_lab="",
+             symbol_var=Dbootstraps,
+             symbol_lab="",
+             point_opacity=c(rep(0.4,400),1,1), 
+             legend_width=80)
 
 ## ----make_better_plot_with_labels----------------------------------------
-Dcols <- c("#abd9e9","#fdae61","#d7191c","#2c7bb6")
-plotGrovesD3(Dscape$pco, groups=Dtype, treeNames = names(DengueTrees), colors=Dcols, point_size=200, point_opacity=c(rep(0.5,300),1,1), col_lab="Tree type", legend_width=80)
+plotGrovesD3(Dscape$pco, 
+             groups=Dmethod, 
+             treeNames = names(DengueTrees), # add the tree names as labels
+             colors=Dcols,
+             col_lab="Tree type",
+             size_var=Dhighlight,
+             size_range = c(100,500),
+             size_lab="",
+             symbol_var=Dbootstraps,
+             symbol_lab="",
+             point_opacity=c(rep(0.4,400),1,1), 
+             legend_width=80)
 
 ## ----make_better_plot_with_tooltips--------------------------------------
-Dcols <- c("#abd9e9","#fdae61","#d7191c","#2c7bb6")
-plotGrovesD3(Dscape$pco, groups=Dtype, tooltip_text = names(DengueTrees), colors=Dcols, point_size=200, point_opacity=c(rep(0.5,300),1,1), col_lab="Tree type", legend_width=80)
+plotGrovesD3(Dscape$pco, 
+             groups=Dmethod, 
+             tooltip_text = names(DengueTrees), # add the tree names as tooltip text
+             colors=Dcols,
+             col_lab="Tree type",
+             size_var=Dhighlight,
+             size_range = c(100,500),
+             size_lab="",
+             symbol_var=Dbootstraps,
+             symbol_lab="",
+             point_opacity=c(rep(0.4,400),1,1), 
+             legend_width=80)
 
 ## ----scree_plot----------------------------------------------------------
 barplot(Dscape$pco$eig, col="navy")
@@ -84,9 +124,11 @@ barplot(Dscape$pco$eig, col="navy")
 library(rgl)
 
 ## ----plot_3D, rgl=TRUE, webgl=TRUE---------------------------------------
-Dcols3D <- c(rep(Dcols[[1]],200),rep(Dcols[[2]],100),Dcols[[3]],Dcols[[4]])
+Dcols3D <- c(rep(Dcols[[1]],200),rep(Dcols[[2]],100),rep(Dcols[[3]],100),Dcols[[2]],Dcols[[3]])
 rgl::plot3d(Dscape$pco$li[,1],Dscape$pco$li[,2],Dscape$pco$li[,3],
-       type="s", size=c(rep(1.5,300),2,2), col=Dcols3D,
+       type="s",
+       size=c(rep(1.5,400),3,3), 
+       col=Dcols3D,
        xlab="", ylab="", zlab="")
 
 ## ----compare_trees_NJ_v_ML-----------------------------------------------
@@ -150,11 +192,13 @@ BEASTMedTreeNums <-c(which(BEASTGroves$groups==1)[[BEASTMeds$`1`$treenumbers[[1]
 highlightTrees <- rep(1,201)
 highlightTrees[[201]] <- 2
 highlightTrees[BEASTMedTreeNums] <- 2
+# prepare colours:
+BEASTcols <- c("#66c2a5","#fc8d62","#8da0cb","#e78ac3")
 
 # plot:
 plotGrovesD3(BEASTscape$pco,
           groups=as.vector(BEASTGroves$groups),
-          colors=Dcols,
+          colors=BEASTcols,
           col_lab="Cluster",
           symbol_var = highlightTrees,
           size_range = c(60,600),
