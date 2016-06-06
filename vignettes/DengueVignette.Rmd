@@ -67,13 +67,14 @@ plot(DnjRooted)
 We use `boot.phylo` to bootstrap the tree:
 ```{r make_NJ_boots, results="hide"}
 Dnjboots <- boot.phylo(DnjRooted, DengueSeqs, B=100, 
-	    	       makeTree, trees=TRUE)
-# root:
-Dnjbootsrooted <- lapply(Dnjboots$trees, function(x) root(x, resolve.root=TRUE, outgroup="D4Thai63"))
+	    	       makeTree, trees=TRUE, rooted=TRUE)
+Dnjboots
 ```
 
+and we can plot the tree again, annotating it with the bootstrap clade support values:
 ```{r see_NJ_boots}
-Dnjboots
+plot(DnjRooted)
+drawSupportOnEdges(Dnjboots$BP)
 ```
 
 We create a maximum-likelihood (ML) tree and root it as before:
@@ -85,11 +86,12 @@ Dfit <- optim.pml(Dfit.ini, optNni=TRUE, optBf=TRUE,
 DfitTreeRooted <- root(Dfit$tree, resolve.root=TRUE, outgroup="D4Thai63")
 ```
 
-
+View the ML tree:
 ```{r view_ML}
 plot(DfitTreeRooted)
 ```
 
+Create bootstrap trees:
 ```{r make_ML_boots, results="hide"}
 # bootstrap supports:
 DMLboots <- bootstrap.pml(Dfit, optNni=TRUE)
@@ -97,7 +99,10 @@ DMLboots <- bootstrap.pml(Dfit, optNni=TRUE)
 DMLbootsrooted <- lapply(DMLboots, function(x) root(x, resolve.root=TRUE, outgroup="D4Thai63"))
 ```
 
-
+Plot the ML tree again, with bootstrap support values:
+```{r see_ML_boots}
+plotBS(DfitTreeRooted, DMLboots, type="phylogram")
+```
 
 Using *treescape* to compare trees
 -------------
@@ -106,7 +111,7 @@ We now use the function `treescape` to find and plot distances between all these
 
 ```{r run_treescape}
 # collect the trees into a single object of class multiPhylo:
-DengueTrees <- c(BEASTtrees,Dnjbootsrooted,DMLbootsrooted,list(DnjRooted),list(DfitTreeRooted))
+DengueTrees <- c(BEASTtrees,Dnjboots$trees,DMLbootsrooted,list(DnjRooted),list(DfitTreeRooted))
 class(DengueTrees) <- "multiPhylo"
 # add tree names:
 names(DengueTrees)[1:200] <- paste0("BEAST",1:200)

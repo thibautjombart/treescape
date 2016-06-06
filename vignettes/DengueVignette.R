@@ -30,12 +30,12 @@ plot(DnjRooted)
 
 ## ----make_NJ_boots, results="hide"---------------------------------------
 Dnjboots <- boot.phylo(DnjRooted, DengueSeqs, B=100, 
-	    	       makeTree, trees=TRUE)
-# root:
-Dnjbootsrooted <- lapply(Dnjboots$trees, function(x) root(x, resolve.root=TRUE, outgroup="D4Thai63"))
+	    	       makeTree, trees=TRUE, rooted=TRUE)
+Dnjboots
 
 ## ----see_NJ_boots--------------------------------------------------------
-Dnjboots
+plot(DnjRooted)
+drawSupportOnEdges(Dnjboots$BP)
 
 ## ----make_ML, results="hide", message=FALSE------------------------------
 Dfit.ini <- pml(DnjRooted, as.phyDat(DengueSeqs), k=4)
@@ -53,9 +53,12 @@ DMLboots <- bootstrap.pml(Dfit, optNni=TRUE)
 # root:
 DMLbootsrooted <- lapply(DMLboots, function(x) root(x, resolve.root=TRUE, outgroup="D4Thai63"))
 
+## ----see_ML_boots--------------------------------------------------------
+plotBS(DfitTreeRooted, DMLboots, type="phylogram")
+
 ## ----run_treescape-------------------------------------------------------
 # collect the trees into a single object of class multiPhylo:
-DengueTrees <- c(BEASTtrees,Dnjbootsrooted,DMLbootsrooted,list(DnjRooted),list(DfitTreeRooted))
+DengueTrees <- c(BEASTtrees,Dnjboots$trees,DMLbootsrooted,list(DnjRooted),list(DfitTreeRooted))
 class(DengueTrees) <- "multiPhylo"
 # add tree names:
 names(DengueTrees)[1:200] <- paste0("BEAST",1:200)
