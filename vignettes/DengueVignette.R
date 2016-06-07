@@ -134,6 +134,12 @@ rgl::plot3d(Dscape$pco$li[,1],Dscape$pco$li[,2],Dscape$pco$li[,3],
        col=Dcols3D,
        xlab="", ylab="", zlab="")
 
+## ----NJ_and_ML_overlap---------------------------------------------------
+# trees with the same topology as the NJ tree:
+which(as.matrix(Dscape$D)["NJ",]==0)
+# trees with the same topology as the ML tree:
+which(as.matrix(Dscape$D)["ML",]==0)
+
 ## ----compare_trees_NJ_v_ML-----------------------------------------------
 # comparing NJ and ML:
 plotTreeDiff(DnjRooted,DfitTreeRooted, use.edge.length=FALSE)

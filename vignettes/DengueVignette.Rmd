@@ -205,7 +205,19 @@ rgl::plot3d(Dscape$pco$li[,1],Dscape$pco$li[,2],Dscape$pco$li[,3],
 -------------
 
 From these plots we can see that *treescape* has identified variation in the trees according to the Kendall Colijn metric ($\lambda=0$, ignoring branch lengths). 
-We can compare pairs of trees using the `plotTreeDiff` function to see exactly where these differences arise. 
+The NJ and ML bootstrap trees have broadly similar topologies but are different from any of the BEAST trees.
+We can check whether any bootstrap trees have the same topology as either the NJ or ML tree, as follows:
+
+```{r NJ_and_ML_overlap}
+# trees with the same topology as the NJ tree:
+which(as.matrix(Dscape$D)["NJ",]==0)
+# trees with the same topology as the ML tree:
+which(as.matrix(Dscape$D)["ML",]==0)
+```
+
+This shows that the NJ tree has the same topology as one NJ bootstrap tree and one ML bootstrap tree. The ML tree has the same topology as 15 ML bootstrap trees, but no NJ bootstrap trees.
+
+We can compare pairs of trees using the `plotTreeDiff` function to see exactly where their differences arise. 
 Tips with identical ancestry in the two trees are coloured grey, whereas tips with differing ancestry are coloured peach-red, with the colour darkening according to the number of ancestral differences found at each tip. 
 Since we are comparing the trees topologically (ignoring branch lengths, for the moment), we plot with constant branch lengths for clarity.
 ```{r compare_trees_NJ_v_ML}
