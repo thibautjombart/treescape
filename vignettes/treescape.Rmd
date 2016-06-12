@@ -4,7 +4,7 @@ author: "Thibaut Jombart, Michelle Kendall"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEngine{knitr::knit2pdf}
   %\VignetteIndexEntry{treescape: exploration of landscapes of phylogenetic trees}
   \usepackage[utf8]{inputenc}
 ---
