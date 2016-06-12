@@ -64,7 +64,8 @@ tipDiff <- function(tr1,tr2,vec1=NULL,vec2=NULL) {
     length(which(allTipDiffs==x)))
   
   # prepare output as data frame of tips and their differences
-  tipDiff <- as.data.frame(cbind(names(tipSignificance[order(tipSignificance)]),tipSignificance[order(tipSignificance)]))
+  tipDiff <- as.data.frame(cbind(names(tipSignificance[order(tipSignificance)]),tipSignificance[order(tipSignificance)]), stringsAsFactors = FALSE)
+  class(tipDiff[,2]) <- "numeric"
   rownames(tipDiff) <- NULL
   colnames(tipDiff) <- c("Tip","No. of differences")
   
@@ -83,6 +84,8 @@ tipDiff <- function(tr1,tr2,vec1=NULL,vec2=NULL) {
 #' @author Michelle Kendall \email{michelle.louise.kendall@@gmail.com}
 #'
 #' @import ape
+#' @importFrom grDevices colorRampPalette
+#' @importFrom graphics layout
 #'
 #' @param tr1 an object of the class \code{phylo}: the first tree to plot.
 #' @param tr2 an object of the class \code{phylo}: the second tree to plot.
@@ -128,21 +131,25 @@ plotTreeDiff <- function(tr1,tr2,tipDiff=NULL,vec1=NULL,vec2=NULL,baseCol="grey"
     # call tipDiff
     tipDiff <- tipDiff(tr1,tr2,vec1,vec2)
   }
-  # add one to all the differences because "zero" won't be defined in the colour palette
-  class(tipDiff[,2]) <- "integer"
-
+  
   # find the number of times each tip appears, in the order that the tip labels are read
   tipSignificance1 <- sapply(tr1$tip.label, function(x)
     tipDiff[which(tipDiff[,1]==x),2])
   tipSignificance2 <- sapply(tr2$tip.label, function(x)
     tipDiff[which(tipDiff[,1]==x),2])
-  
-  numCols <- max(tipSignificance1) -1 
+
+  numCols <- max(tipDiff[,2]) - min(tipDiff[,2]) 
   colfunc<-colorRampPalette(c(col1,col2))
-  pal <- c(baseCol,colfunc(numCols))
   
-  tipCols1 <- pal[tipSignificance1]
-  tipCols2 <- pal[tipSignificance2]
+  if (min(tipDiff[,2])==0) { # make sure tips with no differences are coloured baseCol
+    pal <- c(baseCol,colfunc(numCols))
+  }
+  else {
+    pal <- colfunc(numCols)
+  }
+  
+  tipCols1 <- pal[as.factor(tipSignificance1)]
+  tipCols2 <- pal[as.factor(tipSignificance2)]
   
   # plot
   layout(matrix(1:2, 1, 2))

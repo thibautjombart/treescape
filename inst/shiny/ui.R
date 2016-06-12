@@ -63,13 +63,14 @@ shinyUI(
                                            ## choose metric
                                            selectInput("treemethod", "Choose a tree summary:",
                                                        choices=c(
-                                                         "Kendall Colijn" = "metric",
-                                                         "Billera, Holmes, Vogtmann" = "BHV",
-                                                         "Robinson Foulds (unrooted)" = "RF",
-                                                         "Tip-tip path distance (unrooted)" = "nNodes",
-                                                         "Tip-tip branch-length distance (unrooted)" = "patristic",
-                                                         "Abouheif test" = "Abouheif",
-                                                         "Sum of direct descendents" = "sumDD")),
+                                                         "Kendall Colijn (rooted)" = "metric",
+                                                         "Billera, Holmes, Vogtmann (rooted, uses branch lengths)" = "BHV",
+                                                         "Kuhner & Felsenstein branch score distance (unrooted, uses branch lengths)" = "KF",
+                                                         "Robinson Foulds symmetric difference (unrooted, topological)" = "RF",
+                                                         "Steel & Penny tip-tip distance (unrooted, topological)" = "nNodes",
+                                                         "Steel & Penny weighted tip-tip distance (unrooted, uses branch lengths)" = "patristic",
+                                                         "Abouheif test (rooted, topological)" = "Abouheif",
+                                                         "Sum of direct descendents (rooted, topological)" = "sumDD")),
                                            
                                            ## lambda, axes
                                            uiOutput("lambda"),

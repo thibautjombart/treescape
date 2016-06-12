@@ -37,15 +37,49 @@ NULL
 #' @author Thibaut Jombart \email{thibautjombart@@gmail.com}
 NULL
 
+#' Dengue fever sequences
+#'
+#' 17 dengue virus serotype 4 sequences from Lanciotti et al. (1997)
+#'
+#' @name DengueSeqs
+#' @docType data
+#' @format A DNAbin object containing 17 DNA sequences, each of length 1485.
+#' @references Lanciotti, R. S., Gubler, D. J., and Trent, D. W. (1997)
+#' Molecular evolution and phylogeny of dengue-4 viruses.
+#' \emph{Journal of General Virology}, 78(9), 2279-2286.
+#' @source http://bmcevolbiol.biomedcentral.com/articles/10.1186/1471-2148-7-214
+#' @keywords datasets
+#' @author Michelle Kendall \email{michelle.louise.kendall@@gmail.com}
+NULL
+
 #' BEAST analysis of Dengue fever
 #'
 #' These trees were created using one of the \code{xml} files provided with the original BEAST paper by Drummond and Rambaut (2007).
-#' They provide an example of 17 dengue virus serotype 4 sequences from Lanciotti et al. (1997) and \code{xml} files with varying priors for model and clock rate.
+#' They provide an example of 17 dengue virus serotype 4 sequences from Lanciotti et al. (1997) (available as \code{\link{DengueSeqs}}) and \code{xml} files with varying priors for model and clock rate.
 #' Here we include a random sample of 500 of the trees (from the second half of the posterior) produced using BEAST v1.8 with the standard GTR + Gamma + I substitution model with uncorrelated lognormal-distributed relaxed molecular clock (file 4).
 #'
 #' @name DengueTrees
 #' @docType data
 #' @format A multiPhylo object containing 500 trees, each with 17 tips
+#' @references Drummond, A. J., and Rambaut, A. (2007) 
+#' BEAST: Bayesian evolutionary analysis by sampling trees.
+#' \emph{BMC Evolutionary Biology}, 7(1), 214.
+#'
+#' Lanciotti, R. S., Gubler, D. J., and Trent, D. W. (1997)
+#' Molecular evolution and phylogeny of dengue-4 viruses.
+#' \emph{Journal of General Virology}, 78(9), 2279-2286.
+#' @source http://bmcevolbiol.biomedcentral.com/articles/10.1186/1471-2148-7-214
+#' @keywords datasets
+#' @author Michelle Kendall \email{michelle.louise.kendall@@gmail.com}
+NULL
+
+#' Dengue fever BEAST MCC tree
+#'
+#' The maximum clade credibility (MCC) tree from \code{\link{DengueTrees}}
+#'
+#' @name DengueBEASTMCC
+#' @docType data
+#' @format A phylo object
 #' @references Drummond, A. J., and Rambaut, A. (2007) 
 #' BEAST: Bayesian evolutionary analysis by sampling trees.
 #' \emph{BMC Evolutionary Biology}, 7(1), 214.

@@ -1,5 +1,6 @@
 [![Travis-CI Build Status](https://travis-ci.org/thibautjombart/treescape.png?branch=master)](https://travis-ci.org/thibautjombart/treescape)
-
+[![CRAN Status Badge](http://www.r-pkg.org/badges/version/treescape)](http://cran.r-project.org/package=treescape)
+[![CRAN Downloads](http://cranlogs.r-pkg.org/badges/treescape)](http://cran.r-project.org/package=treescape)
 
 
 
@@ -30,6 +31,14 @@ Then, to load the package, use:
 library("treescape")
 ```
 
+```
+## Loading required package: ape
+```
+
+```
+## Loading required package: ade4
+```
+
 
 Content overview
 -------------
@@ -45,12 +54,15 @@ Other functions are central to the computations of distances between trees:
 * __`treeDist`__: find the distance between two tree vectors
 * __`multiDist`__: find the pairwise distances of a list of trees
 * __`refTreeDist`__: find the distances of a list of trees from a reference tree
+* __`tipDiff`__: for a pair of trees, list the tips with differing ancestry
+* __`plotTreeDiff`__: plot a pair of trees, highlighting the tips with differing ancestry
 
 
 Distributed datasets include:
 * __`woodmiceTrees`__: illustrative set of 201 trees built using the neighbour-joining and bootstrapping example from the *woodmice* dataset in the *ape* documentation.
-* __`DengueTrees`__: 500 trees sampled from a BEAST posterior set of trees from Drummond, A. J., and Rambaut, A. (2007) BEAST: Bayesian evolutionary analysis by sampling trees.
-
+* __`DengueTrees`__: 500 trees sampled from a BEAST posterior set of trees from (Drummond and Rambaut, 2007)
+* __`DengueSeqs`__: 17 dengue virus serotype 4 sequences from (Lanciotti *et al.*, 1997), from which the `DengueTrees` were inferred.
+* __`DengueBEASTMCC`__: the maximum clade credibility (MCC) tree from the `DengueTrees`.
 
 
 Exploring trees with *treescape*
@@ -60,7 +72,6 @@ We first load *treescape*, and the packages required for graphics:
 
 ```r
 library("treescape")
-library("ade4")
 library("adegenet")
 library("adegraphics")
 library("ggplot2")
@@ -68,20 +79,20 @@ library("ggplot2")
 
 The function `treescape` defines typologies of phylogenetic trees using a two-step approach:
 
-1. perform pairwise comparisons of trees using various (Euclidean) metrics; by default, the comparison uses the Kendall and Colijn metric (Kendall & Colijn, 2015) which is described in more detail below; other metrics rely on tips distances implemented in *adephylo* (Jombart *et al.* 2010).
+1. perform pairwise comparisons of trees using various (Euclidean) metrics; by default, the comparison uses the Kendall and Colijn metric (Kendall & Colijn, 2015) which is described in more detail below; other metrics rely on tips distances implemented in *adephylo* (Jombart *et al.*, 2010).
 
-2. use Metric Multidimensional Scaling (MDS, aka Principal Coordinates Analysis, PCoA) to summarise pairwise distances between the trees as well as possible into a few dimensions; the output of the MDS is typically visualised using scatterplots of the first few Principal Components (PCs); this step relies on the PCoA implemented in *ade4* (Dray & Dufour 2007).
+2. use Metric Multidimensional Scaling (MDS, aka Principal Coordinates Analysis, PCoA) to summarise pairwise distances between the trees as well as possible into a few dimensions; the output of the MDS is typically visualised using scatterplots of the first few Principal Components (PCs); this step relies on the PCoA implemented in *ade4* (Dray & Dufour, 2007).
 
 The function `treescape` performs both tasks, returning both the matrix of pairwise tree comparisons (`$D`), and the PCoA (`$pco`).
 This can be illustrated using randomly generated trees:
 
 ```r
-## generate list of trees
+# generate list of trees
 set.seed(1)
 x <- rmtree(10, 20)
 names(x) <- paste("tree", 1:10, sep = "")
 
-## use treescape
+# use treescape
 res <- treescape(x, nf=3)
 names(res)
 ```
@@ -129,74 +140,40 @@ res
 ## other elements: NULL
 ```
 
-Pairwise distances can be visualised using *adegraphics*:
+Pairwise tree distances can be visualised using *adegraphics*:
 
 ```r
-## table.image
+# table.image
 table.image(res$D, nclass=30)
 ```
 
-![plot of chunk distances](vignettes/figs/distances-1.png)
+![plot of chunk distances_readme](vignettes/figs/distances_readme-1.png)
 
 ```r
-## table.value with some customization
+# table.value with some customization
 table.value(res$D, nclass=5, method="color", 
             symbol="circle", col=redpal(5))
 ```
 
-![plot of chunk distances](vignettes/figs/distances-2.png)
+![plot of chunk distances_readme](vignettes/figs/distances_readme-2.png)
 
 The best representation of these distances in a 2-dimensional space is given by the first 2 PCs of the MDS.
-These can be visualised using *adegraphics*'s function `scatter`:
+These can be visualised using any scatter plotting tool; here we use the *treescape* function `plotGroves`, based on the *adegraphics* function `scatter`:
 
-```r
-scatter(res$pco)
-```
-
-![plot of chunk treescapescatter](vignettes/figs/treescapescatter-1.png)
-
-Alternatively, the function `plotGroves` can be used:
 
 ```r
 plotGroves(res$pco, lab.show=TRUE, lab.cex=1.5)
 ```
 
-![plot of chunk plotgroves](vignettes/figs/plotgroves-1.png)
+![plot of chunk plotgroves_readme](vignettes/figs/plotgroves_readme-1.png)
 
-The functionality of `treecsape` can be further illustrated using *ape*'s dataset *woodmouse*, from which we built the 201 trees supplied in `woodmiceTrees` using the neighbour-joining and bootstrapping example from the *ape* documentation. 
+The functionality of `treescape` can be further illustrated using *ape*'s dataset *woodmouse*, from which we built the 201 trees supplied in `woodmiceTrees` using the neighbour-joining and bootstrapping example from the *ape* documentation. 
 
 ```r
 data(woodmiceTrees)
 wm.res <- treescape(woodmiceTrees,nf=3)
 
-## this is the PCoA / MDS:
-wm.res$pco
-```
-
-```
-## Duality diagramm
-## class: pco dudi
-## $call: dudi.pco(d = D, scannf = is.null(nf), nf = nf)
-## 
-## $nf: 3 axis-components saved
-## $rank: 54
-## eigen values: 32.69 24.41 6.952 6.348 4.363 ...
-##   vector length mode    content       
-## 1 $cw    54     numeric column weights
-## 2 $lw    201    numeric row weights   
-## 3 $eig   54     numeric eigen values  
-## 
-##   data.frame nrow ncol content             
-## 1 $tab       201  54   modified array      
-## 2 $li        201  3    row coordinates     
-## 3 $l1        201  3    row normed scores   
-## 4 $co        54   3    column coordinates  
-## 5 $c1        54   3    column normed scores
-## other elements: NULL
-```
-
-```r
-## PCs are stored in:
+# PCs are stored in:
 head(wm.res$pco$li)
 ```
 
@@ -211,35 +188,21 @@ head(wm.res$pco$li)
 ```
 
 ```r
-## plot results
-plotGroves(wm.res$pco, lab.show=TRUE, lab.optim=FALSE)
+# plot results
+plotGroves(wm.res$pco)
 ```
 
-![plot of chunk woodmicePlots](vignettes/figs/woodmicePlots-1.png)
+![plot of chunk woodmicePlots_readme](vignettes/figs/woodmicePlots_readme-1.png)
 
 ```r
-## visualising density of points
+# visualising density of points
 s.kde2d(wm.res$pco$li)
 ```
 
-![plot of chunk woodmicePlots](vignettes/figs/woodmicePlots-2.png)
+![plot of chunk woodmicePlots_readme](vignettes/figs/woodmicePlots_readme-2.png)
 
 ```r
-## alternative visualisation
-s.density(wm.res$pco$li, col=redpal(100), bandwidth=3)
-```
-
-![plot of chunk woodmicePlots](vignettes/figs/woodmicePlots-3.png)
-
-```r
-## same, other palette
-s.density(wm.res$pco$li, col=rev(transp(spectral(100),.5)), bandwidth=3)
-```
-
-![plot of chunk woodmicePlots](vignettes/figs/woodmicePlots-4.png)
-
-```r
-## alternative using ggplot2
+# alternative using ggplot2
 woodmiceplot <- ggplot(wm.res$pco$li, aes(x=A1, y=A2)) # create plot
 woodmiceplot + geom_density2d(colour="gray80") + # contour lines
 geom_point(size=6, shape=1, colour="gray50") + # grey edges
@@ -247,8 +210,9 @@ geom_point(size=6, alpha=0.2, colour="navy") + # transparent blue points
 xlab("") + ylab("") + theme_bw(base_family="") # remove axis labels and grey background
 ```
 
-![plot of chunk woodmicePlots](vignettes/figs/woodmicePlots-5.png)
+![plot of chunk woodmicePlots_readme](vignettes/figs/woodmicePlots_readme-3.png)
 
+Interactive plots are also available using `plotGrovesD3` and *rgl*'s `plot3d`.
 
 Note that alternatively, the function `multiDist` simply performs the pairwise comparison of trees and outputs a distance matrix. 
 This function may be preferable for large datasets, and when principal co-ordinate analysis is not required. 
@@ -285,32 +249,25 @@ Note that when the number of clusters (`nclust`) is not provided, the function w
 The results can be plotted directly using `plotGroves` (see `?plotGroves` for options):
 
 ```r
-## basic plot
+# basic plot
 plotGroves(wm.groves)
 ```
 
-![plot of chunk plotgroves2](vignettes/figs/plotgroves2-1.png)
+![plot of chunk plotgroves2_readme](vignettes/figs/plotgroves2_readme-1.png)
 
 ```r
-## alternative with inertia ellipses
+# alternative with inertia ellipses
 plotGroves(wm.groves, type="ellipse")
 ```
 
-![plot of chunk plotgroves2](vignettes/figs/plotgroves2-2.png)
+![plot of chunk plotgroves2_readme](vignettes/figs/plotgroves2_readme-2.png)
 
 ```r
-## plot axes 2-3
+# plot axes 2 and 3. This helps to show why, for example, clusters 2 and 4 have been identified as separate, despite them appearing to overlap when viewing axes 1 and 2.
 plotGroves(wm.groves, xax=2, yax=3)
 ```
 
-![plot of chunk plotgroves2](vignettes/figs/plotgroves2-3.png)
-
-```r
-## customize graphics
-plotGroves(wm.groves, bg="black", col.pal=lightseasun, lab.show=TRUE, lab.col="white", lab.cex=1.5)
-```
-
-![plot of chunk plotgroves3](vignettes/figs/plotgroves3-1.png)
+![plot of chunk plotgroves2_readme](vignettes/figs/plotgroves2_readme-3.png)
 
 
 `treescapeServer`: a web application for *treescape*
@@ -320,13 +277,13 @@ It can be started by simply typing `treescapeServer()`.
 The interface allows you to import trees and run `treescape` to view and explore the tree space in 2 or 3 dimensions.
 It is then straightforward to analyse the tree space by varying lambda, looking for clusters using `findGroves` and saving results in various formats.
 Individual trees can be easily viewed including median trees per cluster, and collections of trees can be seen together using `densiTree` from the package `phangorn`.
-It is fully documented in the *help* tab.
+**It is fully documented in the *help* tab.**
 
-![example of treescapeServer 3d](vignettes/figs/treescape3d.png) 
+<img src="vignettes/figs/treescape3d.png" style="width:650px"/>
 
-![example of treescapeServer tree](vignettes/figs/treescapeTree.png)
+<img src="vignettes/figs/treescapeTree.png" style="width:650px"/>
 
-![example of treescapeServer densiTree](vignettes/figs/treescapeDensiTree.png)
+<img src="vignettes/figs/treescapeDensiTree.png" style="width:650px"/>
 
 
 Finding median trees
@@ -335,26 +292,27 @@ Finding median trees
 When a set of trees have very similar structures, it makes sense to summarize them into a single 'consensus' tree.
 In `treescape`, this is achieved by finding the *median tree* for a set of trees according to the Kendall and Colijn metric.
 That is, we find the tree which is closest to the centre of the set of trees in the tree landscape defined in `treescape`.
-This procedure is implemented by the function **`medTree`**:
+This procedure is implemented by the function `medTree`:
+
 
 ```r
-## get first median tree
+# get first median tree
 tre <- medTree(woodmiceTrees)$trees[[1]]
 
-## plot tree
+# plot tree
 plot(tre,type="cladogram",edge.width=3, cex=0.8)
 ```
 
-![plot of chunk woodmiceMedian](vignettes/figs/woodmiceMedian-1.png)
+![plot of chunk woodmiceMedian_readme](vignettes/figs/woodmiceMedian_readme-1.png)
 
 However, a more complete and accurate summary of the data can be given by finding a summary tree from each cluster.
 This is achieved using the `groups` argument of `medTree`:
 
 ```r
-## find median trees for the 6 clusters identified earlier:
+# find median trees for the 6 clusters identified earlier:
 res <- medTree(woodmiceTrees, wm.groves$groups)
 
-## there is one output per cluster
+# there is one output per cluster
 names(res)
 ```
 
@@ -363,20 +321,37 @@ names(res)
 ```
 
 ```r
-## get the first median of each
+# get the first median of each
 med.trees <- lapply(res, function(e) ladderize(e$trees[[1]]))
 
-## plot trees
+# plot trees
 par(mfrow=c(2,3))
 for(i in 1:length(med.trees)) plot(med.trees[[i]], main=paste("cluster",i),cex=1.5)
 ```
 
-<img src="vignettes/figs/woodmiceCluster1-1.png" title="plot of chunk woodmiceCluster1" alt="plot of chunk woodmiceCluster1" width="600px" />
+<img src="vignettes/figs/woodmiceCluster1_readme-1.png" title="plot of chunk woodmiceCluster1_readme" alt="plot of chunk woodmiceCluster1_readme" width="600px" />
 
 These trees exhibit a number of topological differences, e.g. in the placement of the **(1007S,1208S,0909S)** clade. 
+To examine the differences between the trees in a pairwise manner, we can use the function `plotTreeDiff`, for example:
+
+
+```r
+# Compare median trees from clusters 1 and 2:
+plotTreeDiff(med.trees[[1]],med.trees[[2]], use.edge.length=FALSE)
+```
+
+![plot of chunk woodmice_plotTreeDiff_readme](vignettes/figs/woodmice_plotTreeDiff_readme-1.png)
+
+```r
+# Compare median trees from clusters 1 and 4, and change aesthetics:
+plotTreeDiff(med.trees[[1]],med.trees[[4]], type="cladogram", use.edge.length=FALSE, edge.width=2, col1="cyan", col2="navy")
+```
+
+![plot of chunk woodmice_plotTreeDiff_readme](vignettes/figs/woodmice_plotTreeDiff_readme-2.png)
+
 Performing this analysis enables the detection of distinct representative trees supported by data.
 
-Note that we supplied the function `medTree` with the multiPhylo list of trees. A more computationally efficient process (at the expense of using more memory) is to use the option `return.tree.vectors` in the initial `treescape` call, and then supply these vectors directly to `medTree`.
+Note that in this example we supplied the function `medTree` with the multiPhylo list of trees. A more computationally efficient process (at the expense of using more memory) is to use the option `return.tree.vectors` in the initial `treescape` call, and then supply these vectors directly to `medTree`.
 In this case, the tree indices are returned by `medTree` but the trees are not (since they were not supplied).
 
 Emphasising the placement of certain tips or clades
@@ -389,11 +364,11 @@ For example, if we wanted to emphasise where the woodmice trees agree and disagr
 ```r
 wm3.res <- treescape(woodmiceTrees,nf=2,emphasise.tips=c("No1007S","No1208S","No0909S"),emphasise.weight=3)
 
-## plot results
-plotGroves(wm3.res$pco, lab.show=TRUE, lab.optim=FALSE)
+# plot results
+plotGroves(wm3.res$pco)
 ```
 
-![plot of chunk woodmice-tip-emphasis](vignettes/figs/woodmice-tip-emphasis-1.png)
+![plot of chunk woodmice-tip-emphasis_readme](vignettes/figs/woodmice-tip-emphasis_readme-1.png)
 
 It can be seen from the scale of the plot and the density of clustering that the trees are now separated into more distinct clusters.
 
@@ -402,13 +377,13 @@ wm3.groves <- findGroves(woodmiceTrees,nf=3,nclust=6,emphasise.tips=c("No1007S",
 plotGroves(wm3.groves, type="ellipse")
 ```
 
-![plot of chunk findgroves-with-emphasis](vignettes/figs/findgroves-with-emphasis-1.png)
+![plot of chunk findgroves-with-emphasis_readme](vignettes/figs/findgroves-with-emphasis_readme-1.png)
 
 Conversely, where the structure of a particular clade is not of interest (for example, lineages within an outgroup which was only included for rooting purposes), those tips can be given a weight less than 1 so as to give them less emphasis in the comparison. We note that although it is possible to give tips a weighting of 0, we advise caution with this as the underlying function will no longer be guaranteed to be a metric. That is, a distance of 0 between two trees will no longer necessarily imply that the trees are identical. In most cases it would be wiser to assign a very small weighting to tips which are not of interest.
 
 Method: characterising a tree by a vector
 --------------
-Kendall and Colijn proposed a [metric](http://arxiv.org/abs/1507.05211) for comparing rooted phylogenetic trees. Each tree is characterised by a vector which notes the placement of the most recent common ancestor (MRCA) of each pair of tips. Specifically, it records the distance between the MRCA of a pair of tips *(i,j)* and the root in two ways: the number of edges *m(i,j)*, and the path length *M(i,j)*. It also records the length *p(i)* of each 'pendant' edge between a tip *i* and its immediate ancestor. This procedure results in two vectors for a tree *T*:
+Kendall and Colijn proposed a [metric](http://arxiv.org/abs/1507.05211) for comparing rooted phylogenetic trees (Kendall & COlijn, 2015). Each tree is characterised by a vector which notes the placement of the most recent common ancestor (MRCA) of each pair of tips. Specifically, it records the distance between the MRCA of a pair of tips *(i,j)* and the root in two ways: the number of edges *m(i,j)*, and the path length *M(i,j)*. It also records the length *p(i)* of each 'pendant' edge between a tip *i* and its immediate ancestor. This procedure results in two vectors for a tree *T*:
 
 *m(T) = (m(1,2), m(1,3),...,m(k-1,k),1,...,1)*
 
@@ -423,38 +398,38 @@ In *m(T)* we record the pendant lengths as 1, as each tip is 1 step from its imm
 This is implemented as the function __`treeVec`__. For example,
 
 ```r
-## generate a random tree:
+# generate a random tree:
 tree <- rtree(6)
-## topological vector of mrca distances from root:
+# topological vector of mrca distances from root:
 treeVec(tree)
 ```
 
 ```
-##  [1] 1 0 2 0 3 0 1 0 1 0 1 0 0 2 0 1 1 1 1 1 1
+##  [1] 2 3 2 0 1 2 3 0 1 2 0 1 0 1 0 1 1 1 1 1 1
 ```
 
 ```r
-## vector of mrca distances from root when lambda=0.5:
+# vector of mrca distances from root when lambda=0.5:
 treeVec(tree,0.5)
 ```
 
 ```
-##  [1] 0.7296 0.0000 1.6272 0.0000 2.3518 0.0000 0.7296 0.0000 0.7296 0.0000
-## [11] 0.5971 0.0000 0.0000 1.6272 0.0000 0.8511 0.8400 0.5533 0.5377 0.8740
-## [21] 0.6391
+##  [1] 1.2482 1.7574 1.2482 0.0000 0.5367 1.2482 2.2422 0.0000 0.5367 1.2482
+## [11] 0.0000 0.5367 0.0000 0.5367 0.0000 0.5961 0.7394 0.6922 0.9528 0.6537
+## [21] 0.9249
 ```
 
 ```r
-## vector of mrca distances as a function of lambda:
+# vector of mrca distances as a function of lambda:
 vecAsFunction <- treeVec(tree,return.lambda.function=TRUE)
-## evaluate the vector at lambda=0.5:
+# evaluate the vector at lambda=0.5:
 vecAsFunction(0.5)
 ```
 
 ```
-##  [1] 0.7296 0.0000 1.6272 0.0000 2.3518 0.0000 0.7296 0.0000 0.7296 0.0000
-## [11] 0.5971 0.0000 0.0000 1.6272 0.0000 0.8511 0.8400 0.5533 0.5377 0.8740
-## [21] 0.6391
+##  [1] 1.2482 1.7574 1.2482 0.0000 0.5367 1.2482 2.2422 0.0000 0.5367 1.2482
+## [11] 0.0000 0.5367 0.0000 0.5367 0.0000 0.5961 0.7394 0.6922 0.9528 0.6537
+## [21] 0.9249
 ```
 
 The metric -- the distance between two trees -- is the Euclidean distance between these vectors:
@@ -465,34 +440,44 @@ The metric -- the distance between two trees -- is the Euclidean distance betwee
 This can be found using __`treeDist`__:
 
 ```r
-## generate random trees
+# generate random trees
 tree_a <- rtree(6)
 tree_b <- rtree(6)
 
-## topological (lambda=0) distance:
+# topological (lambda=0) distance:
 treeDist(tree_a,tree_b) 
 ```
 
 ```
-## [1] 5.099
+## [1] 4.243
 ```
 
 ```r
-## branch-length focused (lambda=1) distance:
+# branch-length focused (lambda=1) distance:
 treeDist(tree_a,tree_b,1)
 ```
 
 ```
-## [1] 3.057
+## [1] 2.864
 ```
 
 
 
 References
 --------------
-* Dray S & Dufour AB (2007): The ade4 package: implementing the duality diagram for ecologists. Journal of Statistical Software 22(4): 1-20.
+* Dray S & Dufour AB (2007) The ade4 package: implementing the duality diagram for ecologists. Journal of Statistical Software 22(4): 1-20.
+
+* Drummond, A. J., and Rambaut, A. (2007) 
+BEAST: Bayesian evolutionary analysis by sampling trees.
+BMC Evolutionary Biology, 7(1), 214.
+
 * Jombart R, Balloux F & Dray S (2010) adephylo: new tools for investigating the phylogenetic signal in biological traits. Bioinformatics 26: 1907-1909. Doi: 10.1093/bioinformatics/btq292
+
 * Kendall M & Colijn C (Preprint 2015) A tree metric using structure and length to capture distinct phylogenetic signals. arXiv 1507.05211
+
+* Lanciotti, R. S., Gubler, D. J., and Trent, D. W. (1997)
+Molecular evolution and phylogeny of dengue-4 viruses.
+Journal of General Virology, 78(9), 2279-2286.
 
 
 
@@ -509,4 +494,3 @@ Contributors:
 
 Maintainer of the CRAN version:
 * [Michelle Kendall](http://www.imperial.ac.uk/people/m.kendall)
-
