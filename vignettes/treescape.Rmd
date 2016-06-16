@@ -4,7 +4,7 @@ author: "Thibaut Jombart, Michelle Kendall"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteEngine{knitr::knit2pdf}
+  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteIndexEntry{treescape: exploration of landscapes of phylogenetic trees}
   \usepackage[utf8]{inputenc}
 ---
@@ -299,7 +299,13 @@ Conversely, where the structure of a particular clade is not of interest (for ex
 
 Method: characterising a tree by a vector
 --------------
-Kendall and Colijn proposed a [metric](http://arxiv.org/abs/1507.05211) for comparing rooted phylogenetic trees (Kendall & COlijn, 2015). Each tree is characterised by a vector which notes the placement of the most recent common ancestor (MRCA) of each pair of tips. Specifically, it records the distance between the MRCA of a pair of tips $(i,j)$ and the root in two ways: the number of edges $m_{i,j}$, and the path length $M_{i,j}$. It also records the length $p_i$ of each 'pendant' edge between a tip $i$ and its immediate ancestor. This procedure results in two vectors for a tree $T$:
+Kendall and Colijn proposed a [metric](http://arxiv.org/abs/1507.05211) for comparing rooted phylogenetic trees (Kendall & COlijn, 2015). Each tree is characterised by a vector which notes the placement of the most recent common ancestor (MRCA) of each pair of tips, as demonstrated in this example:
+
+```{r figure_construction, echo=FALSE, out.width="650px", fig.retina = NULL}
+knitr::include_graphics("figs/construction.png")
+```
+
+Specifically, it records the distance between the MRCA of a pair of tips $(i,j)$ and the root in two ways: the number of edges $m_{i,j}$, and the path length $M_{i,j}$. It also records the length $p_i$ of each 'pendant' edge between a tip $i$ and its immediate ancestor. This procedure results in two vectors for a tree $T$:
 
 $$
 m(T) = (m_{1,2}, m_{1,3},...,m_{k-1,k},1,...,1)

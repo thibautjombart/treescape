@@ -125,6 +125,9 @@ plotGrovesD3(wm3.res$pco)
 wm3.groves <- findGroves(woodmiceTrees,nf=3,nclust=6,emphasise.tips=c("No1007S","No1208S","No0909S"),emphasise.weight=3)
 plotGrovesD3(wm3.groves)
 
+## ----figure_construction, echo=FALSE, out.width="650px", fig.retina = NULL----
+knitr::include_graphics("figs/construction.png")
+
 ## ----treevec-------------------------------------------------------------
 # generate a random tree:
 tree <- rtree(6)
