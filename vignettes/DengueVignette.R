@@ -76,7 +76,7 @@ Dscape <- treescape(DengueTrees, nf=5)
 plotGrovesD3(Dscape$pco, groups=Dtype)
 
 ## ----make_better_plot----------------------------------------------------
-Dcols <- c("#1b9e77","#d95f02","#7570b3")#,"#d95f02","#7570b3")
+Dcols <- c("#1b9e77","#d95f02","#7570b3")
 Dmethod <- c(rep("BEAST",200),rep("NJ",100),rep("ML",100),"NJ","ML")
 Dbootstraps <- c(rep("replicates",400),"NJ","ML")
 Dhighlight <- c(rep(1,400),2,2)

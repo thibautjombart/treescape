@@ -132,7 +132,7 @@ plotGrovesD3(Dscape$pco, groups=Dtype)
 The function `plotGrovesD3` produces interactive d3 plots which enable zooming, moving, tooltip text and legend hovering. We now refine the plot with colour-blind friendly colours (selected using [ColorBrewer2](http://colorbrewer2.org/)), bigger points, varying symbols and point opacity to demonstrate the NJ and ML trees, informative legend title and smaller legend width:
 
 ```{r make_better_plot}
-Dcols <- c("#1b9e77","#d95f02","#7570b3")#,"#d95f02","#7570b3")
+Dcols <- c("#1b9e77","#d95f02","#7570b3")
 Dmethod <- c(rep("BEAST",200),rep("NJ",100),rep("ML",100),"NJ","ML")
 Dbootstraps <- c(rep("replicates",400),"NJ","ML")
 Dhighlight <- c(rep(1,400),2,2)
