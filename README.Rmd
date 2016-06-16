@@ -262,6 +262,7 @@ Method: characterising a tree by a vector
 Kendall and Colijn proposed a [metric](http://arxiv.org/abs/1507.05211) for comparing rooted phylogenetic trees (Kendall & COlijn, 2015). Each tree is characterised by a vector which notes the placement of the most recent common ancestor (MRCA) of each pair of tips, as demonstrated in this example:
 
 
+<img src="vignettes/figs/construction.png" style="width:650px"/>
 
 Specifically, it records the distance between the MRCA of a pair of tips *(i,j)* and the root in two ways: the number of edges *m(i,j)*, and the path length *M(i,j)*. It also records the length *p(i)* of each 'pendant' edge between a tip *i* and its immediate ancestor. This procedure results in two vectors for a tree *T*:
 
