@@ -333,7 +333,7 @@ shinyServer(function(input, output, session) {
     
     ## select method used to summarise tree
     if(!is.null(TM)){
-      if(TM %in% c("BHV","KF","RF","patristic","nNodes","Abouheif","sumDD")){
+      if(TM %in% c("BHV","KF","RF","wRF","patristic","nNodes","Abouheif","sumDD")){
         ## run treescape (suppress warnings about rootedness etc.)
         res <- suppressWarnings(treescape(x, method=TM, nf=naxes))
       } 

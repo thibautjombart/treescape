@@ -10,6 +10,7 @@
 #' \code{BHV} the Billera, Holmes Vogtmann metric using \code{dist.multiPhylo} from package \code{distory}
 #' \code{KF} the Kuhner Felsenstein metric (branch score distance) using \code{KF.dist} from package \code{phangorn} (Note: this considers the trees as unrooted)
 #' \code{RF} the Robinson Foulds metric using \code{RF.dist} from package \code{phangorn} (Note: this considers the trees as unrooted and issues a corresponding warning)
+#' \code{wRF} the weighted Robinson Foulds metric using \code{wRF.dist} from package \code{phangorn} (Note: this considers the trees as unrooted and issues a corresponding warning)
 #' \code{nNodes} the Steel & Penny tip-tip path difference metric, (topological, ignoring branch lengths), using \code{path.dist} from package \code{phangorn} (Note: this considers the trees as unrooted)
 #' \code{patristic} the Steel & Penny tip-tip path difference metric, using branch lengths, calling \code{path.dist} from package \code{phangorn} (Note: this considers the trees as unrooted)
 #' others inherited from \code{distTips} in \code{adephylo}:
@@ -32,6 +33,7 @@
 #' @importFrom phangorn KF.dist
 #' @importFrom phangorn path.dist
 #' @importFrom phangorn RF.dist
+#' @importFrom phangorn wRF.dist
 #'
 #' @examples
 #'
@@ -116,6 +118,10 @@ treescape <- function(x, method="treeVec", nf=NULL, return.tree.vectors=FALSE, .
       D <- RF.dist(x)
       ## make the distance Euclidean
       D <- ade4::cailliez(D, print=FALSE)
+    }
+    else if(method=="wRF"){
+      names(x) <- NULL # temporary fix to avoid wRF error
+      D <- wRF.dist(x)
     }
     else if(method=="KF"){
       D <- KF.dist(x)

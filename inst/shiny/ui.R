@@ -67,6 +67,7 @@ shinyUI(
                                                          "Billera, Holmes, Vogtmann (rooted, uses branch lengths)" = "BHV",
                                                          "Kuhner & Felsenstein branch score distance (unrooted, uses branch lengths)" = "KF",
                                                          "Robinson Foulds symmetric difference (unrooted, topological)" = "RF",
+                                                         "Weighted Robinson Foulds (unrooted, uses branch lengths)" = "wRF",
                                                          "Steel & Penny tip-tip distance (unrooted, topological)" = "nNodes",
                                                          "Steel & Penny weighted tip-tip distance (unrooted, uses branch lengths)" = "patristic",
                                                          "Abouheif test (rooted, topological)" = "Abouheif",
