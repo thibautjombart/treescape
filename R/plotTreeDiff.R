@@ -138,13 +138,17 @@ plotTreeDiff <- function(tr1,tr2,tipDiff=NULL,vec1=NULL,vec2=NULL,baseCol="grey"
   tipSignificance2 <- sapply(tr2$tip.label, function(x)
     tipDiff[which(tipDiff[,1]==x),2])
 
-  numCols <- max(tipDiff[,2]) - min(tipDiff[,2]) 
-  colfunc<-colorRampPalette(c(col1,col2))
+  colfunc <- colorRampPalette(c(col1,col2))
   
   if (min(tipDiff[,2])==0) { # make sure tips with no differences are coloured baseCol
+    tipSignificance1 <- tipSignificance1 + 1
+    tipSignificance2 <- tipSignificance2 + 1
+    if (max(tipDiff[,2])==0) {numCols <- 0}
+    else {numCols <- max(tipDiff[,2]) - min(tipDiff[,2][which(tipDiff[,2]!=0)]) + 1}
     pal <- c(baseCol,colfunc(numCols))
   }
   else {
+    numCols <- max(tipDiff[,2]) - min(tipDiff[,2]) + 1
     pal <- colfunc(numCols)
   }
   
