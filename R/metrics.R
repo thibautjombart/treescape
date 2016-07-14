@@ -118,6 +118,9 @@ treeVec <- function(tree, lambda=0, return.lambda.function=FALSE, emphasise.tips
   
   # To emphasise the position of certain tips, if needed:
   if (is.null(emphasise.tips)==FALSE){
+    # check tip labels are recognised:
+    unknownTips <- setdiff(emphasise.tips,tree$tip.label)
+    if (length(unknownTips)>0) {stop(paste('Tip "',unknownTips,'" not recognised. ', sep=''))}
     # translate important tip label names into order
     emphasise.tips.order <- tip_order[which(tree$tip.label%in%emphasise.tips)]
     # find the positions where these tips appear in the k choose 2 elements of the final vector
