@@ -361,17 +361,17 @@ treeDist(tree_a,tree_b,1)
 References
 --------------
 
-* Dray S & Dufour AB (2007) The ade4 package: implementing the duality diagram for ecologists. Journal of Statistical Software 22(4): 1-20.
+* Dray, S. and Dufour, A. B. (2007) The ade4 package: implementing the duality diagram for ecologists. Journal of Statistical Software 22(4): 1-20.
 
-* Drummond, A. J., and Rambaut, A. (2007) 
+* Drummond, A. J. and Rambaut, A. (2007) 
 BEAST: Bayesian evolutionary analysis by sampling trees.
 BMC Evolutionary Biology, 7(1), 214.
 
-* Jombart R, Balloux F & Dray S (2010) adephylo: new tools for investigating the phylogenetic signal in biological traits. Bioinformatics 26: 1907-1909. Doi: 10.1093/bioinformatics/btq292
+* Jombart, T., Balloux, F. and Dray, S. (2010) adephylo: new tools for investigating the phylogenetic signal in biological traits. Bioinformatics 26: 1907-1909. DOI: 10.1093/bioinformatics/btq292
 
-* Kendall M & Colijn C (Preprint 2015) A tree metric using structure and length to capture distinct phylogenetic signals. arXiv 1507.05211
+* Kendall, M. and Colijn, C. (2016) Mapping phylogenetic trees to reveal distinct patterns of evolution. Molecular Biology and Evolution, first published online: June 24, 2016. DOI: 10.1093/molbev/msw124
 
-* Lanciotti, R. S., Gubler, D. J., and Trent, D. W. (1997)
+* Lanciotti, R. S., Gubler, D. J. and Trent, D. W. (1997)
 Molecular evolution and phylogeny of dengue-4 viruses.
 Journal of General Virology, 78(9), 2279-2286.
 
