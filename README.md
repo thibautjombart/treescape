@@ -31,14 +31,6 @@ Then, to load the package, use:
 library("treescape")
 ```
 
-```
-## Loading required package: ape
-```
-
-```
-## Loading required package: ade4
-```
-
 
 Content overview
 -------------
@@ -79,9 +71,9 @@ library("ggplot2")
 
 The function `treescape` defines typologies of phylogenetic trees using a two-step approach:
 
-1. perform pairwise comparisons of trees using various (Euclidean) metrics; by default, the comparison uses the Kendall and Colijn metric (Kendall & Colijn, 2015) which is described in more detail below; other metrics rely on tips distances implemented in *adephylo* (Jombart *et al.*, 2010).
+1. perform pairwise comparisons of trees using various (Euclidean) metrics; by default, the comparison uses the Kendall and Colijn metric (Kendall and Colijn, 2016) which is described in more detail below; other metrics rely on tip distances implemented in *adephylo* (Jombart *et al.*, 2010) and *phangorn* (Schliep 2011).
 
-2. use Metric Multidimensional Scaling (MDS, aka Principal Coordinates Analysis, PCoA) to summarise pairwise distances between the trees as well as possible into a few dimensions; the output of the MDS is typically visualised using scatterplots of the first few Principal Components (PCs); this step relies on the PCoA implemented in *ade4* (Dray & Dufour, 2007).
+2. use Metric Multidimensional Scaling (MDS, aka Principal Coordinates Analysis, PCoA) to summarise pairwise distances between the trees as well as possible into a few dimensions; the output of the MDS is typically visualised using scatterplots of the first few Principal Components (PCs); this step relies on the PCoA implemented in *ade4* (Dray and Dufour, 2007).
 
 The function `treescape` performs both tasks, returning both the matrix of pairwise tree comparisons (`$D`), and the PCoA (`$pco`).
 This can be illustrated using randomly generated trees:
@@ -383,7 +375,12 @@ Conversely, where the structure of a particular clade is not of interest (for ex
 
 Method: characterising a tree by a vector
 --------------
-Kendall and Colijn proposed a [metric](http://arxiv.org/abs/1507.05211) for comparing rooted phylogenetic trees (Kendall & COlijn, 2015). Each tree is characterised by a vector which notes the placement of the most recent common ancestor (MRCA) of each pair of tips. Specifically, it records the distance between the MRCA of a pair of tips *(i,j)* and the root in two ways: the number of edges *m(i,j)*, and the path length *M(i,j)*. It also records the length *p(i)* of each 'pendant' edge between a tip *i* and its immediate ancestor. This procedure results in two vectors for a tree *T*:
+Kendall and Colijn proposed a [metric](http://dx.doi.org/10.1093/molbev/msw124) for comparing rooted phylogenetic trees (Kendall and COlijn, 2016). Each tree is characterised by a vector which notes the placement of the most recent common ancestor (MRCA) of each pair of tips, as demonstrated in this example:
+
+
+<img src="vignettes/figs/construction.png" style="width:650px"/>
+
+Specifically, it records the distance between the MRCA of a pair of tips *(i,j)* and the root in two ways: the number of edges *m(i,j)*, and the path length *M(i,j)*. It also records the length *p(i)* of each 'pendant' edge between a tip *i* and its immediate ancestor. This procedure results in two vectors for a tree *T*:
 
 *m(T) = (m(1,2), m(1,3),...,m(k-1,k),1,...,1)*
 
@@ -405,7 +402,7 @@ treeVec(tree)
 ```
 
 ```
-##  [1] 2 3 2 0 1 2 3 0 1 2 0 1 0 1 0 1 1 1 1 1 1
+##  [1] 0 0 2 2 1 1 0 0 0 0 0 0 3 1 1 1 1 1 1 1 1
 ```
 
 ```r
@@ -414,9 +411,9 @@ treeVec(tree,0.5)
 ```
 
 ```
-##  [1] 1.2482 1.7574 1.2482 0.0000 0.5367 1.2482 2.2422 0.0000 0.5367 1.2482
-## [11] 0.0000 0.5367 0.0000 0.5367 0.0000 0.5961 0.7394 0.6922 0.9528 0.6537
-## [21] 0.9249
+##  [1] 0.0000 0.0000 1.2882 1.2882 0.5961 0.7394 0.0000 0.0000 0.0000 0.0000
+## [11] 0.0000 0.0000 2.0524 0.5961 0.5961 0.6537 0.9528 0.5093 0.9768 0.8641
+## [21] 0.7480
 ```
 
 ```r
@@ -427,9 +424,9 @@ vecAsFunction(0.5)
 ```
 
 ```
-##  [1] 1.2482 1.7574 1.2482 0.0000 0.5367 1.2482 2.2422 0.0000 0.5367 1.2482
-## [11] 0.0000 0.5367 0.0000 0.5367 0.0000 0.5961 0.7394 0.6922 0.9528 0.6537
-## [21] 0.9249
+##  [1] 0.0000 0.0000 1.2882 1.2882 0.5961 0.7394 0.0000 0.0000 0.0000 0.0000
+## [11] 0.0000 0.0000 2.0524 0.5961 0.5961 0.6537 0.9528 0.5093 0.9768 0.8641
+## [21] 0.7480
 ```
 
 The metric -- the distance between two trees -- is the Euclidean distance between these vectors:
@@ -449,7 +446,7 @@ treeDist(tree_a,tree_b)
 ```
 
 ```
-## [1] 4.243
+## [1] 6
 ```
 
 ```r
@@ -458,28 +455,28 @@ treeDist(tree_a,tree_b,1)
 ```
 
 ```
-## [1] 2.864
+## [1] 3.008
 ```
 
 
 
 References
 --------------
-* Dray S & Dufour AB (2007) The ade4 package: implementing the duality diagram for ecologists. Journal of Statistical Software 22(4): 1-20.
+* Dray, S. and Dufour, A. B. (2007) The ade4 package: implementing the duality diagram for ecologists. Journal of Statistical Software 22(4): 1-20.
 
-* Drummond, A. J., and Rambaut, A. (2007) 
+* Drummond, A. J. and Rambaut, A. (2007) 
 BEAST: Bayesian evolutionary analysis by sampling trees.
 BMC Evolutionary Biology, 7(1), 214.
 
-* Jombart R, Balloux F & Dray S (2010) adephylo: new tools for investigating the phylogenetic signal in biological traits. Bioinformatics 26: 1907-1909. Doi: 10.1093/bioinformatics/btq292
+* Jombart, T., Balloux, F. and Dray, S. (2010) adephylo: new tools for investigating the phylogenetic signal in biological traits. Bioinformatics 26: 1907-1909. DOI: 10.1093/bioinformatics/btq292
 
-* Kendall M & Colijn C (Preprint 2015) A tree metric using structure and length to capture distinct phylogenetic signals. arXiv 1507.05211
+* Kendall, M. and Colijn, C. (2016) Mapping phylogenetic trees to reveal distinct patterns of evolution. Molecular Biology and Evolution, first published online: June 24, 2016. DOI: 10.1093/molbev/msw124
 
-* Lanciotti, R. S., Gubler, D. J., and Trent, D. W. (1997)
+* Lanciotti, R. S., Gubler, D. J. and Trent, D. W. (1997)
 Molecular evolution and phylogeny of dengue-4 viruses.
 Journal of General Virology, 78(9), 2279-2286.
 
-
+* Schliep, K. P. (2011) phangorn: phylogenetic analysis in R. Bioinformatics 27(4): 592-593. 
 
 
 Authors / Contributors
