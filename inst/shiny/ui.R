@@ -2,7 +2,6 @@ options(rgl.useNULL=TRUE)
 ## CHECKS ##
 if(!require("scatterD3")) stop("package scatterD3 is required")
 if(!require("shiny")) stop("package shiny is required")
-if(!require("rglwidget")) stop("package rglwidget is required")
 if(!require("rgl")) stop("package rgl is required")
 if(!require("RLumShiny")) stop("package RLumShiny is required")
 if(!require("shinyBS")) stop("package shinyBS is required")

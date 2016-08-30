@@ -715,8 +715,8 @@ shinyServer(function(input, output, session) {
   # 3d output
   output$treescapePlot3D <- renderRglwidget({
     validate(
-      need(packageVersion("rglwidget")>='0.1.1433',
-           paste0("You are running version ",packageVersion("rglwidget")," of the package rglwidget, which contains a bug for 3D plotting. Please update to the latest version by running: install.packages('rglwidget', repos='http://R-Forge.R-project.org')")
+      need(packageVersion("rgl")>='0.96.0',
+           paste0("You are running version ",packageVersion("rgl")," of the package rgl, which may not contain all the necessary features for 3D plotting (which are based on the old, separate rglwidget package). Please update to the latest version.")
       ))
     plot <- getPlot3d()
     plot
