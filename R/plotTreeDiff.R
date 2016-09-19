@@ -84,7 +84,6 @@ tipDiff <- function(tr1,tr2,vec1=NULL,vec2=NULL) {
 #' @author Michelle Kendall \email{michelle.louise.kendall@@gmail.com}
 #'
 #' @import ape
-#' @importFrom adegenet spectral
 #' @importFrom adegenet lightseasun
 #' @importFrom adegenet num2col
 #' @importFrom grDevices colorRampPalette
@@ -128,11 +127,11 @@ tipDiff <- function(tr1,tr2,vec1=NULL,vec2=NULL) {
 #'    edge.width=2, type="radial", cex=0.5, font=2)
 #' ## use colour palette from adegenet:
 #' plotTreeDiff(woodmiceTrees[[1]],woodmiceTrees[[2]], tipDiff=wmTipDiff,
-#'    baseCol="black", colourMethod="palette", palette=lightseasun,
+#'    baseCol="black", colourMethod="palette", 
 #'    edge.width=2, type="cladogram", cex=0.5, font=2)    
 #' 
 #' @export 
-plotTreeDiff <- function(tr1,tr2,tipDiff=NULL,vec1=NULL,vec2=NULL,baseCol="grey",col1="peachpuff",col2="red2",colourMethod="ramp",palette=spectral,...) {
+plotTreeDiff <- function(tr1,tr2,tipDiff=NULL,vec1=NULL,vec2=NULL,baseCol="grey",col1="peachpuff",col2="red2",colourMethod="ramp",palette=lightseasun,...) {
   
   l <- length(tr1$tip.label)
   

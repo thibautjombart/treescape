@@ -6,7 +6,7 @@
 \usage{
 plotTreeDiff(tr1, tr2, tipDiff = NULL, vec1 = NULL, vec2 = NULL,
   baseCol = "grey", col1 = "peachpuff", col2 = "red2",
-  colourMethod = "ramp", palette = spectral, ...)
+  colourMethod = "ramp", palette = lightseasun, ...)
 }
 \arguments{
 \item{tr1}{an object of the class \code{phylo}: the first tree to plot.}
@@ -60,7 +60,7 @@ plotTreeDiff(woodmiceTrees[[1]],woodmiceTrees[[2]], tipDiff=wmTipDiff,
    edge.width=2, type="radial", cex=0.5, font=2)
 ## use colour palette from adegenet:
 plotTreeDiff(woodmiceTrees[[1]],woodmiceTrees[[2]], tipDiff=wmTipDiff,
-   baseCol="black", colourMethod="palette", palette=lightseasun,
+   baseCol="black", colourMethod="palette", 
    edge.width=2, type="cladogram", cex=0.5, font=2)    
 
 }
