@@ -113,7 +113,7 @@ for(i in 1:length(med.trees)) plot(med.trees[[i]], main=paste("cluster",i),cex=1
 # Compare median trees from clusters 1 and 2:
 plotTreeDiff(med.trees[[1]],med.trees[[2]], use.edge.length=FALSE)
 # Compare median trees from clusters 1 and 4, and change aesthetics:
-plotTreeDiff(med.trees[[1]],med.trees[[4]], type="cladogram", use.edge.length=FALSE, edge.width=2, col1="cyan", col2="navy")
+plotTreeDiff(med.trees[[1]],med.trees[[4]], type="cladogram", use.edge.length=FALSE, edge.width=2, colourMethod="palette",palette=spectral)
 
 ## ----woodmice-tip-emphasis-----------------------------------------------
 wm3.res <- treescape(woodmiceTrees,nf=2,emphasise.tips=c("No1007S","No1208S","No0909S"),emphasise.weight=3)

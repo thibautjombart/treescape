@@ -84,6 +84,9 @@ tipDiff <- function(tr1,tr2,vec1=NULL,vec2=NULL) {
 #' @author Michelle Kendall \email{michelle.louise.kendall@@gmail.com}
 #'
 #' @import ape
+#' @importFrom adegenet spectral
+#' @importFrom adegenet lightseasun
+#' @importFrom adegenet num2col
 #' @importFrom grDevices colorRampPalette
 #' @importFrom graphics layout
 #'
@@ -93,8 +96,10 @@ tipDiff <- function(tr1,tr2,vec1=NULL,vec2=NULL) {
 #' @param vec1 an optional input, the result of \code{treeVec(tr1, lambda=0)}. This argument is ignored if \code{tipDiff} is supplied; otherwise supplying this will save time if calling \code{plotTreeDiff} repeatedly, for example with different aesthetics.
 #' @param vec2 an optional input, the result of \code{treeVec(tr2, lambda=0)}. This argument is ignored if \code{tipDiff} is supplied; otherwise supplying this will save time if calling \code{plotTreeDiff} repeatedly, for example with different aesthetics.
 #' @param baseCol the colour used for tips with identical ancestry in the two trees. Defaults to "grey".
-#' @param col1 the first colour used to define the colour spectrum for tips with differences. This colour will be used for tips with minor differences. Defaults to "peachpuff".
-#' @param col2 the second colour used to define the colour spectrum for tips with differences. This colour will be used for tips with major differences. Defaults to "red2".
+#' @param colourMethod the method to use for colouring. Default is "ramp", corresponding to the original implementation, where the function \code{colorRampPalette} is used to create a palette which ranges from \code{col1} to \code{col2}. For large trees this can be hard to interpret, and method \code{palette} may be preferred, which permits the selection of a palette to use in \code{adegenet}'s function \code{num2col}.
+#' @param col1 the first colour used to define the colour spectrum for tips with differences. This colour will be used for tips with minor differences. Defaults to "peachpuff". Ignored if \code{colourMethod="palette"}.
+#' @param col2 the second colour used to define the colour spectrum for tips with differences. This colour will be used for tips with major differences. Defaults to "red2". Ignored if \code{colourMethod="palette"}.
+#' @param palette the colour palette to be used if \code{colourMethod="palette"}. For a list of available palettes see \code{?num2col}.
 #' @param ... further arguments passed to \code{\link{plot.phylo}}
 #'
 #' @return
@@ -121,9 +126,13 @@ tipDiff <- function(tr1,tr2,vec1=NULL,vec2=NULL) {
 #' plotTreeDiff(woodmiceTrees[[1]],woodmiceTrees[[2]], tipDiff=wmTipDiff,
 #'    baseCol="grey2", col1="cyan", col2="navy", 
 #'    edge.width=2, type="radial", cex=0.5, font=2)
+#' ## use colour palette from adegenet:
+#' plotTreeDiff(woodmiceTrees[[1]],woodmiceTrees[[2]], tipDiff=wmTipDiff,
+#'    baseCol="black", colourMethod="palette", palette=lightseasun,
+#'    edge.width=2, type="cladogram", cex=0.5, font=2)    
 #' 
 #' @export 
-plotTreeDiff <- function(tr1,tr2,tipDiff=NULL,vec1=NULL,vec2=NULL,baseCol="grey",col1="peachpuff",col2="red2",...) {
+plotTreeDiff <- function(tr1,tr2,tipDiff=NULL,vec1=NULL,vec2=NULL,baseCol="grey",col1="peachpuff",col2="red2",colourMethod="ramp",palette=spectral,...) {
   
   l <- length(tr1$tip.label)
   
@@ -137,24 +146,35 @@ plotTreeDiff <- function(tr1,tr2,tipDiff=NULL,vec1=NULL,vec2=NULL,baseCol="grey"
     tipDiff[which(tipDiff[,1]==x),2])
   tipSignificance2 <- sapply(tr2$tip.label, function(x)
     tipDiff[which(tipDiff[,1]==x),2])
-
-  colfunc <- colorRampPalette(c(col1,col2))
   
-  if (min(tipDiff[,2])==0) { # make sure tips with no differences are coloured baseCol
-    tipSignificance1 <- tipSignificance1 + 1
-    tipSignificance2 <- tipSignificance2 + 1
-    if (max(tipDiff[,2])==0) {numCols <- 0}
-    else {numCols <- max(tipDiff[,2]) - min(tipDiff[,2][which(tipDiff[,2]!=0)]) + 1}
-    pal <- c(baseCol,colfunc(numCols))
+  if (colourMethod=="ramp") {
+    colfunc <- colorRampPalette(c(col1,col2))
+  
+    if (min(tipDiff[,2])==0) { # make sure tips with no differences are coloured baseCol
+      tipSignificance1 <- tipSignificance1 + 1
+      tipSignificance2 <- tipSignificance2 + 1
+      if (max(tipDiff[,2])==0) {numCols <- 0}
+      else {numCols <- max(tipDiff[,2]) - min(tipDiff[,2][which(tipDiff[,2]!=0)]) + 1}
+      pal <- c(baseCol,colfunc(numCols))
+    }
+    else {
+      numCols <- max(tipDiff[,2]) - min(tipDiff[,2]) + 1
+      pal <- colfunc(numCols)
+    }
+  
+    tipCols1 <- pal[as.factor(tipSignificance1)]
+    tipCols2 <- pal[as.factor(tipSignificance2)]
   }
+  
   else {
-    numCols <- max(tipDiff[,2]) - min(tipDiff[,2]) + 1
-    pal <- colfunc(numCols)
+    tipCols1 <- num2col(tipSignificance1, col.pal=palette)
+    tipCols2 <- num2col(tipSignificance2, col.pal=palette)
+      if (min(tipDiff[,2])==0) { # make sure tips with no differences are coloured baseCol
+        tipCols1[which(tipSignificance1==0)] <- baseCol
+        tipCols2[which(tipSignificance2==0)] <- baseCol
+      }
   }
-  
-  tipCols1 <- pal[as.factor(tipSignificance1)]
-  tipCols2 <- pal[as.factor(tipSignificance2)]
-  
+    
   # plot
   layout(matrix(1:2, 1, 2))
   plot.phylo(tr1, tip.color=tipCols1, no.margin=TRUE, ...)

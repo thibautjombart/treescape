@@ -984,6 +984,10 @@ shinyServer(function(input, output, session) {
     tr1 <- getTree1()
     tr2 <- getTree2()
     tipDiff <- getTipDiff()
+    CM <- c("ramp","palette")[[as.numeric(input$colourMethod)]]
+    tipPal <- c(funky, spectral, seasun, lightseasun, deepseasun,
+                rainbow, azur, wasp)[[as.numeric(input$tipPalette)]]
+    
     if(!is.null(tr1)&&!is.null(tr2)){
       
       ## plot tree comparison ##
@@ -993,6 +997,8 @@ shinyServer(function(input, output, session) {
                    baseCol=input$basetiplabelcolour,
                    col1=input$minortiplabelcolour,
                    col2=input$majortiplabelcolour,
+                   colourMethod=CM,
+                   palette=tipPal,
                    type=input$treetype,
                    use.edge.length=as.logical(input$edgelengths),
                    show.tip.lab=input$showtiplabels, 

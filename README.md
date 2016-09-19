@@ -336,7 +336,7 @@ plotTreeDiff(med.trees[[1]],med.trees[[2]], use.edge.length=FALSE)
 
 ```r
 # Compare median trees from clusters 1 and 4, and change aesthetics:
-plotTreeDiff(med.trees[[1]],med.trees[[4]], type="cladogram", use.edge.length=FALSE, edge.width=2, col1="cyan", col2="navy")
+plotTreeDiff(med.trees[[1]],med.trees[[4]], type="cladogram", use.edge.length=FALSE, edge.width=2, colourMethod="palette",palette=spectral)
 ```
 
 ![plot of chunk woodmice_plotTreeDiff_readme](vignettes/figs/woodmice_plotTreeDiff_readme-2.png)

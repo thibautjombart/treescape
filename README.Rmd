@@ -228,7 +228,7 @@ To examine the differences between the trees in a pairwise manner, we can use th
 # Compare median trees from clusters 1 and 2:
 plotTreeDiff(med.trees[[1]],med.trees[[2]], use.edge.length=FALSE)
 # Compare median trees from clusters 1 and 4, and change aesthetics:
-plotTreeDiff(med.trees[[1]],med.trees[[4]], type="cladogram", use.edge.length=FALSE, edge.width=2, col1="cyan", col2="navy")
+plotTreeDiff(med.trees[[1]],med.trees[[4]], type="cladogram", use.edge.length=FALSE, edge.width=2, colourMethod="palette",palette=spectral)
 ```
 
 Performing this analysis enables the detection of distinct representative trees supported by data.

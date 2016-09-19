@@ -5,7 +5,8 @@
 \title{Plot tree differences}
 \usage{
 plotTreeDiff(tr1, tr2, tipDiff = NULL, vec1 = NULL, vec2 = NULL,
-  baseCol = "grey", col1 = "peachpuff", col2 = "red2", ...)
+  baseCol = "grey", col1 = "peachpuff", col2 = "red2",
+  colourMethod = "ramp", palette = spectral, ...)
 }
 \arguments{
 \item{tr1}{an object of the class \code{phylo}: the first tree to plot.}
@@ -20,9 +21,13 @@ plotTreeDiff(tr1, tr2, tipDiff = NULL, vec1 = NULL, vec2 = NULL,
 
 \item{baseCol}{the colour used for tips with identical ancestry in the two trees. Defaults to "grey".}
 
-\item{col1}{the first colour used to define the colour spectrum for tips with differences. This colour will be used for tips with minor differences. Defaults to "peachpuff".}
+\item{col1}{the first colour used to define the colour spectrum for tips with differences. This colour will be used for tips with minor differences. Defaults to "peachpuff". Ignored if \code{colourMethod="palette"}.}
 
-\item{col2}{the second colour used to define the colour spectrum for tips with differences. This colour will be used for tips with major differences. Defaults to "red2".}
+\item{col2}{the second colour used to define the colour spectrum for tips with differences. This colour will be used for tips with major differences. Defaults to "red2". Ignored if \code{colourMethod="palette"}.}
+
+\item{colourMethod}{the method to use for colouring. Default is "ramp", corresponding to the original implementation, where the function \code{colorRampPalette} is used to create a palette which ranges from \code{col1} to \code{col2}. For large trees this can be hard to interpret, and method \code{palette} may be preferred, which permits the selection of a palette to use in \code{adegenet}'s function \code{num2col}.}
+
+\item{palette}{the colour palette to be used if \code{colourMethod="palette"}. For a list of available palettes see \code{?num2col}.}
 
 \item{...}{further arguments passed to \code{\link{plot.phylo}}}
 }
@@ -53,6 +58,10 @@ plotTreeDiff(woodmiceTrees[[1]],woodmiceTrees[[2]], tipDiff=wmTipDiff)
 plotTreeDiff(woodmiceTrees[[1]],woodmiceTrees[[2]], tipDiff=wmTipDiff,
    baseCol="grey2", col1="cyan", col2="navy", 
    edge.width=2, type="radial", cex=0.5, font=2)
+## use colour palette from adegenet:
+plotTreeDiff(woodmiceTrees[[1]],woodmiceTrees[[2]], tipDiff=wmTipDiff,
+   baseCol="black", colourMethod="palette", palette=lightseasun,
+   edge.width=2, type="cladogram", cex=0.5, font=2)    
 
 }
 \author{
