@@ -27,7 +27,6 @@ Imports:
     phangorn,
     Rcpp,
     rgl,
-    rglwidget,
     RLumShiny,
     scatterD3,
     shiny,
