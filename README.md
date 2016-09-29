@@ -1,6 +1,6 @@
 [![Travis-CI Build Status](https://travis-ci.org/thibautjombart/treescape.png?branch=master)](https://travis-ci.org/thibautjombart/treescape)
-[![CRAN Status Badge](http://www.r-pkg.org/badges/version/treescape)](http://cran.r-project.org/package=treescape)
-[![CRAN Downloads](http://cranlogs.r-pkg.org/badges/treescape)](http://cran.r-project.org/package=treescape)
+[![CRAN Status Badge](http://www.r-pkg.org/badges/version/treescape)](https://cran.r-project.org/package=treescape)
+[![CRAN Downloads](https://cranlogs.r-pkg.org/badges/treescape)](https://cran.r-project.org/package=treescape)
 
 
 
