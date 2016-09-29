@@ -1,7 +1,7 @@
 Package: treescape
 Title: Statistical Exploration of Landscapes of Phylogenetic Trees
-Version: 1.9.17
-Date: 2016-06-07
+Version: 1.10.17
+Date: 2016-09-29
 Authors@R: c(TJ=person("Thibaut", "Jombart", email="thibaut.jombart@gmail.com", role = c("aut")),
  	     MK=person("Michelle", "Kendall", email="m.kendall@imperial.ac.uk", role = c("aut", "cre")),
 	     JAG=person("Jacob", "Almagro-Garcia", role = c("aut")),
@@ -35,6 +35,7 @@ Imports:
     utils
 LinkingTo: Rcpp
 Suggests:
+    igraph,
     RColorBrewer,
     ggplot2,
     testthat, 
@@ -51,6 +52,7 @@ Collate:
     plotGroves.R
     plotTreeDiff.R
     servers.R
+    transmissionTrees.R
     data.R
 RoxygenNote: 5.0.1
 VignetteBuilder: knitr
