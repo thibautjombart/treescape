@@ -97,6 +97,8 @@ Create bootstrap trees:
 DMLboots <- bootstrap.pml(Dfit, optNni=TRUE)
 # root:
 DMLbootsrooted <- lapply(DMLboots, function(x) root(x, resolve.root=TRUE, outgroup="D4Thai63"))
+class(DMLbootsrooted) <- "multiPhylo"
+
 ```
 
 Plot the ML tree again, with bootstrap support values:
@@ -111,7 +113,8 @@ We now use the function `treescape` to find and plot distances between all these
 
 ```{r run_treescape}
 # collect the trees into a single object of class multiPhylo:
-DengueTrees <- c(BEASTtrees,Dnjboots$trees,DMLbootsrooted,list(DnjRooted),list(DfitTreeRooted))
+DengueTrees <- c(BEASTtrees, Dnjboots$trees, DMLbootsrooted,
+		             DnjRooted, DfitTreeRooted)
 class(DengueTrees) <- "multiPhylo"
 # add tree names:
 names(DengueTrees)[1:200] <- paste0("BEAST",1:200)
@@ -267,7 +270,7 @@ We used TreeAnnotator (Drummond and Rambaut, 2007) to create a Maximum Clade Cre
 # load the MCC tree
 data(DengueBEASTMCC)
 # concatenate with other BEAST trees
-BEAST201 <- c(BEASTtrees,list(DengueBEASTMCC))
+BEAST201 <- c(BEASTtrees, DengueBEASTMCC)
 # compare using treescape:
 BEASTscape <- treescape(BEAST201, nf=5)
 # simple plot:
@@ -277,7 +280,7 @@ plotGrovesD3(BEASTscape$pco)
 There appear to be clusters of tree topologies within the BEAST trees. We can use the function `findGroves` to identify clusters:
 ```{r BEASTtrees_clusters}
 # find clusters or 'groves':
-BEASTGroves <- findGroves(BEASTscape,nclust=4,clustering="single")
+BEASTGroves <- findGroves(BEASTscape, nclust=4, clustering = "single")
 ```
 
 and to find a median tree per cluster:
