@@ -31,4 +31,3 @@ findMRCIs(tree1)
 \author{
 Michelle Kendall \email{michelle.louise.kendall@gmail.com}
 }
-

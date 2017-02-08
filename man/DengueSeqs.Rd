@@ -11,13 +11,12 @@ http://bmcevolbiol.biomedcentral.com/articles/10.1186/1471-2148-7-214
 \description{
 17 dengue virus serotype 4 sequences from Lanciotti et al. (1997)
 }
-\author{
-Michelle Kendall \email{michelle.louise.kendall@gmail.com}
-}
 \references{
 Lanciotti, R. S., Gubler, D. J., and Trent, D. W. (1997)
 Molecular evolution and phylogeny of dengue-4 viruses.
 \emph{Journal of General Virology}, 78(9), 2279-2286.
 }
+\author{
+Michelle Kendall \email{michelle.louise.kendall@gmail.com}
+}
 \keyword{datasets}
-

@@ -42,4 +42,3 @@ refTreeDist(refTree,trees)
 \author{
 Michelle Kendall \email{michelle.louise.kendall@gmail.com}
 }
-

@@ -34,10 +34,9 @@ data(woodmiceTrees)
 tipDiff(woodmiceTrees[[1]],woodmiceTrees[[2]])
 
 }
-\author{
-Michelle Kendall \email{michelle.louise.kendall@gmail.com}
-}
 \seealso{
 \code{\link{medTree}} \code{\link{plotTreeDiff}}
 }
-
+\author{
+Michelle Kendall \email{michelle.louise.kendall@gmail.com}
+}

@@ -50,4 +50,3 @@ Jacob Almagro-Garcia \email{nativecoder@gmail.com}
 
 Michelle Kendall \email{michelle.louise.kendall@gmail.com}
 }
-

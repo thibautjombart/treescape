@@ -24,7 +24,6 @@
 #' @importFrom MASS Shepard
 #' @importFrom phangorn Children
 #' @importFrom phangorn Descendants
-#' @importFrom rgl writeWebGL
 #' @importFrom RLumShiny jscolorInput
 #' @importFrom shinyBS bsTooltip
 #' @importFrom utils packageDescription

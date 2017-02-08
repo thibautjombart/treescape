@@ -61,10 +61,9 @@ plotGrovesD3(res$treescape$pco)
 }
 
 }
-\author{
-Thibaut Jombart \email{thibautjombart@gmail.com}
-}
 \seealso{
 \code{\link{findGroves}} to find any clusters in the tree landscape
 }
-
+\author{
+Thibaut Jombart \email{thibautjombart@gmail.com}
+}

@@ -88,11 +88,10 @@ plotGroves(res$treescape$pco, lab.show=TRUE, lab.cex=2)
 }
 
 }
-\author{
-Thibaut Jombart \email{thibautjombart@gmail.com}
-}
 \seealso{
 \code{\link{findGroves}} to find any clusters in the tree landscape
 \code{\link[adegraphics]{s.class}}
 }
-
+\author{
+Thibaut Jombart \email{thibautjombart@gmail.com}
+}

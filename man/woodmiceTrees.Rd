@@ -15,14 +15,13 @@ Michaux et al. (2003). The full data set is available through GenBank
 These trees were created using the neighbour-joining and bootstrapping
 example from the ape documentation.
 }
-\author{
-Michelle Kendall \email{michelle.louise.kendall@gmail.com}
-}
 \references{
 Michaux, J. R., Magnanou, E., Paradis, E., Nieberding, C. and
 Libois, R. (2003) Mitochondrial phylogeography of the Woodmouse (Apodemus
 sylvaticus) in the Western Palearctic region. \emph{Molecular Ecology}, 12,
 685-697
 }
+\author{
+Michelle Kendall \email{michelle.louise.kendall@gmail.com}
+}
 \keyword{datasets}
-

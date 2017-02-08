@@ -16,11 +16,10 @@ http://beast.bio.ed.ac.uk/tutorials
 \details{
 Only the first 200 trees (out of 10,000) were retained.
 }
-\author{
-Thibaut Jombart \email{thibautjombart@gmail.com}
-}
 \references{
 http://beast.bio.ed.ac.uk/tutorials
 }
+\author{
+Thibaut Jombart \email{thibautjombart@gmail.com}
+}
 \keyword{datasets}
-

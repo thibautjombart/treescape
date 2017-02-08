@@ -34,4 +34,3 @@ wiwTreeDist(matList, sampled=c(1,2,4))
 \author{
 Michelle Kendall \email{michelle.louise.kendall@gmail.com}
 }
-

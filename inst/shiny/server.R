@@ -1,16 +1,16 @@
 ## DEFINE THE SERVER SIDE OF THE APPLICATION
 shinyServer(function(input, output, session) {
   ## LOAD PACKAGES
-  if(!require("ade4")) stop("package ade4 is required")
-  if(!require("adegenet")) stop("package adegenet is required")
-  if(!require("adegraphics")) stop("package ade4 is required")
-  if(!require("ape")) stop("package ape is required")
-  if(!require("distory")) stop("package distory is required")
-  if(!require("fields")) stop("package fields is required")
-  if(!require("htmlwidgets")) stop("package htmlwidgets is required")
-  if(!require("MASS")) stop("package MASS is required")
-  if(!require("phangorn")) stop("package phangorn is required")
-  if(!require("treescape")) stop("package treescape is required")
+  require("ade4")
+  require("adegenet")
+  require("adegraphics")
+  require("ape")
+  require("distory")
+  require("fields")
+  require("htmlwidgets")
+  require("MASS")
+  require("phangorn")
+  require("treescape")
  
   # suppress warning messages from creating temporary directories when 3d plotting
   suppressWarnings(warning("dir.create(dir)"))

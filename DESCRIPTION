@@ -1,7 +1,7 @@
 Package: treescape
 Title: Statistical Exploration of Landscapes of Phylogenetic Trees
-Version: 1.10.18
-Date: 2016-12-02
+Version: 1.10.19
+Date: 2017-02-08
 Authors@R: c(TJ=person("Thibaut", "Jombart", email="thibaut.jombart@gmail.com", role = c("aut")),
  	     MK=person("Michelle", "Kendall", email="m.kendall@imperial.ac.uk", role = c("aut", "cre")),
 	     JAG=person("Jacob", "Almagro-Garcia", role = c("aut")),
@@ -26,7 +26,6 @@ Imports:
     MASS,
     phangorn,
     Rcpp,
-    rgl,
     RLumShiny,
     scatterD3,
     shiny,
@@ -39,7 +38,8 @@ Suggests:
     ggplot2,
     testthat, 
     knitr,
-    rmarkdown
+    rmarkdown,
+    rgl
 License: GPL (>=2)
 LazyData: true
 Collate:
@@ -53,5 +53,5 @@ Collate:
     servers.R
     transmissionTrees.R
     data.R
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.0
 VignetteBuilder: knitr

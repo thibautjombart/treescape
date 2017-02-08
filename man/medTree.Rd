@@ -84,4 +84,3 @@ Michelle Kendall \email{michelle.louise.kendall@gmail.com}
 
 Thibaut Jombart \email{thibautjombart@gmail.com}
 }
-
